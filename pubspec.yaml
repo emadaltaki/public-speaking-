@@ -1,0 +1,26 @@
+name: speak_up_fearless
+description: Speak Up Fearless is a supportive public speaking community helping people normalize anxiety, practice speaking, and build confidence together.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.9
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+  url_launcher: ^6.3.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
