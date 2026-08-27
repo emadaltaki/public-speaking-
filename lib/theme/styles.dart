@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
@@ -37,7 +36,32 @@ class AppStyles {
 
   static BorderRadius get cardRadius => BorderRadius.circular(radius);
 
-  static TextStyle get display => GoogleFonts.inter(
+  /// Inter is bundled as a variable font, so weights are requested through the
+  /// `wght` axis as well as [TextStyle.fontWeight] for renderers that need it.
+  static const String fontFamily = 'Inter';
+
+  static TextStyle _inter({
+    double? fontSize,
+    double? height,
+    FontWeight? fontWeight,
+    Color? color,
+    double? letterSpacing,
+    TextDecoration? decoration,
+  }) {
+    final weight = fontWeight ?? FontWeight.w400;
+    return TextStyle(
+      fontFamily: fontFamily,
+      fontSize: fontSize,
+      height: height,
+      fontWeight: weight,
+      color: color,
+      letterSpacing: letterSpacing,
+      decoration: decoration,
+      fontVariations: [FontVariation('wght', weight.value.toDouble())],
+    );
+  }
+
+  static TextStyle get display => _inter(
         fontSize: 52,
         height: 1.15,
         fontWeight: FontWeight.w700,
@@ -45,7 +69,7 @@ class AppStyles {
         letterSpacing: -0.8,
       );
 
-  static TextStyle get headline => GoogleFonts.inter(
+  static TextStyle get headline => _inter(
         fontSize: 36,
         height: 1.22,
         fontWeight: FontWeight.w700,
@@ -53,28 +77,28 @@ class AppStyles {
         letterSpacing: -0.4,
       );
 
-  static TextStyle get title => GoogleFonts.inter(
+  static TextStyle get title => _inter(
         fontSize: 22,
         height: 1.35,
         fontWeight: FontWeight.w600,
         color: AppColors.navy,
       );
 
-  static TextStyle get body => GoogleFonts.inter(
+  static TextStyle get body => _inter(
         fontSize: 17,
         height: 1.65,
         fontWeight: FontWeight.w400,
         color: AppColors.charcoal,
       );
 
-  static TextStyle get bodySmall => GoogleFonts.inter(
+  static TextStyle get bodySmall => _inter(
         fontSize: 15,
         height: 1.6,
         fontWeight: FontWeight.w400,
         color: AppColors.mutedText,
       );
 
-  static TextStyle get navLink => GoogleFonts.inter(
+  static TextStyle get navLink => _inter(
         fontSize: 17,
         height: 1.2,
         fontWeight: FontWeight.w500,
@@ -82,7 +106,7 @@ class AppStyles {
         letterSpacing: 0.1,
       );
 
-  static TextStyle get label => GoogleFonts.inter(
+  static TextStyle get label => _inter(
         fontSize: 14,
         height: 1.4,
         fontWeight: FontWeight.w600,
@@ -114,7 +138,7 @@ class AppStyles {
         ),
         elevation: const WidgetStatePropertyAll(0),
         textStyle: WidgetStatePropertyAll(
-          GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+          _inter(fontWeight: FontWeight.w600, fontSize: 16),
         ),
       );
 
@@ -124,7 +148,7 @@ class AppStyles {
           EdgeInsets.symmetric(horizontal: 28, vertical: 16),
         ),
         textStyle: WidgetStatePropertyAll(
-          GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 17),
+          _inter(fontWeight: FontWeight.w600, fontSize: 17),
         ),
       );
 
@@ -146,7 +170,7 @@ class AppStyles {
         ),
         elevation: const WidgetStatePropertyAll(0),
         textStyle: WidgetStatePropertyAll(
-          GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+          _inter(fontWeight: FontWeight.w600, fontSize: 16),
         ),
       );
 
@@ -167,7 +191,8 @@ class AppStyles {
       ),
     );
 
-    final textTheme = GoogleFonts.interTextTheme(base.textTheme).apply(
+    final textTheme = base.textTheme.apply(
+      fontFamily: fontFamily,
       bodyColor: AppColors.charcoal,
       displayColor: AppColors.navy,
     );

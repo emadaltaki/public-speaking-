@@ -68,6 +68,7 @@ class MissionSection extends StatelessWidget {
                 }
                 return wrap
                     ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: steps
                             .map(
                               (w) => Padding(

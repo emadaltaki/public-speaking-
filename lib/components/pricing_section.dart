@@ -39,6 +39,7 @@ class PricingSection extends StatelessWidget {
                 ];
                 if (stacked) {
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       for (final card in cards) ...[
                         card,

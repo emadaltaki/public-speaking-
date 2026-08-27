@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:speak_up_fearless/contact/contact_submit_handler.dart';
 import 'package:speak_up_fearless/theme/styles.dart';
 import 'package:speak_up_fearless/translations/translations.dart';
 
 void configureTestFonts() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  GoogleFonts.config.allowRuntimeFetching = false;
 }
 
 void setSurface(WidgetTester tester, {required Size size}) {

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:speak_up_fearless/theme/colors.dart';
 import 'package:speak_up_fearless/theme/styles.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  GoogleFonts.config.allowRuntimeFetching = false;
 
   test('brand tokens match the Speak Up Fearless palette', () {
     expect(AppColors.navy, const Color(0xFF173B57));

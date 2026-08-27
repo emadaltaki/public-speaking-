@@ -54,7 +54,7 @@ class ContactSection extends StatelessWidget {
       color: AppColors.lightBlue,
       child: SectionContainer(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(Translations.contactHeadline, style: AppStyles.headline),
             const SizedBox(height: 12),
