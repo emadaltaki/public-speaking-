@@ -14,7 +14,7 @@ class AppStyles {
   static const double radius = 16;
   static const double radiusSmall = 10;
   static const double minTapSize = 44;
-  static const double navBreakpoint = 960;
+  static const double navBreakpoint = 1100;
   static const double tabletBreakpoint = 720;
 
   static List<BoxShadow> get softShadow => [
@@ -70,6 +70,14 @@ class AppStyles {
         height: 1.6,
         fontWeight: FontWeight.w400,
         color: AppColors.mutedText,
+      );
+
+  static TextStyle get navLink => GoogleFonts.inter(
+        fontSize: 15,
+        height: 1.2,
+        fontWeight: FontWeight.w500,
+        color: AppColors.onNavy,
+        letterSpacing: 0.1,
       );
 
   static TextStyle get label => GoogleFonts.inter(

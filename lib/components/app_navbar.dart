@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
+import 'nav_link_button.dart';
 import 'primary_button.dart';
 import 'skip_to_content_link.dart';
 import 'speech_mark_logo.dart';
@@ -48,16 +49,17 @@ class _AppNavbarState extends State<AppNavbar> {
 
     return Material(
       color: AppColors.navy,
+      elevation: 3,
+      shadowColor: AppColors.navy.withValues(alpha: 0.4),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 76),
+          SizedBox(
+            height: 72,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppStyles.gutter,
-                vertical: 8,
               ),
               child: Center(
                 child: ConstrainedBox(
@@ -67,11 +69,12 @@ class _AppNavbarState extends State<AppNavbar> {
                   child: Row(
                     children: [
                       SkipToContentLink(onActivate: widget.onSkipToContent),
-                      const SpeechMarkLogo(size: 32),
+                      const SpeechMarkLogo(size: 30),
                       const SizedBox(width: 10),
                       Flexible(
                         child: Text(
                           Translations.siteName,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppStyles.title.copyWith(
                             color: AppColors.onNavy,
@@ -79,29 +82,26 @@ class _AppNavbarState extends State<AppNavbar> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 16),
                       if (wide)
                         Expanded(
-                          child: Wrap(
-                            alignment: WrapAlignment.end,
-                            spacing: 2,
-                            runSpacing: 4,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              for (final item in widget.items)
-                                TextButton(
-                                  onPressed: item.onPressed,
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: AppColors.onNavy,
-                                    minimumSize: const Size(44, 44),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Row(
+                              children: [
+                                for (final item in widget.items)
+                                  NavLinkButton(
+                                    label: item.label,
+                                    onPressed: item.onPressed,
                                   ),
-                                  child: Text(item.label),
+                                const SizedBox(width: 14),
+                                PrimaryButton(
+                                  label: Translations.navJoinUs,
+                                  onPressed: widget.onJoinUs,
                                 ),
-                              PrimaryButton(
-                                label: Translations.navJoinUs,
-                                onPressed: widget.onJoinUs,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                       else ...[
@@ -126,27 +126,28 @@ class _AppNavbarState extends State<AppNavbar> {
             ),
           ),
           if (!wide && _menuOpen)
-            ColoredBox(
-              color: AppColors.navy,
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                color: AppColors.navyElevated,
+                border: Border(
+                  top: BorderSide(color: Color(0x33FFFFFF)),
+                ),
+              ),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     for (final item in widget.items)
-                      TextButton(
+                      NavLinkButton(
+                        label: item.label,
+                        alignStart: true,
                         onPressed: () {
                           item.onPressed();
                           _closeMenu();
                         },
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.onNavy,
-                          alignment: Alignment.centerLeft,
-                          minimumSize: const Size(44, 48),
-                        ),
-                        child: Text(item.label),
                       ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     PrimaryButton(
                       label: Translations.navJoinUs,
                       onPressed: () {
