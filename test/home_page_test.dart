@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:speak_up_fearless/components/app_navbar.dart';
+import 'package:speak_up_fearless/components/site_footer.dart';
+import 'package:speak_up_fearless/components/skip_to_content_link.dart';
 import 'package:speak_up_fearless/pages/home_page.dart';
 import 'package:speak_up_fearless/translations/translations.dart';
 
@@ -76,5 +79,31 @@ void main() {
     expect(find.text(Translations.trust7), findsOneWidget);
     expect(find.text(Translations.expect1Body), findsOneWidget);
     expect(find.text(Translations.expect4Body), findsOneWidget);
+  });
+
+  testWidgets('navbar and footer bands span the full viewport width', (
+    tester,
+  ) async {
+    const viewport = Size(1600, 9000);
+    setSurface(tester, size: viewport);
+    await tester.pumpWidget(
+      wrapForTest(HomePage(contactHandler: RecordingContactHandler())),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.getSize(find.byType(AppNavbar)).width, viewport.width);
+    expect(tester.getSize(find.byType(SiteFooter)).width, viewport.width);
+  });
+
+  testWidgets('skip link stays collapsed until it receives focus', (
+    tester,
+  ) async {
+    setSurface(tester, size: const Size(1280, 1200));
+    await tester.pumpWidget(
+      wrapForTest(HomePage(contactHandler: RecordingContactHandler())),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.getSize(find.byType(SkipToContentLink)).width, 0);
   });
 }

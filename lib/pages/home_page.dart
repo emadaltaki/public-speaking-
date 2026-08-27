@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.offWhite,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppNavbar(
             onSkipToContent: () => _scrollTo(_homeKey),
@@ -112,6 +113,7 @@ class _HomePageState extends State<HomePage> {
             child: SelectionArea(
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     KeyedSubtree(
                       key: _homeKey,

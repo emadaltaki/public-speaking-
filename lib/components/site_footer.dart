@@ -27,64 +27,160 @@ class SiteFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: AppColors.navy,
-      child: SectionContainer(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: SizedBox(
+        width: double.infinity,
+        child: SectionContainer(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppStyles.gutter,
+            vertical: 56,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final wide = constraints.maxWidth >= AppStyles.tabletBreakpoint;
+                  final brand = _FooterBrand();
+                  final navigation = _FooterLinks(links: links);
+                  final contact = _FooterContact(onEmail: onEmail);
+
+                  if (!wide) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        brand,
+                        const SizedBox(height: 32),
+                        navigation,
+                        const SizedBox(height: 32),
+                        contact,
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 5, child: brand),
+                      const SizedBox(width: 40),
+                      Expanded(flex: 4, child: navigation),
+                      const SizedBox(width: 40),
+                      Expanded(flex: 3, child: contact),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 40),
+              const Divider(height: 1, color: Color(0x33FFFFFF)),
+              const SizedBox(height: 20),
+              Text(
+                Translations.footerCopyright,
+                style: AppStyles.bodySmall.copyWith(color: AppColors.lightBlue),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FooterBrand extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            const Row(
-              children: [
-                SpeechMarkLogo(size: 28),
-                SizedBox(width: 10),
-                Flexible(
-                  child: Text(
-                    Translations.siteName,
-                    style: TextStyle(
-                      color: AppColors.onNavy,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
+            const SpeechMarkLogo(size: 28),
+            const SizedBox(width: 10),
+            Flexible(
+              child: Text(
+                Translations.siteName,
+                style: AppStyles.title.copyWith(color: AppColors.onNavy),
+              ),
             ),
-            const SizedBox(height: 12),
-            Text(
-              Translations.footerBlurb,
-              style: AppStyles.body.copyWith(color: AppColors.lightBlue),
-            ),
-            const SizedBox(height: 24),
-            Wrap(
-              spacing: 12,
-              runSpacing: 8,
-              children: [
-                for (final link in links)
-                  TextButton(
+          ],
+        ),
+        const SizedBox(height: 14),
+        Text(
+          Translations.footerBlurb,
+          style: AppStyles.body.copyWith(color: AppColors.lightBlue),
+        ),
+      ],
+    );
+  }
+}
+
+class _FooterLinks extends StatelessWidget {
+  const _FooterLinks({required this.links});
+
+  final List<FooterLink> links;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Translations.footerExplore,
+          style: AppStyles.label.copyWith(color: AppColors.lightBlue),
+        ),
+        const SizedBox(height: 6),
+        Wrap(
+          spacing: 24,
+          children: [
+            for (final link in links)
+              SizedBox(
+                width: 150,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
                     onPressed: link.onPressed,
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.onNavy,
                       minimumSize: const Size(44, 44),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
                     ),
                     child: Text(link.label),
                   ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            TextButton(
-              onPressed: onEmail,
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.teal,
-                minimumSize: const Size(44, 44),
+                ),
               ),
-              child: const Text(Translations.contactEmail),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              Translations.footerCopyright,
-              style: AppStyles.bodySmall.copyWith(color: AppColors.lightBlue),
-            ),
           ],
         ),
-      ),
+      ],
+    );
+  }
+}
+
+class _FooterContact extends StatelessWidget {
+  const _FooterContact({required this.onEmail});
+
+  final VoidCallback onEmail;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Translations.footerContactLabel,
+          style: AppStyles.label.copyWith(color: AppColors.lightBlue),
+        ),
+        const SizedBox(height: 6),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: onEmail,
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.teal,
+              minimumSize: const Size(44, 44),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+            ),
+            child: const Text(Translations.contactEmail),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -4,6 +4,7 @@ import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'primary_button.dart';
+import 'skip_to_content_link.dart';
 import 'speech_mark_logo.dart';
 
 class NavItem {
@@ -49,6 +50,7 @@ class _AppNavbarState extends State<AppNavbar> {
       color: AppColors.navy,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 76),
@@ -64,15 +66,7 @@ class _AppNavbarState extends State<AppNavbar> {
                   ),
                   child: Row(
                     children: [
-                      TextButton(
-                        onPressed: widget.onSkipToContent,
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.onNavy,
-                          minimumSize: const Size(44, 44),
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                        child: const Text(Translations.skipToContent),
-                      ),
+                      SkipToContentLink(onActivate: widget.onSkipToContent),
                       const SpeechMarkLogo(size: 32),
                       const SizedBox(width: 10),
                       Flexible(

@@ -260,6 +260,8 @@ class Translations {
       'A supportive community helping people become more comfortable, confident, and courageous speakers.';
   static const String footerMission = 'Our Mission';
   static const String footerCommunity = 'Community';
+  static const String footerExplore = 'Explore';
+  static const String footerContactLabel = 'Contact';
   static const String footerCopyright =
       '© 2026 Speak Up Fearless. All rights reserved.';
 }
