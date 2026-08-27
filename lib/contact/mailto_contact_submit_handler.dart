@@ -25,6 +25,11 @@ class MailtoContactSubmitHandler implements ContactSubmitHandler {
   }
 
   @override
+  Future<bool> openPhoneClient() {
+    return launchUrl(Uri.parse(Translations.telUri));
+  }
+
+  @override
   Future<ContactSubmitResult> submit(ContactFormData data) async {
     final launched = await openEmailClient(
       subject: 'Speak Up Fearless — message from ${data.name}',

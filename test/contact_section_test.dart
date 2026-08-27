@@ -35,6 +35,33 @@ void main() {
     expect(handler.emailOpens, 1);
   });
 
+  testWidgets('Call Us uses the community phone number via the handler', (
+    tester,
+  ) async {
+    final handler = RecordingContactHandler();
+    setSurface(tester, size: const Size(1000, 1400));
+    await tester.pumpWidget(
+      wrapForTest(
+        Scaffold(
+          body: SingleChildScrollView(
+            child: ContactSection(
+              handler: handler,
+              onCallUs: () {
+                handler.openPhoneClient();
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text(Translations.contactPhoneDisplay), findsOneWidget);
+    await tester.tap(find.text(Translations.ctaCallUs));
+    await tester.pumpAndSettle();
+    expect(handler.phoneOpens, 1);
+  });
+
   testWidgets('empty submit shows validation and does not claim sent', (
     tester,
   ) async {

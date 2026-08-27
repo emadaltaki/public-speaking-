@@ -33,6 +33,7 @@ void main() {
     expect(find.text(Translations.contactHeadline), findsOneWidget);
     expect(find.text(Translations.footerCopyright), findsOneWidget);
     expect(find.text(Translations.contactEmail), findsWidgets);
+    expect(find.text(Translations.contactPhoneDisplay), findsWidgets);
     expect(find.byTooltip('Twitter'), findsNothing);
     expect(find.byTooltip('Instagram'), findsNothing);
   });

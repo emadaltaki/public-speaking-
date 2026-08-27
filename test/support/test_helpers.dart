@@ -25,6 +25,7 @@ Widget wrapForTest(Widget child) {
 class RecordingContactHandler implements ContactSubmitHandler {
   ContactFormData? lastSubmitted;
   int emailOpens = 0;
+  int phoneOpens = 0;
   String statusMessage = Translations.contactFormNote;
   ContactSubmitKind kind = ContactSubmitKind.mailtoOpened;
 
@@ -37,6 +38,12 @@ class RecordingContactHandler implements ContactSubmitHandler {
   @override
   Future<bool> openEmailClient({String? subject, String? body}) async {
     emailOpens += 1;
+    return true;
+  }
+
+  @override
+  Future<bool> openPhoneClient() async {
+    phoneOpens += 1;
     return true;
   }
 }

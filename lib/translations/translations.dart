@@ -7,6 +7,8 @@ class Translations {
       'Speak Up Fearless | Build Confidence. Find Your Voice.';
   static const String contactEmail = 'speakupfearless@gmail.com';
   static const String mailtoUri = 'mailto:speakupfearless@gmail.com';
+  static const String contactPhoneDisplay = '(416) 995-5347';
+  static const String telUri = 'tel:+14169955347';
 
   static const String skipToContent = 'Skip to content';
   static const String openMenu = 'Open menu';
@@ -26,6 +28,7 @@ class Translations {
   static const String ctaReadyToSpeak = "I'm Ready to Speak";
   static const String ctaLearnSessions = 'Learn About Our Sessions';
   static const String ctaEmailUs = 'Email Us';
+  static const String ctaCallUs = 'Call Us';
   static const String ctaSendMessage = 'Send Message';
 
   static const String heroHeadline =

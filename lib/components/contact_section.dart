@@ -6,6 +6,7 @@ import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'contact_form.dart';
 import 'primary_button.dart';
+import 'secondary_button.dart';
 import 'section_container.dart';
 import 'site_card.dart';
 
@@ -14,10 +15,12 @@ class ContactSection extends StatelessWidget {
     super.key,
     required this.handler,
     this.onTalkToUs,
+    this.onCallUs,
   });
 
   final ContactSubmitHandler handler;
   final VoidCallback? onTalkToUs;
+  final VoidCallback? onCallUs;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +29,17 @@ class ContactSection extends StatelessWidget {
     final card = SiteCard(
       elevated: true,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(Translations.siteName, style: AppStyles.title),
           const SizedBox(height: 8),
           SelectableText(
             Translations.contactEmail,
+            style: AppStyles.body.copyWith(color: AppColors.teal),
+          ),
+          const SizedBox(height: 4),
+          SelectableText(
+            Translations.contactPhoneDisplay,
             style: AppStyles.body.copyWith(color: AppColors.teal),
           ),
           const SizedBox(height: 16),
@@ -43,6 +51,11 @@ class ContactSection extends StatelessWidget {
                     subject: 'Speak Up Fearless — I would like to join',
                   );
                 },
+          ),
+          const SizedBox(height: 10),
+          SecondaryButton(
+            label: Translations.ctaCallUs,
+            onPressed: onCallUs ?? () => handler.openPhoneClient(),
           ),
         ],
       ),

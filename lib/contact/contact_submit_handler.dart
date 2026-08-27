@@ -29,4 +29,6 @@ abstract class ContactSubmitHandler {
   Future<ContactSubmitResult> submit(ContactFormData data);
 
   Future<bool> openEmailClient({String? subject, String? body});
+
+  Future<bool> openPhoneClient();
 }

@@ -18,10 +18,12 @@ class SiteFooter extends StatelessWidget {
     super.key,
     required this.links,
     required this.onEmail,
+    required this.onPhone,
   });
 
   final List<FooterLink> links;
   final VoidCallback onEmail;
+  final VoidCallback onPhone;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,10 @@ class SiteFooter extends StatelessWidget {
                   final wide = constraints.maxWidth >= AppStyles.tabletBreakpoint;
                   final brand = _FooterBrand();
                   final navigation = _FooterLinks(links: links);
-                  final contact = _FooterContact(onEmail: onEmail);
+                  final contact = _FooterContact(
+                    onEmail: onEmail,
+                    onPhone: onPhone,
+                  );
 
                   if (!wide) {
                     return Column(
@@ -154,9 +159,10 @@ class _FooterLinks extends StatelessWidget {
 }
 
 class _FooterContact extends StatelessWidget {
-  const _FooterContact({required this.onEmail});
+  const _FooterContact({required this.onEmail, required this.onPhone});
 
   final VoidCallback onEmail;
+  final VoidCallback onPhone;
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +184,18 @@ class _FooterContact extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4),
             ),
             child: const Text(Translations.contactEmail),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: onPhone,
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.teal,
+              minimumSize: const Size(44, 44),
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+            ),
+            child: const Text(Translations.contactPhoneDisplay),
           ),
         ),
       ],

@@ -72,6 +72,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _callUs() {
+    return _handler.openPhoneClient();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,10 +156,12 @@ class _HomePageState extends State<HomePage> {
                       child: ContactSection(
                         handler: _handler,
                         onTalkToUs: _talkToUs,
+                        onCallUs: _callUs,
                       ),
                     ),
                     SiteFooter(
                       onEmail: _talkToUs,
+                      onPhone: _callUs,
                       links: [
                         FooterLink(
                           label: Translations.navHome,
