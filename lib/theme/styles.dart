@@ -11,6 +11,8 @@ class AppStyles {
   static const double sectionPaddingY = 88;
   static const double sectionPaddingYMobile = 56;
   static const double gutter = 24;
+  static const double barGutterWide = 48;
+  static const double barGutterNarrow = 20;
   static const double radius = 16;
   static const double radiusSmall = 10;
   static const double minTapSize = 44;
@@ -73,7 +75,7 @@ class AppStyles {
       );
 
   static TextStyle get navLink => GoogleFonts.inter(
-        fontSize: 15,
+        fontSize: 17,
         height: 1.2,
         fontWeight: FontWeight.w500,
         color: AppColors.onNavy,
@@ -113,6 +115,16 @@ class AppStyles {
         elevation: const WidgetStatePropertyAll(0),
         textStyle: WidgetStatePropertyAll(
           GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+        ),
+      );
+
+  static ButtonStyle get primaryButtonLarge => primaryButton.copyWith(
+        minimumSize: const WidgetStatePropertyAll(Size(56, 52)),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+        ),
+        textStyle: WidgetStatePropertyAll(
+          GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 17),
         ),
       );
 

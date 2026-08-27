@@ -56,72 +56,75 @@ class _AppNavbarState extends State<AppNavbar> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 72,
+            height: 84,
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppStyles.gutter,
+              padding: EdgeInsets.symmetric(
+                horizontal: wide
+                    ? AppStyles.barGutterWide
+                    : AppStyles.barGutterNarrow,
               ),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: AppStyles.maxContentWidth,
-                  ),
-                  child: Row(
-                    children: [
-                      SkipToContentLink(onActivate: widget.onSkipToContent),
-                      const SpeechMarkLogo(size: 30),
-                      const SizedBox(width: 10),
-                      Flexible(
-                        child: Text(
-                          Translations.siteName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppStyles.title.copyWith(
-                            color: AppColors.onNavy,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      if (wide)
-                        Expanded(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerRight,
-                            child: Row(
-                              children: [
-                                for (final item in widget.items)
-                                  NavLinkButton(
-                                    label: item.label,
-                                    onPressed: item.onPressed,
-                                  ),
-                                const SizedBox(width: 14),
-                                PrimaryButton(
-                                  label: Translations.navJoinUs,
-                                  onPressed: widget.onJoinUs,
-                                ),
-                              ],
+              child: Row(
+                children: [
+                  SkipToContentLink(onActivate: widget.onSkipToContent),
+                  Expanded(
+                    flex: wide ? 3 : 1,
+                    child: Row(
+                      children: [
+                        const SpeechMarkLogo(size: 34),
+                        const SizedBox(width: 12),
+                        Flexible(
+                          child: Text(
+                            Translations.siteName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppStyles.title.copyWith(
+                              color: AppColors.onNavy,
+                              fontSize: 21,
                             ),
-                          ),
-                        )
-                      else ...[
-                        const Spacer(),
-                        IconButton(
-                          tooltip: _menuOpen
-                              ? Translations.closeMenu
-                              : Translations.openMenu,
-                          onPressed: () {
-                            setState(() => _menuOpen = !_menuOpen);
-                          },
-                          icon: Icon(
-                            _menuOpen ? Icons.close : Icons.menu,
-                            color: AppColors.onNavy,
                           ),
                         ),
                       ],
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 24),
+                  if (wide)
+                    Expanded(
+                      flex: 7,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          children: [
+                            for (final item in widget.items)
+                              NavLinkButton(
+                                label: item.label,
+                                onPressed: item.onPressed,
+                              ),
+                            const SizedBox(width: 20),
+                            PrimaryButton(
+                              label: Translations.navJoinUs,
+                              onPressed: widget.onJoinUs,
+                              large: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  else
+                    IconButton(
+                      tooltip: _menuOpen
+                          ? Translations.closeMenu
+                          : Translations.openMenu,
+                      iconSize: 30,
+                      onPressed: () {
+                        setState(() => _menuOpen = !_menuOpen);
+                      },
+                      icon: Icon(
+                        _menuOpen ? Icons.close : Icons.menu,
+                        color: AppColors.onNavy,
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -134,7 +137,12 @@ class _AppNavbarState extends State<AppNavbar> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
+                padding: const EdgeInsets.fromLTRB(
+                  AppStyles.barGutterNarrow,
+                  12,
+                  AppStyles.barGutterNarrow,
+                  20,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -150,6 +158,7 @@ class _AppNavbarState extends State<AppNavbar> {
                     const SizedBox(height: 12),
                     PrimaryButton(
                       label: Translations.navJoinUs,
+                      large: true,
                       onPressed: () {
                         widget.onJoinUs();
                         _closeMenu();

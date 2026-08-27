@@ -95,6 +95,25 @@ void main() {
     expect(tester.getSize(find.byType(SiteFooter)).width, viewport.width);
   });
 
+  testWidgets('header keeps the brand left and the Join Us CTA right', (
+    tester,
+  ) async {
+    const viewport = Size(1600, 1200);
+    setSurface(tester, size: viewport);
+    await tester.pumpWidget(
+      wrapForTest(HomePage(contactHandler: RecordingContactHandler())),
+    );
+    await tester.pumpAndSettle();
+
+    final brand = tester.getRect(find.text(Translations.siteName).first);
+    final cta = tester.getRect(
+      find.widgetWithText(FilledButton, Translations.navJoinUs),
+    );
+
+    expect(brand.left, lessThan(150));
+    expect(cta.right, greaterThan(viewport.width - 120));
+  });
+
   testWidgets('skip link stays collapsed until it receives focus', (
     tester,
   ) async {

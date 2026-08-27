@@ -16,6 +16,13 @@ void main() {
     expect(AppColors.charcoal, const Color(0xFF1F2933));
   });
 
+  test('header CTA style is a large, comfortable tap target', () {
+    final size = AppStyles.primaryButtonLarge.minimumSize?.resolve({});
+    expect(size, isNotNull);
+    expect(size!.height, greaterThanOrEqualTo(52));
+    expect(AppStyles.navLink.fontSize, greaterThanOrEqualTo(17));
+  });
+
   test('theme uses navy primary and off-white scaffold', () {
     final theme = AppStyles.theme;
     expect(theme.primaryColor, AppColors.navy);

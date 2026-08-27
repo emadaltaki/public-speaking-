@@ -7,15 +7,17 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.label,
     required this.onPressed,
+    this.large = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
     return FilledButton(
-      style: AppStyles.primaryButton,
+      style: large ? AppStyles.primaryButtonLarge : AppStyles.primaryButton,
       onPressed: onPressed,
       child: Text(label),
     );
