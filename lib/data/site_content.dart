@@ -108,34 +108,34 @@ class SiteContent {
 
   static const List<GalleryItem> gallery = [
     GalleryItem(
-      assetPath: 'assets/images/gallery_01.png',
+      assetPath: 'assets/images/directing-participants-pic.jpeg',
       caption: Translations.galleryCaption1,
       alt: Translations.galleryAlt1,
       featured: true,
     ),
     GalleryItem(
-      assetPath: 'assets/images/gallery_02.png',
+      assetPath: 'assets/images/participant-podcast-pic.jpeg',
       caption: Translations.galleryCaption2,
       alt: Translations.galleryAlt2,
     ),
     GalleryItem(
-      assetPath: 'assets/images/gallery_03.png',
+      assetPath: 'assets/images/directing-consultant-pic-2.jpeg',
       caption: Translations.galleryCaption3,
       alt: Translations.galleryAlt3,
     ),
     GalleryItem(
-      assetPath: 'assets/images/gallery_04.png',
+      assetPath: 'assets/images/explaining-pic.jpeg',
       caption: Translations.galleryCaption4,
       alt: Translations.galleryAlt4,
       featured: true,
     ),
     GalleryItem(
-      assetPath: 'assets/images/gallery_05.png',
+      assetPath: 'assets/images/playing-a-game-pic.jpeg',
       caption: Translations.galleryCaption5Fixed,
       alt: Translations.galleryAlt5,
     ),
     GalleryItem(
-      assetPath: 'assets/images/gallery_06.png',
+      assetPath: 'assets/images/image-just-after-a-game-pic.jpeg',
       caption: Translations.galleryCaption6,
       alt: Translations.galleryAlt6,
     ),
@@ -143,24 +143,20 @@ class SiteContent {
 
   static const List<Testimonial> testimonials = [
     Testimonial(
-      quote: Translations.testimonial1Quote,
-      firstName: Translations.testimonial1Name,
-      role: Translations.testimonial1Role,
+      quote: Translations.testimonialEmadQuote,
+      firstName: Translations.testimonialEmadName,
+      role: Translations.testimonialEmadRole,
+      photoAsset: 'assets/images/emad_pic.jpg',
+      photoAlt: Translations.testimonialEmadPhotoAlt,
+      isPlaceholder: false,
     ),
     Testimonial(
-      quote: Translations.testimonial2Quote,
-      firstName: Translations.testimonial2Name,
-      role: Translations.testimonial2Role,
-    ),
-    Testimonial(
-      quote: Translations.testimonial3Quote,
-      firstName: Translations.testimonial3Name,
-      role: Translations.testimonial3Role,
-    ),
-    Testimonial(
-      quote: Translations.testimonial4Quote,
-      firstName: Translations.testimonial4Name,
-      role: Translations.testimonial4Role,
+      quote: Translations.testimonialEliasQuote,
+      firstName: Translations.testimonialEliasName,
+      role: Translations.testimonialEliasRole,
+      photoAsset: 'assets/images/Elias-image.jpeg',
+      photoAlt: Translations.testimonialEliasPhotoAlt,
+      isPlaceholder: false,
     ),
   ];
 

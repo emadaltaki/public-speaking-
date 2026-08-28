@@ -24,6 +24,7 @@ class TestimonialsSection extends StatelessWidget {
             Text(Translations.testimonialsIntro, style: AppStyles.bodySmall),
             const SizedBox(height: 28),
             ResponsiveCardGrid(
+              minTileWidth: 420,
               children: [
                 for (final item in SiteContent.testimonials)
                   SiteCard(
@@ -31,6 +32,23 @@ class TestimonialsSection extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (item.photoAsset != null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: Semantics(
+                              label: item.photoAlt,
+                              image: true,
+                              child: ClipOval(
+                                child: Image.asset(
+                                  item.photoAsset!,
+                                  width: AppStyles.avatarSize,
+                                  height: AppStyles.avatarSize,
+                                  fit: BoxFit.cover,
+                                  excludeFromSemantics: true,
+                                ),
+                              ),
+                            ),
+                          ),
                         if (item.isPlaceholder)
                           Text(
                             Translations.testimonialPlaceholderLabel,

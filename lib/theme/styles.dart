@@ -15,6 +15,7 @@ class AppStyles {
   static const double radius = 16;
   static const double radiusSmall = 10;
   static const double minTapSize = 44;
+  static const double avatarSize = 64;
   static const double navBreakpoint = 1100;
   static const double tabletBreakpoint = 720;
 

@@ -18,6 +18,7 @@ class Testimonial {
     required this.firstName,
     this.role,
     this.photoAsset,
+    this.photoAlt,
     this.isPlaceholder = true,
   });
 
@@ -25,6 +26,7 @@ class Testimonial {
   final String firstName;
   final String? role;
   final String? photoAsset;
+  final String? photoAlt;
   final bool isPlaceholder;
 }
 

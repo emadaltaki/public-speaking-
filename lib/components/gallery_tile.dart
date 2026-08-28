@@ -33,7 +33,13 @@ class _GalleryTileState extends State<GalleryTile> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                const CommunityScene(),
+                Image.asset(
+                  widget.item.assetPath,
+                  fit: BoxFit.cover,
+                  excludeFromSemantics: true,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const CommunityScene(),
+                ),
                 ColoredBox(
                   color: AppColors.navy.withValues(alpha: _hovered ? 0.28 : 0.18),
                 ),

@@ -153,43 +153,37 @@ class Translations {
   static const String galleryCaption1 = 'Practicing together';
   static const String galleryCaption2 = 'Finding your voice';
   static const String galleryCaption3 = 'Learning through feedback';
-  static const String galleryCaption4 = 'One speech at a time';
-  static const String galleryCaption5 = 'Workshops and workshops of kindness';
+  static const String galleryCaption4 = 'Learning by doing';
   static const String galleryCaption5Fixed = 'Workshops that feel human';
   static const String galleryCaption6 = 'Behind the scenes';
   static const String galleryAlt1 =
-      'Members practicing speaking together in a small group';
+      'Members seated around a long table, watching a facilitator introduce a speaking exercise';
   static const String galleryAlt2 =
-      'A speaker sharing an idea with a supportive audience';
+      'A member speaking to the room in front of a slide for the Podcast speaking game';
   static const String galleryAlt3 =
-      'Participants exchanging constructive feedback';
+      'A facilitator pointing to the Triple Step exercise on screen while participants follow along';
   static const String galleryAlt4 =
-      'Someone taking a first speech, one step at a time';
+      'A host presenting the "Let\'s Learn by Doing" ground rules to the group';
   static const String galleryAlt5 =
-      'A workshop moment with people listening closely';
+      'Three people at the front of the room during a speaking game, with the group watching';
   static const String galleryAlt6 =
-      'A candid behind-the-scenes community moment';
+      'A candid moment just after a speaking game, with the group still laughing along';
 
-  static const String testimonialsHeadline = 'Real People. Real Progress.';
+  static const String testimonialsHeadline = 'The People Behind the Sessions.';
   static const String testimonialsIntro =
-      'Placeholder stories below show the shape of real voices we will add as members share them. They are examples of tone — not fabricated reviews.';
+      'We run every session ourselves. Here is why we started, and what we are trying to build with the people who show up.';
   static const String testimonialPlaceholderLabel = 'Placeholder';
-  static const String testimonial1Quote =
-      'I used to avoid speaking whenever I could. Having a place where everyone was there to practice made it much easier to take the first step.';
-  static const String testimonial1Name = 'Alex';
-  static const String testimonial1Role = 'Member';
-  static const String testimonial2Quote =
-      "I didn't need someone to tell me to be confident. I needed a room where it was okay to be nervous and still try.";
-  static const String testimonial2Name = 'Jordan';
-  static const String testimonial2Role = 'Member';
-  static const String testimonial3Quote =
-      'The feedback felt kind and useful. I left knowing what to practice next, not feeling smaller than when I arrived.';
-  static const String testimonial3Name = 'Sam';
-  static const String testimonial3Role = 'Member';
-  static const String testimonial4Quote =
-      "I still get anxious. I just don't let that be the reason I stay silent anymore.";
-  static const String testimonial4Name = 'Riley';
-  static const String testimonial4Role = 'Member';
+  static const String testimonialEmadQuote =
+      'I know what it feels like to have something worth saying and freeze anyway. Speak Up Fearless is the room I wanted back then — you practice first, and confidence follows.';
+  static const String testimonialEmadName = 'Emad';
+  static const String testimonialEmadRole = 'Co-Founder and Host';
+  static const String testimonialEliasQuote =
+      'Nobody here waits until they feel ready. We show up, we speak, we give each other honest and kind feedback, and everyone leaves knowing what to work on next.';
+  static const String testimonialEliasName = 'Elias';
+  static const String testimonialEliasRole = 'Co-Founder and Host';
+  static const String testimonialEmadPhotoAlt = 'Portrait of Emad, founder and host';
+  static const String testimonialEliasPhotoAlt =
+      'Portrait of Elias, co-founder and host';
 
   static const String trustHeadline = 'A Place Where You Can Start Small.';
   static const String trust1 = 'No experience required';
