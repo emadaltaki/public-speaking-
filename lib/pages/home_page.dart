@@ -72,6 +72,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _bookIntro() {
+    return _handler.openEmailClient(
+      subject: Translations.pricingIntroEmailSubject,
+      body: Translations.pricingIntroEmailBody,
+    );
+  }
+
   Future<void> _callUs() {
     return _handler.openPhoneClient();
   }
@@ -139,6 +146,7 @@ class _HomePageState extends State<HomePage> {
                     PricingSection(
                       onJoin: () => _scrollTo(_contactKey),
                       onTalk: _talkToUs,
+                      onBookIntro: _bookIntro,
                     ),
                     KeyedSubtree(
                       key: _communityKey,

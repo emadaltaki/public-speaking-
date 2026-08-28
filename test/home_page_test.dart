@@ -25,6 +25,7 @@ void main() {
     expect(find.text(Translations.howHeadline), findsOneWidget);
     expect(find.text(Translations.sessionsHeadline), findsOneWidget);
     expect(find.text(Translations.pricingHeadline), findsOneWidget);
+    expect(find.text(Translations.pricingIntroTitle), findsOneWidget);
     expect(find.text(Translations.galleryHeadline), findsWidgets);
     expect(find.text(Translations.testimonialsHeadline), findsOneWidget);
     expect(find.text(Translations.trustHeadline), findsOneWidget);
@@ -79,6 +80,7 @@ void main() {
     expect(find.text(Translations.trust1), findsOneWidget);
     expect(find.text(Translations.trust7), findsOneWidget);
     expect(find.text(Translations.expect1Body), findsOneWidget);
+    expect(find.text(Translations.expect3Body), findsOneWidget);
     expect(find.text(Translations.expect4Body), findsOneWidget);
   });
 

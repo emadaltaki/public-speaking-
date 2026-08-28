@@ -11,10 +11,16 @@ import 'section_container.dart';
 import 'site_card.dart';
 
 class PricingSection extends StatelessWidget {
-  const PricingSection({super.key, required this.onJoin, required this.onTalk});
+  const PricingSection({
+    super.key,
+    required this.onJoin,
+    required this.onTalk,
+    required this.onBookIntro,
+  });
 
   final VoidCallback onJoin;
   final VoidCallback onTalk;
+  final VoidCallback onBookIntro;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,8 @@ class PricingSection extends StatelessWidget {
             const SizedBox(height: 8),
             Text(Translations.pricingCurrencyNote, style: AppStyles.bodySmall),
             const SizedBox(height: 32),
+            _FreeIntroCard(onBookIntro: onBookIntro),
+            const SizedBox(height: 16),
             LayoutBuilder(
               builder: (context, constraints) {
                 final stacked = constraints.maxWidth < 960;
@@ -84,6 +92,76 @@ class PricingSection extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FreeIntroCard extends StatelessWidget {
+  const _FreeIntroCard({required this.onBookIntro});
+
+  final VoidCallback onBookIntro;
+
+  @override
+  Widget build(BuildContext context) {
+    return SiteCard(
+      borderColor: AppColors.teal,
+      color: AppColors.lightBlue,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.teal,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Text(
+                Translations.pricingIntroBadge,
+                style: AppStyles.label.copyWith(
+                  color: AppColors.onTeal,
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(Translations.pricingIntroTitle, style: AppStyles.title),
+          const SizedBox(height: 8),
+          Text(
+            Translations.pricingIntroPrice,
+            style: AppStyles.headline.copyWith(
+              color: AppColors.teal,
+              fontSize: 40,
+            ),
+          ),
+          Text(Translations.pricingIntroMeta, style: AppStyles.bodySmall),
+          const SizedBox(height: 12),
+          Text(Translations.pricingIntroDesc, style: AppStyles.bodySmall),
+          const SizedBox(height: 16),
+          for (final feature in [
+            Translations.pricingIntroFeatureMeet,
+            Translations.pricingIntroFeatureUnderstand,
+            Translations.pricingIntroFeatureFit,
+          ])
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.check, size: 18, color: AppColors.teal),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(feature, style: AppStyles.bodySmall)),
+                ],
+              ),
+            ),
+          const SizedBox(height: 16),
+          PrimaryButton(
+            label: Translations.pricingIntroCta,
+            onPressed: onBookIntro,
+          ),
+        ],
       ),
     );
   }

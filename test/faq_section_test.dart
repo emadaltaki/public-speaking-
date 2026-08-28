@@ -32,5 +32,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('CAD'), findsOneWidget);
     expect(find.textContaining(r'$50'), findsWidgets);
+
+    expect(find.text(Translations.faqQ9), findsOneWidget);
+    await tester.ensureVisible(find.text(Translations.faqQ9));
+    await tester.tap(find.text(Translations.faqQ9));
+    await tester.pumpAndSettle();
+    expect(find.text(Translations.faqA9), findsOneWidget);
   });
 }

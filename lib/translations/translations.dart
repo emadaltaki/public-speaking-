@@ -102,8 +102,24 @@ class Translations {
 
   static const String pricingHeadline = 'Start Where You Are. Grow From There.';
   static const String pricingSupport =
-      "You don't need to commit to a big program to get started. Join one session, see how it feels, and continue when you're ready.";
+      "You don't need to commit to a big program to get started. Begin with a free online conversation, join one session if it feels right, and continue when you're ready.";
   static const String pricingCurrencyNote = 'Prices are in CAD (\$).';
+  static const String pricingIntroBadge = 'FREE';
+  static const String pricingIntroTitle = 'Free Online Explanation Session';
+  static const String pricingIntroPrice = '\$0';
+  static const String pricingIntroMeta = '15–20 minutes · online video call';
+  static const String pricingIntroDesc =
+      'Talk with a host, ask anything, and we will walk through what we do. You do not have to speak, and there is no pressure to join a paid session.';
+  static const String pricingIntroCta = 'Book a Free Explanation Session';
+  static const String pricingIntroFeatureMeet = 'Meet a host';
+  static const String pricingIntroFeatureUnderstand =
+      'Understand how sessions work';
+  static const String pricingIntroFeatureFit =
+      'See if it feels like a fit — no commitment';
+  static const String pricingIntroEmailSubject =
+      'Speak Up Fearless — free explanation session';
+  static const String pricingIntroEmailBody =
+      'Hi — I would like to book a free online explanation session to understand how Speak Up Fearless works.';
   static const String pricingSingleTitle = 'Single Session';
   static const String pricingSinglePrice = '\$50';
   static const String pricingSingleMeta = '1 speaking session';
@@ -142,10 +158,10 @@ class Translations {
   static const String pricingReassureTitle =
       "Not sure you're ready for a package? That's okay.";
   static const String pricingReassureBody =
-      'Start with one session. There is no pressure to commit to more.';
+      'Start with a free explanation session, or try one paid session. There is no pressure to commit to more.';
   static const String pricingCtaHeadline = 'Ready to take the first step?';
   static const String pricingCtaBody =
-      "Choose a session package or reach out to us if you have questions. We're happy to help you find the right place to start.";
+      "Book a free explanation session, choose a session package, or reach out if you have questions. We're happy to help you find the right place to start.";
 
   static const String galleryHeadline = 'Our Community';
   static const String galleryIntro =
@@ -196,11 +212,13 @@ class Translations {
 
   static const String expectHeadline = 'What Happens When You Reach Out?';
   static const String expect1Title = 'Step 1';
-  static const String expect1Body = 'Send us an email.';
+  static const String expect1Body =
+      'Email us and ask for a free online explanation session.';
   static const String expect2Title = 'Step 2';
   static const String expect2Body = "We'll respond and answer your questions.";
   static const String expect3Title = 'Step 3';
-  static const String expect3Body = "We'll explain how our sessions work.";
+  static const String expect3Body =
+      "We'll hop on a short call and walk through how our sessions work.";
   static const String expect4Title = 'Step 4';
   static const String expect4Body = "You decide when you're ready to join.";
   static const String expectReassure =
@@ -230,7 +248,11 @@ class Translations {
       'Sessions focus on practice, reflection, and constructive feedback in a supportive environment. We will walk you through the flow before you join.';
   static const String faqQ8 = 'How much does it cost?';
   static const String faqA8 =
-      'Packages are listed in CAD on this page: \$50 for a single session, \$180 for four sessions, and \$320 for eight sessions. Email us if you have questions about which starting point is right for you.';
+      'Packages are listed in CAD on this page: \$50 for a single session, \$180 for four sessions, and \$320 for eight sessions. A free online explanation session is available if you want to talk first. Email us if you have questions about which starting point is right for you.';
+  static const String faqQ9 =
+      'Can I talk to you before joining a session?';
+  static const String faqA9 =
+      'Yes. We offer a free online explanation session so you can talk with a host, understand what we do, and ask questions. There is no speaking required and no pressure to join.';
 
   static const String contactHeadline = 'Ready to Take the First Step?';
   static const String contactSupport =

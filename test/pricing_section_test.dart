@@ -16,13 +16,20 @@ void main() {
       wrapForTest(
         Scaffold(
           body: SingleChildScrollView(
-            child: PricingSection(onJoin: () {}, onTalk: () {}),
+            child: PricingSection(
+              onJoin: () {},
+              onTalk: () {},
+              onBookIntro: () {},
+            ),
           ),
         ),
       ),
     );
     await tester.pumpAndSettle();
 
+    expect(find.text(Translations.pricingIntroTitle), findsOneWidget);
+    expect(find.text(Translations.pricingIntroPrice), findsOneWidget);
+    expect(find.text(Translations.pricingIntroCta), findsOneWidget);
     expect(find.text(Translations.pricingSinglePrice), findsWidgets);
     expect(find.text(Translations.pricingFourPrice), findsWidgets);
     expect(find.text(Translations.pricingEightPrice), findsWidgets);
@@ -45,7 +52,11 @@ void main() {
       wrapForTest(
         Scaffold(
           body: SingleChildScrollView(
-            child: PricingSection(onJoin: () {}, onTalk: () {}),
+            child: PricingSection(
+              onJoin: () {},
+              onTalk: () {},
+              onBookIntro: () {},
+            ),
           ),
         ),
       ),
@@ -54,5 +65,29 @@ void main() {
     expect(find.text(Translations.pricingSingleCta), findsOneWidget);
     expect(find.text(Translations.pricingFourCta), findsOneWidget);
     expect(find.text(Translations.pricingEightCta), findsOneWidget);
+  });
+
+  testWidgets('free explanation CTA uses the book-intro callback', (
+    tester,
+  ) async {
+    setSurface(tester, size: const Size(1280, 2000));
+    var booked = 0;
+    await tester.pumpWidget(
+      wrapForTest(
+        Scaffold(
+          body: SingleChildScrollView(
+            child: PricingSection(
+              onJoin: () {},
+              onTalk: () {},
+              onBookIntro: () => booked += 1,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(Translations.pricingIntroCta));
+    expect(booked, 1);
   });
 }

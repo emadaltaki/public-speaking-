@@ -169,6 +169,7 @@ class SiteContent {
     FaqItem(question: Translations.faqQ6, answer: Translations.faqA6),
     FaqItem(question: Translations.faqQ7, answer: Translations.faqA7),
     FaqItem(question: Translations.faqQ8, answer: Translations.faqA8),
+    FaqItem(question: Translations.faqQ9, answer: Translations.faqA9),
   ];
 
   static const List<String> trustPoints = [
