@@ -19,37 +19,29 @@ class AppStyles {
   static const double navBreakpoint = 1100;
   static const double tabletBreakpoint = 720;
 
+  // Shadows use small blurs on purpose: large blurs are redrawn every frame
+  // on the web and made scrolling stutter on phones.
   static List<BoxShadow> get softShadow => [
     BoxShadow(
-      color: AppColors.navy.withValues(alpha: 0.04),
-      blurRadius: 2,
-      offset: const Offset(0, 1),
-    ),
-    BoxShadow(
-      color: AppColors.navy.withValues(alpha: 0.06),
-      blurRadius: 24,
-      offset: const Offset(0, 8),
+      color: AppColors.navy.withValues(alpha: 0.07),
+      blurRadius: 10,
+      offset: const Offset(0, 4),
     ),
   ];
 
   static List<BoxShadow> get hoverShadow => [
     BoxShadow(
-      color: AppColors.navy.withValues(alpha: 0.05),
-      blurRadius: 2,
-      offset: const Offset(0, 1),
-    ),
-    BoxShadow(
       color: AppColors.navy.withValues(alpha: 0.12),
-      blurRadius: 36,
-      offset: const Offset(0, 16),
+      blurRadius: 16,
+      offset: const Offset(0, 8),
     ),
   ];
 
   static List<BoxShadow> get elevatedShadow => [
     BoxShadow(
-      color: AppColors.navy.withValues(alpha: 0.18),
-      blurRadius: 48,
-      offset: const Offset(0, 20),
+      color: AppColors.navy.withValues(alpha: 0.16),
+      blurRadius: 20,
+      offset: const Offset(0, 10),
     ),
   ];
 

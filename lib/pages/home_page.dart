@@ -186,82 +186,82 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Expanded(
-            child: SelectionArea(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    KeyedSubtree(
-                      key: _homeKey,
-                      child: HeroSection(
-                        onJoin: _bookIntro,
-                        onLearnSessions: () => _scrollTo(_sessionsKey),
-                      ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                // Each section repaints on its own, which keeps scrolling
+                // smooth on phones.
+                children: [
+                  KeyedSubtree(
+                    key: _homeKey,
+                    child: HeroSection(
+                      onJoin: _bookIntro,
+                      onLearnSessions: () => _scrollTo(_sessionsKey),
                     ),
-                    KeyedSubtree(key: _whyKey, child: const AnxietySection()),
-                    const HowItWorksSection(),
-                    KeyedSubtree(
-                      key: _sessionsKey,
-                      child: const SessionsSection(),
-                    ),
-                    PricingSection(
-                      onJoin: () => _scrollTo(_contactKey),
-                      onBookIntro: _bookIntro,
-                    ),
-                    KeyedSubtree(
-                      key: _communityKey,
-                      child: const CommunityGallery(),
-                    ),
-                    const TestimonialsSection(),
-                    KeyedSubtree(key: _faqKey, child: const FaqSection()),
-                    KeyedSubtree(
-                      key: _contactKey,
-                      child: BookingSection(
-                        onRequest: _requestTime,
-                        onEmail: _talkToUs,
-                        onCall: _callUs,
-                      ),
-                    ),
-                    SiteFooter(
+                  ),
+                  KeyedSubtree(key: _whyKey, child: const AnxietySection()),
+                  const HowItWorksSection(),
+                  KeyedSubtree(
+                    key: _sessionsKey,
+                    child: const SessionsSection(),
+                  ),
+                  PricingSection(
+                    onJoin: () => _scrollTo(_contactKey),
+                    onBookIntro: _bookIntro,
+                  ),
+                  KeyedSubtree(
+                    key: _communityKey,
+                    child: const CommunityGallery(),
+                  ),
+                  const TestimonialsSection(),
+                  KeyedSubtree(key: _faqKey, child: const FaqSection()),
+                  KeyedSubtree(
+                    key: _contactKey,
+                    child: BookingSection(
+                      onRequest: _requestTime,
                       onEmail: _talkToUs,
-                      onPhone: _callUs,
-                      links: [
-                        FooterLink(
-                          label: Translations.navHome,
-                          onPressed: () => _scrollTo(_homeKey),
-                        ),
-                        FooterLink(
-                          label: Translations.footerMission,
-                          onPressed: () => _scrollTo(_whyKey),
-                        ),
-                        FooterLink(
-                          label: Translations.navSessions,
-                          onPressed: () => _scrollTo(_sessionsKey),
-                        ),
-                        FooterLink(
-                          label: Translations.footerCommunity,
-                          onPressed: () => _scrollTo(_communityKey),
-                        ),
-                        FooterLink(
-                          label: Translations.navGames,
-                          onPressed: _openGames,
-                        ),
-                        FooterLink(
-                          label: Translations.navFaq,
-                          onPressed: () => _scrollTo(_faqKey),
-                        ),
-                        FooterLink(
-                          label: Translations.navContact,
-                          onPressed: () => _scrollTo(_contactKey),
-                        ),
-                        FooterLink(
-                          label: Translations.footerPrivacy,
-                          onPressed: _showPrivacy,
-                        ),
-                      ],
+                      onCall: _callUs,
                     ),
-                  ],
-                ),
+                  ),
+                  SiteFooter(
+                    onEmail: _talkToUs,
+                    onPhone: _callUs,
+                    links: [
+                      FooterLink(
+                        label: Translations.navHome,
+                        onPressed: () => _scrollTo(_homeKey),
+                      ),
+                      FooterLink(
+                        label: Translations.footerMission,
+                        onPressed: () => _scrollTo(_whyKey),
+                      ),
+                      FooterLink(
+                        label: Translations.navSessions,
+                        onPressed: () => _scrollTo(_sessionsKey),
+                      ),
+                      FooterLink(
+                        label: Translations.footerCommunity,
+                        onPressed: () => _scrollTo(_communityKey),
+                      ),
+                      FooterLink(
+                        label: Translations.navGames,
+                        onPressed: _openGames,
+                      ),
+                      FooterLink(
+                        label: Translations.navFaq,
+                        onPressed: () => _scrollTo(_faqKey),
+                      ),
+                      FooterLink(
+                        label: Translations.navContact,
+                        onPressed: () => _scrollTo(_contactKey),
+                      ),
+                      FooterLink(
+                        label: Translations.footerPrivacy,
+                        onPressed: _showPrivacy,
+                      ),
+                    ],
+                  ),
+                ].map((section) => RepaintBoundary(child: section)).toList(),
               ),
             ),
           ),
