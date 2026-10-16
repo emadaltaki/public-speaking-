@@ -75,29 +75,35 @@ class Translations {
   static const String tripleStepRemovePlayer = 'Remove player';
   static const String tripleStepTopics = 'Number of topics';
   static const String tripleStepTopicsHelp =
-      'How many surprise words you need to work into your speech.';
+      'How many surprise words will pop up while you speak.';
   static const String tripleStepTimer = 'Timer';
   static const String tripleStepSuggestTitle = 'Suggest a title';
   static const String tripleStepSuggestTitleHelp =
       'Get a random speech topic, or turn off to choose your own.';
   static const String tripleStepSurvival = 'Survival mode';
   static const String tripleStepSurvivalHelp =
-      'Each word gets its own countdown. Miss one and the round ends.';
+      'Words keep coming at the same pace until you get stuck.';
   static const String tripleStepWordSet = 'Word set';
   static const String tripleStepStart = 'START TRAINING';
   static const String tripleStepBackToSettings = 'Back to settings';
   static const String tripleStepInstruction =
-      'Speak on this topic and tick each word as you work it into your speech.';
+      'Keep speaking on this topic. Work each new word into your speech as it appears.';
   static const String tripleStepSurvivalInstruction =
-      'Work in a word before the countdown ends. Each tick resets the clock.';
-  static const String tripleStepNextWordTimer = 'until your next word';
+      'Words keep coming. Work each one in and see how long you can last.';
   static const String tripleStepPause = 'Pause';
   static const String tripleStepResume = 'Resume';
   static const String tripleStepFinish = 'Finish';
-  static const String tripleStepWords = 'Words to use';
-  static const String tripleStepAllDone = 'All words used!';
-  static const String tripleStepTimeUp = "Time's up!";
-  static const String tripleStepEliminated = 'Out of time on a word';
+  static const String tripleStepWords = 'Your words';
+  static const String tripleStepSpokenFor = 'speaking time';
+  static const String tripleStepStuck = "I'm stuck";
+  static const String tripleStepNextWordIn = 'Next word in';
+  static const String tripleStepFirstWordSoon =
+      'Start speaking. Your first word is on its way…';
+  static const String tripleStepNew = 'NEW';
+  static const String tripleStepComingUp = 'Coming up…';
+  static const String tripleStepGreatSpeech = 'Great speech!';
+  static const String tripleStepSurvived = 'You kept going!';
+  static const String tripleStepRoundEnded = 'Round ended';
   static const String tripleStepScore = 'Score';
   static const String tripleStepStandings = 'Standings';
   static const String tripleStepNextPlayer = 'Next';
