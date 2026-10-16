@@ -16,11 +16,7 @@ void main() {
       wrapForTest(
         Scaffold(
           body: SingleChildScrollView(
-            child: PricingSection(
-              onJoin: () {},
-              onTalk: () {},
-              onBookIntro: () {},
-            ),
+            child: PricingSection(onJoin: () {}, onBookIntro: () {}),
           ),
         ),
       ),
@@ -38,9 +34,7 @@ void main() {
     expect(find.text(Translations.pricingFourBadge), findsOneWidget);
     expect(find.text(Translations.pricingEightBadge), findsOneWidget);
     expect(find.text(Translations.pricingCurrencyNote), findsOneWidget);
-    expect(find.text(Translations.pricingReassureBody), findsOneWidget);
-    expect(find.text(Translations.ctaJoin), findsOneWidget);
-    expect(find.text(Translations.ctaTalkToUs), findsOneWidget);
+    expect(find.text(Translations.pricingIncludes), findsOneWidget);
 
     final struck = tester.widget<Text>(find.text(Translations.pricingFourWas));
     expect(struck.style?.decoration, TextDecoration.lineThrough);
@@ -52,11 +46,7 @@ void main() {
       wrapForTest(
         Scaffold(
           body: SingleChildScrollView(
-            child: PricingSection(
-              onJoin: () {},
-              onTalk: () {},
-              onBookIntro: () {},
-            ),
+            child: PricingSection(onJoin: () {}, onBookIntro: () {}),
           ),
         ),
       ),
@@ -78,7 +68,6 @@ void main() {
           body: SingleChildScrollView(
             child: PricingSection(
               onJoin: () {},
-              onTalk: () {},
               onBookIntro: () => booked += 1,
             ),
           ),

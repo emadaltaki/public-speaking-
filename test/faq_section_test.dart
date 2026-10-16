@@ -8,13 +8,13 @@ import 'support/test_helpers.dart';
 void main() {
   setUpAll(configureTestFonts);
 
-  testWidgets('FAQ answers are closed until a question is opened', (tester) async {
+  testWidgets('FAQ answers are closed until a question is opened', (
+    tester,
+  ) async {
     setSurface(tester, size: const Size(800, 1600));
     await tester.pumpWidget(
       wrapForTest(
-        const Scaffold(
-          body: SingleChildScrollView(child: FaqSection()),
-        ),
+        const Scaffold(body: SingleChildScrollView(child: FaqSection())),
       ),
     );
     await tester.pumpAndSettle();
@@ -26,12 +26,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(Translations.faqA1), findsOneWidget);
 
-    expect(find.text(Translations.faqQ8), findsOneWidget);
-    await tester.ensureVisible(find.text(Translations.faqQ8));
-    await tester.tap(find.text(Translations.faqQ8));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('CAD'), findsOneWidget);
-    expect(find.textContaining(r'$50'), findsWidgets);
+    // Non-answers and the price repeat were trimmed from the FAQ.
+    expect(find.text(Translations.faqQ5), findsNothing);
+    expect(find.text(Translations.faqQ8), findsNothing);
 
     expect(find.text(Translations.faqQ9), findsOneWidget);
     await tester.ensureVisible(find.text(Translations.faqQ9));

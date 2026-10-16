@@ -15,12 +15,10 @@ class PricingSection extends StatelessWidget {
   const PricingSection({
     super.key,
     required this.onJoin,
-    required this.onTalk,
     required this.onBookIntro,
   });
 
   final VoidCallback onJoin;
-  final VoidCallback onTalk;
   final VoidCallback onBookIntro;
 
   @override
@@ -77,10 +75,27 @@ class PricingSection extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 32),
-            _PricingSummary(),
-            const SizedBox(height: 32),
-            _PricingCta(onJoin: onJoin, onTalk: onTalk),
+            const SizedBox(height: 24),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 3),
+                  child: Icon(
+                    Icons.check_circle_rounded,
+                    size: 20,
+                    color: AppColors.teal,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    Translations.pricingIncludes,
+                    style: AppStyles.body,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -118,10 +133,9 @@ class _Pill extends StatelessWidget {
 }
 
 class _FeatureRow extends StatelessWidget {
-  const _FeatureRow({required this.text, this.onDark = false});
+  const _FeatureRow({required this.text});
 
   final String text;
-  final bool onDark;
 
   @override
   Widget build(BuildContext context) {
@@ -134,25 +148,21 @@ class _FeatureRow extends StatelessWidget {
             width: 20,
             height: 20,
             margin: const EdgeInsets.only(top: 1),
-            decoration: BoxDecoration(
-              color: onDark
-                  ? AppColors.tealLight.withValues(alpha: 0.18)
-                  : AppColors.tealSoft,
+            decoration: const BoxDecoration(
+              color: AppColors.tealSoft,
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.check_rounded,
               size: 14,
-              color: onDark ? AppColors.tealLight : AppColors.teal,
+              color: AppColors.teal,
             ),
           ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: AppStyles.bodySmall.copyWith(
-                color: onDark ? AppColors.lightBlue : AppColors.charcoal,
-              ),
+              style: AppStyles.bodySmall.copyWith(color: AppColors.charcoal),
             ),
           ),
         ],
@@ -339,21 +349,6 @@ class _PricingCard extends StatelessWidget {
               pack.meta!,
               style: AppStyles.bodySmall.copyWith(color: mutedColor),
             ),
-          const SizedBox(height: 16),
-          Text(
-            pack.description,
-            style: AppStyles.bodySmall.copyWith(color: mutedColor),
-          ),
-          const SizedBox(height: 20),
-          Divider(
-            height: 1,
-            color: dark
-                ? Colors.white.withValues(alpha: 0.14)
-                : AppColors.border,
-          ),
-          const SizedBox(height: 20),
-          for (final feature in pack.features)
-            _FeatureRow(text: feature, onDark: dark),
           if (fillHeight) const Spacer(),
           const SizedBox(height: 20),
           SizedBox(
@@ -367,244 +362,6 @@ class _PricingCard extends StatelessWidget {
                 : SecondaryButton(label: pack.cta, onPressed: onSelect),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PricingSummary extends StatelessWidget {
-  /// Phone layout: one stacked block per package instead of a wide table.
-  Widget _compact(TextStyle header) {
-    Widget cell(String label, String value) => Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label.toUpperCase(), style: header.copyWith(fontSize: 10)),
-          const SizedBox(height: 2),
-          Text(value, style: AppStyles.bodySmall),
-        ],
-      ),
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (var i = 0; i < SiteContent.pricing.length; i++) ...[
-          if (i > 0) const Divider(height: 28, color: AppColors.border),
-          Text(
-            SiteContent.pricing[i].title,
-            style: AppStyles.bodySmall.copyWith(
-              color: AppColors.navy,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              cell(
-                Translations.pricingTableTotal,
-                SiteContent.pricing[i].price,
-              ),
-              cell(
-                Translations.pricingTableSavings,
-                SiteContent.pricing[i].savingsTable,
-              ),
-              cell(
-                Translations.pricingTablePer,
-                SiteContent.pricing[i].perSessionTable,
-              ),
-            ],
-          ),
-        ],
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final header = AppStyles.label.copyWith(
-      color: AppColors.mutedText,
-      fontSize: 12,
-      letterSpacing: 1,
-    );
-    return SiteCard(
-      hoverLift: false,
-      color: Colors.white,
-      child: LayoutBuilder(
-        builder: (context, constraints) => constraints.maxWidth < 560
-            ? _compact(header)
-            : SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: constraints.maxWidth < 640
-                      ? 640
-                      : constraints.maxWidth,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              Translations.pricingTablePackage.toUpperCase(),
-                              style: header,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              Translations.pricingTableTotal.toUpperCase(),
-                              textAlign: TextAlign.end,
-                              style: header,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              Translations.pricingTableSavings.toUpperCase(),
-                              textAlign: TextAlign.end,
-                              style: header,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              Translations.pricingTablePer.toUpperCase(),
-                              textAlign: TextAlign.end,
-                              style: header,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(height: 28),
-                      for (final pack in SiteContent.pricing)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  pack.title,
-                                  style: AppStyles.bodySmall.copyWith(
-                                    color: AppColors.navy,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  pack.price,
-                                  textAlign: TextAlign.end,
-                                  style: AppStyles.bodySmall,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  pack.savingsTable,
-                                  textAlign: TextAlign.end,
-                                  style: AppStyles.bodySmall.copyWith(
-                                    color:
-                                        pack.savingsTable ==
-                                            Translations.pricingTableDash
-                                        ? AppColors.mutedText
-                                        : AppColors.teal,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  pack.perSessionTable,
-                                  textAlign: TextAlign.end,
-                                  style: AppStyles.bodySmall,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-      ),
-    );
-  }
-}
-
-class _PricingCta extends StatelessWidget {
-  const _PricingCta({required this.onJoin, required this.onTalk});
-
-  final VoidCallback onJoin;
-  final VoidCallback onTalk;
-
-  @override
-  Widget build(BuildContext context) {
-    return SiteCard(
-      hoverLift: false,
-      color: AppColors.lightBlue,
-      borderColor: Colors.transparent,
-      padding: const EdgeInsets.all(36),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final wide = constraints.maxWidth >= 860;
-          final reassure = Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.favorite_rounded,
-                    size: 18,
-                    color: AppColors.teal,
-                  ),
-                  const SizedBox(width: 8),
-                  Flexible(
-                    child: Text(
-                      Translations.pricingReassureTitle,
-                      style: AppStyles.label.copyWith(color: AppColors.teal),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                Translations.pricingReassureBody,
-                style: AppStyles.bodySmall,
-              ),
-            ],
-          );
-          final cta = Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(Translations.pricingCtaHeadline, style: AppStyles.title),
-              const SizedBox(height: 8),
-              Text(Translations.pricingCtaBody, style: AppStyles.body),
-              const SizedBox(height: 20),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  PrimaryButton(label: Translations.ctaJoin, onPressed: onJoin),
-                  SecondaryButton(
-                    label: Translations.ctaTalkToUs,
-                    onPressed: onTalk,
-                  ),
-                ],
-              ),
-            ],
-          );
-          if (!wide) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [reassure, const SizedBox(height: 28), cta],
-            );
-          }
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: reassure),
-              const SizedBox(width: 48),
-              Expanded(child: cta),
-            ],
-          );
-        },
       ),
     );
   }

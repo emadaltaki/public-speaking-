@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../components/anxiety_section.dart';
 import '../components/app_navbar.dart';
 import '../components/community_gallery.dart';
-import '../components/contact_section.dart';
+import '../components/booking_section.dart';
 import '../components/faq_section.dart';
 import '../components/hero_section.dart';
 import '../components/how_it_works_section.dart';
-import '../components/mission_section.dart';
 import '../components/pricing_section.dart';
 import '../components/sessions_section.dart';
 import '../components/site_footer.dart';
 import '../components/testimonials_section.dart';
-import '../components/trust_section.dart';
-import '../components/what_to_expect_section.dart';
 import '../contact/contact_submit_handler.dart';
 import '../contact/mailto_contact_submit_handler.dart';
 import '../theme/colors.dart';
@@ -103,18 +99,11 @@ class _HomePageState extends State<HomePage> {
     _showEmailFallback();
   }
 
-  Future<void> _bookIntro() async {
-    if (Translations.bookingUrl.isNotEmpty) {
-      await launchUrl(
-        Uri.parse(Translations.bookingUrl),
-        webOnlyWindowName: '_blank',
-      );
-      return;
-    }
-    await _handler.openEmailClient(
-      subject: Translations.pricingIntroEmailSubject,
-      body: Translations.pricingIntroEmailBody,
-    );
+  /// Every "book" button leads to the scheduling section.
+  Future<void> _bookIntro() => _scrollTo(_contactKey);
+
+  Future<void> _requestTime(String subject, String body) async {
+    await _handler.openEmailClient(subject: subject, body: body);
     _showEmailFallback();
   }
 
@@ -191,11 +180,7 @@ class _HomePageState extends State<HomePage> {
                         onLearnSessions: () => _scrollTo(_sessionsKey),
                       ),
                     ),
-                    KeyedSubtree(
-                      key: _whyKey,
-                      child: const AnxietySection(),
-                    ),
-                    const MissionSection(),
+                    KeyedSubtree(key: _whyKey, child: const AnxietySection()),
                     const HowItWorksSection(),
                     KeyedSubtree(
                       key: _sessionsKey,
@@ -203,7 +188,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                     PricingSection(
                       onJoin: () => _scrollTo(_contactKey),
-                      onTalk: _talkToUs,
                       onBookIntro: _bookIntro,
                     ),
                     KeyedSubtree(
@@ -211,18 +195,13 @@ class _HomePageState extends State<HomePage> {
                       child: const CommunityGallery(),
                     ),
                     const TestimonialsSection(),
-                    const TrustSection(),
-                    const WhatToExpectSection(),
-                    KeyedSubtree(
-                      key: _faqKey,
-                      child: const FaqSection(),
-                    ),
+                    KeyedSubtree(key: _faqKey, child: const FaqSection()),
                     KeyedSubtree(
                       key: _contactKey,
-                      child: ContactSection(
-                        handler: _handler,
-                        onTalkToUs: _talkToUs,
-                        onCallUs: _callUs,
+                      child: BookingSection(
+                        onRequest: _requestTime,
+                        onEmail: _talkToUs,
+                        onCall: _callUs,
                       ),
                     ),
                     SiteFooter(

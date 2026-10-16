@@ -165,10 +165,7 @@ class SiteContent {
     FaqItem(question: Translations.faqQ2, answer: Translations.faqA2),
     FaqItem(question: Translations.faqQ3, answer: Translations.faqA3),
     FaqItem(question: Translations.faqQ4, answer: Translations.faqA4),
-    FaqItem(question: Translations.faqQ5, answer: Translations.faqA5),
-    FaqItem(question: Translations.faqQ6, answer: Translations.faqA6),
     FaqItem(question: Translations.faqQ7, answer: Translations.faqA7),
-    FaqItem(question: Translations.faqQ8, answer: Translations.faqA8),
     FaqItem(question: Translations.faqQ9, answer: Translations.faqA9),
   ];
 

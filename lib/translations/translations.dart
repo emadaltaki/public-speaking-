@@ -23,6 +23,29 @@ class Translations {
   static const String photoEnlarge = 'View larger';
   static const String heroPhotoCaption = 'Learning by doing';
 
+  static const String pricingIncludes =
+      'Every session includes guided speaking practice, constructive feedback and confidence-building exercises in a supportive group.';
+
+  static const String bookingHeadline = 'Book Your Free Intro Call';
+  static const String bookingIntro =
+      "Pick a day and time that suits you. We'll reply to confirm.";
+  static const String bookingFormTitle = 'Choose a time for your free call';
+  static const String bookingPickDay = 'Pick a day';
+  static const String bookingPickTime = 'Pick a time';
+  static const String bookingTimeMorning = 'Morning (9am–12pm)';
+  static const String bookingTimeAfternoon = 'Afternoon (12–5pm)';
+  static const String bookingTimeEvening = 'Evening (5–9pm)';
+  static const String bookingChoiceRequired = 'Please pick a day and a time.';
+  static const String bookingYourDetails = 'Your details';
+  static const String bookingContactLabel = 'Email or phone';
+  static const String bookingContactRequired =
+      'Please add an email or phone number.';
+  static const String bookingSubmit = 'Request This Time';
+  static const String bookingNote =
+      "This opens a ready-to-send email. We'll reply to confirm your time.";
+  static const String bookingEmailSubject = 'Free intro call request';
+  static const String bookingPreferToTalk = 'Prefer to talk first?';
+
   static const String footerPrivacy = 'Privacy Policy';
   static const String privacyTitle = 'Privacy Policy';
   static const String privacyClose = 'Close';
@@ -61,7 +84,7 @@ class Translations {
 
   static const String heroHeadline = "You Don't Have to Be Fearless to Speak.";
   static const String heroSupport =
-      "Public speaking anxiety is normal. You don't have to overcome it alone. Speak Up Fearless is a supportive community where you can practice, build confidence, and learn to speak with courage.";
+      "Public speaking anxiety is normal. Practice with a supportive group in Mississauga and build real confidence, one step at a time.";
   static const String heroTrust =
       'A supportive space to practice. No judgment. No pressure. Just progress.';
   static const String heroImageAlt =
@@ -123,7 +146,7 @@ class Translations {
 
   static const String sessionsHeadline = 'Practice Without the Pressure.';
   static const String sessionsIntro =
-      'Sessions are designed to give members a regular place to practice speaking — community, communication skills, and confidence. Not clinical treatment.';
+      'A regular place to practice speaking. Community and skills, not clinical treatment.';
   static const String sessionPracticeTitle = 'Speaking Practice';
   static const String sessionPracticeBody =
       'Practice expressing ideas clearly and confidently.';
@@ -142,14 +165,14 @@ class Translations {
 
   static const String pricingHeadline = 'Start Where You Are. Grow From There.';
   static const String pricingSupport =
-      "You don't need to commit to a big program to get started. Begin with a free online conversation, join one session if it feels right, and continue when you're ready.";
+      "Start with a free call. Continue only when you're ready.";
   static const String pricingCurrencyNote = 'Prices are in CAD (\$).';
   static const String pricingIntroBadge = 'FREE';
   static const String pricingIntroTitle = 'Free Online Explanation Session';
   static const String pricingIntroPrice = '\$0';
   static const String pricingIntroMeta = '15–20 minutes · online video call';
   static const String pricingIntroDesc =
-      'Talk with a host, ask anything, and we will walk through what we do. You do not have to speak, and there is no pressure to join a paid session.';
+      'Meet a host and see how sessions work. No speaking required, no pressure to join.';
   static const String pricingIntroCta = 'Book a Free Explanation Session';
   static const String pricingIntroFeatureMeet = 'Meet a host';
   static const String pricingIntroFeatureUnderstand =
@@ -205,7 +228,7 @@ class Translations {
 
   static const String galleryHeadline = 'Our Community';
   static const String galleryIntro =
-      'Session photos, group moments, and the quiet work of finding your voice — together.';
+      'Real sessions, real people, finding their voice together.';
   static const String galleryCaption1 = 'Practicing together';
   static const String galleryCaption2 = 'Finding your voice';
   static const String galleryCaption3 = 'Learning through feedback';

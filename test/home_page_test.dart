@@ -19,19 +19,17 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text(Translations.heroHeadline), findsOneWidget);
-    expect(find.text(Translations.ctaJoin), findsWidgets);
+    expect(find.text(Translations.pricingIntroCta), findsWidgets);
     expect(find.text(Translations.anxietyHeadline), findsOneWidget);
-    expect(find.text(Translations.missionHeadline), findsOneWidget);
     expect(find.text(Translations.howHeadline), findsOneWidget);
     expect(find.text(Translations.sessionsHeadline), findsOneWidget);
     expect(find.text(Translations.pricingHeadline), findsOneWidget);
     expect(find.text(Translations.pricingIntroTitle), findsOneWidget);
     expect(find.text(Translations.galleryHeadline), findsWidgets);
     expect(find.text(Translations.testimonialsHeadline), findsOneWidget);
-    expect(find.text(Translations.trustHeadline), findsOneWidget);
-    expect(find.text(Translations.expectHeadline), findsOneWidget);
     expect(find.text(Translations.faqHeadline), findsWidgets);
-    expect(find.text(Translations.contactHeadline), findsOneWidget);
+    expect(find.text(Translations.bookingHeadline), findsOneWidget);
+    expect(find.text(Translations.bookingSubmit), findsOneWidget);
     expect(find.text(Translations.footerCopyright), findsOneWidget);
     expect(find.text(Translations.contactEmail), findsWidgets);
     expect(find.text(Translations.contactPhoneDisplay), findsWidgets);
@@ -66,22 +64,6 @@ void main() {
     expect(find.text(Translations.navWhy), findsOneWidget);
     expect(find.text(Translations.navSessions), findsWidgets);
     expect(find.text(Translations.navJoinUs), findsOneWidget);
-  });
-
-  testWidgets('trust checklist and what-to-expect steps are visible', (
-    tester,
-  ) async {
-    setSurface(tester, size: const Size(1280, 9000));
-    await tester.pumpWidget(
-      wrapForTest(HomePage(contactHandler: RecordingContactHandler())),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.text(Translations.trust1), findsOneWidget);
-    expect(find.text(Translations.trust7), findsOneWidget);
-    expect(find.text(Translations.expect1Body), findsOneWidget);
-    expect(find.text(Translations.expect3Body), findsOneWidget);
-    expect(find.text(Translations.expect4Body), findsOneWidget);
   });
 
   testWidgets('navbar and footer bands span the full viewport width', (

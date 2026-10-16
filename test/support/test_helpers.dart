@@ -16,10 +16,7 @@ void setSurface(WidgetTester tester, {required Size size}) {
 }
 
 Widget wrapForTest(Widget child) {
-  return MaterialApp(
-    theme: AppStyles.theme,
-    home: child,
-  );
+  return MaterialApp(theme: AppStyles.theme, home: child);
 }
 
 class RecordingContactHandler implements ContactSubmitHandler {

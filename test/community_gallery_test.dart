@@ -31,9 +31,7 @@ void main() {
     await tester.pumpWidget(
       wrapForTest(
         const Scaffold(
-          body: SingleChildScrollView(
-            child: CommunityGallery(items: first),
-          ),
+          body: SingleChildScrollView(child: CommunityGallery(items: first)),
         ),
       ),
     );
@@ -63,15 +61,14 @@ void main() {
     expect(find.text('Learning through feedback'), findsOneWidget);
   });
 
-  testWidgets('each tile renders the photo declared on its item',
-      (tester) async {
+  testWidgets('each tile renders the photo declared on its item', (
+    tester,
+  ) async {
     setSurface(tester, size: const Size(1200, 2400));
 
     await tester.pumpWidget(
       wrapForTest(
-        const Scaffold(
-          body: SingleChildScrollView(child: CommunityGallery()),
-        ),
+        const Scaffold(body: SingleChildScrollView(child: CommunityGallery())),
       ),
     );
     await tester.pumpAndSettle();
@@ -87,8 +84,9 @@ void main() {
     );
   });
 
-  testWidgets('a missing photo falls back to the painted scene',
-      (tester) async {
+  testWidgets('a missing photo falls back to the painted scene', (
+    tester,
+  ) async {
     setSurface(tester, size: const Size(900, 1400));
 
     await tester.pumpWidget(
@@ -118,9 +116,7 @@ void main() {
     setSurface(tester, size: const Size(1200, 2400));
     await tester.pumpWidget(
       wrapForTest(
-        const Scaffold(
-          body: SingleChildScrollView(child: CommunityGallery()),
-        ),
+        const Scaffold(body: SingleChildScrollView(child: CommunityGallery())),
       ),
     );
     await tester.pumpAndSettle();
