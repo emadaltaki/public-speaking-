@@ -95037,7 +95037,7 @@ s($,"aVu","YK",()=>new A.ahz(A.co("[/\\\\]",!0,!1),A.co("[^/\\\\]$",!0,!1),A.co(
 s($,"aVt","HC",()=>new A.ahc(A.co("/",!0,!1),A.co("(^[a-zA-Z][-+.a-zA-Z\\d]*://|[^/])$",!0,!1),A.co("[a-zA-Z][-+.a-zA-Z\\d]*://[^/]*",!0,!1),A.co("^/",!0,!1)))
 s($,"aVr","ax8",()=>A.aN7())
 s($,"aV0","atN",()=>A.ayU())
-s($,"aU3","aEF",()=>A.fa("https://formsubmit.co/ajax/speakupfearless@gmail.com",0,null))
+s($,"aU3","aEF",()=>A.fa("https://formsubmit.co/ajax/speakupunshaken@gmail.com",0,null))
 s($,"aVK","ax9",()=>new A.I())
 r($,"aNV","aFE",()=>{var q=new A.a99()
 q.a3g($.ax9())

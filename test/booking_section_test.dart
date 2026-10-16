@@ -96,7 +96,7 @@ void main() {
       );
 
       expect(await sender.send(request), isTrue);
-      expect(captured.url.path, endsWith(Translations.contactEmail));
+      expect(captured.url.path, endsWith(Translations.bookingInboxEmail));
       final body = jsonDecode(captured.body) as Map;
       expect(body['Name'], 'Alex');
       expect(body['Email or phone'], 'alex@example.com');
