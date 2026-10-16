@@ -25,9 +25,12 @@ class SectionContainer extends StatelessWidget {
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppStyles.maxContentWidth),
+          constraints: const BoxConstraints(
+            maxWidth: AppStyles.maxContentWidth,
+          ),
           child: Padding(
-            padding: padding ??
+            padding:
+                padding ??
                 EdgeInsets.symmetric(
                   horizontal: AppStyles.gutter,
                   vertical: vertical,

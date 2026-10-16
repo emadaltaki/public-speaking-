@@ -16,6 +16,13 @@ class Translations {
   static const String emailFallbackCopy = 'Copy email';
   static const String emailCopied = 'Email address copied.';
 
+  static const String photoViewerClose = 'Close photo';
+  static const String photoViewerPrevious = 'Previous photo';
+  static const String photoViewerNext = 'Next photo';
+  static const String photoViewerHint = 'Pinch, scroll or double-tap to zoom';
+  static const String photoEnlarge = 'View larger';
+  static const String heroPhotoCaption = 'Learning by doing';
+
   static const String footerPrivacy = 'Privacy Policy';
   static const String privacyTitle = 'Privacy Policy';
   static const String privacyClose = 'Close';

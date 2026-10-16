@@ -55,14 +55,33 @@ class CommunityScenePainter extends CustomPainter {
       canvas.drawPath(body, paint);
     }
 
-    person(size.width * 0.28, size.height * 0.58, size.width * 0.11, AppColors.navy);
-    person(size.width * 0.50, size.height * 0.50, size.width * 0.13, AppColors.teal);
-    person(size.width * 0.72, size.height * 0.58, size.width * 0.11, AppColors.personAccent);
+    person(
+      size.width * 0.28,
+      size.height * 0.58,
+      size.width * 0.11,
+      AppColors.navy,
+    );
+    person(
+      size.width * 0.50,
+      size.height * 0.50,
+      size.width * 0.13,
+      AppColors.teal,
+    );
+    person(
+      size.width * 0.72,
+      size.height * 0.58,
+      size.width * 0.11,
+      AppColors.personAccent,
+    );
 
     final glow = Paint()
       ..color = AppColors.teal.withValues(alpha: 0.12)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 24);
-    canvas.drawCircle(Offset(size.width * 0.5, size.height * 0.42), size.width * 0.28, glow);
+    canvas.drawCircle(
+      Offset(size.width * 0.5, size.height * 0.42),
+      size.width * 0.28,
+      glow,
+    );
   }
 
   @override

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:speak_up_fearless/components/community_gallery.dart';
 import 'package:speak_up_fearless/components/community_scene.dart';
+import 'package:speak_up_fearless/components/photo_viewer.dart';
 import 'package:speak_up_fearless/data/models.dart';
 import 'package:speak_up_fearless/data/site_content.dart';
+
+import 'package:speak_up_fearless/translations/translations.dart';
 
 import 'support/test_helpers.dart';
 
@@ -109,5 +112,31 @@ void main() {
 
     expect(find.byType(CommunityScene), findsOneWidget);
     expect(find.text('Behind the scenes'), findsOneWidget);
+  });
+
+  testWidgets('tapping a photo opens the zoomable viewer', (tester) async {
+    setSurface(tester, size: const Size(1200, 2400));
+    await tester.pumpWidget(
+      wrapForTest(
+        const Scaffold(
+          body: SingleChildScrollView(child: CommunityGallery()),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(SiteContent.gallery[1].caption));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PhotoViewer), findsOneWidget);
+    expect(find.byType(InteractiveViewer), findsWidgets);
+    expect(
+      find.textContaining('2 / ${SiteContent.gallery.length}'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byTooltip(Translations.photoViewerClose));
+    await tester.pumpAndSettle();
+    expect(find.byType(PhotoViewer), findsNothing);
   });
 }
