@@ -573,19 +573,13 @@ class _ResultsOverlay extends StatelessWidget {
     final (icon, title) = switch (last.status) {
       RoundStatus.finished => (
         Icons.emoji_events_rounded,
-        Translations.tripleStepGreatSpeech,
-      ),
-      _ when game.settings.survivalMode => (
-        Icons.local_fire_department_rounded,
-        Translations.tripleStepSurvived,
+        Translations.tripleStepTimeUp,
       ),
       _ => (Icons.flag_rounded, Translations.tripleStepRoundEnded),
     };
     String clock(Duration d) =>
         '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}';
     final multiplayerDone = game.settings.isMultiplayer && !game.hasNextPlayer;
-    final standings = [...game.results]
-      ..sort((a, b) => b.score.compareTo(a.score));
 
     return ColoredBox(
       color: AppColors.navyDeep.withValues(alpha: 0.55),
@@ -624,48 +618,41 @@ class _ResultsOverlay extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'You spoke for ${clock(last.spoken)} and worked with '
-                    '${last.wordsHandled} '
-                    '${last.wordsHandled == 1 ? 'word' : 'words'}.',
+                    'You spoke for ${clock(last.spoken)}.',
                     textAlign: TextAlign.center,
                     style: AppStyles.body,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${Translations.tripleStepScore}: ${last.score}',
-                    textAlign: TextAlign.center,
-                    style: AppStyles.label.copyWith(
-                      color: GameColors.accentDark,
-                    ),
                   ),
                   if (multiplayerDone) ...[
                     const SizedBox(height: 20),
                     Text(
-                      Translations.tripleStepStandings,
+                      Translations.tripleStepEveryoneWent,
                       style: AppStyles.label,
                     ),
                     const SizedBox(height: 8),
-                    for (var i = 0; i < standings.length; i++)
+                    for (final turn in game.results)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Row(
                           children: [
-                            SizedBox(
-                              width: 28,
-                              child: Text(
-                                i == 0 ? '🏆' : '${i + 1}.',
-                                style: AppStyles.label,
-                              ),
+                            const Icon(
+                              Icons.check_circle_rounded,
+                              size: 18,
+                              color: GameColors.accent,
                             ),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                standings[i].player ?? '',
+                                turn.player ?? '',
                                 style: AppStyles.body,
                               ),
                             ),
-                            Text(
-                              '${standings[i].wordsHandled} words · ${clock(standings[i].spoken)} · ${standings[i].score}',
-                              style: AppStyles.bodySmall,
+                            Flexible(
+                              child: Text(
+                                turn.topic,
+                                textAlign: TextAlign.end,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppStyles.bodySmall,
+                              ),
                             ),
                           ],
                         ),

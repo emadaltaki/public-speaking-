@@ -109,8 +109,6 @@ class RoundResult {
   final int wordsHandled;
   final Duration spoken;
   final RoundStatus status;
-
-  int get score => wordsHandled * 10 + spoken.inSeconds;
 }
 
 /// Game state for Triple Step: the speaker talks on a topic while words

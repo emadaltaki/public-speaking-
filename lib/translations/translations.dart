@@ -101,11 +101,9 @@ class Translations {
       'Start speaking. Your first word is on its way…';
   static const String tripleStepNew = 'NEW';
   static const String tripleStepComingUp = 'Coming up…';
-  static const String tripleStepGreatSpeech = 'Great speech!';
-  static const String tripleStepSurvived = 'You kept going!';
-  static const String tripleStepRoundEnded = 'Round ended';
-  static const String tripleStepScore = 'Score';
-  static const String tripleStepStandings = 'Standings';
+  static const String tripleStepTimeUp = "Time's up!";
+  static const String tripleStepRoundEnded = 'Round finished';
+  static const String tripleStepEveryoneWent = 'Everyone has had a turn';
   static const String tripleStepNextPlayer = 'Next';
   static const String tripleStepNewGame = 'New game';
   static const String tripleStepNextTopic = 'Next topic';

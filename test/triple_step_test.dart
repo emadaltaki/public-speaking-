@@ -71,7 +71,7 @@ void main() {
       expect(g.results.single.spoken, const Duration(minutes: 3));
     });
 
-    test('multiplayer rotates players and keeps standings', () {
+    test('multiplayer rotates players and records each turn', () {
       final g = game(
         const TripleStepSettings(
           mode: TripleStepMode.multiplayer,
@@ -162,8 +162,9 @@ void main() {
     for (var i = 0; i < 46; i++) {
       await tester.pump(const Duration(seconds: 1));
     }
-    expect(find.text(Translations.tripleStepGreatSpeech), findsOneWidget);
-    expect(find.textContaining('worked with 3 words'), findsOneWidget);
+    expect(find.text(Translations.tripleStepTimeUp), findsOneWidget);
+    expect(find.textContaining('Score'), findsNothing);
+    expect(find.text('You spoke for 1:00.'), findsOneWidget);
   });
 
   test('catalog routes Triple Step', () {
