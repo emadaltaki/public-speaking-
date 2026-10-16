@@ -77,8 +77,6 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
       bindings: {
         const SingleActivator(LogicalKeyboardKey.escape): _exit,
         const SingleActivator(LogicalKeyboardKey.space): _game.togglePause,
-        for (var i = 0; i < _game.words.length && i < 9; i++)
-          SingleActivator(LogicalKeyboardKey(0x31 + i)): () => _game.toggle(i),
       },
       child: Focus(
         autofocus: true,
@@ -116,13 +114,13 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
                                       children: [
                                         Expanded(child: _timerPanel(wide)),
                                         const SizedBox(width: 48),
-                                        Expanded(child: _checklist()),
+                                        Expanded(child: _wordsPanel()),
                                       ],
                                     )
                                   else ...[
                                     _timerPanel(wide),
                                     const SizedBox(height: 28),
-                                    _checklist(),
+                                    _wordsPanel(),
                                   ],
                                 ],
                               ),
@@ -197,10 +195,12 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
   }
 
   Widget _timerPanel(bool wide) {
-    final remaining = _game.remaining;
-    final low = _game.fractionRemaining <= 0.2;
-    final minutes = remaining.inMinutes.toString().padLeft(2, '0');
-    final seconds = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+    final survival = _game.settings.survivalMode;
+    // Survival counts speaking time up; normal rounds count down.
+    final shown = survival ? _game.elapsed : _game.remaining;
+    final low = !survival && _game.fractionRemaining <= 0.2;
+    final minutes = shown.inMinutes.toString().padLeft(2, '0');
+    final seconds = (shown.inSeconds % 60).toString().padLeft(2, '0');
     final paused = _game.status == RoundStatus.paused;
 
     return Column(
@@ -208,7 +208,9 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
         SizedBox.square(
           dimension: wide ? 280 : 170,
           child: Semantics(
-            label: 'Time remaining $minutes:$seconds',
+            label: survival
+                ? 'Spoken for $minutes:$seconds'
+                : 'Time remaining $minutes:$seconds',
             child: CustomPaint(
               painter: PieTimerPainter(
                 fraction: _game.fractionRemaining,
@@ -228,11 +230,8 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
             fontFeatures: const [FontFeature.tabularFigures()],
           ),
         ),
-        if (_game.settings.survivalMode)
-          Text(
-            Translations.tripleStepNextWordTimer,
-            style: AppStyles.bodySmall,
-          ),
+        if (survival)
+          Text(Translations.tripleStepSpokenFor, style: AppStyles.bodySmall),
         const SizedBox(height: 16),
         Wrap(
           alignment: WrapAlignment.center,
@@ -252,10 +251,16 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
               ),
             ),
             OutlinedButton.icon(
-              onPressed: _game.isOver ? null : _game.finishEarly,
+              onPressed: _game.isOver ? null : _game.stop,
               style: AppStyles.secondaryButton,
-              icon: const Icon(Icons.flag_rounded),
-              label: const Text(Translations.tripleStepFinish),
+              icon: Icon(
+                survival ? Icons.front_hand_rounded : Icons.flag_rounded,
+              ),
+              label: Text(
+                survival
+                    ? Translations.tripleStepStuck
+                    : Translations.tripleStepFinish,
+              ),
             ),
           ],
         ),
@@ -263,7 +268,12 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
     );
   }
 
-  Widget _checklist() {
+  Widget _wordsPanel() {
+    final words = _game.revealed;
+    final next = _game.nextWordIn;
+    final survival = _game.settings.survivalMode;
+    final step = _game.interval.inMilliseconds;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -279,29 +289,58 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
               Text(Translations.tripleStepWords, style: AppStyles.label),
               const Spacer(),
               Text(
-                '${_game.wordsUsed} / ${_game.words.length}',
+                survival
+                    ? '${words.length}'
+                    : '${words.length} / ${_game.settings.topicCount}',
                 style: AppStyles.label.copyWith(color: GameColors.accentDark),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(99),
-            child: LinearProgressIndicator(
-              value: _game.wordsUsed / _game.words.length,
-              minHeight: 6,
-              backgroundColor: GameColors.track,
-              color: GameColors.accent,
-            ),
-          ),
           const SizedBox(height: 12),
-          for (var i = 0; i < _game.words.length; i++)
-            _CheckItem(
-              index: i,
-              word: _game.words[i],
-              checked: _game.done[i],
-              onTap: () => _game.toggle(i),
+          if (next != null) ...[
+            Row(
+              children: [
+                const Icon(
+                  Icons.hourglass_top_rounded,
+                  size: 16,
+                  color: AppColors.mutedText,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  '${Translations.tripleStepNextWordIn} ${next.inSeconds + 1}s',
+                  style: AppStyles.bodySmall,
+                ),
+              ],
             ),
+            const SizedBox(height: 6),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(99),
+              child: LinearProgressIndicator(
+                value: 1 - next.inMilliseconds / step,
+                minHeight: 6,
+                backgroundColor: GameColors.track,
+                color: GameColors.accent,
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+          if (words.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Text(
+                Translations.tripleStepFirstWordSoon,
+                textAlign: TextAlign.center,
+                style: AppStyles.body.copyWith(color: AppColors.mutedText),
+              ),
+            ),
+          // Newest word first, so the one to use now is always on top.
+          for (var i = words.length - 1; i >= 0; i--)
+            _WordTile(
+              key: ValueKey('word-$i'),
+              word: words[i],
+              isNew: i == words.length - 1,
+            ),
+          for (var i = 0; i < _game.upcomingCount; i++) const _UpcomingTile(),
         ],
       ),
     );
@@ -385,82 +424,103 @@ class _Badge extends StatelessWidget {
   }
 }
 
-class _CheckItem extends StatelessWidget {
-  const _CheckItem({
-    required this.index,
-    required this.word,
-    required this.checked,
-    required this.onTap,
-  });
+/// A word that has appeared. The newest one is large and highlighted, and
+/// pops in so the speaker notices it.
+class _WordTile extends StatelessWidget {
+  const _WordTile({super.key, required this.word, required this.isNew});
 
-  final int index;
   final String word;
-  final bool checked;
-  final VoidCallback onTap;
+  final bool isNew;
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      checked: checked,
-      label: word,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutBack,
+      builder: (context, t, child) => Opacity(
+        opacity: t.clamp(0, 1),
+        child: Transform.scale(scale: 0.9 + 0.1 * t, child: child),
+      ),
+      child: Semantics(
+        liveRegion: isNew,
+        label: isNew ? 'New word: $word' : word,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
+          duration: const Duration(milliseconds: 250),
           margin: const EdgeInsets.symmetric(vertical: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: isNew ? 20 : 12,
+          ),
           decoration: BoxDecoration(
-            color: checked ? GameColors.accentSoft : GameColors.background,
+            color: isNew ? GameColors.accent : GameColors.accentSoft,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Row(
             children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: checked ? GameColors.accent : Colors.white,
-                  borderRadius: BorderRadius.circular(7),
-                  border: Border.all(
-                    color: checked
-                        ? GameColors.accent
-                        : const Color(0xFFB9C3CC),
-                    width: 2,
-                  ),
-                ),
-                child: checked
-                    ? const Icon(
-                        Icons.check_rounded,
-                        size: 20,
-                        color: Colors.white,
-                      )
-                    : null,
-              ),
-              const SizedBox(width: 14),
               Expanded(
-                child: Text(
-                  word,
-                  style: AppStyles.title.copyWith(
-                    fontSize: 19,
-                    color: checked ? AppColors.mutedText : AppColors.navy,
-                    decoration: checked ? TextDecoration.lineThrough : null,
-                    decorationColor: AppColors.mutedText,
+                child: ExcludeSemantics(
+                  child: Text(
+                    word,
+                    style: AppStyles.title.copyWith(
+                      fontSize: isNew ? 28 : 18,
+                      fontWeight: isNew ? FontWeight.w800 : FontWeight.w600,
+                      color: isNew ? Colors.white : AppColors.navy,
+                    ),
                   ),
                 ),
               ),
-              if (index < 9)
-                Text(
-                  '${index + 1}',
-                  style: AppStyles.bodySmall.copyWith(
-                    fontSize: 12,
-                    color: AppColors.mutedText.withValues(alpha: 0.6),
+              if (isNew)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.25),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    Translations.tripleStepNew,
+                    style: AppStyles.label.copyWith(
+                      color: Colors.white,
+                      fontSize: 11,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Placeholder for a word that hasn't appeared yet.
+class _UpcomingTile extends StatelessWidget {
+  const _UpcomingTile();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: GameColors.background,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: GameColors.track),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.lock_clock_outlined,
+            size: 18,
+            color: AppColors.mutedText,
+          ),
+          const SizedBox(width: 10),
+          Text(Translations.tripleStepComingUp, style: AppStyles.bodySmall),
+        ],
       ),
     );
   }
@@ -511,16 +571,18 @@ class _ResultsOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final last = game.results.last;
     final (icon, title) = switch (last.status) {
-      RoundStatus.completed => (
+      RoundStatus.finished => (
         Icons.emoji_events_rounded,
-        Translations.tripleStepAllDone,
+        Translations.tripleStepGreatSpeech,
       ),
-      RoundStatus.eliminated => (
+      _ when game.settings.survivalMode => (
         Icons.local_fire_department_rounded,
-        Translations.tripleStepEliminated,
+        Translations.tripleStepSurvived,
       ),
-      _ => (Icons.timer_off_rounded, Translations.tripleStepTimeUp),
+      _ => (Icons.flag_rounded, Translations.tripleStepRoundEnded),
     };
+    String clock(Duration d) =>
+        '${d.inMinutes}:${(d.inSeconds % 60).toString().padLeft(2, '0')}';
     final multiplayerDone = game.settings.isMultiplayer && !game.hasNextPlayer;
     final standings = [...game.results]
       ..sort((a, b) => b.score.compareTo(a.score));
@@ -562,8 +624,9 @@ class _ResultsOverlay extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '${last.wordsUsed} of ${last.wordCount} words used'
-                    '${last.status == RoundStatus.completed ? ' with ${last.timeLeft.inSeconds}s to spare' : ''}.',
+                    'You spoke for ${clock(last.spoken)} and worked with '
+                    '${last.wordsHandled} '
+                    '${last.wordsHandled == 1 ? 'word' : 'words'}.',
                     textAlign: TextAlign.center,
                     style: AppStyles.body,
                   ),
@@ -601,7 +664,7 @@ class _ResultsOverlay extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${standings[i].wordsUsed}/${standings[i].wordCount} · ${standings[i].score}',
+                              '${standings[i].wordsHandled} words · ${clock(standings[i].spoken)} · ${standings[i].score}',
                               style: AppStyles.bodySmall,
                             ),
                           ],

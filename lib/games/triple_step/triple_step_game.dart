@@ -27,12 +27,12 @@ class TripleStepSettings {
 
   final TripleStepMode mode;
 
-  /// How many words the speaker has to work into the speech.
+  /// How many words appear during the round.
   final int topicCount;
   final int timerSeconds;
   final bool suggestTitle;
 
-  /// Each word gets an equal slice of the time; missing a slice ends the round.
+  /// Words keep coming at the same pace until the speaker gets stuck.
   final bool survivalMode;
   final String wordSet;
 
@@ -62,33 +62,41 @@ class TripleStepSettings {
   }
 }
 
-enum RoundStatus { running, paused, completed, timeUp, eliminated }
+enum RoundStatus {
+  running,
+  paused,
+
+  /// Spoke until the timer ran out.
+  finished,
+
+  /// Ended early (or got stuck in survival mode).
+  stopped,
+}
 
 class RoundResult {
   const RoundResult({
     required this.player,
     required this.topic,
-    required this.wordsUsed,
-    required this.wordCount,
-    required this.timeLeft,
+    required this.wordsHandled,
+    required this.spoken,
     required this.status,
   });
 
   final String? player;
   final String topic;
-  final int wordsUsed;
-  final int wordCount;
-  final Duration timeLeft;
+
+  /// Words that appeared while the speaker kept going.
+  final int wordsHandled;
+  final Duration spoken;
   final RoundStatus status;
 
-  /// Words used, plus a bonus second-per-point for finishing early.
-  int get score =>
-      wordsUsed * 10 +
-      (status == RoundStatus.completed ? timeLeft.inSeconds : 0);
+  int get score => wordsHandled * 10 + spoken.inSeconds;
 }
 
-/// Game state for Triple Step. Time is advanced by [tick] so a screen can
-/// drive it from a ticker and tests can drive it directly.
+/// Game state for Triple Step: the speaker talks on a topic while words
+/// appear one at a time, and has to work each new word into the speech.
+/// Time is advanced by [tick] so a screen can drive it from a ticker and
+/// tests can drive it directly.
 class TripleStepGame extends ChangeNotifier {
   TripleStepGame(this.settings, {math.Random? random})
     : _random = random ?? math.Random() {
@@ -100,36 +108,47 @@ class TripleStepGame extends ChangeNotifier {
 
   final List<RoundResult> results = [];
   late String topic;
-  late List<String> words;
-  late List<bool> done;
+  late List<String> _pool;
   int playerIndex = 0;
   RoundStatus status = RoundStatus.running;
-
-  Duration _elapsed = Duration.zero;
-  Duration _sliceStart = Duration.zero;
+  Duration elapsed = Duration.zero;
 
   Duration get total => Duration(seconds: settings.timerSeconds);
 
-  /// Time each word gets in survival mode.
-  Duration get slice =>
-      Duration(milliseconds: total.inMilliseconds ~/ settings.topicCount);
+  /// Time between new words. Words are spread so the last one still leaves
+  /// a stretch of speaking time after it.
+  Duration get interval =>
+      Duration(milliseconds: total.inMilliseconds ~/ (settings.topicCount + 1));
 
-  /// The time the pie and clock show: the whole round normally, or the
-  /// current word's slice in survival mode.
-  Duration get countdownTotal => settings.survivalMode ? slice : total;
-
-  Duration get remaining {
-    final left = settings.survivalMode
-        ? slice - (_elapsed - _sliceStart)
-        : total - _elapsed;
-    if (left.isNegative) return Duration.zero;
-    if (left > countdownTotal) return countdownTotal;
-    return left;
+  /// Words shown so far, oldest first.
+  List<String> get revealed {
+    var count = elapsed.inMilliseconds ~/ interval.inMilliseconds;
+    if (!settings.survivalMode) {
+      count = math.min(count, settings.topicCount);
+    }
+    return [for (var i = 0; i < count; i++) _pool[i % _pool.length]];
   }
 
-  /// Time left in the whole round (used for scoring).
-  Duration get roundRemaining {
-    final left = total - _elapsed;
+  int get revealedCount => revealed.length;
+
+  /// Words still to come (normal mode only).
+  int get upcomingCount =>
+      settings.survivalMode ? 0 : settings.topicCount - revealedCount;
+
+  /// Time until the next word appears, or null when none are left.
+  Duration? get nextWordIn {
+    if (!settings.survivalMode && upcomingCount == 0) return null;
+    final step = interval.inMilliseconds;
+    return Duration(milliseconds: step - elapsed.inMilliseconds % step);
+  }
+
+  /// What the pie and clock count down: the round in normal mode, the wait
+  /// for the next word in survival mode.
+  Duration get countdownTotal => settings.survivalMode ? interval : total;
+
+  Duration get remaining {
+    if (settings.survivalMode) return nextWordIn ?? Duration.zero;
+    final left = total - elapsed;
     return left.isNegative ? Duration.zero : left;
   }
 
@@ -137,12 +156,8 @@ class TripleStepGame extends ChangeNotifier {
       ? 0
       : remaining.inMilliseconds / countdownTotal.inMilliseconds;
 
-  int get wordsUsed => done.where((d) => d).length;
-
   bool get isOver =>
-      status == RoundStatus.completed ||
-      status == RoundStatus.timeUp ||
-      status == RoundStatus.eliminated;
+      status == RoundStatus.finished || status == RoundStatus.stopped;
 
   String? get currentPlayer =>
       settings.isMultiplayer && settings.players.isNotEmpty
@@ -156,37 +171,21 @@ class TripleStepGame extends ChangeNotifier {
     topic = settings.suggestTitle
         ? TripleStepData.topics[_random.nextInt(TripleStepData.topics.length)]
         : 'Your Own Topic';
-    final pool = List<String>.of(
+    _pool = List<String>.of(
       TripleStepData.wordSets[settings.wordSet] ??
           TripleStepData.wordSets.values.first,
     )..shuffle(_random);
-    words = pool.take(settings.topicCount).toList();
-    done = List<bool>.filled(words.length, false);
-    _elapsed = Duration.zero;
-    _sliceStart = Duration.zero;
+    elapsed = Duration.zero;
     status = RoundStatus.running;
   }
 
   /// Advances the clock by [delta] while the round is running.
   void tick(Duration delta) {
     if (status != RoundStatus.running) return;
-    _elapsed += delta;
-    if (settings.survivalMode && _elapsed - _sliceStart >= slice) {
-      _finish(RoundStatus.eliminated);
-    } else if (_elapsed >= total) {
-      _finish(RoundStatus.timeUp);
-    }
-    notifyListeners();
-  }
-
-  void toggle(int index) {
-    if (isOver) return;
-    done[index] = !done[index];
-    if (done[index] && settings.survivalMode) {
-      _sliceStart = _elapsed;
-    }
-    if (done.every((d) => d)) {
-      _finish(RoundStatus.completed);
+    elapsed += delta;
+    if (!settings.survivalMode && elapsed >= total) {
+      elapsed = total;
+      _finish(RoundStatus.finished);
     }
     notifyListeners();
   }
@@ -200,10 +199,10 @@ class TripleStepGame extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Ends the round early, keeping the words used so far.
-  void finishEarly() {
+  /// Ends the round now: "Finish" in normal mode, "I'm stuck" in survival.
+  void stop() {
     if (isOver) return;
-    _finish(done.every((d) => d) ? RoundStatus.completed : RoundStatus.timeUp);
+    _finish(RoundStatus.stopped);
     notifyListeners();
   }
 
@@ -213,9 +212,8 @@ class TripleStepGame extends ChangeNotifier {
       RoundResult(
         player: currentPlayer,
         topic: topic,
-        wordsUsed: wordsUsed,
-        wordCount: words.length,
-        timeLeft: roundRemaining,
+        wordsHandled: revealedCount,
+        spoken: elapsed,
         status: outcome,
       ),
     );
