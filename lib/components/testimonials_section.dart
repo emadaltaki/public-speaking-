@@ -23,7 +23,6 @@ class TestimonialsSection extends StatelessWidget {
             const SectionHeader(
               eyebrow: Translations.eyebrowHosts,
               title: Translations.testimonialsHeadline,
-              intro: Translations.testimonialsIntro,
             ),
             const SizedBox(height: 40),
             ResponsiveCardGrid(

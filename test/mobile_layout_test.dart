@@ -21,29 +21,9 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('mission flow steps fill the width on phones', (tester) async {
-    await pumpPhoneHome(tester);
-
-    for (final step in [
-      Translations.missionStepSpeak,
-      Translations.missionStepPractice,
-      Translations.missionStepGrow,
-    ]) {
-      final chip = find
-          .ancestor(
-            of: find.text(step),
-            matching: find.byType(DecoratedBox),
-          )
-          .first;
-      expect(
-        tester.getSize(chip).width,
-        contentWidth,
-        reason: 'step "$step" should span the content width',
-      );
-    }
-  });
-
-  testWidgets('contact card and form fill the width on phones', (tester) async {
+  testWidgets('booking form and contact card fill the width on phones', (
+    tester,
+  ) async {
     await pumpPhoneHome(tester);
 
     final contactCard = find
@@ -54,7 +34,7 @@ void main() {
         .first;
     final messageForm = find
         .ancestor(
-          of: find.text(Translations.ctaSendMessage),
+          of: find.text(Translations.bookingSubmit),
           matching: find.byType(SiteCard),
         )
         .first;

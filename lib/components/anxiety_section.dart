@@ -81,11 +81,6 @@ class AnxietySection extends StatelessWidget {
                                 Translations.anxietyHuman,
                                 style: AppStyles.title.copyWith(fontSize: 20),
                               ),
-                              const SizedBox(height: 10),
-                              Text(
-                                Translations.anxietyFollow,
-                                style: AppStyles.body,
-                              ),
                             ],
                           ),
                         ),

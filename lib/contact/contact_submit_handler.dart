@@ -9,17 +9,13 @@ class ContactFormData {
   final String email;
   final String message;
 
-  String get mailtoBody =>
-      'Name: $name\nEmail: $email\n\n$message';
+  String get mailtoBody => 'Name: $name\nEmail: $email\n\n$message';
 }
 
 enum ContactSubmitKind { mailtoOpened, unavailable }
 
 class ContactSubmitResult {
-  const ContactSubmitResult({
-    required this.kind,
-    required this.userMessage,
-  });
+  const ContactSubmitResult({required this.kind, required this.userMessage});
 
   final ContactSubmitKind kind;
   final String userMessage;
