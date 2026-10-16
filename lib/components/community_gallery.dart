@@ -4,6 +4,7 @@ import '../data/models.dart';
 import '../data/site_content.dart';
 import '../translations/translations.dart';
 import 'gallery_tile.dart';
+import 'photo_viewer.dart';
 import 'section_container.dart';
 import 'section_header.dart';
 
@@ -30,6 +31,11 @@ class CommunityGallery extends StatelessWidget {
             LayoutBuilder(
               builder: (context, constraints) {
                 final wide = constraints.maxWidth >= 800;
+                void open(int index) => showPhotoViewer(
+                  context,
+                  items: gallery,
+                  initialIndex: index,
+                );
                 if (!wide) {
                   return Column(
                     children: [
@@ -37,7 +43,10 @@ class CommunityGallery extends StatelessWidget {
                         if (i > 0) const SizedBox(height: 16),
                         SizedBox(
                           height: 240,
-                          child: GalleryTile(item: gallery[i]),
+                          child: GalleryTile(
+                            item: gallery[i],
+                            onTap: () => open(i),
+                          ),
                         ),
                       ],
                     ],
@@ -63,13 +72,19 @@ class CommunityGallery extends StatelessWidget {
                         children: [
                           Expanded(
                             flex: flexFor(first),
-                            child: GalleryTile(item: first),
+                            child: GalleryTile(
+                              item: first,
+                              onTap: () => open(i),
+                            ),
                           ),
                           if (second != null) ...[
                             const SizedBox(width: 16),
                             Expanded(
                               flex: flexFor(second),
-                              child: GalleryTile(item: second),
+                              child: GalleryTile(
+                                item: second,
+                                onTap: () => open(i + 1),
+                              ),
                             ),
                           ],
                         ],

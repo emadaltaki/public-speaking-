@@ -4,7 +4,35 @@ class Translations {
 
   static const String siteName = 'Speak Up Fearless';
   static const String pageTitle =
-      'Speak Up Fearless | Build Confidence. Find Your Voice.';
+      'Public Speaking Classes in Mississauga | Speak Up Fearless';
+
+  /// Online scheduling page (Calendly, Cal.com, ...) for the free intro call.
+  /// Leave empty to fall back to an email draft.
+  static const String bookingUrl = '';
+
+  static const String emailFallbackTitle = 'Opening your email app…';
+  static const String emailFallbackBody =
+      "If nothing opens, email us at speakupfearless@gmail.com or call (416) 995-5347.";
+  static const String emailFallbackCopy = 'Copy email';
+  static const String emailCopied = 'Email address copied.';
+
+  static const String photoViewerClose = 'Close photo';
+  static const String photoViewerPrevious = 'Previous photo';
+  static const String photoViewerNext = 'Next photo';
+  static const String photoViewerHint = 'Pinch, scroll or double-tap to zoom';
+  static const String photoEnlarge = 'View larger';
+  static const String heroPhotoCaption = 'Learning by doing';
+
+  static const String footerPrivacy = 'Privacy Policy';
+  static const String privacyTitle = 'Privacy Policy';
+  static const String privacyClose = 'Close';
+  static const String privacyBody =
+      'Speak Up Fearless respects your privacy.\n\n'
+      'What we collect: this website does not store anything you type. The contact form only prepares an email in your own email app; nothing is sent until you press send there. If you email or call us, we receive your name, contact details, and whatever you choose to share.\n\n'
+      'How we use it: only to reply to you, arrange sessions, and keep in touch about sessions you have asked about. We never sell or rent your information.\n\n'
+      'Website statistics: we may use privacy-friendly, cookie-free analytics that count visits without identifying you.\n\n'
+      'Your choices: you can ask us at any time to see, correct, or delete the information we hold about you by emailing speakupfearless@gmail.com.\n\n'
+      "We follow Canada's Personal Information Protection and Electronic Documents Act (PIPEDA).";
   static const String contactEmail = 'speakupfearless@gmail.com';
   static const String mailtoUri = 'mailto:speakupfearless@gmail.com';
   static const String contactPhoneDisplay = '(416) 995-5347';

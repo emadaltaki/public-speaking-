@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
+import '../data/models.dart';
 import 'community_scene.dart';
+import 'photo_viewer.dart';
 import 'primary_button.dart';
 import 'secondary_button.dart';
 import 'section_container.dart';
@@ -45,7 +47,7 @@ class HeroSection extends StatelessWidget {
           runSpacing: 12,
           children: [
             PrimaryButton(
-              label: Translations.ctaJoin,
+              label: Translations.pricingIntroCta,
               onPressed: onJoin,
               large: true,
             ),
@@ -204,25 +206,40 @@ class _HeroPhoto extends StatelessWidget {
               ),
             ),
           ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: AppStyles.elevatedShadow,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(28),
-              child: AspectRatio(
-                aspectRatio: aspectRatio,
-                child: Semantics(
-                  label: Translations.heroImageAlt,
-                  image: true,
-                  child: Image.asset(
-                    'assets/images/explaining-pic.jpeg',
-                    fit: BoxFit.cover,
-                    alignment: const Alignment(-0.45, 0),
-                    excludeFromSemantics: true,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const CommunityScene(),
+          MouseRegion(
+            cursor: SystemMouseCursors.zoomIn,
+            child: GestureDetector(
+              onTap: () => showPhotoViewer(
+                context,
+                items: const [
+                  GalleryItem(
+                    assetPath: 'assets/images/explaining-pic.jpeg',
+                    caption: Translations.heroPhotoCaption,
+                    alt: Translations.heroImageAlt,
+                  ),
+                ],
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  boxShadow: AppStyles.elevatedShadow,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(28),
+                  child: AspectRatio(
+                    aspectRatio: aspectRatio,
+                    child: Semantics(
+                      label: Translations.heroImageAlt,
+                      image: true,
+                      child: Image.asset(
+                        'assets/images/explaining-pic.jpeg',
+                        fit: BoxFit.cover,
+                        alignment: const Alignment(-0.45, 0),
+                        excludeFromSemantics: true,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const CommunityScene(),
+                      ),
+                    ),
                   ),
                 ),
               ),
