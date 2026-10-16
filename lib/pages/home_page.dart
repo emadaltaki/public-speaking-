@@ -13,6 +13,7 @@ import '../components/sessions_section.dart';
 import '../components/site_footer.dart';
 import '../components/testimonials_section.dart';
 import '../contact/booking_request_sender.dart';
+import '../games/game_catalog.dart';
 import '../contact/contact_submit_handler.dart';
 import '../contact/mailto_contact_submit_handler.dart';
 import '../theme/colors.dart';
@@ -121,6 +122,8 @@ class _HomePageState extends State<HomePage> {
     return false;
   }
 
+  void _openGames() => Navigator.of(context).pushNamed(AppRoutes.games);
+
   void _showPrivacy() {
     showDialog<void>(
       context: context,
@@ -171,6 +174,7 @@ class _HomePageState extends State<HomePage> {
                 label: Translations.navCommunity,
                 onPressed: () => _scrollTo(_communityKey),
               ),
+              NavItem(label: Translations.navGames, onPressed: _openGames),
               NavItem(
                 label: Translations.navFaq,
                 onPressed: () => _scrollTo(_faqKey),
@@ -237,6 +241,10 @@ class _HomePageState extends State<HomePage> {
                         FooterLink(
                           label: Translations.footerCommunity,
                           onPressed: () => _scrollTo(_communityKey),
+                        ),
+                        FooterLink(
+                          label: Translations.navGames,
+                          onPressed: _openGames,
                         ),
                         FooterLink(
                           label: Translations.navFaq,

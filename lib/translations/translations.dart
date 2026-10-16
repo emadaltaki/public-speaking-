@@ -57,6 +57,55 @@ class Translations {
   static const String bookingEmailSubject = 'Free intro call request';
   static const String bookingPreferToTalk = 'Prefer to talk first?';
 
+  static const String navGames = 'Games';
+  static const String gamesBackToSite = 'Back to site';
+  static const String gamesEyebrow = 'Practice anywhere';
+  static const String gamesTitle = 'Speaking Games';
+  static const String gamesIntro =
+      'Quick games to build speaking confidence, on your own or with friends.';
+  static const String gamesComingSoon = 'COMING SOON';
+  static const String gamesPlay = 'Play';
+
+  static const String tripleStepSetupSubtitle = 'Set up your training round';
+  static const String tripleStepBackToGames = 'Back to games';
+  static const String tripleStepSingle = 'Single Player';
+  static const String tripleStepMulti = 'Multiplayer';
+  static const String tripleStepPlayers = 'Players';
+  static const String tripleStepAddPlayer = 'Add player';
+  static const String tripleStepRemovePlayer = 'Remove player';
+  static const String tripleStepTopics = 'Number of topics';
+  static const String tripleStepTopicsHelp =
+      'How many surprise words you need to work into your speech.';
+  static const String tripleStepTimer = 'Timer';
+  static const String tripleStepSuggestTitle = 'Suggest a title';
+  static const String tripleStepSuggestTitleHelp =
+      'Get a random speech topic, or turn off to choose your own.';
+  static const String tripleStepSurvival = 'Survival mode';
+  static const String tripleStepSurvivalHelp =
+      'Each word gets its own countdown. Miss one and the round ends.';
+  static const String tripleStepWordSet = 'Word set';
+  static const String tripleStepStart = 'START TRAINING';
+  static const String tripleStepBackToSettings = 'Back to settings';
+  static const String tripleStepInstruction =
+      'Speak on this topic and tick each word as you work it into your speech.';
+  static const String tripleStepSurvivalInstruction =
+      'Work in a word before the countdown ends. Each tick resets the clock.';
+  static const String tripleStepNextWordTimer = 'until your next word';
+  static const String tripleStepPause = 'Pause';
+  static const String tripleStepResume = 'Resume';
+  static const String tripleStepFinish = 'Finish';
+  static const String tripleStepWords = 'Words to use';
+  static const String tripleStepAllDone = 'All words used!';
+  static const String tripleStepTimeUp = "Time's up!";
+  static const String tripleStepEliminated = 'Out of time on a word';
+  static const String tripleStepScore = 'Score';
+  static const String tripleStepStandings = 'Standings';
+  static const String tripleStepNextPlayer = 'Next';
+  static const String tripleStepNewGame = 'New game';
+  static const String tripleStepNextTopic = 'Next topic';
+  static const String tripleStepRetry = 'Retry';
+  static const String tripleStepSettings = 'Settings';
+
   static const String footerPrivacy = 'Privacy Policy';
   static const String privacyTitle = 'Privacy Policy';
   static const String privacyClose = 'Close';

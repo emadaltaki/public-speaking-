@@ -1,0 +1,499 @@
+import 'package:flutter/material.dart';
+
+import '../../theme/colors.dart';
+import '../../theme/styles.dart';
+import '../../translations/translations.dart';
+import '../game_catalog.dart';
+import '../game_theme.dart';
+import '../games_hub_page.dart';
+import 'triple_step_data.dart';
+import 'triple_step_game.dart';
+import 'triple_step_play_page.dart';
+
+/// Phase 1: choose the mode and rules, then start training.
+class TripleStepSetupPage extends StatefulWidget {
+  const TripleStepSetupPage({super.key});
+
+  @override
+  State<TripleStepSetupPage> createState() => _TripleStepSetupPageState();
+}
+
+class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
+  static const int _maxPlayers = 6;
+
+  TripleStepSettings _settings = const TripleStepSettings();
+  final List<TextEditingController> _players = [
+    TextEditingController(text: 'Player 1'),
+    TextEditingController(text: 'Player 2'),
+  ];
+
+  @override
+  void dispose() {
+    for (final c in _players) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  void _update(TripleStepSettings next) => setState(() => _settings = next);
+
+  void _start() {
+    final names = [
+      for (var i = 0; i < _players.length; i++)
+        _players[i].text.trim().isEmpty
+            ? 'Player ${i + 1}'
+            : _players[i].text.trim(),
+    ];
+    final settings = _settings.copyWith(
+      players: _settings.isMultiplayer ? names : const [],
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => TripleStepPlayPage(settings: settings),
+      ),
+    );
+  }
+
+  String _timerLabel(int seconds) {
+    final m = seconds ~/ 60;
+    final s = seconds % 60;
+    if (s == 0) return m == 1 ? '1 minute' : '$m minutes';
+    return '$m:${s.toString().padLeft(2, '0')} min';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
+    return Title(
+      title: 'Triple Step | ${Translations.siteName}',
+      color: AppColors.navy,
+      child: Scaffold(
+        backgroundColor: GameColors.background,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const GamesHeader(),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: wide ? 48 : 20,
+                ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 560),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
+                        boxShadow: AppStyles.elevatedShadow,
+                      ),
+                      padding: EdgeInsets.all(wide ? 36 : 22),
+                      child: _form(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _form() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: GameColors.accent,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(
+                Icons.record_voice_over_rounded,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Triple Step',
+                    style: AppStyles.title.copyWith(fontSize: 24),
+                  ),
+                  Text(
+                    Translations.tripleStepSetupSubtitle,
+                    style: AppStyles.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              tooltip: Translations.tripleStepBackToGames,
+              onPressed: () => Navigator.of(context).canPop()
+                  ? Navigator.of(context).pop()
+                  : Navigator.of(context).pushReplacementNamed(AppRoutes.games),
+              icon: const Icon(Icons.close_rounded),
+            ),
+          ],
+        ),
+        const SizedBox(height: 28),
+        _ModeTabs(
+          mode: _settings.mode,
+          onChanged: (m) => _update(_settings.copyWith(mode: m)),
+        ),
+        if (_settings.isMultiplayer) ...[
+          const SizedBox(height: 20),
+          _playersEditor(),
+        ],
+        const SizedBox(height: 28),
+        _SliderRow(
+          icon: Icons.format_list_numbered_rounded,
+          label: Translations.tripleStepTopics,
+          help: Translations.tripleStepTopicsHelp,
+          valueLabel: '${_settings.topicCount}',
+          value: _settings.topicCount.toDouble(),
+          min: TripleStepSettings.minTopicCount.toDouble(),
+          max: TripleStepSettings.maxTopicCount.toDouble(),
+          divisions:
+              TripleStepSettings.maxTopicCount -
+              TripleStepSettings.minTopicCount,
+          onChanged: (v) => _update(_settings.copyWith(topicCount: v.round())),
+        ),
+        const SizedBox(height: 20),
+        _SliderRow(
+          icon: Icons.schedule_rounded,
+          label: Translations.tripleStepTimer,
+          valueLabel: _timerLabel(_settings.timerSeconds),
+          value: _settings.timerSeconds.toDouble(),
+          min: TripleStepSettings.minTimerSeconds.toDouble(),
+          max: TripleStepSettings.maxTimerSeconds.toDouble(),
+          divisions:
+              (TripleStepSettings.maxTimerSeconds -
+                  TripleStepSettings.minTimerSeconds) ~/
+              TripleStepSettings.timerStepSeconds,
+          onChanged: (v) =>
+              _update(_settings.copyWith(timerSeconds: v.round())),
+        ),
+        const SizedBox(height: 16),
+        _ToggleRow(
+          label: Translations.tripleStepSuggestTitle,
+          help: Translations.tripleStepSuggestTitleHelp,
+          value: _settings.suggestTitle,
+          onChanged: (v) => _update(_settings.copyWith(suggestTitle: v)),
+        ),
+        _ToggleRow(
+          label: Translations.tripleStepSurvival,
+          help: Translations.tripleStepSurvivalHelp,
+          value: _settings.survivalMode,
+          onChanged: (v) => _update(_settings.copyWith(survivalMode: v)),
+        ),
+        const SizedBox(height: 16),
+        Text(Translations.tripleStepWordSet, style: AppStyles.label),
+        const SizedBox(height: 8),
+        DropdownButtonFormField<String>(
+          initialValue: _settings.wordSet,
+          borderRadius: BorderRadius.circular(12),
+          decoration: const InputDecoration(
+            prefixIcon: Icon(Icons.style_outlined),
+          ),
+          items: [
+            for (final name in TripleStepData.wordSetNames)
+              DropdownMenuItem(value: name, child: Text(name)),
+          ],
+          onChanged: (v) {
+            if (v != null) _update(_settings.copyWith(wordSet: v));
+          },
+        ),
+        const SizedBox(height: 32),
+        SizedBox(
+          height: 58,
+          child: FilledButton.icon(
+            onPressed: _start,
+            style:
+                FilledButton.styleFrom(
+                  backgroundColor: GameColors.accent,
+                  foregroundColor: Colors.white,
+                  shape: const StadiumBorder(),
+                  textStyle: AppStyles.label.copyWith(
+                    fontSize: 17,
+                    letterSpacing: 1.4,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ).copyWith(
+                  backgroundColor: WidgetStateProperty.resolveWith(
+                    (states) => states.contains(WidgetState.hovered)
+                        ? GameColors.accentDark
+                        : GameColors.accent,
+                  ),
+                ),
+            icon: const Icon(Icons.play_arrow_rounded, size: 26),
+            label: const Text(Translations.tripleStepStart),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _playersEditor() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(Translations.tripleStepPlayers, style: AppStyles.label),
+        const SizedBox(height: 8),
+        for (var i = 0; i < _players.length; i++)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _players[i],
+                    decoration: InputDecoration(
+                      isDense: true,
+                      prefixIcon: const Icon(Icons.person_outline_rounded),
+                      hintText: 'Player ${i + 1}',
+                    ),
+                  ),
+                ),
+                if (_players.length > 2)
+                  IconButton(
+                    tooltip: Translations.tripleStepRemovePlayer,
+                    onPressed: () => setState(() {
+                      _players.removeAt(i).dispose();
+                    }),
+                    icon: const Icon(Icons.remove_circle_outline_rounded),
+                  ),
+              ],
+            ),
+          ),
+        if (_players.length < _maxPlayers)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => setState(() {
+                _players.add(
+                  TextEditingController(text: 'Player ${_players.length + 1}'),
+                );
+              }),
+              style: TextButton.styleFrom(
+                foregroundColor: GameColors.accentDark,
+              ),
+              icon: const Icon(Icons.add_rounded),
+              label: const Text(Translations.tripleStepAddPlayer),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _ModeTabs extends StatelessWidget {
+  const _ModeTabs({required this.mode, required this.onChanged});
+
+  final TripleStepMode mode;
+  final ValueChanged<TripleStepMode> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget tab(TripleStepMode value, IconData icon, String label) {
+      final selected = mode == value;
+      return Expanded(
+        child: Semantics(
+          selected: selected,
+          button: true,
+          child: GestureDetector(
+            onTap: () => onChanged(value),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: selected ? Colors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: selected ? AppStyles.softShadow : null,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 18,
+                      color: selected
+                          ? GameColors.accentDark
+                          : AppColors.mutedText,
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        label,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.label.copyWith(
+                          color: selected
+                              ? AppColors.navy
+                              : AppColors.mutedText,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: GameColors.track,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          tab(
+            TripleStepMode.singlePlayer,
+            Icons.person_rounded,
+            Translations.tripleStepSingle,
+          ),
+          tab(
+            TripleStepMode.multiplayer,
+            Icons.groups_rounded,
+            Translations.tripleStepMulti,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SliderRow extends StatelessWidget {
+  const _SliderRow({
+    required this.icon,
+    required this.label,
+    required this.valueLabel,
+    required this.value,
+    required this.min,
+    required this.max,
+    required this.divisions,
+    required this.onChanged,
+    this.help,
+  });
+
+  final IconData icon;
+  final String label;
+  final String? help;
+  final String valueLabel;
+  final double value;
+  final double min;
+  final double max;
+  final int divisions;
+  final ValueChanged<double> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 20, color: GameColors.accentDark),
+            const SizedBox(width: 8),
+            Text(label, style: AppStyles.label.copyWith(fontSize: 15)),
+            if (help != null) ...[
+              const SizedBox(width: 4),
+              Tooltip(
+                message: help!,
+                triggerMode: TooltipTriggerMode.tap,
+                preferBelow: false,
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.help_outline_rounded,
+                    size: 18,
+                    color: AppColors.mutedText,
+                  ),
+                ),
+              ),
+            ],
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: GameColors.accentSoft,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                valueLabel,
+                style: AppStyles.label.copyWith(color: GameColors.accentDark),
+              ),
+            ),
+          ],
+        ),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            activeTrackColor: GameColors.accent,
+            inactiveTrackColor: GameColors.track,
+            thumbColor: GameColors.accent,
+            overlayColor: GameColors.accent.withValues(alpha: 0.15),
+            trackHeight: 6,
+            showValueIndicator: ShowValueIndicator.never,
+            tickMarkShape: SliderTickMarkShape.noTickMark,
+          ),
+          child: Slider(
+            value: value,
+            min: min,
+            max: max,
+            divisions: divisions,
+            semanticFormatterCallback: (_) => valueLabel,
+            onChanged: onChanged,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ToggleRow extends StatelessWidget {
+  const _ToggleRow({
+    required this.label,
+    required this.help,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String label;
+  final String help;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return MergeSemantics(
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(label, style: AppStyles.label.copyWith(fontSize: 15)),
+        subtitle: Text(help, style: AppStyles.bodySmall.copyWith(fontSize: 13)),
+        onTap: () => onChanged(!value),
+        trailing: Switch(
+          value: value,
+          onChanged: onChanged,
+          activeThumbColor: Colors.white,
+          activeTrackColor: GameColors.accent,
+          inactiveThumbColor: Colors.white,
+          inactiveTrackColor: const Color(0xFFCBD3DA),
+          trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
+        ),
+      ),
+    );
+  }
+}
