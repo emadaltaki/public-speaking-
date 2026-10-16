@@ -6,6 +6,26 @@ import 'triple_step_data.dart';
 
 enum TripleStepMode { singlePlayer, multiplayer }
 
+/// Hands out topics in a random order without repeats; once every topic has
+/// been used, it reshuffles. Shared so every round and every player in a
+/// visit gets a fresh topic.
+class TopicDeck {
+  TopicDeck(this.topics);
+
+  static final TopicDeck shared = TopicDeck(TripleStepData.topics);
+
+  final List<String> topics;
+  final List<String> _remaining = [];
+
+  String draw(math.Random random) {
+    if (_remaining.isEmpty) {
+      _remaining.addAll(topics);
+      _remaining.shuffle(random);
+    }
+    return _remaining.removeLast();
+  }
+}
+
 class TripleStepSettings {
   const TripleStepSettings({
     this.mode = TripleStepMode.singlePlayer,
@@ -169,7 +189,7 @@ class TripleStepGame extends ChangeNotifier {
 
   void _startRound() {
     topic = settings.suggestTitle
-        ? TripleStepData.topics[_random.nextInt(TripleStepData.topics.length)]
+        ? TopicDeck.shared.draw(_random)
         : 'Your Own Topic';
     _pool = List<String>.of(
       TripleStepData.wordSets[settings.wordSet] ??
