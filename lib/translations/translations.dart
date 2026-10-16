@@ -40,9 +40,16 @@ class Translations {
   static const String bookingContactLabel = 'Email or phone';
   static const String bookingContactRequired =
       'Please add an email or phone number.';
-  static const String bookingSubmit = 'Request This Time';
+  static const String bookingSubmit = 'Send Request';
+  static const String bookingSending = 'Sending…';
   static const String bookingNote =
-      "This opens a ready-to-send email. We'll reply to confirm your time.";
+      "Your request comes straight to us. We'll reply to confirm your time.";
+  static const String bookingSentTitle = 'Request sent!';
+  static const String bookingSentBody =
+      "Thanks! We'll get back to you soon to confirm your time.";
+  static const String bookingSendAnother = 'Request another time';
+  static const String bookingSendFailed =
+      "We couldn't send it from here, so we opened an email with your request instead.";
   static const String bookingEmailSubject = 'Free intro call request';
   static const String bookingPreferToTalk = 'Prefer to talk first?';
 
@@ -51,7 +58,7 @@ class Translations {
   static const String privacyClose = 'Close';
   static const String privacyBody =
       'Speak Up Fearless respects your privacy.\n\n'
-      'What we collect: this website does not store anything you type. The contact form only prepares an email in your own email app; nothing is sent until you press send there. If you email or call us, we receive your name, contact details, and whatever you choose to share.\n\n'
+      'What we collect: this website does not store anything you type. When you request a time through the booking form, your name, email or phone, and preferred time are sent to us by email through FormSubmit (formsubmit.co), a form-forwarding service. If you email or call us, we receive your name, contact details, and whatever you choose to share.\n\n'
       'How we use it: only to reply to you, arrange sessions, and keep in touch about sessions you have asked about. We never sell or rent your information.\n\n'
       'Website statistics: we may use privacy-friendly, cookie-free analytics that count visits without identifying you.\n\n'
       'Your choices: you can ask us at any time to see, correct, or delete the information we hold about you by emailing speakupfearless@gmail.com.\n\n'
