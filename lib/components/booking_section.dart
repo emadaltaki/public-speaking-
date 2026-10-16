@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../contact/booking_request_sender.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
@@ -22,8 +23,8 @@ class BookingSection extends StatelessWidget {
     this.bookingUrl = Translations.bookingUrl,
   });
 
-  /// Sends a time request; receives a ready-made email subject and body.
-  final void Function(String subject, String body) onRequest;
+  /// Sends a time request; resolves to true once it reached the inbox.
+  final Future<bool> Function(BookingRequest request) onRequest;
   final VoidCallback onEmail;
   final VoidCallback onCall;
   final String bookingUrl;
@@ -78,7 +79,7 @@ class BookingSection extends StatelessWidget {
 class _TimeRequestForm extends StatefulWidget {
   const _TimeRequestForm({required this.onRequest});
 
-  final void Function(String subject, String body) onRequest;
+  final Future<bool> Function(BookingRequest request) onRequest;
 
   @override
   State<_TimeRequestForm> createState() => _TimeRequestFormState();
@@ -113,6 +114,9 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   DateTime? _day;
   String? _time;
   bool _showChoiceError = false;
+  bool _sending = false;
+  bool _sent = false;
+  bool _failed = false;
 
   static List<DateTime> _upcomingDays() {
     final now = DateTime.now();
@@ -130,20 +134,72 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     final choicesOk = _day != null && _time != null;
-    setState(() => _showChoiceError = !choicesOk);
+    setState(() {
+      _showChoiceError = !choicesOk;
+      _failed = false;
+    });
     final fieldsOk = _formKey.currentState!.validate();
     if (!choicesOk || !fieldsOk) {
       return;
     }
-    final when = '${_label(_day!)}, $_time';
-    widget.onRequest(
-      '${Translations.bookingEmailSubject} — $when',
-      'Hi! I would like to book a free intro call.\n\n'
-          'Preferred time: $when\n'
-          'Name: ${_name.text.trim()}\n'
-          'Email or phone: ${_contact.text.trim()}\n',
+    setState(() => _sending = true);
+    final sent = await widget.onRequest(
+      BookingRequest(
+        name: _name.text.trim(),
+        contact: _contact.text.trim(),
+        preferredTime: '${_label(_day!)}, $_time',
+      ),
+    );
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _sending = false;
+      _sent = sent;
+      _failed = !sent;
+    });
+  }
+
+  void _reset() {
+    _name.clear();
+    _contact.clear();
+    setState(() {
+      _day = null;
+      _time = null;
+      _sent = false;
+      _failed = false;
+    });
+  }
+
+  Widget _sentMessage() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 56,
+          height: 56,
+          decoration: const BoxDecoration(
+            color: AppColors.tealSoft,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.check_rounded,
+            color: AppColors.teal,
+            size: 32,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(Translations.bookingSentTitle, style: AppStyles.title),
+        const SizedBox(height: 8),
+        Text(Translations.bookingSentBody, style: AppStyles.body),
+        const SizedBox(height: 20),
+        TextButton(
+          onPressed: _reset,
+          child: const Text(Translations.bookingSendAnother),
+        ),
+      ],
     );
   }
 
@@ -199,6 +255,9 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
 
   @override
   Widget build(BuildContext context) {
+    if (_sent) {
+      return _sentMessage();
+    }
     return Form(
       key: _formKey,
       child: Column(
@@ -266,11 +325,20 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
           ),
           const SizedBox(height: 20),
           PrimaryButton(
-            label: Translations.bookingSubmit,
-            onPressed: _submit,
+            label: _sending
+                ? Translations.bookingSending
+                : Translations.bookingSubmit,
+            onPressed: _sending ? null : _submit,
             large: true,
           ),
           const SizedBox(height: 10),
+          if (_failed) ...[
+            Text(
+              Translations.bookingSendFailed,
+              style: AppStyles.bodySmall.copyWith(color: AppColors.error),
+            ),
+            const SizedBox(height: 6),
+          ],
           Text(Translations.bookingNote, style: AppStyles.bodySmall),
         ],
       ),

@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:speak_up_fearless/components/booking_section.dart';
+import 'package:speak_up_fearless/contact/booking_request_sender.dart';
 import 'package:speak_up_fearless/translations/translations.dart';
 
 import 'support/test_helpers.dart';
@@ -8,8 +13,11 @@ import 'support/test_helpers.dart';
 void main() {
   setUpAll(configureTestFonts);
 
-  Future<List<String>> pumpBooking(WidgetTester tester) async {
-    final sent = <String>[];
+  Future<List<BookingRequest>> pumpBooking(
+    WidgetTester tester, {
+    bool succeed = true,
+  }) async {
+    final sent = <BookingRequest>[];
     setSurface(tester, size: const Size(1280, 2000));
     await tester.pumpWidget(
       wrapForTest(
@@ -17,9 +25,10 @@ void main() {
           body: SingleChildScrollView(
             child: BookingSection(
               bookingUrl: '',
-              onRequest: (subject, body) => sent
-                ..add(subject)
-                ..add(body),
+              onRequest: (request) async {
+                sent.add(request);
+                return succeed;
+              },
               onEmail: () {},
               onCall: () {},
             ),
@@ -31,6 +40,15 @@ void main() {
     return sent;
   }
 
+  Future<void> fillAndSend(WidgetTester tester) async {
+    await tester.tap(find.byType(ChoiceChip).first);
+    await tester.tap(find.text(Translations.bookingTimeEvening));
+    await tester.enterText(find.byType(TextFormField).at(0), 'Alex');
+    await tester.enterText(find.byType(TextFormField).at(1), '416-555-0100');
+    await tester.tap(find.text(Translations.bookingSubmit));
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('asks for a day and time before sending', (tester) async {
     final sent = await pumpBooking(tester);
     await tester.tap(find.text(Translations.bookingSubmit));
@@ -39,18 +57,59 @@ void main() {
     expect(sent, isEmpty);
   });
 
-  testWidgets('sends the chosen day, time and details', (tester) async {
+  testWidgets('sends the request and confirms it', (tester) async {
     final sent = await pumpBooking(tester);
-    await tester.tap(find.byType(ChoiceChip).first);
-    await tester.tap(find.text(Translations.bookingTimeEvening));
-    await tester.enterText(find.byType(TextFormField).at(0), 'Alex');
-    await tester.enterText(find.byType(TextFormField).at(1), '416-555-0100');
-    await tester.tap(find.text(Translations.bookingSubmit));
-    await tester.pumpAndSettle();
+    await fillAndSend(tester);
 
-    expect(sent, hasLength(2));
-    expect(sent[0], contains(Translations.bookingTimeEvening));
-    expect(sent[1], contains('Alex'));
-    expect(sent[1], contains('416-555-0100'));
+    expect(sent, hasLength(1));
+    expect(sent.single.name, 'Alex');
+    expect(sent.single.contact, '416-555-0100');
+    expect(
+      sent.single.preferredTime,
+      contains(Translations.bookingTimeEvening),
+    );
+    expect(find.text(Translations.bookingSentTitle), findsOneWidget);
+  });
+
+  testWidgets('explains the email fallback when sending fails', (tester) async {
+    await pumpBooking(tester, succeed: false);
+    await fillAndSend(tester);
+
+    expect(find.text(Translations.bookingSentTitle), findsNothing);
+    expect(find.text(Translations.bookingSendFailed), findsOneWidget);
+  });
+
+  group('FormSubmitBookingSender', () {
+    const request = BookingRequest(
+      name: 'Alex',
+      contact: 'alex@example.com',
+      preferredTime: 'Mon, Oct 19, Evening (5–9pm)',
+    );
+
+    test('posts the request as JSON to the inbox address', () async {
+      late http.Request captured;
+      final sender = FormSubmitBookingSender(
+        client: MockClient((req) async {
+          captured = req;
+          return http.Response('{"success":"true"}', 200);
+        }),
+      );
+
+      expect(await sender.send(request), isTrue);
+      expect(captured.url.path, endsWith(Translations.contactEmail));
+      final body = jsonDecode(captured.body) as Map;
+      expect(body['Name'], 'Alex');
+      expect(body['Email or phone'], 'alex@example.com');
+      expect(body['_subject'], contains('Evening'));
+    });
+
+    test('reports failure when the service rejects the request', () async {
+      final sender = FormSubmitBookingSender(
+        client: MockClient(
+          (_) async => http.Response('{"success":"false"}', 200),
+        ),
+      );
+      expect(await sender.send(request), isFalse);
+    });
   });
 }

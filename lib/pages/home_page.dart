@@ -12,6 +12,7 @@ import '../components/pricing_section.dart';
 import '../components/sessions_section.dart';
 import '../components/site_footer.dart';
 import '../components/testimonials_section.dart';
+import '../contact/booking_request_sender.dart';
 import '../contact/contact_submit_handler.dart';
 import '../contact/mailto_contact_submit_handler.dart';
 import '../theme/colors.dart';
@@ -21,6 +22,7 @@ class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
     this.contactHandler,
+    this.bookingSender,
     this.homeKey,
     this.whyKey,
     this.sessionsKey,
@@ -30,6 +32,7 @@ class HomePage extends StatefulWidget {
   });
 
   final ContactSubmitHandler? contactHandler;
+  final BookingRequestSender? bookingSender;
   final GlobalKey? homeKey;
   final GlobalKey? whyKey;
   final GlobalKey? sessionsKey;
@@ -50,6 +53,8 @@ class _HomePageState extends State<HomePage> {
   late final GlobalKey _contactKey = widget.contactKey ?? GlobalKey();
   late final ContactSubmitHandler _handler =
       widget.contactHandler ?? const MailtoContactSubmitHandler();
+  late final BookingRequestSender _bookingSender =
+      widget.bookingSender ?? FormSubmitBookingSender();
 
   Future<void> _scrollTo(GlobalKey key) async {
     final ctx = key.currentContext;
@@ -102,9 +107,18 @@ class _HomePageState extends State<HomePage> {
   /// Every "book" button leads to the scheduling section.
   Future<void> _bookIntro() => _scrollTo(_contactKey);
 
-  Future<void> _requestTime(String subject, String body) async {
-    await _handler.openEmailClient(subject: subject, body: body);
+  /// Sends the booking request straight to the inbox; if that fails, falls
+  /// back to an email draft so the request isn't lost.
+  Future<bool> _requestTime(BookingRequest request) async {
+    if (await _bookingSender.send(request)) {
+      return true;
+    }
+    await _handler.openEmailClient(
+      subject: request.subject,
+      body: request.body,
+    );
     _showEmailFallback();
+    return false;
   }
 
   void _showPrivacy() {
