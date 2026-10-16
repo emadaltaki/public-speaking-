@@ -40,6 +40,10 @@ class Translations {
   static const String bookingContactLabel = 'Email or phone';
   static const String bookingContactRequired =
       'Please add an email or phone number.';
+  static const String bookingDescriptionLabel =
+      'Anything you would like us to know? (optional)';
+  static const String bookingDescriptionHint =
+      'For example: what makes speaking hard for you, or what you hope to work on.';
   static const String bookingSubmit = 'Send Request';
   static const String bookingSending = 'Sending…';
   static const String bookingNote =

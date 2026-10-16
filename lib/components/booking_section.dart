@@ -110,6 +110,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _contact = TextEditingController();
+  final _description = TextEditingController();
   late final List<DateTime> _days = _upcomingDays();
   DateTime? _day;
   String? _time;
@@ -131,6 +132,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   void dispose() {
     _name.dispose();
     _contact.dispose();
+    _description.dispose();
     super.dispose();
   }
 
@@ -149,6 +151,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
       BookingRequest(
         name: _name.text.trim(),
         contact: _contact.text.trim(),
+        description: _description.text.trim(),
         preferredTime: '${_label(_day!)}, $_time',
       ),
     );
@@ -165,6 +168,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   void _reset() {
     _name.clear();
     _contact.clear();
+    _description.clear();
     setState(() {
       _day = null;
       _time = null;
@@ -322,6 +326,19 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
             validator: (v) => (v == null || v.trim().isEmpty)
                 ? Translations.bookingContactRequired
                 : null,
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _description,
+            minLines: 3,
+            maxLines: 6,
+            maxLength: 1000,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: const InputDecoration(
+              labelText: Translations.bookingDescriptionLabel,
+              hintText: Translations.bookingDescriptionHint,
+              alignLabelWithHint: true,
+            ),
           ),
           const SizedBox(height: 20),
           PrimaryButton(
