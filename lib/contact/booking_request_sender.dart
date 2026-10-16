@@ -30,7 +30,7 @@ abstract class BookingRequestSender {
 }
 
 /// Posts booking requests to FormSubmit, which forwards them by email to
-/// [Translations.contactEmail]. No account is needed: the first request sends
+/// [Translations.bookingInboxEmail]. No account is needed: the first request sends
 /// a one-time activation email to that address, which must be confirmed.
 class FormSubmitBookingSender implements BookingRequestSender {
   FormSubmitBookingSender({http.Client? client})
@@ -39,7 +39,7 @@ class FormSubmitBookingSender implements BookingRequestSender {
   final http.Client _client;
 
   static final Uri _endpoint = Uri.parse(
-    'https://formsubmit.co/ajax/${Translations.contactEmail}',
+    'https://formsubmit.co/ajax/${Translations.bookingInboxEmail}',
   );
 
   @override

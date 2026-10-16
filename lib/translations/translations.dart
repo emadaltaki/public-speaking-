@@ -64,6 +64,9 @@ class Translations {
       'Your choices: you can ask us at any time to see, correct, or delete the information we hold about you by emailing speakupfearless@gmail.com.\n\n'
       "We follow Canada's Personal Information Protection and Electronic Documents Act (PIPEDA).";
   static const String contactEmail = 'speakupfearless@gmail.com';
+
+  /// Inbox that receives booking requests sent from the site.
+  static const String bookingInboxEmail = 'speakupunshaken@gmail.com';
   static const String mailtoUri = 'mailto:speakupfearless@gmail.com';
   static const String contactPhoneDisplay = '(416) 995-5347';
   static const String telUri = 'tel:+14169955347';
