@@ -19,18 +19,21 @@ class SpeakUpFearlessApp extends StatelessWidget {
       title: Translations.pageTitle,
       debugShowCheckedModeBanner: false,
       theme: AppStyles.theme,
-      initialRoute: AppRoutes.home,
-      onGenerateRoute: (settings) {
-        final Widget page = switch (settings.name) {
-          AppRoutes.games => const GamesHubPage(),
-          AppRoutes.tripleStep => const TripleStepSetupPage(),
-          _ => HomePage(contactHandler: contactHandler),
-        };
-        return MaterialPageRoute<void>(
-          settings: settings,
-          builder: (_) => page,
-        );
-      },
+      // Open only the requested page on a direct link. Building the home page
+      // underneath it trips a SelectionArea bug for off-screen routes.
+      onGenerateInitialRoutes: (name) => [
+        _route(RouteSettings(name: name.isEmpty ? AppRoutes.home : name)),
+      ],
+      onGenerateRoute: _route,
     );
+  }
+
+  Route<void> _route(RouteSettings settings) {
+    final Widget page = switch (settings.name) {
+      AppRoutes.games => const GamesHubPage(),
+      AppRoutes.tripleStep => const TripleStepSetupPage(),
+      _ => HomePage(contactHandler: contactHandler),
+    };
+    return MaterialPageRoute<void>(settings: settings, builder: (_) => page);
   }
 }
