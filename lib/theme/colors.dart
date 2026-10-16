@@ -21,4 +21,17 @@ class AppColors {
   static const Color tealPressed = Color(0xFF23756D);
   static const Color navyElevated = Color(0xFF1F4A68);
   static const Color personAccent = Color(0xFF3D5A73);
+
+  /// Deeper navy used for gradients and the footer.
+  static const Color navyDeep = Color(0xFF0F2A40);
+
+  /// Soft teal wash used behind icons and highlights.
+  static const Color tealSoft = Color(0xFFDDEFEC);
+
+  /// Brighter teal that stays legible on navy backgrounds.
+  static const Color tealLight = Color(0xFF7FD1C6);
+
+  /// Warm accent that adds energy next to navy and teal.
+  static const Color warm = Color(0xFFE9A23B);
+  static const Color warmSoft = Color(0xFFFCEFD9);
 }

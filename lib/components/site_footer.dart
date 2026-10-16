@@ -28,7 +28,7 @@ class SiteFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: AppColors.navy,
+      color: AppColors.navyDeep,
       child: SizedBox(
         width: double.infinity,
         child: SectionContainer(
@@ -41,7 +41,8 @@ class SiteFooter extends StatelessWidget {
             children: [
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final wide = constraints.maxWidth >= AppStyles.tabletBreakpoint;
+                  final wide =
+                      constraints.maxWidth >= AppStyles.tabletBreakpoint;
                   final brand = _FooterBrand();
                   final navigation = _FooterLinks(links: links);
                   final contact = _FooterContact(
@@ -179,7 +180,7 @@ class _FooterContact extends StatelessWidget {
           child: TextButton(
             onPressed: onEmail,
             style: TextButton.styleFrom(
-              foregroundColor: AppColors.teal,
+              foregroundColor: AppColors.tealLight,
               minimumSize: const Size(44, 44),
               padding: const EdgeInsets.symmetric(horizontal: 4),
             ),
@@ -191,7 +192,7 @@ class _FooterContact extends StatelessWidget {
           child: TextButton(
             onPressed: onPhone,
             style: TextButton.styleFrom(
-              foregroundColor: AppColors.teal,
+              foregroundColor: AppColors.tealLight,
               minimumSize: const Size(44, 44),
               padding: const EdgeInsets.symmetric(horizontal: 4),
             ),

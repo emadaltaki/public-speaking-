@@ -4,43 +4,97 @@ import '../data/site_content.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
-import 'section_container.dart';
-import 'site_card.dart';
 import 'responsive_card_grid.dart';
+import 'section_container.dart';
+import 'section_header.dart';
+import 'site_card.dart';
 
 class AnxietySection extends StatelessWidget {
   const AnxietySection({super.key});
 
+  static const _icons = [
+    Icons.favorite_border_rounded,
+    Icons.psychology_alt_outlined,
+    Icons.visibility_outlined,
+    Icons.pause_circle_outline_rounded,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: AppColors.lightBlue,
+      color: Colors.white,
       child: SectionContainer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Translations.anxietyHeadline, style: AppStyles.headline),
-            const SizedBox(height: 28),
+            const SectionHeader(
+              eyebrow: Translations.eyebrowWhy,
+              title: Translations.anxietyHeadline,
+            ),
+            const SizedBox(height: 40),
             ResponsiveCardGrid(
               children: [
-                for (final card in SiteContent.anxietyCards)
+                for (var i = 0; i < SiteContent.anxietyCards.length; i++)
                   SiteCard(
-                    color: Colors.white,
-                    child: Text(
-                      card,
-                      textAlign: TextAlign.center,
-                      style: AppStyles.title.copyWith(fontSize: 18),
+                    color: AppColors.offWhite,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconBadge(
+                          icon: _icons[i % _icons.length],
+                          size: 44,
+                          background: Colors.white,
+                        ),
+                        const SizedBox(height: 18),
+                        Text(
+                          '“${SiteContent.anxietyCards[i]}”',
+                          style: AppStyles.title.copyWith(
+                            fontSize: 18,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
               ],
             ),
-            const SizedBox(height: 28),
-            Text(
-              Translations.anxietyHuman,
-              style: AppStyles.title.copyWith(fontSize: 20),
+            const SizedBox(height: 40),
+            ClipRRect(
+              borderRadius: AppStyles.cardRadius,
+              child: ColoredBox(
+                color: AppColors.tealSoft.withValues(alpha: 0.6),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                        width: 5,
+                        child: ColoredBox(color: AppColors.teal),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(28, 24, 28, 24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                Translations.anxietyHuman,
+                                style: AppStyles.title.copyWith(fontSize: 20),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                Translations.anxietyFollow,
+                                style: AppStyles.body,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 12),
-            Text(Translations.anxietyFollow, style: AppStyles.body),
           ],
         ),
       ),

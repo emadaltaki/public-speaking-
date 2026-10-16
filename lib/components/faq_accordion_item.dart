@@ -18,29 +18,56 @@ class _FaqAccordionItemState extends State<FaqAccordionItem> {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: AppStyles.cardRadius,
-        border: Border.all(color: AppColors.border),
+        color: _open ? AppColors.offWhite : Colors.white,
+        borderRadius: BorderRadius.circular(AppStyles.radiusSmall + 4),
+        border: Border.all(
+          color: _open
+              ? AppColors.teal.withValues(alpha: 0.5)
+              : AppColors.border,
+        ),
       ),
       child: Column(
         children: [
           InkWell(
             onTap: () => setState(() => _open = !_open),
-            borderRadius: AppStyles.cardRadius,
+            borderRadius: BorderRadius.circular(AppStyles.radiusSmall + 4),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: AppStyles.minTapSize),
+              constraints: const BoxConstraints(
+                minHeight: AppStyles.minTapSize,
+              ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
+                ),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(widget.item.question, style: AppStyles.title.copyWith(fontSize: 18)),
+                      child: Text(
+                        widget.item.question,
+                        style: AppStyles.title.copyWith(fontSize: 18),
+                      ),
                     ),
-                    Icon(
-                      _open ? Icons.expand_less : Icons.expand_more,
-                      color: AppColors.navy,
+                    const SizedBox(width: 16),
+                    AnimatedRotation(
+                      turns: _open ? 0.125 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: _open ? AppColors.teal : AppColors.tealSoft,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.add_rounded,
+                          size: 20,
+                          color: _open ? AppColors.onTeal : AppColors.teal,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -49,10 +76,13 @@ class _FaqAccordionItemState extends State<FaqAccordionItem> {
           ),
           if (_open)
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+              padding: const EdgeInsets.fromLTRB(24, 0, 72, 22),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(widget.item.answer, style: AppStyles.body),
+                child: Text(
+                  widget.item.answer,
+                  style: AppStyles.body.copyWith(color: AppColors.mutedText),
+                ),
               ),
             ),
         ],

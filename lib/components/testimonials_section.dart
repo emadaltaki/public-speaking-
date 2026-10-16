@@ -4,9 +4,10 @@ import '../data/site_content.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
-import 'section_container.dart';
-import 'site_card.dart';
 import 'responsive_card_grid.dart';
+import 'section_container.dart';
+import 'section_header.dart';
+import 'site_card.dart';
 
 class TestimonialsSection extends StatelessWidget {
   const TestimonialsSection({super.key});
@@ -19,36 +20,28 @@ class TestimonialsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Translations.testimonialsHeadline, style: AppStyles.headline),
-            const SizedBox(height: 12),
-            Text(Translations.testimonialsIntro, style: AppStyles.bodySmall),
-            const SizedBox(height: 28),
+            const SectionHeader(
+              eyebrow: Translations.eyebrowHosts,
+              title: Translations.testimonialsHeadline,
+              intro: Translations.testimonialsIntro,
+            ),
+            const SizedBox(height: 40),
             ResponsiveCardGrid(
               minTileWidth: 420,
+              gap: 24,
               children: [
                 for (final item in SiteContent.testimonials)
                   SiteCard(
+                    padding: const EdgeInsets.all(36),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (item.photoAsset != null)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 14),
-                            child: Semantics(
-                              label: item.photoAlt,
-                              image: true,
-                              child: ClipOval(
-                                child: Image.asset(
-                                  item.photoAsset!,
-                                  width: AppStyles.avatarSize,
-                                  height: AppStyles.avatarSize,
-                                  fit: BoxFit.cover,
-                                  excludeFromSemantics: true,
-                                ),
-                              ),
-                            ),
-                          ),
+                        const Icon(
+                          Icons.format_quote_rounded,
+                          size: 40,
+                          color: AppColors.teal,
+                        ),
                         if (item.isPlaceholder)
                           Text(
                             Translations.testimonialPlaceholderLabel,
@@ -56,18 +49,65 @@ class TestimonialsSection extends StatelessWidget {
                               color: AppColors.teal,
                             ),
                           ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '"${item.quote}"',
-                          style: AppStyles.body,
-                        ),
                         const SizedBox(height: 12),
                         Text(
-                          item.firstName,
-                          style: AppStyles.title.copyWith(fontSize: 18),
+                          item.quote,
+                          style: AppStyles.body.copyWith(
+                            fontSize: 18,
+                            height: 1.7,
+                            color: AppColors.charcoal,
+                          ),
                         ),
-                        if (item.role != null)
-                          Text(item.role!, style: AppStyles.bodySmall),
+                        const SizedBox(height: 28),
+                        const Divider(height: 1, color: AppColors.border),
+                        const SizedBox(height: 24),
+                        Row(
+                          children: [
+                            if (item.photoAsset != null) ...[
+                              Semantics(
+                                label: item.photoAlt,
+                                image: true,
+                                child: Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      colors: [AppColors.teal, AppColors.warm],
+                                    ),
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.asset(
+                                      item.photoAsset!,
+                                      width: AppStyles.avatarSize,
+                                      height: AppStyles.avatarSize,
+                                      fit: BoxFit.cover,
+                                      excludeFromSemantics: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                            ],
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.firstName,
+                                    style: AppStyles.title.copyWith(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  if (item.role != null)
+                                    Text(
+                                      item.role!,
+                                      style: AppStyles.bodySmall,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

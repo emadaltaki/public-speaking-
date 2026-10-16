@@ -7,33 +7,51 @@ class AppStyles {
   AppStyles._();
 
   static const double maxContentWidth = 1160;
-  static const double sectionPaddingY = 88;
+  static const double sectionPaddingY = 104;
   static const double sectionPaddingYMobile = 56;
   static const double gutter = 24;
   static const double barGutterWide = 48;
   static const double barGutterNarrow = 20;
-  static const double radius = 16;
-  static const double radiusSmall = 10;
+  static const double radius = 20;
+  static const double radiusSmall = 12;
   static const double minTapSize = 44;
   static const double avatarSize = 64;
   static const double navBreakpoint = 1100;
   static const double tabletBreakpoint = 720;
 
   static List<BoxShadow> get softShadow => [
-        BoxShadow(
-          color: AppColors.cardShadow,
-          blurRadius: 24,
-          offset: const Offset(0, 10),
-        ),
-      ];
+    BoxShadow(
+      color: AppColors.navy.withValues(alpha: 0.04),
+      blurRadius: 2,
+      offset: const Offset(0, 1),
+    ),
+    BoxShadow(
+      color: AppColors.navy.withValues(alpha: 0.06),
+      blurRadius: 24,
+      offset: const Offset(0, 8),
+    ),
+  ];
+
+  static List<BoxShadow> get hoverShadow => [
+    BoxShadow(
+      color: AppColors.navy.withValues(alpha: 0.05),
+      blurRadius: 2,
+      offset: const Offset(0, 1),
+    ),
+    BoxShadow(
+      color: AppColors.navy.withValues(alpha: 0.12),
+      blurRadius: 36,
+      offset: const Offset(0, 16),
+    ),
+  ];
 
   static List<BoxShadow> get elevatedShadow => [
-        BoxShadow(
-          color: AppColors.navy.withValues(alpha: 0.14),
-          blurRadius: 32,
-          offset: const Offset(0, 14),
-        ),
-      ];
+    BoxShadow(
+      color: AppColors.navy.withValues(alpha: 0.18),
+      blurRadius: 48,
+      offset: const Offset(0, 20),
+    ),
+  ];
 
   static BorderRadius get cardRadius => BorderRadius.circular(radius);
 
@@ -63,117 +81,138 @@ class AppStyles {
   }
 
   static TextStyle get display => _inter(
-        fontSize: 52,
-        height: 1.15,
-        fontWeight: FontWeight.w700,
-        color: AppColors.navy,
-        letterSpacing: -0.8,
-      );
+    fontSize: 60,
+    height: 1.08,
+    fontWeight: FontWeight.w800,
+    color: AppColors.navy,
+    letterSpacing: -1.6,
+  );
 
   static TextStyle get headline => _inter(
-        fontSize: 36,
-        height: 1.22,
-        fontWeight: FontWeight.w700,
-        color: AppColors.navy,
-        letterSpacing: -0.4,
-      );
+    fontSize: 40,
+    height: 1.15,
+    fontWeight: FontWeight.w700,
+    color: AppColors.navy,
+    letterSpacing: -0.9,
+  );
+
+  /// Small uppercase kicker shown above section headlines.
+  static TextStyle get eyebrow => _inter(
+    fontSize: 13,
+    height: 1.3,
+    fontWeight: FontWeight.w700,
+    color: AppColors.teal,
+    letterSpacing: 1.6,
+  );
 
   static TextStyle get title => _inter(
-        fontSize: 22,
-        height: 1.35,
-        fontWeight: FontWeight.w600,
-        color: AppColors.navy,
-      );
+    fontSize: 22,
+    height: 1.3,
+    fontWeight: FontWeight.w600,
+    color: AppColors.navy,
+    letterSpacing: -0.2,
+  );
+
+  static TextStyle get lead => _inter(
+    fontSize: 19,
+    height: 1.6,
+    fontWeight: FontWeight.w400,
+    color: AppColors.mutedText,
+  );
 
   static TextStyle get body => _inter(
-        fontSize: 17,
-        height: 1.65,
-        fontWeight: FontWeight.w400,
-        color: AppColors.charcoal,
-      );
+    fontSize: 17,
+    height: 1.65,
+    fontWeight: FontWeight.w400,
+    color: AppColors.charcoal,
+  );
 
   static TextStyle get bodySmall => _inter(
-        fontSize: 15,
-        height: 1.6,
-        fontWeight: FontWeight.w400,
-        color: AppColors.mutedText,
-      );
+    fontSize: 15,
+    height: 1.6,
+    fontWeight: FontWeight.w400,
+    color: AppColors.mutedText,
+  );
 
   static TextStyle get navLink => _inter(
-        fontSize: 17,
-        height: 1.2,
-        fontWeight: FontWeight.w500,
-        color: AppColors.onNavy,
-        letterSpacing: 0.1,
-      );
+    fontSize: 17,
+    height: 1.2,
+    fontWeight: FontWeight.w500,
+    color: AppColors.onNavy,
+    letterSpacing: 0.1,
+  );
 
   static TextStyle get label => _inter(
-        fontSize: 14,
-        height: 1.4,
-        fontWeight: FontWeight.w600,
-        color: AppColors.navy,
-        letterSpacing: 0.2,
-      );
+    fontSize: 14,
+    height: 1.4,
+    fontWeight: FontWeight.w600,
+    color: AppColors.navy,
+    letterSpacing: 0.2,
+  );
 
   static ButtonStyle get primaryButton => ButtonStyle(
-        minimumSize: const WidgetStatePropertyAll(Size(48, minTapSize)),
-        backgroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.disabled)) {
-            return AppColors.teal.withValues(alpha: 0.45);
-          }
-          if (states.contains(WidgetState.hovered) ||
-              states.contains(WidgetState.pressed)) {
-            return AppColors.tealPressed;
-          }
-          return AppColors.teal;
-        }),
-        foregroundColor: const WidgetStatePropertyAll(AppColors.onTeal),
-        overlayColor: WidgetStatePropertyAll(
-          AppColors.onTeal.withValues(alpha: 0.08),
-        ),
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-        ),
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusSmall)),
-        ),
-        elevation: const WidgetStatePropertyAll(0),
-        textStyle: WidgetStatePropertyAll(
-          _inter(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-      );
+    minimumSize: const WidgetStatePropertyAll(Size(48, minTapSize)),
+    backgroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.disabled)) {
+        return AppColors.teal.withValues(alpha: 0.45);
+      }
+      if (states.contains(WidgetState.hovered) ||
+          states.contains(WidgetState.pressed)) {
+        return AppColors.tealPressed;
+      }
+      return AppColors.teal;
+    }),
+    foregroundColor: const WidgetStatePropertyAll(AppColors.onTeal),
+    overlayColor: WidgetStatePropertyAll(
+      AppColors.onTeal.withValues(alpha: 0.08),
+    ),
+    padding: const WidgetStatePropertyAll(
+      EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+    ),
+    shape: const WidgetStatePropertyAll(StadiumBorder()),
+    elevation: WidgetStateProperty.resolveWith(
+      (states) => states.contains(WidgetState.hovered) ? 4 : 0,
+    ),
+    shadowColor: WidgetStatePropertyAll(AppColors.teal.withValues(alpha: 0.5)),
+    textStyle: WidgetStatePropertyAll(
+      _inter(fontWeight: FontWeight.w600, fontSize: 16),
+    ),
+  );
 
   static ButtonStyle get primaryButtonLarge => primaryButton.copyWith(
-        minimumSize: const WidgetStatePropertyAll(Size(56, 52)),
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-        ),
-        textStyle: WidgetStatePropertyAll(
-          _inter(fontWeight: FontWeight.w600, fontSize: 17),
-        ),
-      );
+    minimumSize: const WidgetStatePropertyAll(Size(56, 52)),
+    padding: const WidgetStatePropertyAll(
+      EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+    ),
+    textStyle: WidgetStatePropertyAll(
+      _inter(fontWeight: FontWeight.w600, fontSize: 17),
+    ),
+  );
 
   static ButtonStyle get secondaryButton => ButtonStyle(
-        minimumSize: const WidgetStatePropertyAll(Size(48, minTapSize)),
-        backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
-        foregroundColor: const WidgetStatePropertyAll(AppColors.navy),
-        overlayColor: WidgetStatePropertyAll(
-          AppColors.navy.withValues(alpha: 0.06),
-        ),
-        side: const WidgetStatePropertyAll(
-          BorderSide(color: AppColors.navy, width: 1.4),
-        ),
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-        ),
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusSmall)),
-        ),
-        elevation: const WidgetStatePropertyAll(0),
-        textStyle: WidgetStatePropertyAll(
-          _inter(fontWeight: FontWeight.w600, fontSize: 16),
-        ),
-      );
+    minimumSize: const WidgetStatePropertyAll(Size(48, minTapSize)),
+    backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+    foregroundColor: const WidgetStatePropertyAll(AppColors.navy),
+    overlayColor: WidgetStatePropertyAll(
+      AppColors.navy.withValues(alpha: 0.06),
+    ),
+    side: WidgetStateProperty.resolveWith(
+      (states) => BorderSide(
+        color: states.contains(WidgetState.hovered)
+            ? AppColors.navy
+            : AppColors.navy.withValues(alpha: 0.35),
+        width: 1.4,
+      ),
+    ),
+    padding: const WidgetStatePropertyAll(
+      EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+    ),
+    shape: const WidgetStatePropertyAll(StadiumBorder()),
+    elevation: const WidgetStatePropertyAll(0),
+    textStyle: WidgetStatePropertyAll(
+      _inter(fontWeight: FontWeight.w600, fontSize: 16),
+    ),
+  );
 
   static ThemeData get theme {
     final base = ThemeData(

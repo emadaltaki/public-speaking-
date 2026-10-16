@@ -24,8 +24,9 @@ void main() {
     expect(SiteContent.testimonials.length, 2);
     expect(find.text(Translations.testimonialEmadName), findsOneWidget);
     expect(find.text(Translations.testimonialEliasName), findsOneWidget);
-    expect(find.text(Translations.testimonialEmadRole), findsOneWidget);
-    expect(find.text(Translations.testimonialEliasRole), findsOneWidget);
+    // Both hosts can share the same role title, so allow either to repeat.
+    expect(find.text(Translations.testimonialEmadRole), findsWidgets);
+    expect(find.text(Translations.testimonialEliasRole), findsWidgets);
     expect(find.text(Translations.testimonialPlaceholderLabel), findsNothing);
 
     final assetNames = tester

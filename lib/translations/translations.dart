@@ -31,22 +31,35 @@ class Translations {
   static const String ctaCallUs = 'Call Us';
   static const String ctaSendMessage = 'Send Message';
 
-  static const String heroHeadline =
-      "You Don't Have to Be Fearless to Speak.";
+  static const String heroHeadline = "You Don't Have to Be Fearless to Speak.";
   static const String heroSupport =
       "Public speaking anxiety is normal. You don't have to overcome it alone. Speak Up Fearless is a supportive community where you can practice, build confidence, and learn to speak with courage.";
   static const String heroTrust =
       'A supportive space to practice. No judgment. No pressure. Just progress.';
   static const String heroImageAlt =
-      'People practicing public speaking together in a warm, supportive circle';
+      'A host leading a Speak Up Fearless workshop in front of a small group';
+  static const String heroLocation = 'Now meeting in Mississauga, Ontario';
+  static const String heroBadgeTitle = 'Everyone participates';
+  static const String heroBadgeBody = 'Mistakes are part of learning.';
+
+  static const String eyebrowWhy = "You're not alone";
+  static const String eyebrowMission = 'Our mission';
+  static const String eyebrowHow = 'The process';
+  static const String eyebrowSessions = 'What we practice';
+  static const String eyebrowPricing = 'Pricing';
+  static const String eyebrowCommunity = 'In the room';
+  static const String eyebrowHosts = 'Meet your hosts';
+  static const String eyebrowTrust = 'Why it works';
+  static const String eyebrowExpect = 'Next steps';
+  static const String eyebrowFaq = 'Questions & answers';
+  static const String eyebrowContact = 'Get in touch';
 
   static const String anxietyHeadline =
       "If Speaking Makes You Nervous, You're Not Alone.";
   static const String anxietyCard1 = 'My heart starts racing.';
   static const String anxietyCard2 = 'I overthink everything I want to say.';
   static const String anxietyCard3 = "I'm afraid people will judge me.";
-  static const String anxietyCard4 =
-      "I know what I want to say, but I freeze.";
+  static const String anxietyCard4 = "I know what I want to say, but I freeze.";
   static const String anxietyHuman =
       "These feelings don't mean you're bad at speaking. They mean you're human.";
   static const String anxietyFollow =
@@ -75,8 +88,7 @@ class Translations {
   static const String how2Body =
       'Practice speaking in a supportive environment.';
   static const String how3Title = 'Reflect';
-  static const String how3Body =
-      'Learn what worked and where you can improve.';
+  static const String how3Body = 'Learn what worked and where you can improve.';
   static const String how4Title = 'Grow';
   static const String how4Body =
       'Build confidence through repetition and community.';
@@ -197,7 +209,8 @@ class Translations {
       'Nobody here waits until they feel ready. We show up, we speak, we give each other honest and kind feedback, and everyone leaves knowing what to work on next.';
   static const String testimonialEliasName = 'Elias';
   static const String testimonialEliasRole = 'Co-Founder and Host';
-  static const String testimonialEmadPhotoAlt = 'Portrait of Emad, founder and host';
+  static const String testimonialEmadPhotoAlt =
+      'Portrait of Emad, founder and host';
   static const String testimonialEliasPhotoAlt =
       'Portrait of Elias, co-founder and host';
 
@@ -249,8 +262,7 @@ class Translations {
   static const String faqQ8 = 'How much does it cost?';
   static const String faqA8 =
       'Packages are listed in CAD on this page: \$50 for a single session, \$180 for four sessions, and \$320 for eight sessions. A free online explanation session is available if you want to talk first. Email us if you have questions about which starting point is right for you.';
-  static const String faqQ9 =
-      'Can I talk to you before joining a session?';
+  static const String faqQ9 = 'Can I talk to you before joining a session?';
   static const String faqA9 =
       'Yes. We offer a free online explanation session so you can talk with a host, understand what we do, and ask questions. There is no speaking required and no pressure to join.';
 

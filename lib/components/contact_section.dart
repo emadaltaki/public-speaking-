@@ -6,8 +6,8 @@ import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'contact_form.dart';
 import 'primary_button.dart';
-import 'secondary_button.dart';
 import 'section_container.dart';
+import 'section_header.dart';
 import 'site_card.dart';
 
 class ContactSection extends StatelessWidget {
@@ -28,24 +28,38 @@ class ContactSection extends StatelessWidget {
 
     final card = SiteCard(
       elevated: true,
+      hoverLift: false,
+      color: AppColors.navy,
+      borderColor: AppColors.navy,
+      padding: EdgeInsets.all(wide ? 32 : 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(Translations.siteName, style: AppStyles.title),
-          const SizedBox(height: 8),
-          SelectableText(
-            Translations.contactEmail,
-            style: AppStyles.body.copyWith(color: AppColors.teal),
+          Text(
+            Translations.siteName,
+            style: AppStyles.title.copyWith(color: AppColors.onNavy),
           ),
-          const SizedBox(height: 4),
-          SelectableText(
-            Translations.contactPhoneDisplay,
-            style: AppStyles.body.copyWith(color: AppColors.teal),
+          const SizedBox(height: 24),
+          const _ContactLine(
+            icon: Icons.mail_outline_rounded,
+            text: Translations.contactEmail,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
+          const _ContactLine(
+            icon: Icons.phone_outlined,
+            text: Translations.contactPhoneDisplay,
+          ),
+          const SizedBox(height: 14),
+          const _ContactLine(
+            icon: Icons.place_outlined,
+            text: Translations.heroLocation,
+            selectable: false,
+          ),
+          const SizedBox(height: 28),
           PrimaryButton(
             label: Translations.ctaEmailUs,
-            onPressed: onTalkToUs ??
+            onPressed:
+                onTalkToUs ??
                 () {
                   handler.openEmailClient(
                     subject: 'Speak Up Fearless — I would like to join',
@@ -53,15 +67,31 @@ class ContactSection extends StatelessWidget {
                 },
           ),
           const SizedBox(height: 10),
-          SecondaryButton(
-            label: Translations.ctaCallUs,
+          OutlinedButton(
+            style: AppStyles.secondaryButton.copyWith(
+              foregroundColor: const WidgetStatePropertyAll(AppColors.onNavy),
+              overlayColor: WidgetStatePropertyAll(
+                Colors.white.withValues(alpha: 0.08),
+              ),
+              side: WidgetStatePropertyAll(
+                BorderSide(
+                  color: Colors.white.withValues(alpha: 0.4),
+                  width: 1.4,
+                ),
+              ),
+            ),
             onPressed: onCallUs ?? () => handler.openPhoneClient(),
+            child: const Text(Translations.ctaCallUs),
           ),
         ],
       ),
     );
 
-    final form = SiteCard(child: ContactForm(handler: handler));
+    final form = SiteCard(
+      hoverLift: false,
+      padding: EdgeInsets.all(wide ? 32 : 24),
+      child: ContactForm(handler: handler),
+    );
 
     return ColoredBox(
       color: AppColors.lightBlue,
@@ -69,16 +99,18 @@ class ContactSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(Translations.contactHeadline, style: AppStyles.headline),
-            const SizedBox(height: 12),
-            Text(Translations.contactSupport, style: AppStyles.body),
-            const SizedBox(height: 28),
+            const SectionHeader(
+              eyebrow: Translations.eyebrowContact,
+              title: Translations.contactHeadline,
+              intro: Translations.contactSupport,
+            ),
+            const SizedBox(height: 40),
             if (wide)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: card),
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 24),
                   Expanded(flex: 2, child: form),
                 ],
               )
@@ -90,6 +122,45 @@ class ContactSection extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ContactLine extends StatelessWidget {
+  const _ContactLine({
+    required this.icon,
+    required this.text,
+    this.selectable = true,
+  });
+
+  final IconData icon;
+  final String text;
+  final bool selectable;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = AppStyles.body.copyWith(
+      color: AppColors.onNavy,
+      fontSize: 16,
+    );
+    return Row(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, size: 20, color: AppColors.tealLight),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: selectable
+              ? SelectableText(text, style: style)
+              : Text(text, style: style),
+        ),
+      ],
     );
   }
 }

@@ -40,13 +40,27 @@ class _GalleryTileState extends State<GalleryTile> {
                   errorBuilder: (context, error, stackTrace) =>
                       const CommunityScene(),
                 ),
-                ColoredBox(
-                  color: AppColors.navy.withValues(alpha: _hovered ? 0.28 : 0.18),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 180),
+                  opacity: _hovered ? 1 : 0.85,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: const [0.45, 1],
+                        colors: [
+                          AppColors.navyDeep.withValues(alpha: 0),
+                          AppColors.navyDeep.withValues(alpha: 0.78),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(20),
                     child: Text(
                       widget.item.caption,
                       style: AppStyles.title.copyWith(

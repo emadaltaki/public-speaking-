@@ -49,14 +49,14 @@ class _AppNavbarState extends State<AppNavbar> {
 
     return Material(
       color: AppColors.navy,
-      elevation: 3,
-      shadowColor: AppColors.navy.withValues(alpha: 0.4),
+      elevation: 0,
+      shadowColor: Colors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 84,
+            height: 80,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: wide
@@ -132,9 +132,7 @@ class _AppNavbarState extends State<AppNavbar> {
             DecoratedBox(
               decoration: const BoxDecoration(
                 color: AppColors.navyElevated,
-                border: Border(
-                  top: BorderSide(color: Color(0x33FFFFFF)),
-                ),
+                border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
               ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(

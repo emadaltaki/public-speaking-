@@ -4,12 +4,21 @@ import '../data/site_content.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
-import 'section_container.dart';
-import 'site_card.dart';
 import 'responsive_card_grid.dart';
+import 'section_container.dart';
+import 'section_header.dart';
+import 'site_card.dart';
 
 class SessionsSection extends StatelessWidget {
   const SessionsSection({super.key});
+
+  static const _icons = [
+    Icons.mic_none_rounded,
+    Icons.bolt_rounded,
+    Icons.auto_stories_outlined,
+    Icons.forum_outlined,
+    Icons.emoji_events_outlined,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +28,38 @@ class SessionsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Translations.sessionsHeadline, style: AppStyles.headline),
-            const SizedBox(height: 12),
-            Text(Translations.sessionsIntro, style: AppStyles.body),
-            const SizedBox(height: 28),
+            const SectionHeader(
+              eyebrow: Translations.eyebrowSessions,
+              title: Translations.sessionsHeadline,
+              intro: Translations.sessionsIntro,
+            ),
+            const SizedBox(height: 40),
             ResponsiveCardGrid(
+              minTileWidth: 320,
               children: [
-                for (final session in SiteContent.sessions)
+                for (var i = 0; i < SiteContent.sessions.length; i++)
                   SiteCard(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.forum_outlined, color: AppColors.teal),
-                        const SizedBox(height: 12),
-                        Text(session.title, style: AppStyles.title),
+                        IconBadge(
+                          icon: _icons[i % _icons.length],
+                          color: i.isEven ? AppColors.teal : AppColors.warm,
+                          background: i.isEven
+                              ? AppColors.tealSoft
+                              : AppColors.warmSoft,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          SiteContent.sessions[i].title,
+                          style: AppStyles.title,
+                        ),
                         const SizedBox(height: 8),
-                        Text(session.body, style: AppStyles.bodySmall),
+                        Text(
+                          SiteContent.sessions[i].body,
+                          style: AppStyles.bodySmall,
+                        ),
                       ],
                     ),
                   ),
