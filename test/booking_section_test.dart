@@ -45,6 +45,10 @@ void main() {
     await tester.tap(find.text(Translations.bookingTimeEvening));
     await tester.enterText(find.byType(TextFormField).at(0), 'Alex');
     await tester.enterText(find.byType(TextFormField).at(1), '416-555-0100');
+    await tester.enterText(
+      find.byType(TextFormField).at(2),
+      'I freeze in meetings.',
+    );
     await tester.tap(find.text(Translations.bookingSubmit));
     await tester.pumpAndSettle();
   }
@@ -64,6 +68,7 @@ void main() {
     expect(sent, hasLength(1));
     expect(sent.single.name, 'Alex');
     expect(sent.single.contact, '416-555-0100');
+    expect(sent.single.description, 'I freeze in meetings.');
     expect(
       sent.single.preferredTime,
       contains(Translations.bookingTimeEvening),
