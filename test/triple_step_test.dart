@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:speak_up_fearless/app.dart';
 import 'package:speak_up_fearless/games/game_catalog.dart';
+import 'package:speak_up_fearless/games/triple_step/triple_step_data.dart';
 import 'package:speak_up_fearless/games/triple_step/triple_step_game.dart';
 import 'package:speak_up_fearless/games/triple_step/triple_step_play_page.dart';
 import 'package:speak_up_fearless/translations/translations.dart';
@@ -85,6 +86,24 @@ void main() {
       g.stop();
       expect(g.results.map((r) => r.player), ['Ana', 'Ben']);
       expect(g.hasNextPlayer, isFalse);
+    });
+
+    test('topics never repeat until every topic has been used', () {
+      final deck = TopicDeck(['A', 'B', 'C']);
+      final random = math.Random(3);
+      final firstPass = {for (var i = 0; i < 3; i++) deck.draw(random)};
+      expect(firstPass, {'A', 'B', 'C'});
+      expect(['A', 'B', 'C'], contains(deck.draw(random)));
+    });
+
+    test('the topic pool is large and includes the custom topics', () {
+      expect(TripleStepData.topics.length, greaterThan(300));
+      expect(
+        TripleStepData.topics.toSet(),
+        hasLength(TripleStepData.topics.length),
+      );
+      expect(TripleStepData.topics, contains('The Price of Leadership'));
+      expect(TripleStepData.topics, contains("If Money Didn't Exist"));
     });
 
     test('custom title when suggestions are off', () {
