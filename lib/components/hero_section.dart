@@ -45,7 +45,7 @@ class HeroSection extends StatelessWidget {
           runSpacing: 12,
           children: [
             PrimaryButton(
-              label: Translations.ctaJoin,
+              label: Translations.pricingIntroCta,
               onPressed: onJoin,
               large: true,
             ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../components/anxiety_section.dart';
 import '../components/app_navbar.dart';
@@ -66,16 +68,72 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _talkToUs() {
-    return _handler.openEmailClient(
-      subject: 'Speak Up Fearless — I would like to join',
-    );
+  /// Browsers can't tell us whether a mail app opened, so always show the
+  /// address too in case the visitor has no email app set up.
+  void _showEmailFallback() {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) {
+      return;
+    }
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 10),
+          content: const Text(
+            '${Translations.emailFallbackTitle} ${Translations.emailFallbackBody}',
+          ),
+          action: SnackBarAction(
+            label: Translations.emailFallbackCopy,
+            onPressed: () {
+              Clipboard.setData(
+                const ClipboardData(text: Translations.contactEmail),
+              );
+            },
+          ),
+        ),
+      );
   }
 
-  Future<void> _bookIntro() {
-    return _handler.openEmailClient(
+  Future<void> _talkToUs() async {
+    await _handler.openEmailClient(
+      subject: 'Speak Up Fearless — I would like to join',
+    );
+    _showEmailFallback();
+  }
+
+  Future<void> _bookIntro() async {
+    if (Translations.bookingUrl.isNotEmpty) {
+      await launchUrl(
+        Uri.parse(Translations.bookingUrl),
+        webOnlyWindowName: '_blank',
+      );
+      return;
+    }
+    await _handler.openEmailClient(
       subject: Translations.pricingIntroEmailSubject,
       body: Translations.pricingIntroEmailBody,
+    );
+    _showEmailFallback();
+  }
+
+  void _showPrivacy() {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(Translations.privacyTitle),
+        content: const SizedBox(
+          width: 560,
+          child: SingleChildScrollView(child: Text(Translations.privacyBody)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(Translations.privacyClose),
+          ),
+        ],
+      ),
     );
   }
 
@@ -129,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                     KeyedSubtree(
                       key: _homeKey,
                       child: HeroSection(
-                        onJoin: () => _scrollTo(_contactKey),
+                        onJoin: _bookIntro,
                         onLearnSessions: () => _scrollTo(_sessionsKey),
                       ),
                     ),
@@ -194,6 +252,10 @@ class _HomePageState extends State<HomePage> {
                         FooterLink(
                           label: Translations.navContact,
                           onPressed: () => _scrollTo(_contactKey),
+                        ),
+                        FooterLink(
+                          label: Translations.footerPrivacy,
+                          onPressed: _showPrivacy,
                         ),
                       ],
                     ),
