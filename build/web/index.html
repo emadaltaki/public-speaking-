@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html lang="en-CA">
+<html lang="en-CA" dir="ltr">
 <head>
-  <base href="/">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#FFD27F">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F1DDBC">
 
   <title>Public Speaking Classes in Mississauga | Speak Up Fearless</title>
   <meta name="description" content="Overcome the fear of public speaking in Mississauga, Ontario. Small, supportive practice sessions for nervous speakers. Free online intro session, then $50 per session or packages from $180 CAD.">
@@ -21,20 +18,20 @@
   <meta property="og:description" content="A supportive space to practice public speaking. No judgment. No pressure. Just progress. Free online intro session.">
   <meta property="og:image" content="https://public-speaking-lemon.vercel.app/assets/assets/images/explaining-pic.jpeg">
   <meta property="og:image:alt" content="A host leading a Speak Up Fearless workshop in front of a small group">
-
+  <meta property="og:url" content="https://public-speaking-lemon.vercel.app/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Public Speaking Classes in Mississauga | Speak Up Fearless">
   <meta name="twitter:description" content="A supportive space to practice public speaking. No judgment. No pressure. Just progress. Free online intro session.">
   <meta name="twitter:image" content="https://public-speaking-lemon.vercel.app/assets/assets/images/explaining-pic.jpeg">
 
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Speak Up Fearless">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-  <link rel="icon" type="image/png" href="favicon.png"/>
-  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="/icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="manifest" href="/manifest.json">
   <link rel="canonical" href="https://public-speaking-lemon.vercel.app/">
-  <meta property="og:url" content="https://public-speaking-lemon.vercel.app/">
+  <link rel="preload" href="/assets/assets/fonts/Montserrat-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/assets/assets/fonts/Inter-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/assets/assets/images/explaining-pic.jpeg" as="image">
 
   <script type="application/ld+json">
   {
@@ -42,17 +39,13 @@
     "@type": "LocalBusiness",
     "name": "Speak Up Fearless",
     "url": "https://public-speaking-lemon.vercel.app/",
+    "image": "https://public-speaking-lemon.vercel.app/assets/assets/images/explaining-pic.jpeg",
     "description": "A supportive public speaking community in Mississauga, Ontario, helping people with speaking anxiety practice, build confidence, and find their voice.",
     "email": "speakupfearless@gmail.com",
     "telephone": "+1-416-995-5347",
     "priceRange": "$0–$320 CAD",
     "currenciesAccepted": "CAD",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Mississauga",
-      "addressRegion": "ON",
-      "addressCountry": "CA"
-    },
+    "address": { "@type": "PostalAddress", "addressLocality": "Mississauga", "addressRegion": "ON", "addressCountry": "CA" },
     "areaServed": { "@type": "City", "name": "Mississauga" },
     "makesOffer": [
       { "@type": "Offer", "name": "Free Online Explanation Session", "price": "0", "priceCurrency": "CAD" },
@@ -75,63 +68,698 @@
   }
   </script>
 
+  <script>
+    // Saved theme and language before first paint (light and English by default).
+    (function () {
+      var d = document.documentElement;
+      try {
+        if (localStorage.getItem('speakupfearless.theme') === 'dark') d.dataset.theme = 'dark';
+        if (localStorage.getItem('speakupfearless.language') === 'ar') { d.lang = 'ar'; d.dir = 'rtl'; d.classList.add('ar-pending'); }
+      } catch (_) {}
+    })();
+  </script>
+
   <style>
-    /* Readable copy of the page. Search engines index it, and visitors see it
-       while the app loads; the app then draws on top of it. */
-    html, body { margin: 0; background: #F7F5F2; }
-    #static-site { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1F2933; line-height: 1.6; }
-    #static-site header { background: #FFD27F; color: #2B2118; padding: 22px 24px; font-weight: 700; font-size: 20px; }
-    #static-site main { max-width: 1112px; margin: 0 auto; padding: 48px 24px 64px; }
-    #static-site h1 { color: #2B2118; font-size: clamp(36px, 6vw, 60px); line-height: 1.08; letter-spacing: -1px; margin: 16px 0 20px; }
-    #static-site h2 { color: #2B2118; font-size: 28px; margin: 48px 0 12px; }
-    #static-site h3 { color: #2B2118; font-size: 18px; margin: 20px 0 4px; }
-    #static-site .pill { display: inline-block; background: #fff; border: 1px solid #D5DEE5; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: #2B2118; }
-    #static-site .lead { font-size: 19px; color: #4B5A67; max-width: 640px; }
-    #static-site a.btn { display: inline-block; background: #C2410C; color: #fff; text-decoration: none; padding: 14px 26px; border-radius: 999px; font-weight: 600; margin: 8px 8px 0 0; }
-    #static-site a { color: #9A3412; }
-    #static-site .loading { margin-top: 28px; color: #4B5A67; font-size: 14px; }
+    @font-face { font-family: "Montserrat"; src: url("/assets/assets/fonts/Montserrat-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: "Inter"; src: url("/assets/assets/fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: "Cairo"; src: url("/assets/assets/fonts/Cairo-Variable.ttf") format("truetype"); font-weight: 200 1000; font-display: swap; }
+
+    :root {
+      --ink: #2B2118; --panel: #33271E; --primary: #B4583A; --primary-pressed: #96452C; --on-primary: #FFFFFF;
+      --page: #F8F5F1; --surface: #FFFFFF; --alt: #FBF4EA; --text: #332A23; --muted: #6E645B; --border: #E8E0D6;
+      --band: #F1DDBC; --band-soft: #F6E9D3; --soft: #F6E3D9; --warm: #D49A4E; --warm-soft: #F8EBD6;
+      --footer: #241B15; --tint: #FAF6F1; --error: #B42318; --ok: #3F7D4E;
+      --shadow: 0 10px 28px -12px rgba(43,33,24,.18);
+      --head: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --header-h: 80px;
+    }
+    :root[data-theme="dark"] {
+      --ink: #F2E9DF; --panel: #2E241D; --primary: #E08A68; --primary-pressed: #EFA284; --on-primary: #1A130F;
+      --page: #17120F; --surface: #221B16; --alt: #1C1612; --text: #E6DCD1; --muted: #B3A699; --border: #3A2F27;
+      --band: #241C16; --band-soft: #1F1813; --soft: #3A2720; --warm: #E0AE6A; --warm-soft: #35291B;
+      --footer: #110D0A; --tint: #201914; --error: #F97066; --ok: #7BC08C;
+      --shadow: 0 10px 28px -12px rgba(0,0,0,.6);
+    }
+    :root[lang="ar"] { --head: "Cairo", system-ui, sans-serif; --body: "Cairo", system-ui, sans-serif; }
+    .ar-pending body { visibility: hidden; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 8px); -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: var(--page); color: var(--text); font: 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    button { font: inherit; color: inherit; }
+    h1, h2, h3 { font-family: var(--head); color: var(--ink); margin: 0; letter-spacing: -.01em; }
+    .wrap { max-width: 1112px; margin: 0 auto; padding: 0 24px; }
+    .skip { position: absolute; top: -80px; inset-inline-start: 8px; z-index: 100; background: var(--surface); padding: 10px 16px; border-radius: 10px; }
+    .skip:focus { top: 8px; }
+    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+    svg.i { width: 1em; height: 1em; flex: none; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 28px; border-radius: 999px; font-family: var(--body); font-weight: 700; font-size: 17px; text-decoration: none; cursor: pointer; border: 0; transition: background .15s, transform .1s, box-shadow .2s; }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { background: var(--primary); color: var(--on-primary); box-shadow: 0 8px 18px -10px var(--primary); }
+    .btn-primary:hover { background: var(--primary-pressed); }
+    .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid color-mix(in srgb, var(--ink) 35%, transparent); font-weight: 600; min-height: 42px; }
+    .btn-ghost:hover { border-color: var(--ink); }
+    .btn-block { width: 100%; }
+
+    /* Header */
+    .site-header { position: sticky; top: 0; z-index: 50; background: var(--band); height: var(--header-h); }
+    .site-header .bar { height: 100%; max-width: 1366px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; gap: 8px; }
+    .brand { flex: none; display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); margin-inline-end: auto; min-width: 0; }
+    .brand svg { width: 32px; height: 32px; flex: none; }
+    .brand span { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 21px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav { display: flex; align-items: center; gap: 4px; }
+    .nav a { white-space: nowrap; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 15px; padding: 8px 10px; border-radius: 8px; }
+    .nav a:hover { background: color-mix(in srgb, var(--surface) 55%, transparent); }
+    .hbtn { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15px; cursor: pointer; flex: none; }
+    .hbtn:hover { background: color-mix(in srgb, var(--surface) 55%, transparent); }
+    .hbtn svg { width: 20px; height: 20px; }
+    .hbtn.lang { background: color-mix(in srgb, var(--surface) 65%, transparent); padding: 0 12px; }
+    .hbtn.lang .long { font-size: 14px; }
+    .hbtn.lang .short { display: none; }
+    .hbtn.icon { width: 40px; padding: 0; justify-content: center; }
+    .acct-name { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .site-header .cta { white-space: nowrap; min-height: 40px; padding: 0 22px; font-size: 15px; margin-inline-start: 8px; }
+    .menu-btn { display: none; }
+    .mobile-menu { display: none; }
+
+    /* Sections */
+    section { padding: 96px 0; }
+    .bg-white { background: var(--surface); }
+    .bg-alt { background: var(--alt); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 12px; color: var(--primary); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 2px; background: currentColor; border-radius: 2px; }
+    .s-title { font-weight: 700; font-size: 40px; line-height: 1.18; margin-top: 12px; max-width: 720px; }
+    .s-intro { color: var(--muted); font-size: 19px; margin: 14px 0 0; max-width: 760px; }
+    .center { text-align: center; }
+    .center .s-title, .center .s-intro { margin-inline: auto; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow); }
+    .ic { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--soft); color: var(--primary); flex: none; }
+    .ic svg { width: 22px; height: 22px; }
+    .ic.warm { background: var(--warm-soft); color: var(--warm); }
+
+    /* Hero */
+    .hero { position: relative; padding: 88px 0 96px; background: linear-gradient(180deg, var(--band) 0%, var(--band-soft) 45%, var(--page) 100%); overflow: hidden; }
+    .hero::after { content: ""; position: absolute; width: 520px; height: 520px; right: -160px; top: -120px; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--primary) 14%, transparent), transparent); pointer-events: none; }
+    .hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1.25fr 1fr; gap: 64px; align-items: center; }
+    .loc { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px 6px 8px; font-size: 13px; font-weight: 600; color: var(--ink); box-shadow: 0 4px 10px -6px rgba(43,33,24,.2); }
+    .loc .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--soft); color: var(--primary); display: grid; place-items: center; }
+    .loc .dot svg { width: 13px; height: 13px; }
+    .hero h1 { font-weight: 800; font-size: 60px; line-height: 1.1; letter-spacing: -.02em; margin: 26px 0 22px; }
+    .hero .lead { font-size: 20px; color: var(--muted); margin: 0 0 30px; max-width: 580px; }
+    .hero .ctas { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+    .hero .ctas .btn-primary { font-size: 18px; min-height: 52px; }
+    .trustline { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-size: 15.5px; color: var(--text); }
+    .trustline svg { width: 20px; height: 20px; color: var(--primary); }
+    .hero-photo { position: relative; justify-self: end; width: 100%; max-width: 460px; }
+    .hero-photo::before { content: ""; position: absolute; inset: 16px -16px -16px 16px; border-radius: 28px; background: color-mix(in srgb, var(--primary) 18%, var(--band)); }
+    .hero-photo button { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 28px; overflow: hidden; cursor: zoom-in; aspect-ratio: 23 / 25; background: var(--soft); }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .badge { position: absolute; left: -12px; bottom: -24px; display: flex; align-items: center; gap: 14px; background: var(--surface); border-radius: 16px; padding: 14px 20px 14px 14px; box-shadow: 0 16px 30px -12px rgba(43,33,24,.3); }
+    .badge .ic { width: 40px; height: 40px; border-radius: 12px; }
+    .badge b { display: block; color: var(--ink); font-size: 15px; }
+    .badge small { color: var(--muted); font-size: 13px; }
+    :root[dir="rtl"] .hero::after { right: auto; left: -160px; }
+    :root[dir="rtl"] .hero-photo::before { inset: 16px 16px -16px -16px; }
+    :root[dir="rtl"] .badge { left: auto; right: -12px; }
+
+    /* Feelings */
+    .feel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+    .feel { background: var(--tint); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
+    .feel .ic { background: var(--surface); width: 44px; height: 44px; border-radius: 12px; }
+    .feel .ic svg { width: 20px; height: 20px; }
+    .feel p { margin: 22px 0 0; font-family: var(--head); font-weight: 600; font-size: 18px; color: var(--ink); line-height: 1.4; }
+    .human { margin-top: 36px; padding: 22px 32px; background: var(--soft); border-radius: 16px; border-inline-start: 4px solid var(--primary); font-family: var(--head); font-weight: 600; font-size: 20px; color: var(--ink); }
+
+    /* Practice */
+    .prac-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin-top: 44px; }
+    .prac { flex: 0 1 calc((100% - 44px) / 3); padding: 28px; }
+    .prac h3 { font-size: 21px; font-weight: 700; margin: 22px 0 8px; }
+    .prac p { margin: 0; color: var(--muted); font-size: 15.5px; }
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 26px; }
+    .flow > span { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-weight: 600; font-size: 14.5px; color: var(--ink); }
+    .flow > span b { color: var(--primary); font-family: "Montserrat", sans-serif; }
+    .flow i { width: 18px; height: 2px; background: var(--border); border-radius: 2px; }
+
+    /* Hosts */
+    .hosts { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 44px; }
+    .host { padding: 34px 36px 30px; display: flex; flex-direction: column; }
+    .host .q { font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 46px; line-height: .6; color: var(--primary); height: 24px; }
+    .host blockquote { margin: 18px 0 26px; font-size: 17px; color: var(--text); flex: 1; }
+    .host .who { display: flex; align-items: center; gap: 16px; padding-top: 22px; border-top: 1px solid var(--border); }
+    .host img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); }
+    .host .who b { display: block; font-family: var(--head); color: var(--ink); font-size: 18px; }
+    .host .who small { color: var(--muted); font-size: 14.5px; }
+
+    /* Gallery */
+    .gallery { display: grid; gap: 16px; margin-top: 44px; grid-template-columns: repeat(12, 1fr); }
+    .gallery button { position: relative; padding: 0; border: 0; border-radius: 20px; overflow: hidden; cursor: zoom-in; height: 300px; background: var(--soft); }
+    .gallery button:nth-child(1) { grid-column: span 7; } .gallery button:nth-child(2) { grid-column: span 5; }
+    .gallery button:nth-child(3) { grid-column: span 5; } .gallery button:nth-child(4) { grid-column: span 7; }
+    .gallery button:nth-child(5), .gallery button:nth-child(6) { grid-column: span 6; }
+    .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+    .gallery button:hover img { transform: scale(1.03); }
+    .gallery button::after { content: ""; position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, rgba(20,14,10,.62)); }
+    .gallery figcaption { position: absolute; z-index: 1; inset-inline-start: 20px; bottom: 16px; color: #fff; font-family: "Montserrat", var(--head); font-weight: 700; font-size: 19px; text-align: start; }
+
+    /* Pricing */
+    .free { position: relative; display: grid; grid-template-columns: 1.3fr 1fr; margin-top: 44px; border: 1.5px solid color-mix(in srgb, var(--primary) 55%, transparent); border-radius: 24px; background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+    .free .l { padding: 32px; }
+    .free .r { padding: 32px 40px; border-inline-start: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+    .tag { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; letter-spacing: .08em; background: var(--primary); color: var(--on-primary); }
+    .tag.warm { background: var(--warm); color: #2B2118; }
+    .tag.soft { background: var(--soft); color: var(--primary); }
+    .free h3 { font-size: 22px; font-weight: 700; margin: 14px 0 8px; }
+    .free p { margin: 0; color: var(--muted); font-size: 15.5px; }
+    .checks { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+    .checks li { display: flex; align-items: center; gap: 12px; font-size: 15.5px; }
+    .checks li::before { content: ""; width: 20px; height: 20px; border-radius: 50%; flex: none; background: var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B4583A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E") center / 12px no-repeat; }
+    .price { font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 56px; line-height: 1; color: var(--ink); }
+    .free .price { color: var(--primary); }
+    .meta { color: var(--muted); font-size: 15px; margin: 6px 0 20px; }
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 24px; align-items: stretch; }
+    .tier { padding: 32px; display: flex; flex-direction: column; }
+    .tier h3 { font-size: 22px; font-weight: 700; margin: 14px 0 12px; }
+    .tier .price { font-size: 48px; display: flex; align-items: baseline; gap: 10px; }
+    .tier .price s { font-size: 18px; font-weight: 600; color: var(--muted); }
+    .tier .save { color: var(--primary); font-weight: 600; font-size: 14.5px; margin-top: 10px; }
+    .tier .per { color: var(--muted); font-size: 14.5px; }
+    .tier .btn { margin-top: auto; }
+    .tier .spacer { height: 26px; }
+    .tier .gap { flex: 1; min-height: 26px; }
+    .tier.hot { background: var(--panel); border-color: var(--panel); transform: translateY(-6px); box-shadow: 0 24px 40px -18px rgba(43,33,24,.55); }
+    .tier.hot h3, .tier.hot .price { color: #FFF8F1; }
+    .tier.hot .price s { color: #CDBEAE; }
+    .tier.hot .save { color: #E9B877; }
+    .tier.hot .per { color: #EADFD3; }
+    :root[data-theme="dark"] .tier.hot { background: #3A2C22; }
+    .includes { display: flex; align-items: center; gap: 12px; margin-top: 30px; color: var(--text); font-size: 16px; }
+    .includes svg { width: 22px; height: 22px; color: var(--primary); }
+
+    /* FAQ */
+    .faq { max-width: 860px; margin: 40px auto 0; display: grid; gap: 12px; }
+    .faq details { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
+    .faq summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 24px; cursor: pointer; font-family: var(--head); font-weight: 600; font-size: 18px; color: var(--ink); }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; width: 32px; height: 32px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--primary); font-size: 20px; font-weight: 500; transition: transform .2s; }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq details p { margin: 0; padding: 0 24px 22px; color: var(--muted); }
+
+    /* Booking */
+    .book-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 26px; margin-top: 44px; align-items: start; }
+    .book-grid > * { min-width: 0; }
+    .book-card { padding: 32px; }
+    .book-card h3 { font-size: 22px; font-weight: 700; }
+    .book-card .sub { color: var(--muted); font-size: 15px; margin: 4px 0 0; }
+    .step { display: flex; align-items: center; gap: 10px; margin: 26px 0 12px; font-weight: 600; color: var(--ink); font-size: 15.5px; }
+    .step b { width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--page); display: grid; place-items: center; font-size: 12.5px; }
+    .days { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+    .day, .time { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; cursor: pointer; transition: border-color .15s, background .15s; }
+    .day { flex: none; width: 72px; padding: 10px 0; text-align: center; scroll-snap-align: start; }
+    .day small { display: block; font-size: 11.5px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+    .day b { display: block; font-family: "Montserrat", sans-serif; font-size: 21px; color: var(--ink); line-height: 1.3; }
+    .day span { font-size: 12px; color: var(--muted); }
+    .times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .time { padding: 14px 8px; text-align: center; }
+    .time svg { width: 22px; height: 22px; color: var(--primary); margin: 0 auto 4px; }
+    .time b { display: block; font-size: 15px; color: var(--ink); }
+    .time span { font-size: 12.5px; color: var(--muted); }
+    .day:hover, .time:hover { border-color: color-mix(in srgb, var(--primary) 50%, var(--border)); }
+    .day[aria-pressed="true"], .time[aria-pressed="true"] { border-color: var(--primary); background: var(--soft); box-shadow: inset 0 0 0 1px var(--primary); }
+    .field { margin-top: 12px; }
+    .field input, .field textarea { width: 100%; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); color: var(--ink); font: 16px var(--body); padding: 13px 18px; transition: border-color .15s, box-shadow .15s; }
+    .field textarea { min-height: 96px; resize: vertical; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent); }
+    .field .count { display: block; text-align: end; font-size: 12px; color: var(--muted); margin: 4px 6px 0; }
+    .field .err, .form-err { display: none; color: var(--error); font-size: 13.5px; margin: 4px 6px 0; }
+    .field.bad input, .field.bad textarea { border-color: var(--error); }
+    .field.bad .err { display: block; }
+    .form-err.show { display: block; margin: 10px 0 0; }
+    .book-card .btn-primary { margin-top: 18px; min-height: 52px; }
+    .note { color: var(--muted); font-size: 14.5px; margin: 12px 0 0; }
+    .sent { text-align: center; padding: 24px 8px; }
+    .sent .ic { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 16px; background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+    .sent .ic svg { width: 30px; height: 30px; }
+    .sent h3 { font-size: 26px; }
+    .sent p { color: var(--muted); }
+    .talk { background: var(--panel); border-radius: 24px; padding: 32px 30px; color: #FFF8F1; box-shadow: 0 24px 40px -18px rgba(43,33,24,.5); }
+    .talk h3 { color: #FFF8F1; font-size: 22px; margin-bottom: 18px; }
+    .talk a.row, .talk div.row { display: flex; align-items: center; gap: 14px; color: #FFF8F1; text-decoration: none; padding: 8px 0; font-size: 16px; word-break: break-word; }
+    .talk .row .ic { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.08); color: #F0B79F; }
+    .talk .row .ic svg { width: 19px; height: 19px; }
+    .talk .btn { width: 100%; margin-top: 12px; min-height: 42px; font-size: 16px; }
+    .talk .btn-primary { margin-top: 20px; background: #B4583A; color: #fff; }
+    .talk .btn-ghost { color: #FFF8F1; border-color: rgba(255,248,241,.45); }
+
+    /* Footer */
+    footer { background: var(--footer); color: #EADFD3; padding: 64px 0 40px; }
+    footer .cols { display: grid; grid-template-columns: 1.3fr 1.2fr 1fr; gap: 40px; }
+    footer .fbrand { display: flex; align-items: center; gap: 12px; font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 21px; color: #fff; }
+    footer .fbrand svg { width: 28px; height: 28px; }
+    footer p { margin: 14px 0 0; font-size: 17px; color: #EADFD3; max-width: 380px; }
+    footer h4 { margin: 4px 0 14px; color: #fff; font-size: 15px; }
+    footer .links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; }
+    footer .links a, footer .links button { color: #EADFD3; text-decoration: none; font-size: 15px; background: none; border: 0; padding: 0; cursor: pointer; text-align: start; }
+    footer .links a:hover, footer .links button:hover, footer .contact a:hover { text-decoration: underline; }
+    footer .contact a { display: block; color: #F0B79F; text-decoration: none; font-size: 15px; margin-bottom: 12px; }
+    footer .copy { border-top: 1px solid rgba(255,255,255,.14); margin-top: 44px; padding-top: 24px; font-size: 15px; }
+
+    /* Sticky phone CTA */
+    .sticky-cta { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 40; display: none; transform: translateY(140%); transition: transform .3s ease; }
+    .sticky-cta.show { transform: none; }
+    .sticky-cta .btn { width: 100%; min-height: 54px; box-shadow: 0 14px 30px -10px rgba(43,33,24,.55); }
+
+    /* Lightbox and dialog */
+    .lightbox, .dialog { position: fixed; inset: 0; z-index: 80; display: none; }
+    .lightbox.open, .dialog.open { display: grid; }
+    .lightbox { background: rgba(10,7,5,.92); place-items: center; }
+    .lightbox img { max-width: 94vw; max-height: 82vh; border-radius: 12px; object-fit: contain; touch-action: pinch-zoom; }
+    .lightbox .cap { color: #fff; text-align: center; margin-top: 12px; font-family: "Montserrat", sans-serif; font-weight: 600; }
+    .lb-btn { position: absolute; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgba(255,255,255,.14); color: #fff; cursor: pointer; display: grid; place-items: center; }
+    .lb-btn svg { width: 24px; height: 24px; }
+    .lb-close { top: calc(14px + env(safe-area-inset-top)); right: 14px; }
+    .lb-prev { left: 14px; top: 50%; transform: translateY(-50%); }
+    .lb-next { right: 14px; top: 50%; transform: translateY(-50%); }
+    .dialog { background: rgba(10,7,5,.55); place-items: center; padding: 16px; }
+    .dialog .box { background: var(--surface); border-radius: 24px; max-width: 600px; width: 100%; max-height: 86vh; overflow: auto; padding: 28px; }
+    .dialog h3 { font-size: 22px; margin-bottom: 12px; }
+    .dialog p { white-space: pre-line; color: var(--text); margin: 0 0 20px; font-size: 15.5px; }
+
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+
+    /* Tablet */
+    @media (max-width: 1320px) { :root[lang="ar"] .nav a { padding: 8px 6px; font-size: 14px; } .site-header .bar { gap: 4px; } }
+    @media (max-width: 1180px) {
+      .site-header .bar { padding: 0 24px; }
+      .nav { display: none; }
+      .menu-btn { display: inline-flex; }
+      .mobile-menu { position: fixed; top: var(--header-h); left: 0; right: 0; z-index: 49; background: var(--band); border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); padding: 8px 16px 18px; box-shadow: 0 18px 30px -16px rgba(43,33,24,.4); }
+      .mobile-menu.open { display: block; }
+      .mobile-menu a:not(.btn), .mobile-menu button.item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 8px; text-decoration: none; color: var(--ink); font-weight: 600; font-size: 17px; border: 0; background: none; border-bottom: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); cursor: pointer; text-align: start; }
+      .mobile-menu .btn { width: 100%; margin-top: 14px; }
+    }
+    @media (max-width: 1023px) {
+      :root { --header-h: 64px; }
+      .site-header .bar { padding: 0 12px 0 16px; gap: 2px; }
+      .brand { gap: 10px; }
+      .brand svg { width: 28px; height: 28px; }
+      .brand span { font-size: 18px; }
+      .brand { flex: 0 1 auto; }
+      .site-header .cta, .hbtn .acct-label, .hbtn.lang .long { display: none; }
+      .hbtn.lang .short { display: inline; }
+      .hbtn.theme { display: none; }
+      section { padding: 64px 0; }
+      .hero { padding: 40px 0 72px; }
+      .hero .wrap { grid-template-columns: 1fr; gap: 48px; }
+      .hero-photo { justify-self: center; max-width: 520px; }
+      .feel-grid { grid-template-columns: 1fr 1fr; }
+      .prac { flex-basis: calc((100% - 22px) / 2); }
+      .tiers { grid-template-columns: 1fr; }
+      .tier.hot { transform: none; }
+      .book-grid { grid-template-columns: 1fr; }
+      footer .cols { grid-template-columns: 1fr 1fr; }
+      footer .cols > :first-child { grid-column: 1 / -1; }
+      .sticky-cta { display: block; }
+      body.has-sticky footer { padding-bottom: 110px; }
+    }
+    /* Phone */
+    @media (max-width: 640px) {
+      .wrap { padding: 0 20px; }
+      .hero h1 { font-size: clamp(30px, 9.2vw, 38px); margin: 20px 0 16px; }
+      .hero .lead { font-size: 17px; margin-bottom: 24px; }
+      .hero .ctas { align-items: stretch; }
+      .hero .ctas .btn { width: 100%; }
+      .hero .ctas .btn-primary { font-size: 17px; }
+      .trustline { font-size: 14.5px; align-items: flex-start; }
+      .hero-photo { max-width: 360px; width: 92%; }
+      .hero-photo button { aspect-ratio: 4 / 3.4; }
+      .badge { left: -8px; bottom: -22px; padding: 10px 14px 10px 10px; }
+      :root[dir="rtl"] .badge { right: -8px; }
+      .s-title { font-size: clamp(24px, 7.2vw, 30px); }
+      .s-intro { font-size: 16.5px; }
+      .feel-grid { gap: 12px; margin-top: 28px; }
+      .feel { padding: 18px 16px; border-radius: 16px; }
+      .feel .ic { width: 36px; height: 36px; }
+      .feel .ic svg { width: 17px; height: 17px; }
+      .feel p { font-size: 15.5px; margin-top: 14px; }
+      .human { font-size: 17px; padding: 18px 20px; margin-top: 24px; }
+      .prac-grid { gap: 12px; margin-top: 28px; }
+      .prac { flex-basis: 100%; display: grid; grid-template-columns: auto 1fr; column-gap: 16px; padding: 20px; }
+      .prac .ic { grid-row: span 2; width: 44px; height: 44px; }
+      .prac h3 { margin: 0 0 4px; font-size: 18px; }
+      .prac p { font-size: 15px; }
+      .flow { gap: 6px; }
+      .flow > span { padding: 6px 12px; font-size: 13.5px; }
+      .flow i { width: 8px; }
+      .hosts { grid-template-columns: 1fr; gap: 16px; margin-top: 28px; }
+      .host { padding: 26px 22px 22px; }
+      .host blockquote { font-size: 16px; }
+      .gallery { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 28px; }
+      .gallery button { height: 150px; border-radius: 14px; grid-column: auto !important; }
+      .gallery button:nth-child(1), .gallery button:nth-child(4) { grid-column: 1 / -1 !important; height: 210px; }
+      .gallery figcaption { font-size: 14px; inset-inline-start: 12px; bottom: 10px; }
+      .free { grid-template-columns: 1fr; margin-top: 28px; }
+      .free .l { padding: 24px 22px 8px; }
+      .free .r { border-inline-start: 0; border-top: 1px solid var(--border); padding: 20px 22px 24px; align-items: stretch; }
+      .free .r .btn { width: 100%; }
+      .price { font-size: 46px; }
+      .tier { padding: 24px 22px; }
+      .tier .price { font-size: 42px; }
+      .tier .spacer { display: none; }
+      .includes { font-size: 15px; align-items: flex-start; }
+      .faq summary { font-size: 16.5px; padding: 18px; }
+      .faq details p { padding: 0 18px 18px; font-size: 15.5px; }
+      .book-grid { margin-top: 28px; gap: 16px; }
+      .book-card { padding: 22px 18px; }
+      .day { width: 64px; }
+      .time { padding: 12px 4px; }
+      .time b { font-size: 14px; }
+      .time span { font-size: 11.5px; }
+      .talk { padding: 26px 22px; }
+      footer { padding-top: 48px; }
+      footer .cols { grid-template-columns: 1fr; gap: 28px; }
+      footer p { font-size: 16px; }
+    }
+    @media (max-width: 420px) { .brand span { font-size: 17px; } .brand { gap: 8px; } }
+    @media (max-width: 370px) { .brand span { font-size: 16px; } .hbtn { padding: 0 6px; } }
   </style>
 </head>
 <body>
-  <div id="static-site">
-    <header>Speak Up Fearless</header>
-    <main>
-      <span class="pill">Now meeting in Mississauga, Ontario</span>
-      <h1>You Don't Have to Be Fearless to Speak.</h1>
-      <p class="lead">Public speaking anxiety is normal. You don't have to overcome it alone. Speak Up Fearless is a supportive public speaking community in Mississauga where you can practice, build confidence, and learn to speak with courage.</p>
-      <a class="btn" href="mailto:speakupfearless@gmail.com?subject=Free%20explanation%20session">Book a Free Explanation Session</a>
-      <a class="btn" href="tel:+14169955347">Call (416) 995-5347</a>
-      <p class="loading">Loading the full site…</p>
+  <a class="skip" href="#main" data-t="skip">Skip to content</a>
 
-      <h2>If Speaking Makes You Nervous, You're Not Alone.</h2>
-      <p>My heart starts racing. I overthink everything I want to say. I'm afraid people will judge me. I know what I want to say, but I freeze. These feelings don't mean you're bad at speaking. They mean you're human.</p>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="64" rx="22" fill="#B4583A"/><path d="M28 68 L22 92 L48 68 Z" fill="#B4583A"/><path d="M38 48 L50 28 L62 48 M50 28 L50 56" fill="none" stroke="#FFF8F1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3.2"/><path d="M6.2 18.4c1.4-1.9 3.4-2.9 5.8-2.9s4.4 1 5.8 2.9"/></g></symbol>
+    <symbol id="i-lang" viewBox="0 0 24 24"><path fill="currentColor" d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-badge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 14.6 4l3 .2.9 2.9 2 2.3-1 2.8 1 2.8-2 2.3-.9 2.9-3 .2L12 21.5 9.4 20l-3-.2-.9-2.9-2-2.3 1-2.8-1-2.8 2-2.3.9-2.9 3-.2z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></g></symbol>
+    <symbol id="i-group" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12.75c1.63 0 3.07.39 4.24.9A3 3 0 0 1 18 16.4V18H6v-1.6c0-1.2.7-2.25 1.76-2.73 1.17-.52 2.61-.92 4.24-.92zM4 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm1.13 1.1A7 7 0 0 0 4 14c-.99 0-1.93.21-2.78.58A2 2 0 0 0 0 16.43V18h4.5v-1.61c0-.83.23-1.61.63-2.29zM20 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm4 3.43a2 2 0 0 0-1.22-1.85A6.95 6.95 0 0 0 20 14c-.39 0-.76.04-1.13.1.4.68.63 1.46.63 2.29V18H24zM12 6a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+    <symbol id="i-head" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-3h2a2 2 0 0 0 2-2v-3l1.5-.5L19 9a7 7 0 1 0-12 5v7"/><path d="M10.5 8.5a1.8 1.8 0 1 1 2.4 1.7c-.5.2-.9.6-.9 1.1v.4M12 13.8h.01"/></g></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/></g></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></g></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3 5v13c4-.5 7 0 9 1.5 2-1.5 5-2 9-1.5V5c-4-.5-7 0-9 1.5zM12 6.5v13"/></g></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12v9H8l-4 3z"/><path d="M8 17h8l4 3V9"/></g></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.4 14.2-4.3-4.3 1.4-1.4 2.9 2.9 6-6 1.4 1.4z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 5.1 5.1l1.4-2.3L19 13.5V17a2 2 0 0 1-2 2A14 14 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-sunrise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 17a7 7 0 0 1 14 0M2 20h20M12 3v4M4.2 9.2l1.4 1.4M19.8 9.2l-1.4 1.4"/></g></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></symbol>
+  </svg>
 
-      <h2>How It Works</h2>
-      <p>Show up to a welcoming session where everyone is learning. Speak in a supportive environment. Reflect on what worked and where you can improve. Grow your confidence through repetition and community.</p>
-
-      <h2>Practice Without the Pressure</h2>
-      <h3>Speaking Practice</h3><p>Practice expressing ideas clearly and confidently.</p>
-      <h3>Impromptu Speaking</h3><p>Learn how to think and respond when you're put on the spot.</p>
-      <h3>Storytelling</h3><p>Learn how to turn experiences and ideas into engaging stories.</p>
-      <h3>Feedback &amp; Growth</h3><p>Receive constructive feedback in a supportive environment.</p>
-      <h3>Confidence Challenges</h3><p>Small challenges designed to gradually push comfort zones.</p>
-
-      <h2>Pricing (CAD)</h2>
-      <p>Free online explanation session (15–20 minutes). Single session $50. 4-session package $180 ($45 per session). 8-session package $320 ($40 per session).</p>
-
-      <h2>Contact</h2>
-      <p>Email <a href="mailto:speakupfearless@gmail.com">speakupfearless@gmail.com</a> or call <a href="tel:+14169955347">(416) 995-5347</a>. Speak Up Fearless, Mississauga, Ontario.</p>
-    </main>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="#top" aria-label="Speak Up Fearless"><svg aria-hidden="true"><use href="#logo"/></svg><span dir="ltr">Speak Up Fearless</span></a>
+      <nav class="nav" aria-label="Main">
+        <a href="#why" data-t="navWhy">Why We Do This</a>
+        <a href="#sessions" data-t="navSessions">Sessions</a>
+        <a href="#community" data-t="navCommunity">Our Community</a>
+        <a href="/games" data-t="navGames">Games</a>
+        <a href="#faq" data-t="navFaq">FAQ</a>
+        <a href="#book" data-t="navContact">Contact</a>
+      </nav>
+      <a class="hbtn acct" href="/login?next=%2F" id="acct"><svg aria-hidden="true"><use href="#i-user"/></svg><span class="acct-label acct-name" data-t="signIn">Sign in</span></a>
+      <button class="hbtn lang" type="button" id="langBtn"><svg aria-hidden="true"><use href="#i-lang"/></svg><span class="long" data-t="langLong">العربية</span><span class="short" data-t="langShort">ع</span></button>
+      <button class="hbtn icon theme" type="button" id="themeBtn"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
+      <a class="btn btn-primary cta" href="#book" data-t="joinUs" data-cta="header">Book Free Call</a>
+      <button class="hbtn icon menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#why" data-t="navWhy">Why We Do This</a>
+    <a href="#sessions" data-t="navSessions">Sessions</a>
+    <a href="#community" data-t="navCommunity">Our Community</a>
+    <a href="/games" data-t="navGames">Games</a>
+    <a href="#faq" data-t="navFaq">FAQ</a>
+    <a href="#book" data-t="navContact">Contact</a>
+    <button class="item" type="button" id="themeBtn2"><svg class="i" aria-hidden="true"><use href="#i-moon"/></svg><span></span></button>
+    <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="menu">Book a Free Explanation Session</a>
   </div>
-  <script>
-    // Once the app has drawn, hide the copy from screen readers so content
-    // isn't announced twice. It stays in the page for search engines.
-    window.addEventListener('flutter-first-frame', function () {
-      var el = document.getElementById('static-site');
-      if (el) { el.setAttribute('aria-hidden', 'true'); el.inert = true; }
-    });
-  </script>
-  <script src="flutter_bootstrap.js" async></script>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="wrap">
+        <div>
+          <span class="loc"><span class="dot"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Now meeting in Mississauga, Ontario</span></span>
+          <h1 data-t="heroHeadline">You Don't Have to Be Fearless to Speak.</h1>
+          <p class="lead" data-t="heroSupport">Public speaking anxiety is normal. Practice with a supportive group in Mississauga and build real confidence, one step at a time.</p>
+          <div class="ctas">
+            <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="hero">Book a Free Explanation Session</a>
+            <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">Learn About Our Sessions</a>
+          </div>
+          <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A supportive space to practice. No judgment. No pressure. Just progress.</span></p>
+        </div>
+        <figure class="hero-photo" style="margin:0">
+          <button type="button" data-photo="0"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host leading a Speak Up Fearless workshop in front of a small group" data-t-alt="heroImageAlt" width="460" height="500" fetchpriority="high"></button>
+          <div class="badge"><span class="ic warm"><svg aria-hidden="true"><use href="#i-group"/></svg></span><span><b data-t="badgeTitle">Everyone participates</b><small data-t="badgeBody">Mistakes are part of learning.</small></span></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- You're not alone -->
+    <section class="bg-white" id="why">
+      <div class="wrap">
+        <span class="eyebrow" data-t="eyebrowWhy">You're not alone</span>
+        <h2 class="s-title" data-t="anxietyHeadline">If Speaking Makes You Nervous, You're Not Alone.</h2>
+        <div class="feel-grid">
+          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-heart"/></svg></span><p data-t="feel1">“My heart starts racing.”</p></div>
+          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-head"/></svg></span><p data-t="feel2">“I overthink everything I want to say.”</p></div>
+          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-eye"/></svg></span><p data-t="feel3">“I'm afraid people will judge me.”</p></div>
+          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-pause"/></svg></span><p data-t="feel4">“I know what I want to say, but I freeze.”</p></div>
+        </div>
+        <p class="human" data-t="anxietyHuman">These feelings don't mean you're bad at speaking. They mean you're human.</p>
+      </div>
+    </section>
+
+    <!-- What we practice (also how a session flows) -->
+    <section class="bg-alt" id="sessions">
+      <div class="wrap">
+        <span class="eyebrow" data-t="eyebrowSessions">What we practice</span>
+        <h2 class="s-title" data-t="sessionsHeadline">Practice Without the Pressure.</h2>
+        <p class="s-intro" data-t="sessionsIntro">A regular place to practice speaking. Community and skills, not clinical treatment.</p>
+        <div class="flow" aria-label="How a session works">
+          <span><b>01</b><span data-t="how1">Show Up</span></span><i></i>
+          <span><b>02</b><span data-t="how2">Speak</span></span><i></i>
+          <span><b>03</b><span data-t="how3">Reflect</span></span><i></i>
+          <span><b>04</b><span data-t="how4">Grow</span></span>
+        </div>
+        <div class="prac-grid">
+          <div class="card prac"><span class="ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><h3 data-t="p1t">Speaking Practice</h3><p data-t="p1b">Practice expressing ideas clearly and confidently.</p></div>
+          <div class="card prac"><span class="ic warm"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span><h3 data-t="p2t">Impromptu Speaking</h3><p data-t="p2b">Learn how to think and respond when you're put on the spot.</p></div>
+          <div class="card prac"><span class="ic"><svg aria-hidden="true"><use href="#i-book"/></svg></span><h3 data-t="p3t">Storytelling</h3><p data-t="p3b">Learn how to turn experiences and ideas into engaging stories.</p></div>
+          <div class="card prac"><span class="ic warm"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><h3 data-t="p4t">Feedback &amp; Growth</h3><p data-t="p4b">Receive constructive feedback in a supportive environment.</p></div>
+          <div class="card prac"><span class="ic"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><h3 data-t="p5t">Confidence Challenges</h3><p data-t="p5b">Small challenges designed to gradually push comfort zones.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community -->
+    <section class="bg-white" id="community">
+      <div class="wrap">
+        <span class="eyebrow" data-t="eyebrowCommunity">In the room</span>
+        <h2 class="s-title" data-t="galleryHeadline">Our Community</h2>
+        <p class="s-intro" data-t="galleryIntro">Real sessions, real people, finding their voice together.</p>
+        <div class="gallery">
+          <button type="button" data-photo="1"><img src="/assets/assets/images/directing-participants-pic.jpeg" alt="Members seated around a long table, watching a facilitator introduce a speaking exercise" data-t-alt="gAlt1" loading="lazy" decoding="async"><figcaption data-t="g1">Practicing together</figcaption></button>
+          <button type="button" data-photo="2"><img src="/assets/assets/images/participant-podcast-pic.jpeg" alt="A member speaking to the room in front of a slide for the Podcast speaking game" data-t-alt="gAlt2" loading="lazy" decoding="async"><figcaption data-t="g2">Finding your voice</figcaption></button>
+          <button type="button" data-photo="3"><img src="/assets/assets/images/directing-consultant-pic-2.jpeg" alt="A facilitator pointing to the Triple Step exercise on screen while participants follow along" data-t-alt="gAlt3" loading="lazy" decoding="async"><figcaption data-t="g3">Learning through feedback</figcaption></button>
+          <button type="button" data-photo="4"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host presenting the Let's Learn by Doing ground rules to the group" data-t-alt="gAlt4" loading="lazy" decoding="async"><figcaption data-t="g4">Learning by doing</figcaption></button>
+          <button type="button" data-photo="5"><img src="/assets/assets/images/playing-a-game-pic.jpeg" alt="Three people at the front of the room during a speaking game, with the group watching" data-t-alt="gAlt5" loading="lazy" decoding="async"><figcaption data-t="g5">Workshops that feel human</figcaption></button>
+          <button type="button" data-photo="6"><img src="/assets/assets/images/image-just-after-a-game-pic.jpeg" alt="A candid moment just after a speaking game, with the group still laughing along" data-t-alt="gAlt6" loading="lazy" decoding="async"><figcaption data-t="g6">Behind the scenes</figcaption></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hosts -->
+    <section class="bg-alt" id="hosts">
+      <div class="wrap">
+        <span class="eyebrow" data-t="eyebrowHosts">Meet your hosts</span>
+        <h2 class="s-title" data-t="hostsHeadline">The People Behind the Sessions.</h2>
+        <div class="hosts">
+          <div class="card host"><span class="q" aria-hidden="true">“</span><blockquote data-t="emadQuote">I know what it feels like to have something worth saying and freeze anyway. Speak Up Fearless is the room I wanted back then — you practice first, and confidence follows.</blockquote><div class="who"><img src="/assets/assets/images/emad_pic.jpg" alt="Portrait of Emad, founder and host" data-t-alt="emadAlt" loading="lazy" width="64" height="64"><span><b>Emad</b><small data-t="hostRole">Co-Founder and Host</small></span></div></div>
+          <div class="card host"><span class="q" aria-hidden="true">“</span><blockquote data-t="eliasQuote">Nobody here waits until they feel ready. We show up, we speak, we give each other honest and kind feedback, and everyone leaves knowing what to work on next.</blockquote><div class="who"><img src="/assets/assets/images/Elias-image.jpeg" alt="Portrait of Elias, co-founder and host" data-t-alt="eliasAlt" loading="lazy" width="64" height="64"><span><b>Elias</b><small data-t="hostRole">Co-Founder and Host</small></span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing">
+      <div class="wrap">
+        <span class="eyebrow" data-t="eyebrowPricing">Pricing</span>
+        <h2 class="s-title" data-t="pricingHeadline">Start Where You Are. Grow From There.</h2>
+        <p class="s-intro" data-t="pricingSupport">Start with a free call. Continue only when you're ready.</p>
+        <p class="meta" style="margin-top:8px" data-t="pricingCurrency">Prices are in CAD ($).</p>
+        <div class="free">
+          <div class="l">
+            <span class="tag" data-t="free">FREE</span>
+            <h3 data-t="freeTitle">Free Online Explanation Session</h3>
+            <p data-t="freeDesc">Meet a host and see how sessions work. No speaking required, no pressure to join.</p>
+            <ul class="checks">
+              <li data-t="freeF1">Meet a host</li>
+              <li data-t="freeF2">Understand how sessions work</li>
+              <li data-t="freeF3">See if it feels like a fit — no commitment</li>
+            </ul>
+          </div>
+          <div class="r">
+            <div class="price">$0</div>
+            <div class="meta" data-t="freeMeta">15–20 minutes · online video call</div>
+            <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="pricing-free">Book a Free Explanation Session</a>
+          </div>
+        </div>
+        <div class="tiers">
+          <div class="card tier">
+            <div class="spacer"></div>
+            <h3 data-t="singleTitle">Single Session</h3>
+            <div class="price">$50</div>
+            <div class="per" style="margin-top:10px" data-t="singleMeta">1 speaking session</div>
+            <div class="gap"></div>
+            <a class="btn btn-ghost" href="#book" data-t="singleCta" data-plan="single">Start With One Session</a>
+          </div>
+          <div class="card tier hot">
+            <div><span class="tag warm" data-t="popular">MOST POPULAR</span></div>
+            <h3 data-t="fourTitle">4-Session Package</h3>
+            <div class="price">$180 <s>$200</s></div>
+            <div class="save" data-t="fourSave">Save $20 · 10% OFF</div>
+            <div class="per" data-t="fourPer">$45 per session</div>
+            <div class="gap"></div>
+            <a class="btn btn-primary" href="#book" data-t="fourCta" data-plan="four">Build Consistency</a>
+          </div>
+          <div class="card tier">
+            <div><span class="tag soft" data-t="bestValue">BEST VALUE</span></div>
+            <h3 data-t="eightTitle">8-Session Package</h3>
+            <div class="price">$320 <s>$400</s></div>
+            <div class="save" data-t="eightSave">Save $80 · 20% OFF</div>
+            <div class="per" data-t="eightPer">$40 per session</div>
+            <div class="gap"></div>
+            <a class="btn btn-ghost" href="#book" data-t="eightCta" data-plan="eight">Build Momentum</a>
+          </div>
+        </div>
+        <p class="includes"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="includes">Every session includes guided speaking practice, constructive feedback and confidence-building exercises in a supportive group.</span></p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-white" id="faq">
+      <div class="wrap center">
+        <span class="eyebrow" data-t="eyebrowFaq">Questions &amp; answers</span>
+        <h2 class="s-title" data-t="faqHeadline">FAQ</h2>
+      </div>
+      <div class="wrap">
+        <div class="faq">
+          <details><summary data-t="q1">Do I need public speaking experience?</summary><p data-t="a1">No. We welcome people who are just starting. You do not need to feel confident before you join — the community is how confidence grows.</p></details>
+          <details><summary data-t="q2">What if I'm extremely nervous?</summary><p data-t="a2">Then you're in the right place. Nervousness is common here. We normalize it, understand it, and practice speaking through it — together.</p></details>
+          <details><summary data-t="q3">Do I have to speak during my first session?</summary><p data-t="a3">We'll explain what a typical session looks like when you reach out, and you can start at a pace that feels manageable. There is no pressure to perform.</p></details>
+          <details><summary data-t="q8">How much does it cost?</summary><p data-t="a8">Prices are in CAD: $50 for a single session, $180 for four sessions, and $320 for eight sessions. Your first call is free.</p></details>
+          <details><summary data-t="q9">Can I talk to you before joining a session?</summary><p data-t="a9">Yes. We offer a free online explanation session so you can talk with a host, understand what we do, and ask questions. There is no speaking required and no pressure to join.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking -->
+    <section class="bg-alt" id="book">
+      <div class="wrap">
+        <span class="eyebrow" data-t="eyebrowContact">Get in touch</span>
+        <h2 class="s-title" data-t="bookHeadline">Book Your Free Intro Call</h2>
+        <p class="s-intro" data-t="bookIntro">Pick a day and time that suits you. We'll reply to confirm.</p>
+        <div class="book-grid">
+          <div class="card book-card" id="bookCard">
+            <form id="bookForm" novalidate>
+              <h3 data-t="bookFormTitle">Choose a time for your free call</h3>
+              <p class="sub" data-t="freeMeta">15–20 minutes · online video call</p>
+              <div class="step"><b>1</b><span data-t="pickDay">Pick a day</span></div>
+              <div class="days" id="days" role="group"></div>
+              <div class="step"><b>2</b><span data-t="pickTime">Pick a time</span></div>
+              <div class="times" role="group">
+                <button type="button" class="time" data-time="0" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sunrise"/></svg><b data-t="morning">Morning</b><span>9am–12pm</span></button>
+                <button type="button" class="time" data-time="1" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sun"/></svg><b data-t="afternoon">Afternoon</b><span>12–5pm</span></button>
+                <button type="button" class="time" data-time="2" aria-pressed="false"><svg aria-hidden="true"><use href="#i-moon"/></svg><b data-t="evening">Evening</b><span>5–9pm</span></button>
+              </div>
+              <p class="form-err" id="choiceErr" data-t="choiceRequired">Please pick a day and a time.</p>
+              <div class="step"><b>3</b><span data-t="yourDetails">Your details</span></div>
+              <div class="field"><input id="fName" autocomplete="name" placeholder="Name" data-t-ph="name" aria-label="Name"><span class="err" data-t="nameRequired">Please enter your name.</span></div>
+              <div class="field"><input id="fContact" autocomplete="email" placeholder="Email or phone" data-t-ph="contact" aria-label="Email or phone"><span class="err" data-t="contactRequired">Please add an email or phone number.</span></div>
+              <div class="field"><input id="fReason" maxlength="200" placeholder="Why are you booking?" data-t-ph="reason" aria-label="Why are you booking?"><span class="err" data-t="reasonRequired">Please tell us why you are booking.</span></div>
+              <div class="field"><textarea id="fDesc" maxlength="2000" placeholder="Anything else to share? (optional)" data-t-ph="desc" aria-label="Anything else to share? (optional)"></textarea></div>
+              <button class="btn btn-primary btn-block" type="submit" id="sendBtn" data-t="send">Send Request</button>
+              <p class="form-err" id="sendErr" data-t="sendFailed">We couldn't send it from here, so we opened an email with your request instead.</p>
+              <p class="note" data-t="bookNote">Your request comes straight to us. We'll reply to confirm your time.</p>
+            </form>
+            <div class="sent" id="sent" hidden>
+              <span class="ic"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+              <h3 data-t="sentTitle">Request sent!</h3>
+              <p data-t="sentBody">Thanks! We'll get back to you soon to confirm your time.</p>
+              <button class="btn btn-ghost" type="button" id="again" data-t="again">Request another time</button>
+            </div>
+          </div>
+          <aside class="talk">
+            <h3 data-t="preferTalk">Prefer to talk first?</h3>
+            <a class="row" href="mailto:speakupfearless@gmail.com"><span class="ic"><svg aria-hidden="true"><use href="#i-mail"/></svg></span>speakupfearless@gmail.com</a>
+            <a class="row" href="tel:+14169955347"><span class="ic"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span dir="ltr">(416) 995-5347</span></a>
+            <div class="row"><span class="ic"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Now meeting in Mississauga, Ontario</span></div>
+            <a class="btn btn-primary" href="mailto:speakupfearless@gmail.com?subject=Speak%20Up%20Fearless%20%E2%80%94%20I%20would%20like%20to%20join" data-t="emailUs">Email Us</a>
+            <a class="btn btn-ghost" href="tel:+14169955347" data-t="callUs">Call Us</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <div class="fbrand"><svg aria-hidden="true"><use href="#logo"/></svg><span dir="ltr">Speak Up Fearless</span></div>
+          <p data-t="footerBlurb">A supportive community helping people become more comfortable, confident, and courageous speakers.</p>
+        </div>
+        <div>
+          <h4 data-t="explore">Explore</h4>
+          <div class="links">
+            <a href="#top" data-t="navHome">Home</a>
+            <a href="#why" data-t="mission">Our Mission</a>
+            <a href="#sessions" data-t="navSessions">Sessions</a>
+            <a href="#community" data-t="community">Community</a>
+            <a href="/games" data-t="navGames">Games</a>
+            <a href="#faq" data-t="navFaq">FAQ</a>
+            <a href="#book" data-t="navContact">Contact</a>
+            <button type="button" id="privacyBtn" data-t="privacy">Privacy Policy</button>
+          </div>
+        </div>
+        <div class="contact">
+          <h4 data-t="contactLabel">Contact</h4>
+          <a href="mailto:speakupfearless@gmail.com">speakupfearless@gmail.com</a>
+          <a href="tel:+14169955347" dir="ltr">(416) 995-5347</a>
+        </div>
+      </div>
+      <div class="copy" data-t="copyright">© 2026 Speak Up Fearless. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <div class="sticky-cta" id="stickyCta"><a class="btn btn-primary" href="#book" data-t="stickyCta" data-cta="sticky">Book your free intro call</a></div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <figure style="margin:0"><img id="lbImg" alt=""><figcaption class="cap" id="lbCap"></figcaption></figure>
+    <button class="lb-btn lb-close" type="button" id="lbClose"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+    <button class="lb-btn lb-prev" type="button" id="lbPrev"><svg aria-hidden="true"><use href="#i-chev-l"/></svg></button>
+    <button class="lb-btn lb-next" type="button" id="lbNext"><svg aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+  </div>
+  <div class="dialog" id="privacy" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <div class="box"><h3 id="privacyTitle" data-t="privacy">Privacy Policy</h3><p data-t="privacyBody"></p><button class="btn btn-primary" type="button" id="privacyClose" data-t="close">Close</button></div>
+  </div>
+
+  <script src="/home.js" defer></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
