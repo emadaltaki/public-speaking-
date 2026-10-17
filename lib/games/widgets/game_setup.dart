@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../theme/styles.dart';
 import '../../translations/translations.dart';
+import '../../account/account_page.dart';
 import '../game_catalog.dart';
 import '../game_theme.dart';
 import '../games_hub_page.dart';
@@ -47,20 +48,22 @@ class GameSetupScaffold extends StatelessWidget {
                 child: Center(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 560),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: AppStyles.elevatedShadow,
-                      ),
-                      padding: EdgeInsets.all(wide ? 36 : 22),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _header(context),
-                          const SizedBox(height: 24),
-                          ...children,
-                        ],
+                    child: SignInGate(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: AppStyles.elevatedShadow,
+                        ),
+                        padding: EdgeInsets.all(wide ? 36 : 22),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _header(context),
+                            const SizedBox(height: 24),
+                            ...children,
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
     return false;
   }
 
-  void _openGames() => Navigator.of(context).pushNamed(AppRoutes.games);
+  void _openGames() => AppRoutes.open(context, AppRoutes.games);
 
   void _showPrivacy() {
     showDialog<void>(

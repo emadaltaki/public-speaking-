@@ -7,6 +7,7 @@ void main() {
   testWidgets('a direct /games/triple-step link opens the setup screen', (
     tester,
   ) async {
+    signInForTest();
     final handle = tester.ensureSemantics();
     setSurface(tester, size: const Size(1280, 900));
     tester.binding.platformDispatcher.defaultRouteNameTestValue =

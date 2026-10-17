@@ -107,6 +107,7 @@ void main() {
   testWidgets('every playable game has How to play tips that open', (
     tester,
   ) async {
+    signInForTest();
     setSurface(tester, size: const Size(1280, 1400));
     await tester.pumpWidget(
       SpeakUpFearlessApp(contactHandler: RecordingContactHandler()),
@@ -187,5 +188,19 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     }
     expect(find.text(Translations.autocompleteDone), findsOneWidget);
+  });
+
+  testWidgets('signed-out visitors are asked to sign up before playing', (
+    tester,
+  ) async {
+    setSurface(tester, size: const Size(1280, 1400));
+    await tester.pumpWidget(
+      SpeakUpFearlessApp(contactHandler: RecordingContactHandler()),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(Translations.navGames).first);
+    await tester.pumpAndSettle();
+    expect(find.text(Translations.gamesGateTitle), findsOneWidget);
+    expect(find.text(Translations.gamesPlay), findsNothing);
   });
 }

@@ -9,6 +9,7 @@ class BookingRequest {
     required this.name,
     required this.contact,
     required this.preferredTime,
+    required this.reason,
     this.description = '',
   });
 
@@ -16,7 +17,10 @@ class BookingRequest {
   final String contact;
   final String preferredTime;
 
-  /// Optional note from the visitor about what they'd like help with.
+  /// Why they are booking (required, up to 200 characters).
+  final String reason;
+
+  /// Optional extra details (up to 2000 characters).
   final String description;
 
   String get subject => '${Translations.bookingEmailSubject} — $preferredTime';
@@ -26,7 +30,8 @@ class BookingRequest {
       'Preferred time: $preferredTime\n'
       'Name: $name\n'
       'Email or phone: $contact\n'
-      '${description.isEmpty ? '' : '\nAbout me:\n$description\n'}';
+      'Reason: $reason\n'
+      '${description.isEmpty ? '' : '\nMore details:\n$description\n'}';
 }
 
 abstract class BookingRequestSender {
@@ -64,8 +69,9 @@ class FormSubmitBookingSender implements BookingRequestSender {
               'Preferred time': request.preferredTime,
               'Name': request.name,
               'Email or phone': request.contact,
+              'Reason': request.reason,
               if (request.description.isNotEmpty)
-                'About me': request.description,
+                'More details': request.description,
             }),
           )
           .timeout(const Duration(seconds: 15));

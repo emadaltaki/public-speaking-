@@ -96,6 +96,16 @@ class Translations {
   static String get themeLight => _l('Light theme', 'المظهر الفاتح');
   static String get themeDark => _l('Dark theme', 'المظهر الداكن');
 
+  static String get gamesGateTitle => _l('Sign up to play', 'سجّل لتلعب');
+  static String get gamesGateBody => _l(
+    'Create a free account to unlock all our speaking games and keep track of your practice.',
+    'أنشئ حسابًا مجانيًا لتفتح جميع ألعاب التحدث وتتابع تدريبك.',
+  );
+  static String get gamesGateSignUp =>
+      _l('Create free account', 'أنشئ حسابًا مجانيًا');
+  static String get gamesGateSignIn =>
+      _l('I already have an account', 'لدي حساب بالفعل');
+
   static String get languageToggle => isArabic ? 'English' : 'العربية';
 
   static const String siteName = 'Speak Up Fearless';
@@ -158,8 +168,18 @@ class Translations {
     'Please add an email or phone number.',
     'يرجى إضافة بريد إلكتروني أو رقم هاتف.',
   );
-  static String get bookingDescriptionLabel =>
-      _l('Anything to share? (optional)', 'هل تريد إضافة شيء؟ (اختياري)');
+  static String get bookingReasonLabel =>
+      _l('Why are you booking?', 'ما سبب الحجز؟');
+  static String get bookingReasonHint => _l(
+    'e.g. I get nervous presenting at work',
+    'مثلًا: أتوتر عند تقديم العروض في العمل',
+  );
+  static String get bookingReasonRequired =>
+      _l('Please tell us why you are booking.', 'يرجى إخبارنا بسبب الحجز.');
+  static String get bookingDescriptionLabel => _l(
+    'Anything else to share? (optional)',
+    'هل تريد إضافة شيء آخر؟ (اختياري)',
+  );
   static String get bookingDescriptionHint => _l(
     'For example: what makes speaking hard for you, or what you hope to work on.',
     'مثلًا: ما الذي يصعّب عليك التحدث، أو ما الذي تأمل أن تتدرب عليه.',

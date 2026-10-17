@@ -75,7 +75,7 @@ void main() {
 
     final assetNames = tester
         .widgetList<Image>(find.byType(Image))
-        .map((image) => (image.image as AssetImage).assetName)
+        .map((image) => _assetName(image.image))
         .toList();
 
     expect(
@@ -135,4 +135,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(PhotoViewer), findsNothing);
   });
+}
+
+String _assetName(ImageProvider provider) {
+  final inner = provider is ResizeImage ? provider.imageProvider : provider;
+  return (inner as AssetImage).assetName;
 }

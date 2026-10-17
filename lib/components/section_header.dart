@@ -24,10 +24,11 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
+    final width = MediaQuery.sizeOf(context).width;
+    final wide = width >= AppStyles.tabletBreakpoint;
     final align = centered ? TextAlign.center : TextAlign.start;
     final headline = AppStyles.headline.copyWith(
-      fontSize: wide ? 40 : 30,
+      fontSize: wide ? 40 : (width * 0.072).clamp(24.0, 30.0),
       color: onDark ? AppColors.onNavy : AppColors.navy,
     );
     final accent = onDark ? AppColors.warm : AppColors.teal;
