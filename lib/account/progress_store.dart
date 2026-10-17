@@ -40,9 +40,9 @@ class GameSession {
 /// (sending [AuthService.idToken] as a bearer token) without touching the
 /// games.
 abstract class ProgressStore {
-  /// Base URL of the Go backend. Empty until it is deployed; set it (no
-  /// trailing slash) to save signed-in visitors' history in the backend.
-  static const String apiBaseUrl = '';
+  /// Base URL of the Go backend (no trailing slash). Signed-in visitors'
+  /// history is also saved there so it follows them across devices.
+  static const String apiBaseUrl = 'https://public-speaking-backend.vercel.app';
 
   static ProgressStore instance = apiBaseUrl.isEmpty
       ? LocalProgressStore()
@@ -92,9 +92,10 @@ class LocalProgressStore implements ProgressStore {
   Future<List<GameSession>> history() async => _read();
 }
 
-/// Stores history in the Go backend (`/v1/games/sessions`) for signed-in
-/// visitors, and falls back to [LocalProgressStore] for guests or when the
-/// API can't be reached.
+/// Saves history in this browser and, for signed-in visitors, also in the Go
+/// backend (`/v1/games/sessions`). History merges both, so it keeps working
+/// when the API is unreachable or has lost data, and rounds played on other
+/// devices still show up.
 class ApiProgressStore implements ProgressStore {
   ApiProgressStore(this.baseUrl, {http.Client? client, ProgressStore? local})
     : _client = client ?? http.Client(),
@@ -120,37 +121,55 @@ class ApiProgressStore implements ProgressStore {
 
   @override
   Future<void> record(GameSession session) async {
-    final headers = await _headers();
-    try {
-      if (headers == null) throw StateError('signed out');
-      final response = await _client.post(
-        Uri.parse('$baseUrl/v1/games/sessions'),
-        headers: headers,
-        body: jsonEncode({
-          'gameId': session.gameId,
-          'durationSeconds': session.spoken.inSeconds,
-          if (session.topic != null) 'details': {'topic': session.topic},
-        }),
-      );
-      if (response.statusCode >= 300) {
-        throw StateError('${response.statusCode}');
-      }
-    } catch (_) {
-      await _local.record(session);
-    }
+    await _local.record(session);
     _changes.value++;
+    final headers = await _headers();
+    if (headers == null) return;
+    try {
+      await _client
+          .post(
+            Uri.parse('$baseUrl/v1/games/sessions'),
+            headers: headers,
+            body: jsonEncode({
+              'gameId': session.gameId,
+              'durationSeconds': session.spoken.inSeconds,
+              if (session.topic != null) 'details': {'topic': session.topic},
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
+    } catch (_) {
+      // Already saved locally.
+    }
   }
 
   @override
   Future<List<GameSession>> history() async {
+    final local = await _local.history();
+    final remote = await _remoteHistory();
+    // Rounds from this browser are in both lists; keep one copy of each.
+    bool same(GameSession a, GameSession b) =>
+        a.gameId == b.gameId &&
+        (a.spoken.inSeconds - b.spoken.inSeconds).abs() <= 1 &&
+        a.playedAt.difference(b.playedAt).inMinutes.abs() <= 2;
+    final merged = [
+      ...local,
+      for (final r in remote)
+        if (!local.any((l) => same(l, r))) r,
+    ]..sort((a, b) => b.playedAt.compareTo(a.playedAt));
+    return merged;
+  }
+
+  Future<List<GameSession>> _remoteHistory() async {
     final headers = await _headers();
-    if (headers == null) return _local.history();
+    if (headers == null) return const [];
     try {
-      final response = await _client.get(
-        Uri.parse('$baseUrl/v1/games/sessions?limit=200'),
-        headers: headers,
-      );
-      if (response.statusCode != 200) return _local.history();
+      final response = await _client
+          .get(
+            Uri.parse('$baseUrl/v1/games/sessions?limit=200'),
+            headers: headers,
+          )
+          .timeout(const Duration(seconds: 10));
+      if (response.statusCode != 200) return const [];
       final body = jsonDecode(response.body) as Map<String, dynamic>;
       return [
         for (final item in body['sessions'] as List? ?? const [])
@@ -163,7 +182,7 @@ class ApiProgressStore implements ProgressStore {
           ),
       ];
     } catch (_) {
-      return _local.history();
+      return const [];
     }
   }
 }
