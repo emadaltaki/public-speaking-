@@ -160,11 +160,13 @@
     root.classList.remove('ar-pending');
   }
 
-  $('langBtn').addEventListener('click', function () {
+  function toggleLanguage() {
     lang = lang === 'ar' ? 'en' : 'ar';
     store(LANG_KEY, lang);
     applyLanguage();
-  });
+  }
+  $('langBtn').addEventListener('click', toggleLanguage);
+  $('langBtn2').addEventListener('click', function () { toggleLanguage(); setMenu(false); });
 
   // ---------------------------------------------------------------- theme
   function isDark() { return root.dataset.theme === 'dark'; }
@@ -174,8 +176,6 @@
     $('themeBtn').querySelector('use').setAttribute('href', icon);
     $('themeBtn').setAttribute('aria-label', label);
     $('themeBtn').title = label;
-    $('themeBtn2').querySelector('use').setAttribute('href', icon);
-    $('themeBtn2').querySelector('span').textContent = label;
     document.querySelector('meta[name="theme-color"]').content = isDark() ? '#241C16' : '#F1DDBC';
   }
   function toggleTheme() {
@@ -184,7 +184,7 @@
     renderTheme();
   }
   $('themeBtn').addEventListener('click', toggleTheme);
-  $('themeBtn2').addEventListener('click', toggleTheme);
+
 
   // ---------------------------------------------------------------- account
   function signedInUser() {
