@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../account/auth_storage.dart';
 
 import '../translations/translations.dart';
 
@@ -59,10 +62,24 @@ class AppRoutes {
   /// Opens [route], unless it is already the page on screen or a page change
   /// is already under way (stops repeat taps from stacking the same page).
   static void open(BuildContext context, String route) {
+    // On the web the games list and account page are plain HTML pages.
+    if (kIsWeb && (route == games || route == account)) {
+      openSitePage(route);
+      return;
+    }
     final current = ModalRoute.of(context);
     if (current == null || !current.isCurrent) return;
     if (current.settings.name == route) return;
     Navigator.of(context).pushNamed(route);
+  }
+
+  /// Leaves a game for the games list.
+  static void toGames(BuildContext context) {
+    if (kIsWeb) {
+      openSitePage(games);
+      return;
+    }
+    Navigator.of(context).pushReplacementNamed(games);
   }
 }
 

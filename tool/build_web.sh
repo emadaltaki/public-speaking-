@@ -12,5 +12,5 @@ cd "$(dirname "$0")/.."
 flutter build web --release --wasm --pwa-strategy=none
 cp tool/flutter_service_worker.js build/web/flutter_service_worker.js
 mv build/web/index.html build/web/app.html
-cp site/index.html build/web/index.html
-cp site/home.js build/web/home.js
+# Plain HTML pages (home, account, games list) and their shared files.
+cp -r site/. build/web/

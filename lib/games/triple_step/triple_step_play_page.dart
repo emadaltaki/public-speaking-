@@ -91,7 +91,7 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
       (route) => route.settings.name == AppRoutes.games || route.isFirst,
     );
     if (ModalRoute.of(context)?.isCurrent ?? false) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.games);
+      AppRoutes.toGames(context);
     }
   }
 
