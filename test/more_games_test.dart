@@ -1,6 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:speak_up_fearless/account/auth_service.dart';
+import 'package:speak_up_fearless/account/auth_storage.dart';
+import 'package:speak_up_fearless/account/verify_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:speak_up_fearless/app.dart';
 import 'package:speak_up_fearless/games/autocomplete/autocomplete_data.dart';
@@ -205,5 +210,34 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(Translations.gamesGateTitle), findsOneWidget);
     expect(find.text(Translations.gamesPlay), findsNothing);
+  });
+
+  testWidgets('email sign-ups confirm their email before playing', (
+    tester,
+  ) async {
+    final expires = DateTime.now().millisecondsSinceEpoch + 3600000;
+    writeStoredUser(
+      'firebase:authUser:${AuthService.apiKey}:[DEFAULT]',
+      '{"uid":"new-user","email":"new@example.com","emailVerified":false,'
+          '"stsTokenManager":{"accessToken":"t","refreshToken":"r",'
+          '"expirationTime":$expires}}',
+    );
+    AuthService.reload();
+    VerifyStore.client = MockClient(
+      (_) async => http.Response('{"emailVerified":false}', 200),
+    );
+    addTearDown(() {
+      VerifyStore.client = MockClient((_) async => http.Response('{}', 404));
+      AuthService.signOut();
+      VerifyStore.check();
+    });
+    setSurface(tester, size: const Size(1280, 900));
+    await tester.pumpWidget(
+      SpeakUpFearlessApp(contactHandler: RecordingContactHandler()),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(Translations.navGames).first);
+    await tester.pumpAndSettle();
+    expect(find.text(Translations.verifyGateTitle), findsOneWidget);
   });
 }
