@@ -14,7 +14,7 @@ import 'game_catalog.dart';
 import 'game_theme.dart';
 import 'widgets/game_setup.dart';
 
-/// Slim navy header shared by the games screens.
+/// Floating rounded header shared by the games and account screens.
 class GamesHeader extends StatelessWidget {
   const GamesHeader({super.key});
 
@@ -32,60 +32,78 @@ class GamesHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
-    return Material(
-      color: AppColors.headerBand,
-      child: SizedBox(
-        height: 68,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: wide ? 32 : 16),
-          child: Row(
-            children: [
-              Flexible(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(8),
-                  onTap: () => _goHome(context),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const SpeechMarkLogo(size: 30),
-                      if (wide) const SizedBox(width: 10),
-                      if (wide)
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              Translations.siteName,
-                              style: AppStyles.title.copyWith(
-                                color: AppColors.navy,
-                                fontSize: wide ? 19 : 16,
+    final dark = AppColors.offWhite.computeLuminance() < 0.2;
+    // Floating "glass" bar, matching the sign-in page.
+    return Container(
+      color: AppColors.headerBand.withValues(alpha: dark ? 1 : 0.55),
+      padding: EdgeInsets.fromLTRB(wide ? 24 : 12, 10, wide ? 24 : 12, 10),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1120),
+          child: Container(
+            height: 56,
+            padding: const EdgeInsetsDirectional.only(start: 14, end: 6),
+            decoration: BoxDecoration(
+              color: AppColors.surface.withValues(alpha: dark ? 0.7 : 0.72),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: dark
+                    ? Colors.white.withValues(alpha: 0.07)
+                    : Colors.white.withValues(alpha: 0.85),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF502D14).withValues(alpha: 0.18),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                  spreadRadius: -12,
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(999),
+                      onTap: () => _goHome(context),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SpeechMarkLogo(size: 30),
+                          const SizedBox(width: 9),
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                Translations.siteName,
+                                textDirection: TextDirection.ltr,
+                                style: AppStyles.title.copyWith(
+                                  color: AppColors.navy,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              AccountButton(compact: !wide),
-              LanguageToggle(compact: !wide),
-              const ThemeToggle(),
-              const SizedBox(width: 4),
-              if (wide)
-                TextButton.icon(
-                  onPressed: () => _goHome(context),
-                  style: TextButton.styleFrom(foregroundColor: AppColors.navy),
-                  icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                  label: Text(Translations.gamesBackToSite),
-                )
-              else
+                AccountButton(compact: !wide),
+                LanguageToggle(compact: true),
+                const ThemeToggle(),
                 IconButton(
                   onPressed: () => _goHome(context),
                   tooltip: Translations.gamesBackToSite,
                   color: AppColors.navy,
-                  icon: const Icon(Icons.home_rounded),
+                  style: IconButton.styleFrom(minimumSize: const Size(40, 40)),
+                  icon: const Icon(Icons.home_outlined),
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
