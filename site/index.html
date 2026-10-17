@@ -60,8 +60,8 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "Do I need public speaking experience?", "acceptedAnswer": { "@type": "Answer", "text": "No. We welcome people who are just starting. You do not need to feel confident before you join — the community is how confidence grows." } },
-      { "@type": "Question", "name": "What if I'm extremely nervous?", "acceptedAnswer": { "@type": "Answer", "text": "Then you're in the right place. Nervousness is common here. We normalize it, understand it, and practice speaking through it — together." } },
+      { "@type": "Question", "name": "Do I need public speaking experience?", "acceptedAnswer": { "@type": "Answer", "text": "No. We welcome people who are just starting. You do not need to feel confident before you join. The community is how confidence grows." } },
+      { "@type": "Question", "name": "What if I'm extremely nervous?", "acceptedAnswer": { "@type": "Answer", "text": "Then you're in the right place. Nervousness is common here. We take it slow and practice speaking through it together." } },
       { "@type": "Question", "name": "How much does it cost?", "acceptedAnswer": { "@type": "Answer", "text": "Prices are in CAD: $50 for a single session, $180 for four sessions, and $320 for eight sessions. A free online explanation session is available if you want to talk first." } },
       { "@type": "Question", "name": "Can I talk to you before joining a session?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We offer a free online explanation session so you can talk with a host, understand what we do, and ask questions. There is no speaking required and no pressure to join." } }
     ]
@@ -89,6 +89,7 @@
       --page: #F8F5F1; --surface: #FFFFFF; --alt: #FBF4EA; --text: #332A23; --muted: #6E645B; --border: #E8E0D6;
       --band: #F1DDBC; --band-soft: #F6E9D3; --soft: #F6E3D9; --warm: #D49A4E; --warm-soft: #F8EBD6;
       --footer: #241B15; --tint: #FAF6F1; --error: #B42318; --ok: #3F7D4E;
+      --section: #FFFFFF; --accent: #B4583A;
       --shadow: 0 10px 28px -12px rgba(43,33,24,.18);
       --head: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
       --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -96,11 +97,13 @@
       --glass: rgba(255,255,255,.66); --glass-border: rgba(255,255,255,.8);
     }
     :root[data-theme="dark"] {
-      --ink: #F2E9DF; --panel: #2E241D; --primary: #E08A68; --primary-pressed: #EFA284; --on-primary: #1A130F;
-      --page: #17120F; --surface: #221B16; --alt: #1C1612; --text: #E6DCD1; --muted: #B3A699; --border: #3A2F27;
-      --band: #241C16; --band-soft: #1F1813; --soft: #3A2720; --warm: #E0AE6A; --warm-soft: #35291B;
-      --footer: #110D0A; --tint: #201914; --error: #F97066; --ok: #7BC08C;
-      --shadow: 0 10px 28px -12px rgba(0,0,0,.6);
+      /* Warm charcoal, with buttons that stay rich terracotta instead of pastel. */
+      --ink: #F4ECE3; --panel: #2C221C; --primary: #D2724C; --primary-pressed: #E0835C; --on-primary: #FFF8F1;
+      --accent: #EE9A76;
+      --page: #141010; --section: #1A1513; --surface: #241D19; --alt: #1E1815; --text: #E4DAD0; --muted: #B0A397; --border: #3B302A;
+      --band: #2A1F18; --band-soft: #1D1714; --soft: #3A2821; --warm: #E3B271; --warm-soft: #3A2D1E;
+      --footer: #0E0B0A; --tint: #2A221D; --error: #F97066; --ok: #7BC08C;
+      --shadow: 0 14px 32px -16px rgba(0,0,0,.75);
       --glass: rgba(34,27,22,.74); --glass-border: rgba(255,255,255,.08);
     }
     :root[lang="ar"] { --head: "Cairo", system-ui, sans-serif; --body: "Cairo", system-ui, sans-serif; }
@@ -155,7 +158,7 @@
 
     /* Sections */
     section { padding: 96px 0; }
-    .bg-white { background: var(--surface); }
+    .bg-white { background: var(--section); }
     .bg-alt { background: var(--alt); }
     .eyebrow { display: inline-flex; align-items: center; gap: 12px; color: var(--primary); font-weight: 700; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
     .eyebrow::before { content: ""; width: 24px; height: 2px; background: currentColor; border-radius: 2px; }
@@ -553,6 +556,31 @@
       footer .copy { margin-top: 24px; padding-top: 16px; font-size: 13px; }
     }
 
+
+    /* Hint that the day list scrolls */
+    .days { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); padding-inline-end: 40px; }
+    :root[dir="rtl"] .days { -webkit-mask-image: linear-gradient(270deg, #000 82%, transparent); mask-image: linear-gradient(270deg, #000 82%, transparent); }
+    /* Dark theme polish */
+    :root[data-theme="dark"] .eyebrow, :root[data-theme="dark"] .more-btn, :root[data-theme="dark"] .tier .save,
+    :root[data-theme="dark"] .feelings svg, :root[data-theme="dark"] .trustline svg, :root[data-theme="dark"] .includes svg,
+    :root[data-theme="dark"] .free .price, :root[data-theme="dark"] .dd-price.is-free, :root[data-theme="dark"] .time svg,
+    :root[data-theme="dark"] .host .q, :root[data-theme="dark"] .loc .dot { color: var(--accent); }
+    :root[data-theme="dark"] .ic { background: var(--soft); color: var(--accent); }
+    :root[data-theme="dark"] .ic.warm { background: var(--warm-soft); color: var(--warm); }
+    :root[data-theme="dark"] .card, :root[data-theme="dark"] .faq details, :root[data-theme="dark"] .skills li { border-color: var(--border); box-shadow: 0 1px 0 rgba(255,255,255,.03) inset, var(--shadow); }
+    :root[data-theme="dark"] .hero { background: radial-gradient(900px 500px at 80% 0%, rgba(210,114,76,.22), transparent 60%), linear-gradient(180deg, #221913 0%, var(--page) 100%); }
+    :root[data-theme="dark"] .hero-photo::before { background: #3A2A20; }
+    :root[data-theme="dark"] .badge { background: var(--surface); border: 1px solid var(--border); }
+    :root[data-theme="dark"] .human { background: #2E211B; color: var(--ink); }
+    :root[data-theme="dark"] .games-band { background: radial-gradient(1200px 420px at 85% -10%, rgba(210,114,76,.32), transparent 60%), radial-gradient(900px 400px at 0% 110%, rgba(227,178,113,.18), transparent 60%), #1F1712; border-block: 1px solid rgba(255,255,255,.06); }
+    :root[data-theme="dark"] .talk { background: #2A201A; border: 1px solid var(--border); }
+    :root[data-theme="dark"] .tier.hot, :root[data-theme="dark"] a.tier.hot { background: #3B2A20; border-color: #5A3E2E; }
+    :root[data-theme="dark"] .day[aria-pressed="true"], :root[data-theme="dark"] .time[aria-pressed="true"], :root[data-theme="dark"] .dd-opt[aria-selected="true"] { background: #3A2821; }
+    :root[data-theme="dark"] .field input, :root[data-theme="dark"] .field textarea, :root[data-theme="dark"] .dd-btn, :root[data-theme="dark"] .day, :root[data-theme="dark"] .time { background: #1C1613; }
+    :root[data-theme="dark"] .btn-ghost { border-color: rgba(244,236,227,.35); }
+    :root[data-theme="dark"] .sticky-cta { box-shadow: 0 14px 34px -14px rgba(0,0,0,.8); }
+    :root[data-theme="dark"] footer { border-top: 1px solid rgba(255,255,255,.05); }
+
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
 
     /* Tablet */
@@ -691,9 +719,9 @@
     <div class="bar">
       <a class="brand" href="#top" aria-label="Speak Up Fearless"><svg aria-hidden="true"><use href="#logo"/></svg><span dir="ltr">Speak Up Fearless</span></a>
       <nav class="nav" aria-label="Main">
-        <a href="#why" data-t="navWhy">Why We Do This</a>
+        <a href="#why" data-t="navWhy">Why we do this</a>
         <a href="#sessions" data-t="navSessions">Sessions</a>
-        <a href="#community" data-t="navCommunity">Our Community</a>
+        <a href="#community" data-t="navCommunity">Community</a>
         <a href="/games" class="nav-games"><span data-t="navGames">Games</span><em data-t="newBadge">New</em></a>
         <a href="#faq" data-t="navFaq">FAQ</a>
         <a href="#book" data-t="navContact">Contact</a>
@@ -701,19 +729,19 @@
       <a class="hbtn acct" href="/login?next=%2F" id="acct"><svg aria-hidden="true"><use href="#i-user"/></svg><span class="acct-label acct-name" data-t="signIn">Sign in</span></a>
       <button class="hbtn lang" type="button" id="langBtn"><svg aria-hidden="true"><use href="#i-lang"/></svg><span class="long" data-t="langLong">العربية</span><span class="short" data-t="langShort">ع</span></button>
       <button class="hbtn icon theme" type="button" id="themeBtn"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
-      <a class="btn btn-primary cta" href="#book" data-t="joinUs" data-cta="header">Book Free Call</a>
+      <a class="btn btn-primary cta" href="#book" data-t="joinUs" data-cta="header">Book a free call</a>
       <button class="hbtn icon menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </div>
   </header>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#why" data-t="navWhy">Why We Do This</a>
+    <a href="#why" data-t="navWhy">Why we do this</a>
     <a href="#sessions" data-t="navSessions">Sessions</a>
-    <a href="#community" data-t="navCommunity">Our Community</a>
+    <a href="#community" data-t="navCommunity">Community</a>
     <a href="/games" class="nav-games"><span data-t="navGames">Games</span><em data-t="newBadge">New</em></a>
     <a href="#faq" data-t="navFaq">FAQ</a>
     <a href="#book" data-t="navContact">Contact</a>
     <button class="item" type="button" id="langBtn2"><svg class="i" aria-hidden="true"><use href="#i-lang"/></svg><span data-t="langLong">العربية</span></button>
-    <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="menu">Book a Free Explanation Session</a>
+    <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="menu">Book a free intro call</a>
   </div>
 
   <main id="main">
@@ -723,16 +751,16 @@
         <div>
           <span class="loc"><span class="dot"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Now meeting in Mississauga, Ontario</span></span>
           <h1 data-t="heroHeadline">You Don't Have to Be Fearless to Speak.</h1>
-          <p class="lead" data-t="heroSupport">Public speaking anxiety is normal. Practice with a supportive group in Mississauga and build real confidence, one step at a time.</p>
+          <p class="lead" data-t="heroSupport">Nervous about speaking? That's normal. Come practice with a friendly group in Mississauga and feel a little more confident every time.</p>
           <div class="ctas">
-            <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="hero">Book a Free Explanation Session</a>
-            <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">Learn About Our Sessions</a>
+            <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="hero">Book a free intro call</a>
+            <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">See what we practice</a>
           </div>
-          <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A supportive space to practice. No judgment. No pressure. Just progress.</span></p>
+          <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A friendly room where nobody judges you and you go at your own pace.</span></p>
         </div>
         <figure class="hero-photo" style="margin:0">
           <button type="button" data-photo="0"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host leading a Speak Up Fearless workshop in front of a small group" data-t-alt="heroImageAlt" width="460" height="500" fetchpriority="high"></button>
-          <div class="badge"><span class="ic warm"><svg aria-hidden="true"><use href="#i-group"/></svg></span><span><b data-t="badgeTitle">Everyone participates</b><small data-t="badgeBody">Mistakes are part of learning.</small></span></div>
+          <div class="badge"><span class="ic warm"><svg aria-hidden="true"><use href="#i-group"/></svg></span><span><b data-t="badgeTitle">Everyone gets a turn</b><small data-t="badgeBody">Mistakes are welcome here.</small></span></div>
         </figure>
       </div>
     </section>
@@ -741,14 +769,14 @@
     <section class="bg-white tight" id="why">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowWhy">You're not alone</span>
-        <h2 class="s-title" data-t="anxietyHeadline">If Speaking Makes You Nervous, You're Not Alone.</h2>
+        <h2 class="s-title" data-t="anxietyHeadline">Speaking makes you nervous? Most of us feel the same.</h2>
         <ul class="feelings">
           <li><svg aria-hidden="true"><use href="#i-heart"/></svg><span data-t="feel1">“My heart starts racing.”</span></li>
           <li><svg aria-hidden="true"><use href="#i-head"/></svg><span data-t="feel2">“I overthink everything I want to say.”</span></li>
           <li><svg aria-hidden="true"><use href="#i-eye"/></svg><span data-t="feel3">“I'm afraid people will judge me.”</span></li>
           <li><svg aria-hidden="true"><use href="#i-pause"/></svg><span data-t="feel4">“I know what I want to say, but I freeze.”</span></li>
         </ul>
-        <p class="human" data-t="anxietyHuman">These feelings don't mean you're bad at speaking. They mean you're human.</p>
+        <p class="human" data-t="anxietyHuman">Feeling this way doesn't mean you're bad at speaking. It just means you care.</p>
       </div>
     </section>
 
@@ -756,14 +784,14 @@
     <section class="bg-alt tight" id="sessions">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowSessions">What we practice</span>
-        <h2 class="s-title" data-t="sessionsHeadline">Practice Without the Pressure.</h2>
-        <p class="s-intro" data-t="sessionsIntro">A regular place to practice speaking. Community and skills, not clinical treatment.</p>
+        <h2 class="s-title" data-t="sessionsHeadline">What we work on together</h2>
+        <p class="s-intro" data-t="sessionsIntro">A relaxed, regular place to practice. It's a community, not therapy.</p>
         <ul class="skills">
-          <li><span class="ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><span><b data-t="p1t">Speaking Practice</b><small data-t="p1b">Practice expressing ideas clearly and confidently.</small></span></li>
-          <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span><span><b data-t="p2t">Impromptu Speaking</b><small data-t="p2b">Learn how to think and respond when you're put on the spot.</small></span></li>
-          <li><span class="ic"><svg aria-hidden="true"><use href="#i-book"/></svg></span><span><b data-t="p3t">Storytelling</b><small data-t="p3b">Learn how to turn experiences and ideas into engaging stories.</small></span></li>
-          <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><span><b data-t="p4t">Feedback &amp; Growth</b><small data-t="p4b">Receive constructive feedback in a supportive environment.</small></span></li>
-          <li><span class="ic"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><span><b data-t="p5t">Confidence Challenges</b><small data-t="p5b">Small challenges designed to gradually push comfort zones.</small></span></li>
+          <li><span class="ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><span><b data-t="p1t">Speaking practice</b><small data-t="p1b">Say what you mean, clearly and calmly.</small></span></li>
+          <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span><span><b data-t="p2t">Thinking on your feet</b><small data-t="p2b">Answer well when someone puts you on the spot.</small></span></li>
+          <li><span class="ic"><svg aria-hidden="true"><use href="#i-book"/></svg></span><span><b data-t="p3t">Storytelling</b><small data-t="p3b">Turn your own experiences into stories people remember.</small></span></li>
+          <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><span><b data-t="p4t">Kind feedback</b><small data-t="p4b">Hear what worked and what to try next.</small></span></li>
+          <li><span class="ic"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><span><b data-t="p5t">Small challenges</b><small data-t="p5b">Little steps that stretch your comfort zone.</small></span></li>
         </ul>
       </div>
     </section>
@@ -775,7 +803,7 @@
           <div>
             <span class="eyebrow" data-t="gamesEyebrow">Free speaking games</span>
             <h2 class="s-title" data-t="gamesHeadline">Warm up your voice in 2 minutes.</h2>
-            <p class="s-intro" data-t="gamesIntro">Quick, fun games to practice speaking on your own or with friends. Free with an account.</p>
+            <p class="s-intro" data-t="gamesIntro">Quick games you can play alone or with friends. All you need is a free account.</p>
           </div>
           <a class="btn btn-primary games-all" href="/games"><svg aria-hidden="true" class="i"><use href="#i-play"/></svg><span data-t="gamesCta">Play the games</span></a>
         </div>
@@ -784,25 +812,25 @@
         <a class="game g1" href="/games/triple-step">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span>
           <b data-t="gTriple">Triple Step</b>
-          <small data-t="gTripleTag">Speak on a topic while weaving in surprise words.</small>
+          <small data-t="gTripleTag">Talk about a topic and work in the surprise words.</small>
           <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g2" href="/games/conductor">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-wave"/></svg></span>
           <b data-t="gConductor">The Conductor</b>
-          <small data-t="gConductorTag">Follow the pitch from 1 (low) to 10 (high).</small>
+          <small data-t="gConductorTag">Change your pitch from 1 (low) to 10 (high) as you talk.</small>
           <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g3" href="/games/podcast">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-pod"/></svg></span>
           <b data-t="gPodcast">The Podcast Game</b>
-          <small data-t="gPodcastTag">One topic, a group, and the mic keeps jumping.</small>
+          <small data-t="gPodcastTag">One topic, a few friends, and the mic keeps moving.</small>
           <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g4" href="/games/autocomplete">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>
           <b data-t="gAuto">Autocomplete</b>
-          <small data-t="gAutoTag">Rapid fire: finish the sentence out loud, fast.</small>
+          <small data-t="gAutoTag">Finish each sentence out loud before time runs out.</small>
           <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
       </div>
@@ -812,8 +840,8 @@
     <section class="bg-white tight" id="community">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowCommunity">In the room</span>
-        <h2 class="s-title" data-t="galleryHeadline">Our Community</h2>
-        <p class="s-intro" data-t="galleryIntro">Real sessions, real people, finding their voice together.</p>
+        <h2 class="s-title" data-t="galleryHeadline">Our community</h2>
+        <p class="s-intro" data-t="galleryIntro">Real people at our real sessions.</p>
       </div>
       <div class="strip" aria-label="Photos">
         <button type="button" data-photo="1"><img src="/assets/assets/images/directing-participants-pic.jpeg" alt="Members seated around a long table, watching a facilitator introduce a speaking exercise" data-t-alt="gAlt1" loading="lazy" decoding="async"><figcaption data-t="g1">Practicing together</figcaption></button>
@@ -825,10 +853,10 @@
       </div>
       <div class="wrap" id="hosts">
         <div class="card hosts-card">
-          <h3 class="hosts-title" data-t="hostsHeadline">The People Behind the Sessions.</h3>
+          <h3 class="hosts-title" data-t="hostsHeadline">Meet your hosts</h3>
           <div class="hosts">
-            <figure class="host"><img src="/assets/assets/images/emad_pic.jpg" alt="Portrait of Emad, founder and host" data-t-alt="emadAlt" loading="lazy" width="56" height="56"><figcaption><blockquote data-t="emadQuote">“I know what it feels like to freeze with something worth saying. This is the room I wanted back then.”</blockquote><b>Emad</b> · <small data-t="hostRole">Co-Founder and Host</small></figcaption></figure>
-            <figure class="host"><img src="/assets/assets/images/Elias-image.jpeg" alt="Portrait of Elias, co-founder and host" data-t-alt="eliasAlt" loading="lazy" width="56" height="56"><figcaption><blockquote data-t="eliasQuote">“Nobody waits until they feel ready. We show up, speak, and give each other kind, honest feedback.”</blockquote><b>Elias</b> · <small data-t="hostRole">Co-Founder and Host</small></figcaption></figure>
+            <figure class="host"><img src="/assets/assets/images/emad_pic.jpg" alt="Portrait of Emad, founder and host" data-t-alt="emadAlt" loading="lazy" width="56" height="56"><figcaption><blockquote data-t="emadQuote">“I know what it feels like to freeze when you have something worth saying. This is the room I wish I had back then.”</blockquote><b>Emad</b> · <small data-t="hostRole">Cofounder and host</small></figcaption></figure>
+            <figure class="host"><img src="/assets/assets/images/Elias-image.jpeg" alt="Portrait of Elias, co-founder and host" data-t-alt="eliasAlt" loading="lazy" width="56" height="56"><figcaption><blockquote data-t="eliasQuote">“Nobody here waits until they feel ready. We show up, we speak, and we help each other get better.”</blockquote><b>Elias</b> · <small data-t="hostRole">Cofounder and host</small></figcaption></figure>
           </div>
         </div>
       </div>
@@ -838,47 +866,47 @@
     <section class="bg-alt tight" id="pricing">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowPricing">Pricing</span>
-        <h2 class="s-title" data-t="pricingHeadline">Start Where You Are. Grow From There.</h2>
-        <p class="s-intro" data-t="pricingSupport">Start with a free call. Continue only when you're ready.</p>
+        <h2 class="s-title" data-t="pricingHeadline">Simple, honest pricing</h2>
+        <p class="s-intro" data-t="pricingSupport">Start with a free call and only continue if it feels right.</p>
         <div class="free">
           <div class="l">
             <span class="tag" data-t="free">FREE</span>
-            <h3 data-t="freeTitle">Free Online Explanation Session</h3>
-            <p data-t="freeDesc">Meet a host and see how sessions work. No speaking required, no pressure to join.</p>
+            <h3 data-t="freeTitle">Free intro call</h3>
+            <p data-t="freeDesc">Meet a host, ask anything, and see if it's for you. You won't have to speak, and there's no pressure to sign up.</p>
           </div>
           <div class="r">
             <div class="price">$0</div>
-            <div class="meta" data-t="freeMeta">15–20 minutes · online video call</div>
+            <div class="meta" data-t="freeMeta">15 to 20 minutes on a video call</div>
             <a class="btn btn-primary" href="#book" data-t="ctaBookShort" data-cta="pricing-free" data-plan="intro">Book my free call</a>
           </div>
         </div>
         <div class="tiers">
           <a class="card tier" href="#book" data-plan="single">
-            <span class="name"><b data-t="singleTitle">Single Session</b><small data-t="singleMeta">1 speaking session</small></span>
+            <span class="name"><b data-t="singleTitle">One session</b><small data-t="singleMeta">A good way to try it</small></span>
             <span class="amt">$50</span>
           </a>
           <a class="card tier hot" href="#book" data-plan="four">
-            <span class="name"><span class="tag warm" data-t="popular">MOST POPULAR</span><b data-t="fourTitle">4-Session Package</b><small data-t="fourPer">$45 per session</small></span>
+            <span class="name"><span class="tag warm" data-t="popular">MOST POPULAR</span><b data-t="fourTitle">4 sessions</b><small data-t="fourPer">$45 a session</small></span>
             <span class="amt">$180<s>$200</s></span>
           </a>
           <a class="card tier" href="#book" data-plan="eight">
-            <span class="name"><span class="tag soft" data-t="bestValue">BEST VALUE</span><b data-t="eightTitle">8-Session Package</b><small data-t="eightPer">$40 per session</small></span>
+            <span class="name"><span class="tag soft" data-t="bestValue">BEST VALUE</span><b data-t="eightTitle">8 sessions</b><small data-t="eightPer">$40 a session</small></span>
             <span class="amt">$320<s>$400</s></span>
           </a>
         </div>
-        <p class="includes"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="includes">Every session includes guided speaking practice, constructive feedback and confidence-building exercises in a supportive group.</span> <span data-t="pricingCurrency">Prices are in CAD ($).</span></p>
+        <p class="includes"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="includes">Every session includes guided practice, friendly feedback and exercises that help you feel more confident.</span> <span data-t="pricingCurrency">Prices are in Canadian dollars.</span></p>
       </div>
     </section>
 
     <!-- FAQ -->
     <section class="bg-white tight" id="faq">
       <div class="wrap">
-        <span class="eyebrow" data-t="eyebrowFaq">Questions &amp; answers</span>
-        <h2 class="s-title" data-t="faqHeadline">FAQ</h2>
+        <span class="eyebrow" data-t="eyebrowFaq">Good to know</span>
+        <h2 class="s-title" data-t="faqHeadline">Questions people ask</h2>
         <div class="faq">
-          <details><summary data-t="q2">What if I'm extremely nervous?</summary><p data-t="a2">Then you're in the right place. Nervousness is common here. We normalize it, understand it, and practice speaking through it — together.</p></details>
-          <details><summary data-t="q3">Do I have to speak during my first session?</summary><p data-t="a3">We'll explain what a typical session looks like when you reach out, and you can start at a pace that feels manageable. There is no pressure to perform.</p></details>
-          <details><summary data-t="q8">How much does it cost?</summary><p data-t="a8">Prices are in CAD: $50 for a single session, $180 for four sessions, and $320 for eight sessions. Your first call is free.</p></details>
+          <details><summary data-t="q2">What if I'm really nervous?</summary><p data-t="a2">Then you're in good company. Most people here felt the same way at first. We take it slow and practice together.</p></details>
+          <details><summary data-t="q3">Do I have to speak in my first session?</summary><p data-t="a3">Not if you don't want to. We'll tell you how a session works before you come, and you can start small. Nobody will push you.</p></details>
+          <details><summary data-t="q8">How much does it cost?</summary><p data-t="a8">One session is $50. You can also get 4 sessions for $180 or 8 for $320. Your first call is free.</p></details>
         </div>
       </div>
     </section>
@@ -887,14 +915,14 @@
     <section class="bg-alt" id="book">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowContact">Get in touch</span>
-        <h2 class="s-title" data-t="bookHeadline">Book Your Free Intro Call</h2>
-        <p class="s-intro" data-t="bookIntro">Pick a day and time that suits you. We'll reply to confirm.</p>
+        <h2 class="s-title" data-t="bookHeadline">Book your free intro call</h2>
+        <p class="s-intro" data-t="bookIntro">Pick a time that works for you and we'll get back to you to confirm.</p>
         <div class="book-grid">
           <div class="card book-card" id="bookCard">
             <form id="bookForm" novalidate>
-              <h3 data-t="bookFormTitle">Request your session</h3>
-              <p class="sub" data-t="bookFormSub">Pick a session and a time. We'll reply to confirm.</p>
-              <div class="step"><b>1</b><span data-t="pickSession">Choose your session</span></div>
+              <h3 data-t="bookFormTitle">Request a session</h3>
+              <p class="sub" data-t="bookFormSub">It only takes a minute.</p>
+              <div class="step"><b>1</b><span data-t="pickSession">What would you like?</span></div>
               <div class="dd" id="sessionDd">
                 <button type="button" class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="ddLabel ddBtn">
                   <span class="dd-ic" id="ddIc"></span>
@@ -902,42 +930,42 @@
                   <span class="dd-price" id="ddPrice"></span>
                   <svg class="dd-chev" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
-                <span id="ddLabel" hidden data-t="pickSession">Choose your session</span>
+                <span id="ddLabel" hidden data-t="pickSession">What would you like?</span>
                 <ul class="dd-list" id="ddList" role="listbox" tabindex="-1" hidden></ul>
               </div>
               <div class="step"><b>2</b><span data-t="pickDay">Pick a day</span></div>
               <div class="days" id="days" role="group"></div>
               <div class="step"><b>3</b><span data-t="pickTime">Pick a time</span></div>
               <div class="times" role="group">
-                <button type="button" class="time" data-time="0" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sunrise"/></svg><b data-t="morning">Morning</b><span>9am–12pm</span></button>
-                <button type="button" class="time" data-time="1" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sun"/></svg><b data-t="afternoon">Afternoon</b><span>12–5pm</span></button>
-                <button type="button" class="time" data-time="2" aria-pressed="false"><svg aria-hidden="true"><use href="#i-moon"/></svg><b data-t="evening">Evening</b><span>5–9pm</span></button>
+                <button type="button" class="time" data-time="0" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sunrise"/></svg><b data-t="morning">Morning</b><span>9am to 12pm</span></button>
+                <button type="button" class="time" data-time="1" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sun"/></svg><b data-t="afternoon">Afternoon</b><span>12 to 5pm</span></button>
+                <button type="button" class="time" data-time="2" aria-pressed="false"><svg aria-hidden="true"><use href="#i-moon"/></svg><b data-t="evening">Evening</b><span>5 to 9pm</span></button>
               </div>
               <p class="form-err" id="choiceErr" data-t="choiceRequired">Please pick a day and a time.</p>
-              <div class="step"><b>4</b><span data-t="yourDetails">Your details</span></div>
-              <div class="field"><input id="fName" autocomplete="name" placeholder="Name" data-t-ph="name" aria-label="Name"><span class="err" data-t="nameRequired">Please enter your name.</span></div>
-              <div class="field"><input id="fContact" autocomplete="email" placeholder="Email or phone" data-t-ph="contact" aria-label="Email or phone"><span class="err" data-t="contactRequired">Please add an email or phone number.</span></div>
-              <div class="field"><input id="fReason" maxlength="200" placeholder="Why are you booking?" data-t-ph="reason" aria-label="Why are you booking?"><span class="err" data-t="reasonRequired">Please tell us why you are booking.</span></div>
-              <button type="button" class="more-btn" id="moreBtn" aria-expanded="false" aria-controls="descField"><span aria-hidden="true">+</span> <span data-t="moreDetails">Add more details (optional)</span></button>
-              <div class="field" id="descField" hidden><textarea id="fDesc" maxlength="2000" placeholder="Anything else to share? (optional)" data-t-ph="desc" aria-label="Anything else to share? (optional)"></textarea></div>
-              <button class="btn btn-primary btn-block" type="submit" id="sendBtn" data-t="send">Send Request</button>
+              <div class="step"><b>4</b><span data-t="yourDetails">About you</span></div>
+              <div class="field"><input id="fName" autocomplete="name" placeholder="Your name" data-t-ph="name" aria-label="Your name"><span class="err" data-t="nameRequired">Please add your name.</span></div>
+              <div class="field"><input id="fContact" autocomplete="email" placeholder="Email or phone" data-t-ph="contact" aria-label="Email or phone"><span class="err" data-t="contactRequired">Add an email or phone number so we can reply.</span></div>
+              <div class="field"><input id="fReason" maxlength="200" placeholder="What would you like help with?" data-t-ph="reason" aria-label="What would you like help with?"><span class="err" data-t="reasonRequired">Tell us a little about what you want help with.</span></div>
+              <button type="button" class="more-btn" id="moreBtn" aria-expanded="false" aria-controls="descField"><span aria-hidden="true">+</span> <span data-t="moreDetails">Add a note</span></button>
+              <div class="field" id="descField" hidden><textarea id="fDesc" maxlength="2000" placeholder="Anything else we should know?" data-t-ph="desc" aria-label="Anything else we should know?"></textarea></div>
+              <button class="btn btn-primary btn-block" type="submit" id="sendBtn" data-t="send">Send request</button>
               <p class="form-err" id="sendErr" data-t="sendFailed">We couldn't send it from here, so we opened an email with your request instead.</p>
-              <p class="note" data-t="bookNote">Your request comes straight to us. We'll reply to confirm your time.</p>
+              <p class="note" data-t="bookNote">This goes straight to us. We'll reply soon to confirm.</p>
             </form>
             <div class="sent" id="sent" hidden>
               <span class="ic"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
-              <h3 data-t="sentTitle">Request sent!</h3>
-              <p data-t="sentBody">Thanks! We'll get back to you soon to confirm your time.</p>
-              <button class="btn btn-ghost" type="button" id="again" data-t="again">Request another time</button>
+              <h3 data-t="sentTitle">Got it, thank you!</h3>
+              <p data-t="sentBody">We'll get back to you soon to confirm your time.</p>
+              <button class="btn btn-ghost" type="button" id="again" data-t="again">Send another request</button>
             </div>
           </div>
           <aside class="talk">
-            <h3 data-t="preferTalk">Prefer to talk first?</h3>
+            <h3 data-t="preferTalk">Rather just talk?</h3>
             <a class="row" href="mailto:speakupfearless@gmail.com"><span class="ic"><svg aria-hidden="true"><use href="#i-mail"/></svg></span>speakupfearless@gmail.com</a>
             <a class="row" href="tel:+14169955347"><span class="ic"><svg aria-hidden="true"><use href="#i-phone"/></svg></span><span dir="ltr">(416) 995-5347</span></a>
             <div class="row"><span class="ic"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Now meeting in Mississauga, Ontario</span></div>
-            <a class="btn btn-primary" href="mailto:speakupfearless@gmail.com?subject=Speak%20Up%20Fearless%20%E2%80%94%20I%20would%20like%20to%20join" data-t="emailUs">Email Us</a>
-            <a class="btn btn-ghost" href="tel:+14169955347" data-t="callUs">Call Us</a>
+            <a class="btn btn-primary" href="mailto:speakupfearless@gmail.com?subject=Speak%20Up%20Fearless%20%E2%80%94%20I%20would%20like%20to%20join" data-t="emailUs">Email us</a>
+            <a class="btn btn-ghost" href="tel:+14169955347" data-t="callUs">Call us</a>
           </aside>
         </div>
       </div>
@@ -949,13 +977,13 @@
       <div class="cols">
         <div>
           <div class="fbrand"><svg aria-hidden="true"><use href="#logo"/></svg><span dir="ltr">Speak Up Fearless</span></div>
-          <p data-t="footerBlurb">A supportive community helping people become more comfortable, confident, and courageous speakers.</p>
+          <p data-t="footerBlurb">A friendly group in Mississauga where people practice speaking and get more comfortable doing it.</p>
         </div>
         <div>
           <h4 data-t="explore">Explore</h4>
           <div class="links">
             <a href="#top" data-t="navHome">Home</a>
-            <a href="#why" data-t="mission">Our Mission</a>
+            <a href="#why" data-t="mission">Why we do this</a>
             <a href="#sessions" data-t="navSessions">Sessions</a>
             <a href="#community" data-t="community">Community</a>
             <a href="/games" data-t="navGames">Games</a>
@@ -975,7 +1003,7 @@
   </footer>
 
   <div class="sticky-cta" id="stickyCta">
-    <span class="txt"><b data-t="stickyTitle">Free intro call</b><small data-t="stickySub">15–20 min · no pressure to join</small></span>
+    <span class="txt"><b data-t="stickyTitle">Free intro call</b><small data-t="stickySub">15 to 20 minutes, no pressure</small></span>
     <a class="btn btn-primary" href="#book" data-cta="sticky"><span data-t="stickyCta">Book now</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
 
