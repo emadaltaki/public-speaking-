@@ -47,7 +47,14 @@
 
   var AR = {
     skip: 'انتقل إلى المحتوى', navWhy: 'لماذا نفعل هذا', navSessions: 'الجلسات', navCommunity: 'مجتمعنا',
-    navGames: 'الألعاب', navFaq: 'الأسئلة الشائعة', navContact: 'تواصل معنا', navHome: 'الرئيسية',
+    navGames: 'الألعاب', newBadge: 'جديد', playNow: 'العب',
+    gamesEyebrow: 'ألعاب تحدّث مجانية', gamesHeadline: 'جهّز صوتك للحديث في دقيقتين.',
+    gamesIntro: 'ألعاب سريعة وممتعة للتدرّب على التحدث وحدك أو مع أصدقائك. مجانية مع حساب.', gamesCta: 'العب الآن',
+    gTriple: 'الخطوة الثلاثية', gTripleTag: 'تحدّث عن موضوع وأدخل كلمات مفاجئة في كلامك.',
+    gConductor: 'قائد الأوركسترا', gConductorTag: 'اتبع طبقة الصوت من 1 (منخفض) إلى 10 (مرتفع).',
+    gPodcast: 'لعبة البودكاست', gPodcastTag: 'موضوع واحد ومجموعة، والميكروفون يتنقّل باستمرار.',
+    gAuto: 'الإكمال التلقائي', gAutoTag: 'أسئلة سريعة: أكمل الجملة بصوت عالٍ وبسرعة.',
+    moreDetails: 'أضف تفاصيل أخرى (اختياري)', navFaq: 'الأسئلة الشائعة', navContact: 'تواصل معنا', navHome: 'الرئيسية',
     langLong: 'English', langShort: 'EN', signIn: 'تسجيل الدخول', account: 'حسابك',
     themeDark: 'المظهر الداكن', themeLight: 'المظهر الفاتح', openMenu: 'افتح القائمة', closeMenu: 'أغلق القائمة',
     joinUs: 'احجز مكالمة', ctaBookShort: 'احجز مكالمتي المجانية', ctaBook: 'احجز جلسة تعريفية مجانية', ctaLearn: 'تعرّف على جلساتنا',
@@ -482,6 +489,12 @@
     } catch (_) {}
   }
 
+  $('moreBtn').addEventListener('click', function () {
+    $('descField').hidden = false;
+    $('moreBtn').hidden = true;
+    $('fDesc').focus();
+  });
+
   $('again').addEventListener('click', function () {
     $('bookForm').reset();
     pickedDay = -1;
@@ -489,6 +502,8 @@
     all('.time').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
     renderDays();
     pickSession('intro');
+    $('descField').hidden = true;
+    $('moreBtn').hidden = false;
     $('sent').hidden = true;
     $('bookForm').hidden = false;
   });
