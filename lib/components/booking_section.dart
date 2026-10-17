@@ -46,7 +46,7 @@ class BookingSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SectionHeader(
+            SectionHeader(
               eyebrow: Translations.eyebrowContact,
               title: Translations.bookingHeadline,
               intro: Translations.bookingIntro,
@@ -83,27 +83,52 @@ class _TimeRequestForm extends StatefulWidget {
 }
 
 class _TimeRequestFormState extends State<_TimeRequestForm> {
-  static const _weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  static const _months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
+  static List<String> get _weekdays => Translations.isArabic
+      ? [
+          'الإثنين',
+          'الثلاثاء',
+          'الأربعاء',
+          'الخميس',
+          'الجمعة',
+          'السبت',
+          'الأحد',
+        ]
+      : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  static List<String> get _months => Translations.isArabic
+      ? [
+          'يناير',
+          'فبراير',
+          'مارس',
+          'أبريل',
+          'مايو',
+          'يونيو',
+          'يوليو',
+          'أغسطس',
+          'سبتمبر',
+          'أكتوبر',
+          'نوفمبر',
+          'ديسمبر',
+        ]
+      : [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ];
   static const _timeIcons = [
     Icons.wb_twilight_rounded,
     Icons.wb_sunny_outlined,
     Icons.nightlight_outlined,
   ];
-  static const _times = [
+  static List<String> get _times => [
     Translations.bookingTimeMorning,
     Translations.bookingTimeAfternoon,
     Translations.bookingTimeEvening,
@@ -203,7 +228,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
         const SizedBox(height: 20),
         TextButton(
           onPressed: _reset,
-          child: const Text(Translations.bookingSendAnother),
+          child: Text(Translations.bookingSendAnother),
         ),
       ],
     );
@@ -255,7 +280,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
           // One swipeable row of day cards: easy to tap on a phone and
           // never wraps into ragged lines.
           SizedBox(
-            height: 84,
+            height: 92,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: _days.length,
@@ -302,7 +327,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
           TextFormField(
             controller: _name,
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: Translations.contactNameLabel,
             ),
             validator: (v) => (v == null || v.trim().isEmpty)
@@ -312,7 +337,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
           const SizedBox(height: 12),
           TextFormField(
             controller: _contact,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: Translations.bookingContactLabel,
             ),
             validator: (v) => (v == null || v.trim().isEmpty)
@@ -326,7 +351,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
             maxLines: 6,
             maxLength: 1000,
             textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: Translations.bookingDescriptionLabel,
               hintText: Translations.bookingDescriptionHint,
               alignLabelWithHint: true,
@@ -430,7 +455,7 @@ class _ContactCard extends StatelessWidget {
                 ),
               ),
               onPressed: open,
-              child: const Text(Translations.ctaCallUs),
+              child: Text(Translations.ctaCallUs),
             ),
           ),
         ],
@@ -472,17 +497,20 @@ class _DayTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(14),
           child: SizedBox(
-            width: 64,
+            width: 72,
             child: ExcludeSemantics(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    weekday.toUpperCase(),
-                    style: AppStyles.label.copyWith(
-                      fontSize: 11,
-                      letterSpacing: 0.8,
-                      color: selected ? fg : AppColors.mutedText,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      weekday.toUpperCase(),
+                      style: AppStyles.label.copyWith(
+                        fontSize: 11,
+                        letterSpacing: 0.8,
+                        color: selected ? fg : AppColors.mutedText,
+                      ),
                     ),
                   ),
                   Text(

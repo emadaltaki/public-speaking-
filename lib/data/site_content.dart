@@ -4,7 +4,7 @@ import '../translations/translations.dart';
 class SiteContent {
   SiteContent._();
 
-  static const List<HowItWorksStep> howItWorks = [
+  static List<HowItWorksStep> get howItWorks => [
     HowItWorksStep(
       number: '01',
       title: Translations.how1Title,
@@ -27,7 +27,7 @@ class SiteContent {
     ),
   ];
 
-  static const List<SessionType> sessions = [
+  static List<SessionType> get sessions => [
     SessionType(
       title: Translations.sessionPracticeTitle,
       body: Translations.sessionPracticeBody,
@@ -50,7 +50,7 @@ class SiteContent {
     ),
   ];
 
-  static const List<PricingPackage> pricing = [
+  static List<PricingPackage> get pricing => [
     PricingPackage(
       title: Translations.pricingSingleTitle,
       price: Translations.pricingSinglePrice,
@@ -106,7 +106,7 @@ class SiteContent {
     ),
   ];
 
-  static const List<GalleryItem> gallery = [
+  static List<GalleryItem> get gallery => [
     GalleryItem(
       assetPath: 'assets/images/directing-participants-pic.jpeg',
       caption: Translations.galleryCaption1,
@@ -141,7 +141,7 @@ class SiteContent {
     ),
   ];
 
-  static const List<Testimonial> testimonials = [
+  static List<Testimonial> get testimonials => [
     Testimonial(
       quote: Translations.testimonialEmadQuote,
       firstName: Translations.testimonialEmadName,
@@ -160,7 +160,7 @@ class SiteContent {
     ),
   ];
 
-  static const List<FaqItem> faqs = [
+  static List<FaqItem> get faqs => [
     FaqItem(question: Translations.faqQ1, answer: Translations.faqA1),
     FaqItem(question: Translations.faqQ2, answer: Translations.faqA2),
     FaqItem(question: Translations.faqQ3, answer: Translations.faqA3),
@@ -169,7 +169,7 @@ class SiteContent {
     FaqItem(question: Translations.faqQ9, answer: Translations.faqA9),
   ];
 
-  static const List<String> trustPoints = [
+  static List<String> get trustPoints => [
     Translations.trust1,
     Translations.trust2,
     Translations.trust3,
@@ -179,14 +179,14 @@ class SiteContent {
     Translations.trust7,
   ];
 
-  static const List<String> anxietyCards = [
+  static List<String> get anxietyCards => [
     Translations.anxietyCard1,
     Translations.anxietyCard2,
     Translations.anxietyCard3,
     Translations.anxietyCard4,
   ];
 
-  static const List<String> missionSteps = [
+  static List<String> get missionSteps => [
     Translations.missionStepSpeak,
     Translations.missionStepPractice,
     Translations.missionStepReflect,

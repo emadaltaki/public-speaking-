@@ -217,7 +217,7 @@ class _HeroPhoto extends StatelessWidget {
             child: GestureDetector(
               onTap: () => showPhotoViewer(
                 context,
-                items: const [
+                items: [
                   GalleryItem(
                     assetPath: 'assets/images/explaining-pic.jpeg',
                     caption: Translations.heroPhotoCaption,

@@ -20,7 +20,7 @@ class FaqSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Center(
+                Center(
                   child: SectionHeader(
                     eyebrow: Translations.eyebrowFaq,
                     title: Translations.faqHeadline,

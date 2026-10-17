@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
+import '../../translations/translations.dart';
 import '../topics.dart';
 
 /// How often the microphone moves to someone else.
@@ -11,9 +12,18 @@ enum PodcastPace {
   fast('Fast', 5, 8),
   chaos('Chaos', 2, 4);
 
-  const PodcastPace(this.label, this.minSeconds, this.maxSeconds);
+  const PodcastPace(this._label, this.minSeconds, this.maxSeconds);
 
-  final String label;
+  final String _label;
+
+  String get label => Translations.isArabic
+      ? const {
+          'Slow': 'بطيء',
+          'Medium': 'متوسط',
+          'Fast': 'سريع',
+          'Chaos': 'فوضى',
+        }[_label]!
+      : _label;
   final int minSeconds;
   final int maxSeconds;
 }
@@ -88,7 +98,10 @@ class PodcastGame extends ChangeNotifier {
   Duration _nextSwitchAt = Duration.zero;
 
   List<String> get players => settings.players.isEmpty
-      ? [for (var i = 1; i <= settings.playerCount; i++) 'Player $i']
+      ? [
+          for (var i = 1; i <= settings.playerCount; i++)
+            Translations.playerName(i),
+        ]
       : settings.players;
 
   String get speakerName => players[speaker];

@@ -167,7 +167,7 @@ class _PodcastPlayPageState extends State<PodcastPlayPage>
             child: Semantics(
               key: ValueKey('speaker-${_game.switches}'),
               liveRegion: true,
-              label: '${_game.speakerName} is speaking',
+              label: Translations.isSpeaking(_game.speakerName),
               child: ExcludeSemantics(
                 child: Text(
                   _game.speakerName,

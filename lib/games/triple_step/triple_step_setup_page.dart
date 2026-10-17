@@ -24,8 +24,8 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
 
   TripleStepSettings _settings = const TripleStepSettings();
   final List<TextEditingController> _players = [
-    TextEditingController(text: 'Player 1'),
-    TextEditingController(text: 'Player 2'),
+    TextEditingController(text: Translations.playerName(1)),
+    TextEditingController(text: Translations.playerName(2)),
   ];
 
   @override
@@ -42,7 +42,7 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
     final names = [
       for (var i = 0; i < _players.length; i++)
         _players[i].text.trim().isEmpty
-            ? 'Player ${i + 1}'
+            ? Translations.playerName(i + 1)
             : _players[i].text.trim(),
     ];
     final settings = _settings.copyWith(
@@ -55,12 +55,7 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
     );
   }
 
-  String _timerLabel(int seconds) {
-    final m = seconds ~/ 60;
-    final s = seconds % 60;
-    if (s == 0) return m == 1 ? '1 minute' : '$m minutes';
-    return '$m:${s.toString().padLeft(2, '0')} min';
-  }
+  String _timerLabel(int seconds) => Translations.timerLabel(seconds);
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +127,10 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
         ),
         items: [
           for (final name in TripleStepData.wordSetNames)
-            DropdownMenuItem(value: name, child: Text(name)),
+            DropdownMenuItem(
+              value: name,
+              child: Text(Translations.wordSetName(name)),
+            ),
         ],
         onChanged: (v) {
           if (v != null) _update(_settings.copyWith(wordSet: v));
@@ -160,7 +158,7 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
                     decoration: InputDecoration(
                       isDense: true,
                       prefixIcon: const Icon(Icons.person_outline_rounded),
-                      hintText: 'Player ${i + 1}',
+                      hintText: Translations.playerName(i + 1),
                     ),
                   ),
                 ),
@@ -181,14 +179,16 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
             child: TextButton.icon(
               onPressed: () => setState(() {
                 _players.add(
-                  TextEditingController(text: 'Player ${_players.length + 1}'),
+                  TextEditingController(
+                    text: Translations.playerName(_players.length + 1),
+                  ),
                 );
               }),
               style: TextButton.styleFrom(
                 foregroundColor: GameColors.accentDark,
               ),
               icon: const Icon(Icons.add_rounded),
-              label: const Text(Translations.tripleStepAddPlayer),
+              label: Text(Translations.tripleStepAddPlayer),
             ),
           ),
       ],

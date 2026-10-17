@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
+import 'language_toggle.dart';
 import 'nav_link_button.dart';
 import 'primary_button.dart';
 import 'skip_to_content_link.dart';
@@ -100,7 +101,9 @@ class _AppNavbarState extends State<AppNavbar> {
                                 label: item.label,
                                 onPressed: item.onPressed,
                               ),
-                            const SizedBox(width: 20),
+                            const SizedBox(width: 8),
+                            const LanguageToggle(),
+                            const SizedBox(width: 16),
                             PrimaryButton(
                               label: Translations.navJoinUs,
                               onPressed: widget.onJoinUs,
@@ -110,7 +113,9 @@ class _AppNavbarState extends State<AppNavbar> {
                         ),
                       ),
                     )
-                  else
+                  else ...[
+                    const LanguageToggle(compact: true),
+                    const SizedBox(width: 4),
                     IconButton(
                       tooltip: _menuOpen
                           ? Translations.closeMenu
@@ -124,6 +129,7 @@ class _AppNavbarState extends State<AppNavbar> {
                         color: AppColors.navy,
                       ),
                     ),
+                  ],
                 ],
               ),
             ),

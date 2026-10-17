@@ -19,8 +19,8 @@ class AutocompleteSetupPage extends StatefulWidget {
 class _AutocompleteSetupPageState extends State<AutocompleteSetupPage> {
   AutocompleteSettings _settings = const AutocompleteSettings();
   final List<TextEditingController> _players = [
-    TextEditingController(text: 'Player 1'),
-    TextEditingController(text: 'Player 2'),
+    TextEditingController(text: Translations.playerName(1)),
+    TextEditingController(text: Translations.playerName(2)),
   ];
 
   @override
@@ -72,7 +72,9 @@ class _AutocompleteSetupPageState extends State<AutocompleteSetupPage> {
             controllers: _players,
             onAdd: () => setState(() {
               _players.add(
-                TextEditingController(text: 'Player ${_players.length + 1}'),
+                TextEditingController(
+                  text: Translations.playerName(_players.length + 1),
+                ),
               );
             }),
             onRemove: (i) => setState(() => _players.removeAt(i).dispose()),
@@ -82,7 +84,7 @@ class _AutocompleteSetupPageState extends State<AutocompleteSetupPage> {
         GameSliderRow(
           icon: Icons.timer_outlined,
           label: Translations.autocompleteSecondsPerRound,
-          valueLabel: '${_settings.secondsPerRound}s',
+          valueLabel: Translations.seconds(_settings.secondsPerRound),
           value: _settings.secondsPerRound.toDouble(),
           min: AutocompleteSettings.minSeconds.toDouble(),
           max: AutocompleteSettings.maxSeconds.toDouble(),
@@ -114,7 +116,10 @@ class _AutocompleteSetupPageState extends State<AutocompleteSetupPage> {
           ),
           items: [
             for (final name in AutocompleteData.setNames)
-              DropdownMenuItem(value: name, child: Text(name)),
+              DropdownMenuItem(
+                value: name,
+                child: Text(Translations.wordSetName(name)),
+              ),
           ],
           onChanged: (v) {
             if (v != null) _update(_settings.copyWith(phraseSet: v));

@@ -29,7 +29,7 @@ class PricingSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(
+            SectionHeader(
               eyebrow: Translations.eyebrowPricing,
               title: Translations.pricingHeadline,
               intro: Translations.pricingSupport,
@@ -182,10 +182,7 @@ class _FreeIntroCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const _Pill(
-          label: Translations.pricingIntroBadge,
-          color: AppColors.teal,
-        ),
+        _Pill(label: Translations.pricingIntroBadge, color: AppColors.teal),
         const SizedBox(height: 14),
         Text(Translations.pricingIntroTitle, style: AppStyles.title),
         const SizedBox(height: 8),

@@ -161,12 +161,12 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
               _Badge(
                 icon: Icons.person_rounded,
                 text:
-                    "$player's turn · ${_game.playerIndex + 1}/${_game.settings.players.length}",
+                    '${Translations.turnOf(player)} · ${_game.playerIndex + 1}/${_game.settings.players.length}',
                 strong: true,
               ),
             _Badge(icon: Icons.style_outlined, text: _game.settings.wordSet),
             if (_game.settings.survivalMode)
-              const _Badge(
+              _Badge(
                 icon: Icons.local_fire_department_rounded,
                 text: Translations.tripleStepSurvival,
               ),
@@ -209,8 +209,8 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
           dimension: wide ? 280 : 170,
           child: Semantics(
             label: survival
-                ? 'Spoken for $minutes:$seconds'
-                : 'Time remaining $minutes:$seconds',
+                ? Translations.spokenFor('$minutes:$seconds')
+                : Translations.timeRemaining('$minutes:$seconds'),
             child: CustomPaint(
               painter: PieTimerPainter(
                 fraction: _game.fractionRemaining,
@@ -307,7 +307,7 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  '${Translations.tripleStepNextWordIn} ${next.inSeconds + 1}s',
+                  '${Translations.tripleStepNextWordIn} ${Translations.seconds(next.inSeconds + 1)}',
                   style: AppStyles.bodySmall,
                 ),
               ],
@@ -444,7 +444,7 @@ class _WordTile extends StatelessWidget {
       ),
       child: Semantics(
         liveRegion: isNew,
-        label: isNew ? 'New word: $word' : word,
+        label: isNew ? Translations.newWord(word) : word,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           margin: const EdgeInsets.symmetric(vertical: 4),
@@ -618,7 +618,7 @@ class _ResultsOverlay extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'You spoke for ${clock(last.spoken)}.',
+                    Translations.youSpokeFor(clock(last.spoken)),
                     textAlign: TextAlign.center,
                     style: AppStyles.body,
                   ),
@@ -683,7 +683,7 @@ class _ResultsOverlay extends StatelessWidget {
                         child: OutlinedButton(
                           onPressed: onReplay,
                           style: AppStyles.secondaryButton,
-                          child: const Text(Translations.tripleStepRetry),
+                          child: Text(Translations.tripleStepRetry),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -691,7 +691,7 @@ class _ResultsOverlay extends StatelessWidget {
                         child: OutlinedButton(
                           onPressed: onSettings,
                           style: AppStyles.secondaryButton,
-                          child: const Text(Translations.tripleStepSettings),
+                          child: Text(Translations.tripleStepSettings),
                         ),
                       ),
                     ],

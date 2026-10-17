@@ -126,8 +126,9 @@ class _AutocompletePlayPageState extends State<AutocompletePlayPage>
                   Positioned.fill(
                     child: GameEndCard(
                       title: Translations.autocompleteDone,
-                      message:
-                          'You finished ${_game.settings.rounds} sentences.',
+                      message: Translations.finishedSentences(
+                        _game.settings.rounds,
+                      ),
                       primaryLabel: Translations.autocompletePlayAgain,
                       onPrimary: _game.playAgain,
                       onRetry: _game.retry,
@@ -159,7 +160,8 @@ class _AutocompletePlayPageState extends State<AutocompletePlayPage>
                   runSpacing: 8,
                   children: [
                     _Chip('${_game.round + 1} / ${_game.settings.rounds}'),
-                    if (player != null) _Chip("$player's turn", strong: true),
+                    if (player != null)
+                      _Chip(Translations.turnOf(player), strong: true),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -224,7 +226,7 @@ class _AutocompletePlayPageState extends State<AutocompletePlayPage>
                       onPressed: _game.isOver ? null : _game.next,
                       style: AppStyles.primaryButton,
                       icon: const Icon(Icons.skip_next_rounded),
-                      label: const Text(Translations.autocompleteNext),
+                      label: Text(Translations.autocompleteNext),
                     ),
                   ],
                 ),

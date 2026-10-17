@@ -33,7 +33,7 @@ class _SkipToContentLinkState extends State<SkipToContentLink> {
               minimumSize: const Size(44, 44),
               padding: const EdgeInsets.symmetric(horizontal: 14),
             ),
-            child: const Text(Translations.skipToContent),
+            child: Text(Translations.skipToContent),
           ),
         ),
       ),

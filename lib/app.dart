@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'contact/contact_submit_handler.dart';
 import 'games/game_catalog.dart';
@@ -18,16 +19,25 @@ class SpeakUpFearlessApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: Translations.pageTitle,
-      debugShowCheckedModeBanner: false,
-      theme: AppStyles.theme,
-      // Open only the requested page on a direct link. Building the home page
-      // underneath it trips a SelectionArea bug for off-screen routes.
-      onGenerateInitialRoutes: (name) => [
-        _route(RouteSettings(name: name.isEmpty ? AppRoutes.home : name)),
-      ],
-      onGenerateRoute: _route,
+    // Rebuild everything when the language changes; Arabic switches the
+    // layout to right-to-left through the locale.
+    return ValueListenableBuilder<String>(
+      valueListenable: Translations.language,
+      builder: (context, language, _) => MaterialApp(
+        key: ValueKey(language),
+        locale: Locale(language),
+        supportedLocales: const [Locale('en'), Locale('ar')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        title: Translations.pageTitle,
+        debugShowCheckedModeBanner: false,
+        theme: AppStyles.theme,
+        // Open only the requested page on a direct link. Building the home page
+        // underneath it trips a SelectionArea bug for off-screen routes.
+        onGenerateInitialRoutes: (name) => [
+          _route(RouteSettings(name: name.isEmpty ? AppRoutes.home : name)),
+        ],
+        onGenerateRoute: _route,
+      ),
     );
   }
 

@@ -27,7 +27,7 @@ class HowItWorksSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(
+            SectionHeader(
               eyebrow: Translations.eyebrowHow,
               title: Translations.howHeadline,
             ),

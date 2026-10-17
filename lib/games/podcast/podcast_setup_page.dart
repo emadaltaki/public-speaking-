@@ -36,7 +36,9 @@ class _PodcastSetupPageState extends State<PodcastSetupPage> {
   void _next() {
     // Keep names already typed; add or trim fields to match the count.
     while (_names.length < _settings.playerCount) {
-      _names.add(TextEditingController(text: 'Player ${_names.length + 1}'));
+      _names.add(
+        TextEditingController(text: Translations.playerName(_names.length + 1)),
+      );
     }
     while (_names.length > _settings.playerCount) {
       _names.removeLast().dispose();
@@ -55,12 +57,7 @@ class _PodcastSetupPageState extends State<PodcastSetupPage> {
     );
   }
 
-  String _timerLabel(int seconds) {
-    final m = seconds ~/ 60;
-    final s = seconds % 60;
-    if (s == 0) return m == 1 ? '1 minute' : '$m minutes';
-    return '$m:${s.toString().padLeft(2, '0')} min';
-  }
+  String _timerLabel(int seconds) => Translations.timerLabel(seconds);
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +124,10 @@ class _PodcastSetupPageState extends State<PodcastSetupPage> {
         ),
         items: [
           for (final name in TripleStepData.wordSetNames)
-            DropdownMenuItem(value: name, child: Text(name)),
+            DropdownMenuItem(
+              value: name,
+              child: Text(Translations.wordSetName(name)),
+            ),
         ],
         onChanged: _settings.suggestTitle
             ? (v) {
@@ -151,7 +151,7 @@ class _PodcastSetupPageState extends State<PodcastSetupPage> {
             ),
           ),
           icon: const Icon(Icons.arrow_forward_rounded),
-          label: const Text(Translations.podcastNext),
+          label: Text(Translations.podcastNext),
         ),
       ),
     ];

@@ -51,6 +51,9 @@ class AppStyles {
   /// `wght` axis as well as [TextStyle.fontWeight] for renderers that need it.
   static const String fontFamily = 'Inter';
 
+  /// Arabic text is drawn with Cairo, which pairs well with both fonts.
+  static const List<String> arabicFallback = ['Cairo'];
+
   static TextStyle _inter({
     double? fontSize,
     double? height,
@@ -62,6 +65,7 @@ class AppStyles {
     final weight = fontWeight ?? FontWeight.w400;
     return TextStyle(
       fontFamily: fontFamily,
+      fontFamilyFallback: arabicFallback,
       fontSize: fontSize,
       height: height,
       fontWeight: weight,
@@ -86,6 +90,7 @@ class AppStyles {
     final weight = fontWeight ?? FontWeight.w700;
     return TextStyle(
       fontFamily: headingFontFamily,
+      fontFamilyFallback: arabicFallback,
       fontSize: fontSize,
       height: height,
       fontWeight: weight,
