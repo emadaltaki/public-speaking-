@@ -281,6 +281,8 @@
           'auth/popup-blocked': 'Your browser blocked the Google window. Allow pop-ups and try again.',
           'auth/unauthorized-domain': 'Sign-in isn’t enabled for this web address yet.',
           'auth/too-many-requests': 'Too many tries. Please wait a moment.',
+          'auth/network-request-failed': 'No connection. Check your internet and try again.',
+          'app/timeout': 'This is taking too long. Check your connection and try again.',
           default: 'Something went wrong. Please try again.',
         },
       },
@@ -310,6 +312,8 @@
           'auth/popup-blocked': 'منع المتصفح نافذة Google. اسمح بالنوافذ المنبثقة وحاول مجددًا.',
           'auth/unauthorized-domain': 'تسجيل الدخول غير مفعّل لهذا العنوان بعد.',
           'auth/too-many-requests': 'محاولات كثيرة. يرجى الانتظار قليلًا.',
+          'auth/network-request-failed': 'لا يوجد اتصال. تحقّق من الإنترنت وحاول مجددًا.',
+          'app/timeout': 'يستغرق الأمر وقتًا طويلًا. تحقّق من اتصالك وحاول مجددًا.',
           default: 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
         },
       },
@@ -387,15 +391,25 @@
     $('tabUp').addEventListener('click', () => setMode('signup'));
     $('peek').addEventListener('click', () => { peeking = !peeking; render(); });
     render();
+    // Until sign-in is ready, hold the form instead of letting it reload the page.
+    const early = (ev) => { ev.preventDefault(); setBusy(true); };
+    $('form').addEventListener('submit', early);
 
     function fail(e) {
-      const errs = T[lang].errors;
+      const errs = ui().errors;
       show(errs[e && e.code] || errs.default, 'error');
       setBusy(false);
     }
+    // The language the page is showing right now.
+    const ui = () => T[document.documentElement.lang === 'ar' ? 'ar' : 'en'];
     function setBusy(busy) {
       for (const id of ['google', 'submit']) $(id).disabled = busy;
-      if (busy) show(T[lang].working);
+      if (busy) show(ui().working);
+    }
+    // Rejects if a sign-in step takes too long, so the button never stays stuck.
+    function withTimeout(promise, ms) {
+      return Promise.race([promise, new Promise((_, reject) =>
+        setTimeout(() => reject({ code: 'app/timeout' }), ms))]);
     }
     function done() { location.replace(next); }
     // Creates (or refreshes) the visitor's account on the backend so their
@@ -403,7 +417,10 @@
     // API is slow or down, the site carries on and the account is created on
     // the next API call instead.
     const API_BASE = 'https://public-speaking-backend.vercel.app';
-    async function syncAccount(user, name) {
+    function syncAccount(user, name) {
+      return Promise.race([syncAccountNow(user, name), new Promise((r) => setTimeout(r, 5000))]);
+    }
+    async function syncAccountNow(user, name) {
       try {
         const token = await user.getIdToken();
         const ctl = new AbortController();
@@ -425,6 +442,10 @@
     // localStorage lets the main site read who is signed in.
     await setPersistence(auth, browserLocalPersistence);
 
+    $('form').removeEventListener('submit', early);
+    setBusy(false);
+    show('');
+
     if (params.has('signout')) {
       await signOut(auth);
       location.replace(next);
@@ -442,14 +463,14 @@
       setBusy(true);
       try {
         if (mode === 'signup') {
-          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          const cred = await withTimeout(createUserWithEmailAndPassword(auth, email, password), 25000);
           const name = $('name').value.trim();
           if (name) await updateProfile(cred.user, { displayName: name });
           // Store the updated profile so the site sees the name.
           await auth.updateCurrentUser(cred.user);
           await syncAccount(cred.user, name);
         } else {
-          const cred = await signInWithEmailAndPassword(auth, email, password);
+          const cred = await withTimeout(signInWithEmailAndPassword(auth, email, password), 25000);
           await syncAccount(cred.user);
         }
         done();
@@ -458,8 +479,8 @@
 
     $('forgot').addEventListener('click', async () => {
       const email = $('email').value.trim();
-      if (!email) { show(T[lang].needEmail, 'error'); return; }
-      try { await sendPasswordResetEmail(auth, email); show(T[lang].resetSent, 'ok'); } catch (e) { fail(e); }
+      if (!email) { show(ui().needEmail, 'error'); return; }
+      try { await sendPasswordResetEmail(auth, email); show(ui().resetSent, 'ok'); } catch (e) { fail(e); }
     });
   </script>
 </body>
