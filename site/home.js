@@ -659,5 +659,30 @@
     document.body.classList.add('has-sticky');
   }
 
+  // ---------------------------------------------------------------- warm up
+  // Quietly download the games and account app while the visitor reads this
+  // page, so switching to it later feels instant. Skipped on slow or data-saver
+  // connections.
+  function warmUp() {
+    var c = navigator.connection || {};
+    if (c.saveData || /2g/.test(c.effectiveType || '')) return;
+    // Safari can't run the faster WebAssembly build, so it gets the JavaScript one.
+    var ua = navigator.userAgent;
+    var safari = /Safari/.test(ua) && !/Chrome|CriOS|Chromium|Edg|Android/.test(ua);
+    var files = safari
+      ? ['/main.dart.js', '/canvaskit/canvaskit.js', '/canvaskit/canvaskit.wasm']
+      : ['/main.dart.mjs', '/main.dart.wasm', '/canvaskit/skwasm.js', '/canvaskit/skwasm.wasm'];
+    files.concat(['/flutter_bootstrap.js', '/assets/FontManifest.json']).forEach(function (href) {
+      var l = document.createElement('link');
+      l.rel = 'prefetch';
+      l.href = href;
+      document.head.appendChild(l);
+    });
+  }
+  window.addEventListener('load', function () {
+    var go = function () { setTimeout(warmUp, 1500); };
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 4000 }); else go();
+  });
+
   applyLanguage();
 })();
