@@ -142,8 +142,9 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
                   Positioned.fill(
                     child: GameEndCard(
                       title: Translations.tripleStepTimeUp,
-                      message:
-                          'You spoke for ${gameClock(_game.elapsed).replaceFirst(RegExp('^0'), '')}.',
+                      message: Translations.youSpokeFor(
+                        gameClock(_game.elapsed).replaceFirst(RegExp('^0'), ''),
+                      ),
                       primaryLabel: Translations.tripleStepNextTopic,
                       onPrimary: _game.nextRound,
                       onRetry: _game.retry,
@@ -204,7 +205,7 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
           child: Semantics(
             key: ValueKey('level-${_game.changes}'),
             liveRegion: true,
-            label: 'Pitch $level of 10, ${_describe(level)}',
+            label: Translations.pitchOf(level, _describe(level)),
             child: ExcludeSemantics(
               child: Text(
                 '$level',

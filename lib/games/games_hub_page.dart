@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/responsive_card_grid.dart';
+import '../components/language_toggle.dart';
 import '../components/speech_mark_logo.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
@@ -44,13 +45,19 @@ class GamesHeader extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              LanguageToggle(compact: !wide),
+              const SizedBox(width: 4),
               TextButton.icon(
                 onPressed: () => Navigator.of(
                   context,
                 ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false),
                 style: TextButton.styleFrom(foregroundColor: AppColors.navy),
                 icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                label: Text(wide ? Translations.gamesBackToSite : 'Site'),
+                label: Text(
+                  wide
+                      ? Translations.gamesBackToSite
+                      : Translations.l('Site', 'الموقع'),
+                ),
               ),
             ],
           ),

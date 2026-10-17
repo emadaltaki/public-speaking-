@@ -36,12 +36,12 @@ class MailtoContactSubmitHandler implements ContactSubmitHandler {
       body: data.mailtoBody,
     );
     if (launched) {
-      return const ContactSubmitResult(
+      return ContactSubmitResult(
         kind: ContactSubmitKind.mailtoOpened,
         userMessage: Translations.contactFormNote,
       );
     }
-    return const ContactSubmitResult(
+    return ContactSubmitResult(
       kind: ContactSubmitKind.unavailable,
       userMessage: Translations.contactNoBackend,
     );

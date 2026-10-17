@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
         SnackBar(
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 10),
-          content: const Text(
+          content: Text(
             '${Translations.emailFallbackTitle} ${Translations.emailFallbackBody}',
           ),
           action: SnackBarAction(
@@ -121,15 +121,15 @@ class _HomePageState extends State<HomePage> {
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(Translations.privacyTitle),
-        content: const SizedBox(
+        title: Text(Translations.privacyTitle),
+        content: SizedBox(
           width: 560,
           child: SingleChildScrollView(child: Text(Translations.privacyBody)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(Translations.privacyClose),
+            child: Text(Translations.privacyClose),
           ),
         ],
       ),

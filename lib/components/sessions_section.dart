@@ -28,7 +28,7 @@ class SessionsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(
+            SectionHeader(
               eyebrow: Translations.eyebrowSessions,
               title: Translations.sessionsHeadline,
               intro: Translations.sessionsIntro,

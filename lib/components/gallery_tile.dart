@@ -95,7 +95,7 @@ class _GalleryTileState extends State<GalleryTile> {
                             color: AppColors.navyDeep.withValues(alpha: 0.55),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.zoom_out_map_rounded,
                             size: 18,
                             color: AppColors.onNavy,

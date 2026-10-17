@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
+import '../../translations/translations.dart';
 import 'triple_step_data.dart';
 
 enum TripleStepMode { singlePlayer, multiplayer }
@@ -12,7 +13,13 @@ enum TripleStepMode { singlePlayer, multiplayer }
 class TopicDeck {
   TopicDeck(this.topics);
 
-  static final TopicDeck shared = TopicDeck(TripleStepData.topics);
+  static final Map<String, TopicDeck> _decks = {};
+
+  /// One deck per language, so switching language keeps both decks fair.
+  static TopicDeck get shared => _decks.putIfAbsent(
+    Translations.language.value,
+    () => TopicDeck(TripleStepData.currentTopics),
+  );
 
   final List<String> topics;
   final List<String> _remaining = [];
@@ -188,10 +195,10 @@ class TripleStepGame extends ChangeNotifier {
   void _startRound() {
     topic = settings.suggestTitle
         ? TopicDeck.shared.draw(_random)
-        : 'Your Own Topic';
+        : Translations.yourOwnTopic;
     _pool = List<String>.of(
-      TripleStepData.wordSets[settings.wordSet] ??
-          TripleStepData.wordSets.values.first,
+      TripleStepData.currentWordSets[settings.wordSet] ??
+          TripleStepData.currentWordSets.values.first,
     )..shuffle(_random);
     elapsed = Duration.zero;
     status = RoundStatus.running;

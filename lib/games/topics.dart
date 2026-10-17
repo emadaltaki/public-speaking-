@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import '../translations/translations.dart';
 import 'triple_step/triple_step_data.dart';
 import 'triple_step/triple_step_game.dart' show TopicDeck;
 
@@ -13,8 +14,8 @@ String pickGameTopic({
   required String wordSet,
   required math.Random random,
 }) {
-  if (!suggestTitle) return 'Your Own Topic';
-  final words = TripleStepData.wordSets[wordSet];
+  if (!suggestTitle) return Translations.yourOwnTopic;
+  final words = TripleStepData.currentWordSets[wordSet];
   if (wordSet == generalWordSet || words == null) {
     return TopicDeck.shared.draw(random);
   }

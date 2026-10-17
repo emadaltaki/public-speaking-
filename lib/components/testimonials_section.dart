@@ -20,7 +20,7 @@ class TestimonialsSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(
+            SectionHeader(
               eyebrow: Translations.eyebrowHosts,
               title: Translations.testimonialsHeadline,
             ),

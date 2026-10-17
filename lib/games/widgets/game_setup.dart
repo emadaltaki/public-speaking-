@@ -145,7 +145,7 @@ class HowToPlayButton extends StatelessWidget {
         textStyle: AppStyles.label,
       ),
       icon: const Icon(Icons.lightbulb_outline_rounded, size: 18),
-      label: const Text(Translations.gamesHowToPlay),
+      label: Text(Translations.gamesHowToPlay),
     );
   }
 }
@@ -246,7 +246,7 @@ Future<void> showHowToPlay(BuildContext context, GameInfo game) {
                   shape: const StadiumBorder(),
                   textStyle: AppStyles.label.copyWith(fontSize: 16),
                 ),
-                child: const Text(Translations.gamesGotIt),
+                child: Text(Translations.gamesGotIt),
               ),
             ],
           ),
@@ -292,7 +292,7 @@ class PlayerNameFields extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       prefixIcon: const Icon(Icons.person_outline_rounded),
-                      hintText: 'Player ${i + 1}',
+                      hintText: Translations.playerName(i + 1),
                     ),
                   ),
                 ),
@@ -314,7 +314,7 @@ class PlayerNameFields extends StatelessWidget {
                 foregroundColor: GameColors.accentDark,
               ),
               icon: const Icon(Icons.add_rounded),
-              label: const Text(Translations.tripleStepAddPlayer),
+              label: Text(Translations.tripleStepAddPlayer),
             ),
           ),
       ],
@@ -325,7 +325,7 @@ class PlayerNameFields extends StatelessWidget {
   static List<String> namesOf(List<TextEditingController> controllers) => [
     for (var i = 0; i < controllers.length; i++)
       controllers[i].text.trim().isEmpty
-          ? 'Player ${i + 1}'
+          ? Translations.playerName(i + 1)
           : controllers[i].text.trim(),
   ];
 }
@@ -467,7 +467,7 @@ class GameReadyView extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(Icons.play_arrow_rounded),
-                    label: const Text(Translations.gamesImReady),
+                    label: Text(Translations.gamesImReady),
                   ),
                 ],
               ],
@@ -577,7 +577,7 @@ class GameEndCard extends StatelessWidget {
                         child: OutlinedButton(
                           onPressed: onRetry,
                           style: AppStyles.secondaryButton,
-                          child: const Text(Translations.tripleStepRetry),
+                          child: Text(Translations.tripleStepRetry),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -585,7 +585,7 @@ class GameEndCard extends StatelessWidget {
                         child: OutlinedButton(
                           onPressed: onSettings,
                           style: AppStyles.secondaryButton,
-                          child: const Text(Translations.tripleStepSettings),
+                          child: Text(Translations.tripleStepSettings),
                         ),
                       ),
                     ],

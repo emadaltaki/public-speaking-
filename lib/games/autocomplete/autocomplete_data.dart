@@ -1,3 +1,6 @@
+import '../../translations/translations.dart';
+import '../arabic_game_data.dart';
+
 /// Sentence starters for Autocomplete. Words wrapped in ** are shown bold.
 class AutocompleteData {
   AutocompleteData._();
@@ -177,7 +180,11 @@ class AutocompleteData {
 
   static List<String> get setNames => [mixed, ...sets.keys];
 
-  static List<String> phrasesFor(String set) => set == mixed
-      ? [for (final list in sets.values) ...list]
-      : sets[set] ?? [for (final list in sets.values) ...list];
+  /// Sentence starters in the current language.
+  static List<String> phrasesFor(String set) {
+    final all = Translations.isArabic ? ArabicGameData.phrases : sets;
+    return set == mixed
+        ? [for (final list in all.values) ...list]
+        : all[set] ?? [for (final list in all.values) ...list];
+  }
 }

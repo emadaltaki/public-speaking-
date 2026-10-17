@@ -1,3 +1,6 @@
+import '../../translations/translations.dart';
+import '../arabic_game_data.dart';
+
 /// Speech topics and word sets used by Triple Step.
 class TripleStepData {
   TripleStepData._();
@@ -594,4 +597,12 @@ class TripleStepData {
   };
 
   static List<String> get wordSetNames => wordSets.keys.toList();
+
+  /// Topics in the current language.
+  static List<String> get currentTopics =>
+      Translations.isArabic ? ArabicGameData.topics : topics;
+
+  /// Word sets in the current language (same set names in both).
+  static Map<String, List<String>> get currentWordSets =>
+      Translations.isArabic ? ArabicGameData.wordSets : wordSets;
 }

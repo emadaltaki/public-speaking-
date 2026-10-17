@@ -30,12 +30,7 @@ class _ConductorSetupPageState extends State<ConductorSetupPage> {
     );
   }
 
-  String _timerLabel(int seconds) {
-    final m = seconds ~/ 60;
-    final s = seconds % 60;
-    if (s == 0) return m == 1 ? '1 minute' : '$m minutes';
-    return '$m:${s.toString().padLeft(2, '0')} min';
-  }
+  String _timerLabel(int seconds) => Translations.timerLabel(seconds);
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +74,10 @@ class _ConductorSetupPageState extends State<ConductorSetupPage> {
         ),
         items: [
           for (final name in TripleStepData.wordSetNames)
-            DropdownMenuItem(value: name, child: Text(name)),
+            DropdownMenuItem(
+              value: name,
+              child: Text(Translations.wordSetName(name)),
+            ),
         ],
         onChanged: _settings.suggestTitle
             ? (v) {

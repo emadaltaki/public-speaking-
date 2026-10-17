@@ -27,7 +27,7 @@ class AnxietySection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(
+            SectionHeader(
               eyebrow: Translations.eyebrowWhy,
               title: Translations.anxietyHeadline,
             ),
