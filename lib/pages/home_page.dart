@@ -98,13 +98,6 @@ class _HomePageState extends State<HomePage> {
       );
   }
 
-  Future<void> _talkToUs() async {
-    await _handler.openEmailClient(
-      subject: 'Speak Up Fearless — I would like to join',
-    );
-    _showEmailFallback();
-  }
-
   /// Every "book" button leads to the scheduling section.
   Future<void> _bookIntro() => _scrollTo(_contactKey);
 
@@ -141,10 +134,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
-
-  Future<void> _callUs() {
-    return _handler.openPhoneClient();
   }
 
   @override
@@ -217,15 +206,9 @@ class _HomePageState extends State<HomePage> {
                   KeyedSubtree(key: _faqKey, child: const FaqSection()),
                   KeyedSubtree(
                     key: _contactKey,
-                    child: BookingSection(
-                      onRequest: _requestTime,
-                      onEmail: _talkToUs,
-                      onCall: _callUs,
-                    ),
+                    child: BookingSection(onRequest: _requestTime),
                   ),
                   SiteFooter(
-                    onEmail: _talkToUs,
-                    onPhone: _callUs,
                     links: [
                       FooterLink(
                         label: Translations.navHome,

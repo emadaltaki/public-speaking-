@@ -127,6 +127,8 @@ class Translations {
   static const String mailtoUri = 'mailto:speakupfearless@gmail.com';
   static const String contactPhoneDisplay = '(416) 995-5347';
   static const String telUri = 'tel:+14169955347';
+  static const String contactJoinSubject =
+      'Speak Up Fearless — I would like to join';
 
   static const String skipToContent = 'Skip to content';
   static const String openMenu = 'Open menu';

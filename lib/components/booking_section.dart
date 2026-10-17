@@ -5,6 +5,7 @@ import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'booking/booking_embed.dart';
+import 'contact_link.dart';
 import 'primary_button.dart';
 import 'section_container.dart';
 import 'section_header.dart';
@@ -18,15 +19,11 @@ class BookingSection extends StatelessWidget {
   const BookingSection({
     super.key,
     required this.onRequest,
-    required this.onEmail,
-    required this.onCall,
     this.bookingUrl = Translations.bookingUrl,
   });
 
   /// Sends a time request; resolves to true once it reached the inbox.
   final Future<bool> Function(BookingRequest request) onRequest;
-  final VoidCallback onEmail;
-  final VoidCallback onCall;
   final String bookingUrl;
 
   @override
@@ -41,7 +38,7 @@ class BookingSection extends StatelessWidget {
           : _TimeRequestForm(onRequest: onRequest),
     );
 
-    final contact = _ContactCard(onEmail: onEmail, onCall: onCall);
+    const contact = _ContactCard();
 
     return ColoredBox(
       color: AppColors.lightBlue,
@@ -364,10 +361,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
 }
 
 class _ContactCard extends StatelessWidget {
-  const _ContactCard({required this.onEmail, required this.onCall});
-
-  final VoidCallback onEmail;
-  final VoidCallback onCall;
+  const _ContactCard();
 
   @override
   Widget build(BuildContext context) {
@@ -419,23 +413,30 @@ class _ContactCard extends StatelessWidget {
             selectable: false,
           ),
           const SizedBox(height: 24),
-          PrimaryButton(label: Translations.ctaEmailUs, onPressed: onEmail),
+          ContactLink(
+            uri: ContactLink.email(subject: Translations.contactJoinSubject),
+            builder: (context, open) =>
+                PrimaryButton(label: Translations.ctaEmailUs, onPressed: open),
+          ),
           const SizedBox(height: 10),
-          OutlinedButton(
-            style: AppStyles.secondaryButton.copyWith(
-              foregroundColor: const WidgetStatePropertyAll(AppColors.onNavy),
-              overlayColor: WidgetStatePropertyAll(
-                Colors.white.withValues(alpha: 0.08),
-              ),
-              side: WidgetStatePropertyAll(
-                BorderSide(
-                  color: Colors.white.withValues(alpha: 0.4),
-                  width: 1.4,
+          ContactLink(
+            uri: ContactLink.phone,
+            builder: (context, open) => OutlinedButton(
+              style: AppStyles.secondaryButton.copyWith(
+                foregroundColor: const WidgetStatePropertyAll(AppColors.onNavy),
+                overlayColor: WidgetStatePropertyAll(
+                  Colors.white.withValues(alpha: 0.08),
+                ),
+                side: WidgetStatePropertyAll(
+                  BorderSide(
+                    color: Colors.white.withValues(alpha: 0.4),
+                    width: 1.4,
+                  ),
                 ),
               ),
+              onPressed: open,
+              child: const Text(Translations.ctaCallUs),
             ),
-            onPressed: onCall,
-            child: const Text(Translations.ctaCallUs),
           ),
         ],
       ),
