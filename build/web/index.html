@@ -366,6 +366,77 @@
     .dialog h3 { font-size: 22px; margin-bottom: 12px; }
     .dialog p { white-space: pre-line; color: var(--text); margin: 0 0 20px; font-size: 15.5px; }
 
+
+    /* Compact sections */
+    section.tight { padding: 72px 0; }
+    .feelings { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .feelings li { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--tint); border: 1px solid var(--border); border-radius: 16px; font-family: var(--head); font-weight: 600; font-size: 15.5px; color: var(--ink); line-height: 1.35; }
+    .feelings svg { width: 20px; height: 20px; color: var(--primary); flex: none; }
+    .tight .human { margin-top: 18px; font-size: 18px; padding: 16px 22px; }
+    .skills { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .skills li { display: flex; align-items: flex-start; gap: 14px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
+    .skills .ic { width: 40px; height: 40px; border-radius: 12px; }
+    .skills .ic svg { width: 19px; height: 19px; }
+    .skills b { display: block; font-family: var(--head); color: var(--ink); font-size: 16px; }
+    .skills small { display: block; color: var(--muted); font-size: 14px; line-height: 1.45; margin-top: 2px; }
+    .strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: max(24px, calc((100vw - 1112px) / 2 + 24px)); padding: 28px max(24px, calc((100vw - 1112px) / 2 + 24px)) 8px; scrollbar-width: none; }
+    .strip::-webkit-scrollbar { display: none; }
+    .strip button { position: relative; flex: none; width: min(360px, 78vw); height: 230px; padding: 0; border: 0; border-radius: 18px; overflow: hidden; cursor: zoom-in; background: var(--soft); scroll-snap-align: start; }
+    .strip img { width: 100%; height: 100%; object-fit: cover; }
+    .strip button::after { content: ""; position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, rgba(20,14,10,.62)); }
+    .strip figcaption { position: absolute; z-index: 1; inset-inline-start: 16px; bottom: 12px; color: #fff; font-family: "Montserrat", var(--head); font-weight: 700; font-size: 16px; text-align: start; }
+    .hosts-card { margin-top: 24px; padding: 24px 28px; }
+    .hosts-title { font-size: 19px; margin-bottom: 14px; }
+    .hosts-card .hosts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 0; }
+    .hosts-card .host { display: flex; flex-direction: row; gap: 14px; align-items: flex-start; margin: 0; padding: 0; }
+    .hosts-card .host img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); flex: none; }
+    .hosts-card blockquote { margin: 0 0 6px; font-size: 15.5px; color: var(--text); }
+    .hosts-card b { color: var(--ink); font-family: var(--head); }
+    .hosts-card small { color: var(--muted); font-size: 13.5px; }
+    .tight .free { margin-top: 28px; }
+    .tight .free .l, .tight .free .r { padding: 24px 28px; }
+    .tight .free .price { font-size: 44px; }
+    .tight .tiers { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; align-items: stretch; }
+    a.tier { display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; text-decoration: none; color: inherit; transition: border-color .15s; }
+    a.tier:hover { border-color: var(--primary); }
+    a.tier.hot { transform: none; }
+    a.tier .name { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
+    a.tier .name b { font-family: var(--head); font-size: 16.5px; color: var(--ink); }
+    a.tier .name small { color: var(--muted); font-size: 13.5px; }
+    a.tier .tag { font-size: 10.5px; padding: 3px 9px; }
+    a.tier .amt { font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 28px; color: var(--ink); display: flex; flex-direction: column; align-items: flex-end; line-height: 1.1; }
+    a.tier .amt s { font-size: 13px; font-weight: 600; color: var(--muted); }
+    a.tier.hot .name b, a.tier.hot .amt { color: #FFF8F1; }
+    a.tier.hot .name small, a.tier.hot .amt s { color: #CDBEAE; }
+    .tight .includes { margin-top: 18px; font-size: 14.5px; color: var(--muted); display: block; }
+    .tight .includes svg { width: 17px; height: 17px; vertical-align: -3px; margin-inline-end: 6px; }
+    .tight .faq { margin: 24px 0 0; max-width: 860px; }
+    @media (max-width: 1023px) {
+      .feelings { grid-template-columns: 1fr 1fr; }
+      .skills { grid-template-columns: 1fr 1fr; }
+      .tight .tiers { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      section.tight { padding: 48px 0; }
+      .feelings { gap: 8px; margin-top: 20px; }
+      .feelings li { padding: 10px 12px; font-size: 14px; gap: 8px; border-radius: 14px; }
+      .feelings svg { width: 17px; height: 17px; }
+      .tight .human { font-size: 16px; padding: 14px 16px; }
+      .skills { grid-template-columns: 1fr; gap: 8px; margin-top: 20px; }
+      .skills li { padding: 12px 14px; }
+      .strip { padding: 20px 20px 6px; gap: 10px; scroll-padding-inline: 20px; }
+      .strip button { height: 190px; }
+      .hosts-card { padding: 18px; margin-top: 16px; }
+      .hosts-card .hosts { grid-template-columns: 1fr; gap: 16px; }
+      .hosts-card blockquote { font-size: 14.5px; }
+      .tight .free { margin-top: 20px; }
+      .tight .free .l { padding: 20px 20px 4px; }
+      .tight .free .r { padding: 16px 20px 20px; }
+      .tight .free .price { font-size: 38px; }
+      a.tier { padding: 14px 16px; }
+      a.tier .amt { font-size: 24px; }
+    }
+
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
 
     /* Tablet */
@@ -548,140 +619,107 @@
     </section>
 
     <!-- You're not alone -->
-    <section class="bg-white" id="why">
+    <section class="bg-white tight" id="why">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowWhy">You're not alone</span>
         <h2 class="s-title" data-t="anxietyHeadline">If Speaking Makes You Nervous, You're Not Alone.</h2>
-        <div class="feel-grid">
-          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-heart"/></svg></span><p data-t="feel1">“My heart starts racing.”</p></div>
-          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-head"/></svg></span><p data-t="feel2">“I overthink everything I want to say.”</p></div>
-          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-eye"/></svg></span><p data-t="feel3">“I'm afraid people will judge me.”</p></div>
-          <div class="feel"><span class="ic"><svg aria-hidden="true"><use href="#i-pause"/></svg></span><p data-t="feel4">“I know what I want to say, but I freeze.”</p></div>
-        </div>
+        <ul class="feelings">
+          <li><svg aria-hidden="true"><use href="#i-heart"/></svg><span data-t="feel1">“My heart starts racing.”</span></li>
+          <li><svg aria-hidden="true"><use href="#i-head"/></svg><span data-t="feel2">“I overthink everything I want to say.”</span></li>
+          <li><svg aria-hidden="true"><use href="#i-eye"/></svg><span data-t="feel3">“I'm afraid people will judge me.”</span></li>
+          <li><svg aria-hidden="true"><use href="#i-pause"/></svg><span data-t="feel4">“I know what I want to say, but I freeze.”</span></li>
+        </ul>
         <p class="human" data-t="anxietyHuman">These feelings don't mean you're bad at speaking. They mean you're human.</p>
       </div>
     </section>
 
-    <!-- What we practice (also how a session flows) -->
-    <section class="bg-alt" id="sessions">
+    <!-- What we practice -->
+    <section class="bg-alt tight" id="sessions">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowSessions">What we practice</span>
         <h2 class="s-title" data-t="sessionsHeadline">Practice Without the Pressure.</h2>
         <p class="s-intro" data-t="sessionsIntro">A regular place to practice speaking. Community and skills, not clinical treatment.</p>
-        <div class="flow" aria-label="How a session works">
-          <span><b>01</b><span data-t="how1">Show Up</span></span><i></i>
-          <span><b>02</b><span data-t="how2">Speak</span></span><i></i>
-          <span><b>03</b><span data-t="how3">Reflect</span></span><i></i>
-          <span><b>04</b><span data-t="how4">Grow</span></span>
-        </div>
-        <div class="prac-grid">
-          <div class="card prac"><span class="ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><h3 data-t="p1t">Speaking Practice</h3><p data-t="p1b">Practice expressing ideas clearly and confidently.</p></div>
-          <div class="card prac"><span class="ic warm"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span><h3 data-t="p2t">Impromptu Speaking</h3><p data-t="p2b">Learn how to think and respond when you're put on the spot.</p></div>
-          <div class="card prac"><span class="ic"><svg aria-hidden="true"><use href="#i-book"/></svg></span><h3 data-t="p3t">Storytelling</h3><p data-t="p3b">Learn how to turn experiences and ideas into engaging stories.</p></div>
-          <div class="card prac"><span class="ic warm"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><h3 data-t="p4t">Feedback &amp; Growth</h3><p data-t="p4b">Receive constructive feedback in a supportive environment.</p></div>
-          <div class="card prac"><span class="ic"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><h3 data-t="p5t">Confidence Challenges</h3><p data-t="p5b">Small challenges designed to gradually push comfort zones.</p></div>
-        </div>
+        <ul class="skills">
+          <li><span class="ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><span><b data-t="p1t">Speaking Practice</b><small data-t="p1b">Practice expressing ideas clearly and confidently.</small></span></li>
+          <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span><span><b data-t="p2t">Impromptu Speaking</b><small data-t="p2b">Learn how to think and respond when you're put on the spot.</small></span></li>
+          <li><span class="ic"><svg aria-hidden="true"><use href="#i-book"/></svg></span><span><b data-t="p3t">Storytelling</b><small data-t="p3b">Learn how to turn experiences and ideas into engaging stories.</small></span></li>
+          <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><span><b data-t="p4t">Feedback &amp; Growth</b><small data-t="p4b">Receive constructive feedback in a supportive environment.</small></span></li>
+          <li><span class="ic"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><span><b data-t="p5t">Confidence Challenges</b><small data-t="p5b">Small challenges designed to gradually push comfort zones.</small></span></li>
+        </ul>
       </div>
     </section>
 
-    <!-- Community -->
-    <section class="bg-white" id="community">
+    <!-- Community and hosts -->
+    <section class="bg-white tight" id="community">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowCommunity">In the room</span>
         <h2 class="s-title" data-t="galleryHeadline">Our Community</h2>
         <p class="s-intro" data-t="galleryIntro">Real sessions, real people, finding their voice together.</p>
-        <div class="gallery">
-          <button type="button" data-photo="1"><img src="/assets/assets/images/directing-participants-pic.jpeg" alt="Members seated around a long table, watching a facilitator introduce a speaking exercise" data-t-alt="gAlt1" loading="lazy" decoding="async"><figcaption data-t="g1">Practicing together</figcaption></button>
-          <button type="button" data-photo="2"><img src="/assets/assets/images/participant-podcast-pic.jpeg" alt="A member speaking to the room in front of a slide for the Podcast speaking game" data-t-alt="gAlt2" loading="lazy" decoding="async"><figcaption data-t="g2">Finding your voice</figcaption></button>
-          <button type="button" data-photo="3"><img src="/assets/assets/images/directing-consultant-pic-2.jpeg" alt="A facilitator pointing to the Triple Step exercise on screen while participants follow along" data-t-alt="gAlt3" loading="lazy" decoding="async"><figcaption data-t="g3">Learning through feedback</figcaption></button>
-          <button type="button" data-photo="4"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host presenting the Let's Learn by Doing ground rules to the group" data-t-alt="gAlt4" loading="lazy" decoding="async"><figcaption data-t="g4">Learning by doing</figcaption></button>
-          <button type="button" data-photo="5"><img src="/assets/assets/images/playing-a-game-pic.jpeg" alt="Three people at the front of the room during a speaking game, with the group watching" data-t-alt="gAlt5" loading="lazy" decoding="async"><figcaption data-t="g5">Workshops that feel human</figcaption></button>
-          <button type="button" data-photo="6"><img src="/assets/assets/images/image-just-after-a-game-pic.jpeg" alt="A candid moment just after a speaking game, with the group still laughing along" data-t-alt="gAlt6" loading="lazy" decoding="async"><figcaption data-t="g6">Behind the scenes</figcaption></button>
-        </div>
       </div>
-    </section>
-
-    <!-- Hosts -->
-    <section class="bg-alt" id="hosts">
-      <div class="wrap">
-        <span class="eyebrow" data-t="eyebrowHosts">Meet your hosts</span>
-        <h2 class="s-title" data-t="hostsHeadline">The People Behind the Sessions.</h2>
-        <div class="hosts">
-          <div class="card host"><span class="q" aria-hidden="true">“</span><blockquote data-t="emadQuote">I know what it feels like to have something worth saying and freeze anyway. Speak Up Fearless is the room I wanted back then — you practice first, and confidence follows.</blockquote><div class="who"><img src="/assets/assets/images/emad_pic.jpg" alt="Portrait of Emad, founder and host" data-t-alt="emadAlt" loading="lazy" width="64" height="64"><span><b>Emad</b><small data-t="hostRole">Co-Founder and Host</small></span></div></div>
-          <div class="card host"><span class="q" aria-hidden="true">“</span><blockquote data-t="eliasQuote">Nobody here waits until they feel ready. We show up, we speak, we give each other honest and kind feedback, and everyone leaves knowing what to work on next.</blockquote><div class="who"><img src="/assets/assets/images/Elias-image.jpeg" alt="Portrait of Elias, co-founder and host" data-t-alt="eliasAlt" loading="lazy" width="64" height="64"><span><b>Elias</b><small data-t="hostRole">Co-Founder and Host</small></span></div></div>
+      <div class="strip" aria-label="Photos">
+        <button type="button" data-photo="1"><img src="/assets/assets/images/directing-participants-pic.jpeg" alt="Members seated around a long table, watching a facilitator introduce a speaking exercise" data-t-alt="gAlt1" loading="lazy" decoding="async"><figcaption data-t="g1">Practicing together</figcaption></button>
+        <button type="button" data-photo="2"><img src="/assets/assets/images/participant-podcast-pic.jpeg" alt="A member speaking to the room in front of a slide for the Podcast speaking game" data-t-alt="gAlt2" loading="lazy" decoding="async"><figcaption data-t="g2">Finding your voice</figcaption></button>
+        <button type="button" data-photo="3"><img src="/assets/assets/images/directing-consultant-pic-2.jpeg" alt="A facilitator pointing to the Triple Step exercise on screen while participants follow along" data-t-alt="gAlt3" loading="lazy" decoding="async"><figcaption data-t="g3">Learning through feedback</figcaption></button>
+        <button type="button" data-photo="4"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host presenting the Let's Learn by Doing ground rules to the group" data-t-alt="gAlt4" loading="lazy" decoding="async"><figcaption data-t="g4">Learning by doing</figcaption></button>
+        <button type="button" data-photo="5"><img src="/assets/assets/images/playing-a-game-pic.jpeg" alt="Three people at the front of the room during a speaking game, with the group watching" data-t-alt="gAlt5" loading="lazy" decoding="async"><figcaption data-t="g5">Workshops that feel human</figcaption></button>
+        <button type="button" data-photo="6"><img src="/assets/assets/images/image-just-after-a-game-pic.jpeg" alt="A candid moment just after a speaking game, with the group still laughing along" data-t-alt="gAlt6" loading="lazy" decoding="async"><figcaption data-t="g6">Behind the scenes</figcaption></button>
+      </div>
+      <div class="wrap" id="hosts">
+        <div class="card hosts-card">
+          <h3 class="hosts-title" data-t="hostsHeadline">The People Behind the Sessions.</h3>
+          <div class="hosts">
+            <figure class="host"><img src="/assets/assets/images/emad_pic.jpg" alt="Portrait of Emad, founder and host" data-t-alt="emadAlt" loading="lazy" width="56" height="56"><figcaption><blockquote data-t="emadQuote">“I know what it feels like to freeze with something worth saying. This is the room I wanted back then.”</blockquote><b>Emad</b> · <small data-t="hostRole">Co-Founder and Host</small></figcaption></figure>
+            <figure class="host"><img src="/assets/assets/images/Elias-image.jpeg" alt="Portrait of Elias, co-founder and host" data-t-alt="eliasAlt" loading="lazy" width="56" height="56"><figcaption><blockquote data-t="eliasQuote">“Nobody waits until they feel ready. We show up, speak, and give each other kind, honest feedback.”</blockquote><b>Elias</b> · <small data-t="hostRole">Co-Founder and Host</small></figcaption></figure>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Pricing -->
-    <section id="pricing">
+    <section class="bg-alt tight" id="pricing">
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowPricing">Pricing</span>
         <h2 class="s-title" data-t="pricingHeadline">Start Where You Are. Grow From There.</h2>
         <p class="s-intro" data-t="pricingSupport">Start with a free call. Continue only when you're ready.</p>
-        <p class="meta" style="margin-top:8px" data-t="pricingCurrency">Prices are in CAD ($).</p>
         <div class="free">
           <div class="l">
             <span class="tag" data-t="free">FREE</span>
             <h3 data-t="freeTitle">Free Online Explanation Session</h3>
             <p data-t="freeDesc">Meet a host and see how sessions work. No speaking required, no pressure to join.</p>
-            <ul class="checks">
-              <li data-t="freeF1">Meet a host</li>
-              <li data-t="freeF2">Understand how sessions work</li>
-              <li data-t="freeF3">See if it feels like a fit — no commitment</li>
-            </ul>
           </div>
           <div class="r">
             <div class="price">$0</div>
             <div class="meta" data-t="freeMeta">15–20 minutes · online video call</div>
-            <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="pricing-free">Book a Free Explanation Session</a>
+            <a class="btn btn-primary" href="#book" data-t="ctaBookShort" data-cta="pricing-free">Book my free call</a>
           </div>
         </div>
         <div class="tiers">
-          <div class="card tier">
-            <div class="spacer"></div>
-            <h3 data-t="singleTitle">Single Session</h3>
-            <div class="price">$50</div>
-            <div class="per" style="margin-top:10px" data-t="singleMeta">1 speaking session</div>
-            <div class="gap"></div>
-            <a class="btn btn-ghost" href="#book" data-t="singleCta" data-plan="single">Start With One Session</a>
-          </div>
-          <div class="card tier hot">
-            <div><span class="tag warm" data-t="popular">MOST POPULAR</span></div>
-            <h3 data-t="fourTitle">4-Session Package</h3>
-            <div class="price">$180 <s>$200</s></div>
-            <div class="save" data-t="fourSave">Save $20 · 10% OFF</div>
-            <div class="per" data-t="fourPer">$45 per session</div>
-            <div class="gap"></div>
-            <a class="btn btn-primary" href="#book" data-t="fourCta" data-plan="four">Build Consistency</a>
-          </div>
-          <div class="card tier">
-            <div><span class="tag soft" data-t="bestValue">BEST VALUE</span></div>
-            <h3 data-t="eightTitle">8-Session Package</h3>
-            <div class="price">$320 <s>$400</s></div>
-            <div class="save" data-t="eightSave">Save $80 · 20% OFF</div>
-            <div class="per" data-t="eightPer">$40 per session</div>
-            <div class="gap"></div>
-            <a class="btn btn-ghost" href="#book" data-t="eightCta" data-plan="eight">Build Momentum</a>
-          </div>
+          <a class="card tier" href="#book" data-plan="single">
+            <span class="name"><b data-t="singleTitle">Single Session</b><small data-t="singleMeta">1 speaking session</small></span>
+            <span class="amt">$50</span>
+          </a>
+          <a class="card tier hot" href="#book" data-plan="four">
+            <span class="name"><span class="tag warm" data-t="popular">MOST POPULAR</span><b data-t="fourTitle">4-Session Package</b><small data-t="fourPer">$45 per session</small></span>
+            <span class="amt">$180<s>$200</s></span>
+          </a>
+          <a class="card tier" href="#book" data-plan="eight">
+            <span class="name"><span class="tag soft" data-t="bestValue">BEST VALUE</span><b data-t="eightTitle">8-Session Package</b><small data-t="eightPer">$40 per session</small></span>
+            <span class="amt">$320<s>$400</s></span>
+          </a>
         </div>
-        <p class="includes"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="includes">Every session includes guided speaking practice, constructive feedback and confidence-building exercises in a supportive group.</span></p>
+        <p class="includes"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="includes">Every session includes guided speaking practice, constructive feedback and confidence-building exercises in a supportive group.</span> <span data-t="pricingCurrency">Prices are in CAD ($).</span></p>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="bg-white" id="faq">
-      <div class="wrap center">
+    <section class="bg-white tight" id="faq">
+      <div class="wrap">
         <span class="eyebrow" data-t="eyebrowFaq">Questions &amp; answers</span>
         <h2 class="s-title" data-t="faqHeadline">FAQ</h2>
-      </div>
-      <div class="wrap">
         <div class="faq">
-          <details><summary data-t="q1">Do I need public speaking experience?</summary><p data-t="a1">No. We welcome people who are just starting. You do not need to feel confident before you join — the community is how confidence grows.</p></details>
           <details><summary data-t="q2">What if I'm extremely nervous?</summary><p data-t="a2">Then you're in the right place. Nervousness is common here. We normalize it, understand it, and practice speaking through it — together.</p></details>
           <details><summary data-t="q3">Do I have to speak during my first session?</summary><p data-t="a3">We'll explain what a typical session looks like when you reach out, and you can start at a pace that feels manageable. There is no pressure to perform.</p></details>
           <details><summary data-t="q8">How much does it cost?</summary><p data-t="a8">Prices are in CAD: $50 for a single session, $180 for four sessions, and $320 for eight sessions. Your first call is free.</p></details>
-          <details><summary data-t="q9">Can I talk to you before joining a session?</summary><p data-t="a9">Yes. We offer a free online explanation session so you can talk with a host, understand what we do, and ask questions. There is no speaking required and no pressure to join.</p></details>
         </div>
       </div>
     </section>
