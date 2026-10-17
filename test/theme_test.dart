@@ -7,11 +7,11 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('brand tokens match the Speak Up Fearless palette', () {
-    expect(AppColors.navy, const Color(0xFF1E1B4B));
-    expect(AppColors.teal, const Color(0xFF4F46E5));
-    expect(AppColors.offWhite, const Color(0xFFF5F6F8));
+    expect(AppColors.navy, const Color(0xFF2B2118));
+    expect(AppColors.teal, const Color(0xFFC2410C));
+    expect(AppColors.offWhite, const Color(0xFFF7F5F2));
     expect(AppColors.headerBand, const Color(0xFFFFD27F));
-    expect(AppColors.charcoal, const Color(0xFF1F2937));
+    expect(AppColors.charcoal, const Color(0xFF292524));
   });
 
   test('header CTA style is a large, comfortable tap target', () {

@@ -132,7 +132,7 @@ class _AppNavbarState extends State<AppNavbar> {
             DecoratedBox(
               decoration: const BoxDecoration(
                 color: AppColors.headerBandSoft,
-                border: Border(top: BorderSide(color: Color(0x221E1B4B))),
+                border: Border(top: BorderSide(color: Color(0x222B2118))),
               ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
