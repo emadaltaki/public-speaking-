@@ -106,6 +106,50 @@ void main() {
     expect(jsonDecode(sent.body)['durationSeconds'], 90);
   });
 
+  test('API store merges backend rounds with local rounds', () async {
+    _signIn();
+    final played = DateTime(2026, 10, 17, 9);
+    final store = ApiProgressStore(
+      'https://api.example.com',
+      local: LocalProgressStore(),
+      client: MockClient((req) async {
+        if (req.method == 'POST') return http.Response('{}', 201);
+        return http.Response(
+          jsonEncode({
+            'sessions': [
+              {
+                'gameId': 'triple-step',
+                'playedAt': played.toUtc().toIso8601String(),
+                'durationSeconds': 90,
+              },
+              {
+                'gameId': 'podcast',
+                'playedAt': DateTime(2026, 10, 16).toUtc().toIso8601String(),
+                'durationSeconds': 60,
+              },
+            ],
+          }),
+          200,
+        );
+      }),
+    );
+    await store.record(
+      GameSession(
+        gameId: 'triple-step',
+        playedAt: played,
+        spoken: const Duration(seconds: 90),
+      ),
+    );
+    final history = await store.history();
+    // The round saved here and returned by the backend shows up once.
+    expect(
+      history.where((s) => s.gameId == 'triple-step' && s.playedAt == played),
+      hasLength(1),
+    );
+    expect(history.any((s) => s.gameId == 'podcast'), isTrue);
+    AuthService.signOut();
+  });
+
   testWidgets('account page shows sign-in when signed out, stats when in', (
     tester,
   ) async {

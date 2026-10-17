@@ -7,6 +7,9 @@
   var THEME_KEY = 'speakupfearless.theme';
   var AUTH_KEY = 'firebase:authUser:AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow:[DEFAULT]';
   var BOOKING_ENDPOINT = 'https://formsubmit.co/ajax/speakupunshaken@gmail.com';
+  // Our own backend keeps a copy of each request; the email above stays the
+  // way requests reach the inbox.
+  var API_BASE = 'https://public-speaking-backend.vercel.app';
   var CONTACT_EMAIL = 'speakupfearless@gmail.com';
   var root = document.documentElement;
   var $ = function (id) { return document.getElementById(id); };
@@ -351,6 +354,7 @@
     btn.textContent = t('sending');
     $('sendErr').classList.remove('show');
 
+    saveToBackend(req);
     var controller = 'AbortController' in window ? new AbortController() : null;
     var timer = setTimeout(function () { if (controller) controller.abort(); }, 15000);
     fetch(BOOKING_ENDPOINT, {
@@ -379,6 +383,19 @@
         location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
       });
   });
+
+  function saveToBackend(req) {
+    var body = { name: req.name, contact: req.contact, preferredTime: req.preferredTime, reason: req.reason };
+    if (req.description) body.description = req.description;
+    try {
+      fetch(API_BASE + '/v1/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        keepalive: true
+      }).catch(function () {});
+    } catch (_) {}
+  }
 
   $('again').addEventListener('click', function () {
     $('bookForm').reset();
