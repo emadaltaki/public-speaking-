@@ -474,6 +474,85 @@
       .dd-opt { gap: 10px; padding: 8px; }
     }
 
+
+    @media (max-width: 1400px) { .nav a { padding: 8px 7px; font-size: 14.5px; } .hbtn { padding: 0 8px; } .site-header .cta { padding: 0 16px; margin-inline-start: 4px; } .brand span { font-size: 18px; } }
+    /* Games showcase */
+    .nav-games { position: relative; }
+    .nav-games em, .mobile-menu .nav-games em { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; background: var(--primary); color: var(--on-primary); margin-inline-start: 6px; vertical-align: 2px; }
+    .nav .nav-games em { font-size: 0; width: 7px; height: 7px; padding: 0; margin-inline-start: 2px; display: inline-block; vertical-align: 8px; }
+    .games-band { position: relative; padding: 72px 0 64px; background: radial-gradient(1200px 400px at 85% -10%, rgba(224,138,104,.35), transparent 60%), radial-gradient(900px 400px at 0% 110%, rgba(212,154,78,.25), transparent 60%), #2B2118; color: #F7EEE4; overflow: hidden; }
+    .games-band .eyebrow { color: #F0B79F; }
+    .games-band .s-title { color: #FFF8F1; }
+    .games-band .s-intro { color: #D9CBBD; }
+    .games-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .games-all { flex: none; }
+    .games-all svg { width: 16px; height: 16px; }
+    .game-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 1112px; margin: 32px auto 0; padding: 0 24px; }
+    .game { position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 230px; padding: 22px; border-radius: 22px; text-decoration: none; color: #fff; overflow: hidden; isolation: isolate; transition: transform .2s, box-shadow .2s; box-shadow: 0 18px 30px -18px rgba(0,0,0,.6); }
+    .game::after { content: ""; position: absolute; z-index: -1; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,.12); transition: transform .4s; }
+    :root[dir="rtl"] .game::after { right: auto; left: -40px; }
+    .game:hover { transform: translateY(-4px); box-shadow: 0 26px 40px -18px rgba(0,0,0,.7); }
+    .game:hover::after { transform: scale(1.25); }
+    .g1 { background: linear-gradient(145deg, #C8643F, #8E3B22); }
+    .g2 { background: linear-gradient(145deg, #3F6F8E, #23455E); }
+    .g3 { background: linear-gradient(145deg, #7A4E9A, #4A2C66); }
+    .g4 { background: linear-gradient(145deg, #D49A4E, #9C6420); }
+    .g-ic { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: rgba(255,255,255,.18); margin-bottom: 8px; }
+    .g-ic svg { width: 26px; height: 26px; color: #fff; }
+    .game b { font-family: var(--head); font-size: 19px; line-height: 1.25; }
+    .game small { color: rgba(255,255,255,.85); font-size: 14px; line-height: 1.45; flex: 1; }
+    .g-go { align-self: flex-start; display: inline-flex; align-items: center; gap: 4px; margin-top: 10px; padding: 7px 14px; border-radius: 999px; background: #fff; color: #2B2118; font-weight: 700; font-size: 14px; }
+    .g-go svg { width: 15px; height: 15px; transition: transform .2s; }
+    :root[dir="rtl"] .g-go svg { transform: scaleX(-1); }
+    .game:hover .g-go svg { transform: translateX(3px); }
+    .more-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 6px 2px; border: 0; background: none; color: var(--primary); font-weight: 700; font-size: 14.5px; cursor: pointer; }
+    .more-btn span[aria-hidden] { font-size: 18px; line-height: 1; }
+    @media (max-width: 1023px) {
+      .games-head { flex-direction: column; align-items: flex-start; }
+      .game-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 24px; scrollbar-width: none; }
+      .game-row::-webkit-scrollbar { display: none; }
+      .game { flex: none; width: 250px; scroll-snap-align: start; }
+    }
+    @media (max-width: 640px) {
+      .games-band { padding: 44px 0 40px; }
+      .games-all { display: none; }
+      .game-row { margin-top: 20px; padding: 0 20px; gap: 10px; scroll-padding-inline: 20px; }
+      .game { width: 210px; min-height: 0; padding: 16px; border-radius: 18px; gap: 4px; }
+      .g-ic { width: 42px; height: 42px; border-radius: 13px; }
+      .g-ic svg { width: 22px; height: 22px; }
+      .game b { font-size: 16.5px; }
+      .game small { font-size: 13px; }
+      .g-go { margin-top: 8px; padding: 6px 12px; font-size: 13px; }
+      /* Shorter page on phones */
+      section.tight { padding: 40px 0; }
+      .skills { grid-template-columns: 1fr 1fr; }
+      .skills li { padding: 10px 12px; gap: 10px; align-items: center; }
+      .skills .ic { width: 34px; height: 34px; border-radius: 10px; }
+      .skills .ic svg { width: 17px; height: 17px; }
+      .skills b { font-size: 14px; line-height: 1.3; }
+      .skills small { display: none; }
+      .talk { padding: 20px; }
+      .talk h3 { margin-bottom: 4px; font-size: 18px; }
+      .talk { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+      .talk h3 { flex: 1 1 100%; }
+      .talk .row { display: none !important; }
+      .talk .btn, .talk .btn-primary { flex: 1; width: auto; margin: 0; }
+      /* Fewer words on phones */
+      #sessions .s-intro, #community .s-intro, #pricing .s-intro, #book .s-intro, .games-band .s-intro { display: none; }
+      .hero-photo button { aspect-ratio: 16 / 11; }
+      .tight .free .l p { display: none; }
+      .tight .free .l { padding-bottom: 0; }
+      .tight .free .r { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 14px; border-top: 0; padding-top: 10px; }
+      .tight .free .r .meta { margin: 0; font-size: 13.5px; }
+      .tight .free .r .btn { grid-column: 1 / -1; margin-top: 14px; }
+      .tight .includes { display: none; }
+      .tight .human { margin-top: 12px; }
+      footer { padding: 36px 0 28px; }
+      footer p { font-size: 15px; }
+      footer .links { grid-template-columns: 1fr 1fr 1fr; gap: 10px 14px; }
+      footer .copy { margin-top: 24px; padding-top: 16px; font-size: 13px; }
+    }
+
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
 
     /* Tablet */
@@ -602,6 +681,9 @@
     <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 5.1 5.1l1.4-2.3L19 13.5V17a2 2 0 0 1-2 2A14 14 0 0 1 3 5a2 2 0 0 1 2-2z"/></symbol>
     <symbol id="i-sunrise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 17a7 7 0 0 1 14 0M2 20h20M12 3v4M4.2 9.2l1.4 1.4M19.8 9.2l-1.4 1.4"/></g></symbol>
     <symbol id="i-chev-l" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M3 12h1M7 8v8M11 4v16M15 7v10M19 10v4M21 12h0"/></symbol>
+    <symbol id="i-pod" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="11" r="2.5"/><path d="M12 13.5V21M7.8 15.2a6 6 0 1 1 8.4 0M5 18a10 10 0 1 1 14 0"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></symbol>
     <symbol id="i-chev-r" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></symbol>
   </svg>
 
@@ -612,7 +694,7 @@
         <a href="#why" data-t="navWhy">Why We Do This</a>
         <a href="#sessions" data-t="navSessions">Sessions</a>
         <a href="#community" data-t="navCommunity">Our Community</a>
-        <a href="/games" data-t="navGames">Games</a>
+        <a href="/games" class="nav-games"><span data-t="navGames">Games</span><em data-t="newBadge">New</em></a>
         <a href="#faq" data-t="navFaq">FAQ</a>
         <a href="#book" data-t="navContact">Contact</a>
       </nav>
@@ -627,7 +709,7 @@
     <a href="#why" data-t="navWhy">Why We Do This</a>
     <a href="#sessions" data-t="navSessions">Sessions</a>
     <a href="#community" data-t="navCommunity">Our Community</a>
-    <a href="/games" data-t="navGames">Games</a>
+    <a href="/games" class="nav-games"><span data-t="navGames">Games</span><em data-t="newBadge">New</em></a>
     <a href="#faq" data-t="navFaq">FAQ</a>
     <a href="#book" data-t="navContact">Contact</a>
     <button class="item" type="button" id="themeBtn2"><svg class="i" aria-hidden="true"><use href="#i-moon"/></svg><span></span></button>
@@ -683,6 +765,46 @@
           <li><span class="ic warm"><svg aria-hidden="true"><use href="#i-chat"/></svg></span><span><b data-t="p4t">Feedback &amp; Growth</b><small data-t="p4b">Receive constructive feedback in a supportive environment.</small></span></li>
           <li><span class="ic"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><span><b data-t="p5t">Confidence Challenges</b><small data-t="p5b">Small challenges designed to gradually push comfort zones.</small></span></li>
         </ul>
+      </div>
+    </section>
+
+    <!-- Games -->
+    <section class="games-band" id="games">
+      <div class="wrap">
+        <div class="games-head">
+          <div>
+            <span class="eyebrow" data-t="gamesEyebrow">Free speaking games</span>
+            <h2 class="s-title" data-t="gamesHeadline">Warm up your voice in 2 minutes.</h2>
+            <p class="s-intro" data-t="gamesIntro">Quick, fun games to practice speaking on your own or with friends. Free with an account.</p>
+          </div>
+          <a class="btn btn-primary games-all" href="/games"><svg aria-hidden="true" class="i"><use href="#i-play"/></svg><span data-t="gamesCta">Play the games</span></a>
+        </div>
+      </div>
+      <div class="game-row">
+        <a class="game g1" href="/games/triple-step">
+          <span class="g-ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span>
+          <b data-t="gTriple">Triple Step</b>
+          <small data-t="gTripleTag">Speak on a topic while weaving in surprise words.</small>
+          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+        </a>
+        <a class="game g2" href="/games/conductor">
+          <span class="g-ic"><svg aria-hidden="true"><use href="#i-wave"/></svg></span>
+          <b data-t="gConductor">The Conductor</b>
+          <small data-t="gConductorTag">Follow the pitch from 1 (low) to 10 (high).</small>
+          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+        </a>
+        <a class="game g3" href="/games/podcast">
+          <span class="g-ic"><svg aria-hidden="true"><use href="#i-pod"/></svg></span>
+          <b data-t="gPodcast">The Podcast Game</b>
+          <small data-t="gPodcastTag">One topic, a group, and the mic keeps jumping.</small>
+          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+        </a>
+        <a class="game g4" href="/games/autocomplete">
+          <span class="g-ic"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>
+          <b data-t="gAuto">Autocomplete</b>
+          <small data-t="gAutoTag">Rapid fire: finish the sentence out loud, fast.</small>
+          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+        </a>
       </div>
     </section>
 
@@ -796,7 +918,8 @@
               <div class="field"><input id="fName" autocomplete="name" placeholder="Name" data-t-ph="name" aria-label="Name"><span class="err" data-t="nameRequired">Please enter your name.</span></div>
               <div class="field"><input id="fContact" autocomplete="email" placeholder="Email or phone" data-t-ph="contact" aria-label="Email or phone"><span class="err" data-t="contactRequired">Please add an email or phone number.</span></div>
               <div class="field"><input id="fReason" maxlength="200" placeholder="Why are you booking?" data-t-ph="reason" aria-label="Why are you booking?"><span class="err" data-t="reasonRequired">Please tell us why you are booking.</span></div>
-              <div class="field"><textarea id="fDesc" maxlength="2000" placeholder="Anything else to share? (optional)" data-t-ph="desc" aria-label="Anything else to share? (optional)"></textarea></div>
+              <button type="button" class="more-btn" id="moreBtn" aria-expanded="false" aria-controls="descField"><span aria-hidden="true">+</span> <span data-t="moreDetails">Add more details (optional)</span></button>
+              <div class="field" id="descField" hidden><textarea id="fDesc" maxlength="2000" placeholder="Anything else to share? (optional)" data-t-ph="desc" aria-label="Anything else to share? (optional)"></textarea></div>
               <button class="btn btn-primary btn-block" type="submit" id="sendBtn" data-t="send">Send Request</button>
               <p class="form-err" id="sendErr" data-t="sendFailed">We couldn't send it from here, so we opened an email with your request instead.</p>
               <p class="note" data-t="bookNote">Your request comes straight to us. We'll reply to confirm your time.</p>
