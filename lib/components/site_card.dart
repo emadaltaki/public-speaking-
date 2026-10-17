@@ -41,7 +41,7 @@ class _SiteCardState extends State<SiteCard> {
         curve: Curves.easeOutCubic,
         transform: Matrix4.translationValues(0, lifted ? -4 : 0, 0),
         decoration: BoxDecoration(
-          color: widget.color ?? Colors.white,
+          color: widget.color ?? AppColors.surface,
           borderRadius: AppStyles.cardRadius,
           border: Border.all(
             color:

@@ -76,10 +76,7 @@ class _Avatar extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        color: AppColors.navy,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: AppColors.panel, shape: BoxShape.circle),
       child: Text(
         user.initial,
         style: AppStyles.label.copyWith(
@@ -142,7 +139,7 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: AppStyles.softShadow,
       ),
@@ -163,11 +160,11 @@ class _SignedOut extends StatelessWidget {
           Container(
             width: 64,
             height: 64,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: GameColors.accentSoft,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.insights_rounded,
               color: GameColors.accent,
               size: 32,
@@ -299,7 +296,7 @@ class _History extends StatelessWidget {
       return _Card(
         child: Column(
           children: [
-            const Icon(
+            Icon(
               Icons.sports_esports_outlined,
               size: 36,
               color: GameColors.accent,

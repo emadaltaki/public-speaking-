@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
+import 'theme_controller.dart';
 
 /// Typography, spacing, radii, shadows, and the app [ThemeData].
 class AppStyles {
@@ -182,7 +183,7 @@ class AppStyles {
       }
       return AppColors.teal;
     }),
-    foregroundColor: const WidgetStatePropertyAll(AppColors.onTeal),
+    foregroundColor: WidgetStatePropertyAll(AppColors.onTeal),
     overlayColor: WidgetStatePropertyAll(
       AppColors.onTeal.withValues(alpha: 0.08),
     ),
@@ -212,7 +213,7 @@ class AppStyles {
   static ButtonStyle get secondaryButton => ButtonStyle(
     minimumSize: const WidgetStatePropertyAll(Size(48, minTapSize)),
     backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
-    foregroundColor: const WidgetStatePropertyAll(AppColors.navy),
+    foregroundColor: WidgetStatePropertyAll(AppColors.navy),
     overlayColor: WidgetStatePropertyAll(
       AppColors.navy.withValues(alpha: 0.06),
     ),
@@ -237,18 +238,22 @@ class AppStyles {
   static ThemeData get theme {
     final base = ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
+      brightness: ThemeController.isDark ? Brightness.dark : Brightness.light,
       scaffoldBackgroundColor: AppColors.offWhite,
       primaryColor: AppColors.navy,
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.navy,
-        secondary: AppColors.teal,
-        surface: AppColors.offWhite,
-        onPrimary: AppColors.onNavy,
-        onSecondary: AppColors.onTeal,
-        onSurface: AppColors.charcoal,
-        error: AppColors.error,
-      ),
+      colorScheme:
+          (ThemeController.isDark
+                  ? const ColorScheme.dark()
+                  : const ColorScheme.light())
+              .copyWith(
+                primary: AppColors.teal,
+                secondary: AppColors.teal,
+                surface: AppColors.surface,
+                onPrimary: AppColors.onTeal,
+                onSecondary: AppColors.onTeal,
+                onSurface: AppColors.charcoal,
+                error: AppColors.error,
+              ),
     );
 
     final textTheme = base.textTheme.apply(
@@ -267,7 +272,7 @@ class AppStyles {
       outlinedButtonTheme: OutlinedButtonThemeData(style: secondaryButton),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.surface,
         hintStyle: bodySmall,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
@@ -275,23 +280,23 @@ class AppStyles {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusSmall),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusSmall),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusSmall),
-          borderSide: const BorderSide(color: AppColors.teal, width: 2),
+          borderSide: BorderSide(color: AppColors.teal, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusSmall),
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: BorderSide(color: AppColors.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusSmall),
-          borderSide: const BorderSide(color: AppColors.error, width: 2),
+          borderSide: BorderSide(color: AppColors.error, width: 2),
         ),
       ),
     );

@@ -49,7 +49,7 @@ class GameSetupScaffold extends StatelessWidget {
                     constraints: const BoxConstraints(maxWidth: 560),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.surface,
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: AppStyles.elevatedShadow,
                       ),
@@ -157,7 +157,7 @@ Future<void> showHowToPlay(BuildContext context, GameInfo game) {
     builder: (context) => Dialog(
       insetPadding: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 440),
         child: SingleChildScrollView(
@@ -188,7 +188,7 @@ Future<void> showHowToPlay(BuildContext context, GameInfo game) {
                       Container(
                         width: 36,
                         height: 36,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: GameColors.accentSoft,
                           shape: BoxShape.circle,
                         ),
@@ -522,7 +522,7 @@ class GameEndCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: AppStyles.elevatedShadow,
               ),
@@ -534,11 +534,11 @@ class GameEndCard extends StatelessWidget {
                     child: Container(
                       width: 72,
                       height: 72,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: GameColors.accentSoft,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.emoji_events_rounded,
                         size: 38,
                         color: GameColors.accent,

@@ -36,7 +36,7 @@ class TestimonialsSection extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.format_quote_rounded,
                           size: 40,
                           color: AppColors.teal,
@@ -58,7 +58,7 @@ class TestimonialsSection extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 28),
-                        const Divider(height: 1, color: AppColors.border),
+                        Divider(height: 1, color: AppColors.border),
                         const SizedBox(height: 24),
                         Row(
                           children: [
@@ -68,7 +68,7 @@ class TestimonialsSection extends StatelessWidget {
                                 image: true,
                                 child: Container(
                                   padding: const EdgeInsets.all(3),
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     gradient: LinearGradient(
                                       colors: [AppColors.teal, AppColors.warm],

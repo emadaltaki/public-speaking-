@@ -61,7 +61,7 @@ class HeroSection extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 2),
               child: Icon(
                 Icons.verified_outlined,
@@ -87,7 +87,7 @@ class HeroSection extends StatelessWidget {
     final visual = _HeroPhoto(aspectRatio: desktop ? 0.92 : 1.3);
 
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         // Continues the amber header band and fades into the page.
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -152,7 +152,7 @@ class _LocationPill extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: AppColors.border),
         boxShadow: AppStyles.softShadow,
@@ -165,15 +165,11 @@ class _LocationPill extends StatelessWidget {
             Container(
               width: 22,
               height: 22,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.tealSoft,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.place_rounded,
-                size: 14,
-                color: AppColors.teal,
-              ),
+              child: Icon(Icons.place_rounded, size: 14, color: AppColors.teal),
             ),
             const SizedBox(width: 8),
             Flexible(
@@ -256,7 +252,7 @@ class _HeroPhoto extends StatelessWidget {
             bottom: -24,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: AppStyles.hoverShadow,
               ),
@@ -272,10 +268,7 @@ class _HeroPhoto extends StatelessWidget {
                         color: AppColors.warmSoft,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
-                        Icons.groups_rounded,
-                        color: AppColors.warm,
-                      ),
+                      child: Icon(Icons.groups_rounded, color: AppColors.warm),
                     ),
                     const SizedBox(width: 12),
                     Column(

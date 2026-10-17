@@ -5,6 +5,7 @@ import '../theme/styles.dart';
 import '../translations/translations.dart';
 import '../account/account_page.dart';
 import 'language_toggle.dart';
+import 'theme_toggle.dart';
 import 'nav_link_button.dart';
 import 'primary_button.dart';
 import 'skip_to_content_link.dart';
@@ -106,7 +107,8 @@ class _AppNavbarState extends State<AppNavbar> {
                             const AccountButton(),
                             const SizedBox(width: 4),
                             const LanguageToggle(),
-                            const SizedBox(width: 16),
+                            const ThemeToggle(),
+                            const SizedBox(width: 12),
                             PrimaryButton(
                               label: Translations.navJoinUs,
                               onPressed: widget.onJoinUs,
@@ -140,7 +142,7 @@ class _AppNavbarState extends State<AppNavbar> {
           ),
           if (!wide && _menuOpen)
             DecoratedBox(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.headerBandSoft,
                 border: Border(top: BorderSide(color: Color(0x222B2118))),
               ),
@@ -163,6 +165,10 @@ class _AppNavbarState extends State<AppNavbar> {
                           _closeMenu();
                         },
                       ),
+                    const Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: ThemeToggle(),
+                    ),
                     const SizedBox(height: 12),
                     PrimaryButton(
                       label: Translations.navJoinUs,

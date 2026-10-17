@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/site_content.dart';
 import '../translations/translations.dart';
 import 'faq_accordion_item.dart';
+import '../theme/colors.dart';
 import 'section_container.dart';
 import 'section_header.dart';
 
@@ -12,7 +13,7 @@ class FaqSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Colors.white,
+      color: AppColors.surface,
       child: SectionContainer(
         child: Center(
           child: ConstrainedBox(

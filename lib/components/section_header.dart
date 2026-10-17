@@ -33,7 +33,7 @@ class SectionHeader extends StatelessWidget {
     final accent = onDark ? AppColors.warm : AppColors.teal;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 760),
+      constraints: BoxConstraints(maxWidth: 760),
       child: Column(
         crossAxisAlignment: centered
             ? CrossAxisAlignment.center
@@ -51,7 +51,7 @@ class SectionHeader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Flexible(
                   child: Text(
                     eyebrow!.toUpperCase(),
@@ -60,11 +60,11 @@ class SectionHeader extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
           ],
           Text(title, style: headline, textAlign: align),
           if (intro != null) ...[
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               intro!,
               textAlign: align,
@@ -89,14 +89,18 @@ class IconBadge extends StatelessWidget {
   const IconBadge({
     super.key,
     required this.icon,
-    this.color = AppColors.teal,
-    this.background = AppColors.tealSoft,
+    this.color,
+    this.background,
     this.size = 48,
   });
 
   final IconData icon;
-  final Color color;
-  final Color background;
+
+  /// Defaults to the primary colour.
+  final Color? color;
+
+  /// Defaults to the soft primary wash.
+  final Color? background;
   final double size;
 
   @override
@@ -105,10 +109,10 @@ class IconBadge extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: background,
+        color: background ?? AppColors.tealSoft,
         borderRadius: BorderRadius.circular(size * 0.3),
       ),
-      child: Icon(icon, color: color, size: size * 0.5),
+      child: Icon(icon, color: color ?? AppColors.teal, size: size * 0.5),
     );
   }
 }

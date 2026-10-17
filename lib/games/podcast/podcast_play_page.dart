@@ -116,7 +116,7 @@ class _PodcastPlayPageState extends State<PodcastPlayPage>
           title: '${GameCatalog.podcast.title} | ${Translations.siteName}',
           color: AppColors.navy,
           child: Scaffold(
-            backgroundColor: live ? AppColors.navy : Colors.white,
+            backgroundColor: live ? AppColors.panel : AppColors.surface,
             body: Stack(
               children: [
                 SafeArea(

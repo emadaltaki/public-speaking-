@@ -129,7 +129,7 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
           title: 'The Conductor | ${Translations.siteName}',
           color: AppColors.navy,
           child: Scaffold(
-            backgroundColor: showLevel ? AppColors.navyDeep : Colors.white,
+            backgroundColor: showLevel ? AppColors.navyDeep : AppColors.surface,
             body: Stack(
               children: [
                 if (showLevel)

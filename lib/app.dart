@@ -11,6 +11,7 @@ import 'games/podcast/podcast_setup_page.dart';
 import 'games/triple_step/triple_step_setup_page.dart';
 import 'pages/home_page.dart';
 import 'theme/styles.dart';
+import 'theme/theme_controller.dart';
 import 'translations/translations.dart';
 
 class SpeakUpFearlessApp extends StatelessWidget {
@@ -22,11 +23,16 @@ class SpeakUpFearlessApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Rebuild everything when the language changes; Arabic switches the
     // layout to right-to-left through the locale.
-    return ValueListenableBuilder<String>(
-      valueListenable: Translations.language,
-      builder: (context, language, _) => MaterialApp(
-        key: ValueKey(language),
-        locale: Locale(language),
+    return ListenableBuilder(
+      listenable: Listenable.merge([
+        Translations.language,
+        ThemeController.dark,
+      ]),
+      builder: (context, _) => MaterialApp(
+        key: ValueKey(
+          '${Translations.language.value}-${ThemeController.isDark}',
+        ),
+        locale: Locale(Translations.language.value),
         supportedLocales: const [Locale('en'), Locale('ar')],
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         title: Translations.pageTitle,

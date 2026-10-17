@@ -218,7 +218,7 @@ class _ModeTabs extends StatelessWidget {
                 duration: const Duration(milliseconds: 180),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: selected ? Colors.white : Colors.transparent,
+                  color: selected ? AppColors.surface : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: selected ? AppStyles.softShadow : null,
                 ),
