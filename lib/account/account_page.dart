@@ -7,6 +7,7 @@ import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'auth_service.dart';
+import 'auth_storage.dart';
 import 'progress_store.dart';
 
 /// "Sign in" in the header, or the signed-in visitor's name linking to
@@ -215,51 +216,20 @@ class _SignedIn extends StatelessWidget {
 
   final AppUser user;
 
+  String get _firstName {
+    final n = user.shortName.trim();
+    if (n.isEmpty) return n;
+    return n[0].toUpperCase() + n.substring(1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final store = ProgressStore.instance;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _Card(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _Avatar(user: user, size: 56),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.displayName?.isNotEmpty == true
-                          ? user.displayName!
-                          : user.shortName,
-                      style: AppStyles.title.copyWith(fontSize: 22),
-                    ),
-                    if (user.email != null)
-                      Text(
-                        user.email!,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppStyles.bodySmall,
-                      ),
-                    const SizedBox(height: 8),
-                    TextButton.icon(
-                      onPressed: AuthService.signOut,
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        foregroundColor: AppColors.teal,
-                      ),
-                      icon: const Icon(Icons.logout_rounded, size: 18),
-                      label: Text(Translations.accountSignOut),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
+        _ProfileHeader(user: user, firstName: _firstName),
+        const SizedBox(height: 16),
         ValueListenableBuilder<int>(
           valueListenable: store.changes,
           builder: (context, _, _) => FutureBuilder<List<GameSession>>(
@@ -275,6 +245,226 @@ class _SignedIn extends StatelessWidget {
             },
           ),
         ),
+        const SizedBox(height: 16),
+        const _BookCard(),
+        const SizedBox(height: 8),
+        Center(
+          child: TextButton.icon(
+            onPressed: AuthService.signOut,
+            style: TextButton.styleFrom(foregroundColor: AppColors.mutedText),
+            icon: const Icon(Icons.logout_rounded, size: 18),
+            label: Text(Translations.accountSignOut),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Warm banner with the visitor's initial, a greeting and their email.
+class _ProfileHeader extends StatelessWidget {
+  const _ProfileHeader({required this.user, required this.firstName});
+
+  final AppUser user;
+  final String firstName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFC8643F), Color(0xFF8E3B22)],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF8E3B22).withValues(alpha: .35),
+            blurRadius: 30,
+            offset: const Offset(0, 14),
+            spreadRadius: -12,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: .18),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withValues(alpha: .5),
+                width: 2,
+              ),
+            ),
+            child: Text(
+              user.initial,
+              style: AppStyles.title.copyWith(
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Translations.accountHello(firstName),
+                  style: AppStyles.title.copyWith(
+                    color: Colors.white,
+                    fontSize: 23,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                if (user.email != null)
+                  Text(
+                    user.email!,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppStyles.bodySmall.copyWith(
+                      color: Colors.white.withValues(alpha: .85),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Small nudge back to booking a call.
+class _BookCard extends StatelessWidget {
+  const _BookCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: GameColors.accentSoft,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              Icons.event_available_rounded,
+              color: GameColors.accent,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Translations.accountBookTitle,
+                  style: AppStyles.label.copyWith(fontSize: 16),
+                ),
+                Text(Translations.accountBookBody, style: AppStyles.bodySmall),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          FilledButton(
+            onPressed: () => openSitePage('/#book'),
+            style: FilledButton.styleFrom(
+              backgroundColor: GameColors.accent,
+              foregroundColor: Colors.white,
+              shape: const StadiumBorder(),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+            ),
+            child: Text(Translations.accountBookCta),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The four games as colourful tiles that open each one.
+class _GameTiles extends StatelessWidget {
+  const _GameTiles();
+
+  static const _gradients = [
+    [Color(0xFFC8643F), Color(0xFF8E3B22)],
+    [Color(0xFF3F6F8E), Color(0xFF23455E)],
+    [Color(0xFF7A4E9A), Color(0xFF4A2C66)],
+    [Color(0xFFD49A4E), Color(0xFF9C6420)],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final games = GameCatalog.games.where((g) => g.available).toList();
+    return GridView(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        mainAxisExtent: 118,
+      ),
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        for (var i = 0; i < games.length; i++)
+          Material(
+            borderRadius: BorderRadius.circular(20),
+            clipBehavior: Clip.antiAlias,
+            child: Ink(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: _gradients[i % _gradients.length],
+                ),
+              ),
+              child: InkWell(
+                onTap: () => AppRoutes.open(context, games[i].route!),
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: .2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          games[i].icon,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        games[i].title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.label.copyWith(
+                          color: Colors.white,
+                          fontSize: 15.5,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -295,24 +485,13 @@ class _History extends StatelessWidget {
     if (sessions.isEmpty) {
       return _Card(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(
-              Icons.sports_esports_outlined,
-              size: 36,
-              color: GameColors.accent,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              Translations.accountNoHistory,
-              textAlign: TextAlign.center,
-              style: AppStyles.body,
-            ),
+            Text(Translations.accountStartTitle, style: AppStyles.title),
+            const SizedBox(height: 4),
+            Text(Translations.accountNoHistory, style: AppStyles.bodySmall),
             const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () => AppRoutes.open(context, AppRoutes.games),
-              style: AppStyles.primaryButton,
-              child: Text(Translations.navGames),
-            ),
+            const _GameTiles(),
           ],
         ),
       );

@@ -85,9 +85,20 @@ class Translations {
   static String get accountByGame => _l('By game', 'حسب اللعبة');
   static String get accountRecent => _l('Recent rounds', 'آخر الجولات');
   static String get accountNoHistory => _l(
-    'No rounds yet. Play a game and it will show up here.',
-    'لا توجد جولات بعد. العب لعبة وستظهر هنا.',
+    'Your rounds and speaking time will show up here.',
+    'ستظهر هنا جولاتك ووقت حديثك.',
   );
+  static String accountHello(String name) =>
+      _l('Hi, $name 👋', 'مرحبًا يا $name 👋');
+  static String get accountStartTitle =>
+      _l('Play your first game', 'العب أول لعبة لك');
+  static String get accountBookTitle =>
+      _l('Ready to practice live?', 'مستعد للتدرّب مباشرة؟');
+  static String get accountBookBody => _l(
+    'Book a free 15 minute intro call.',
+    'احجز مكالمة تعريفية مجانية لمدة 15 دقيقة.',
+  );
+  static String get accountBookCta => _l('Book', 'احجز');
   static String roundsCount(int n) => isArabic
       ? (n == 1 ? 'جولة واحدة' : '$n جولات')
       : (n == 1 ? '1 round' : '$n rounds');

@@ -168,7 +168,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Sam Rivera'), findsOneWidget);
+    expect(find.text(Translations.accountHello('Sam')), findsOneWidget);
     expect(find.text(Translations.accountRounds), findsOneWidget);
     expect(find.text('Hope'), findsOneWidget);
   });
