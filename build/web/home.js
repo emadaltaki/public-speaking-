@@ -30,6 +30,8 @@
     morningFull: 'Morning (9am to 12pm)', afternoonFull: 'Afternoon (12 to 5pm)', eveningFull: 'Evening (5 to 9pm)',
     sending: 'Sending…', subject: 'Free intro call request',
     pickSession: 'Choose your session',
+    mLead: 'Just', mDay: 'pick a day', mTime: 'pick a time', mName: 'add your name',
+    mContact: 'add an email or phone', mReason: 'tell us what you want help with',
     sIntro: 'Free intro call', sIntroMeta: '15 to 20 minutes on video',
     sSingle: 'One session', sSingleMeta: 'A good way to try it',
     sFour: '4 sessions', sFourMeta: '$45 a session, save $20',
@@ -121,7 +123,9 @@
     footerBlurb: 'مجموعة ودودة في ميسيساغا يتدرّب فيها الناس على التحدث ويرتاحون له أكثر فأكثر.',
     explore: 'استكشف', mission: 'لماذا نفعل هذا', community: 'المجتمع', privacy: 'سياسة الخصوصية', contactLabel: 'تواصل',
     copyright: '© 2026 Speak Up Fearless. جميع الحقوق محفوظة.', close: 'إغلاق',
-    stickyCta: 'احجز الآن', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب لعبة سريعة أولًا',
+    stickyCta: 'احجز الآن', almostThere: 'اقتربت!', mLead: 'بقي فقط:', mDay: 'اختيار يوم', mTime: 'اختيار وقت',
+    mName: 'كتابة اسمك', mContact: 'إضافة بريد أو هاتف', mReason: 'إخبارنا بما تريد المساعدة فيه',
+    dayMissing: 'اختر اليوم الأنسب لك.', timeMissing: 'صباحًا أم ظهرًا أم مساءً؟', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب لعبة سريعة أولًا',
     sentMail: 'أرسلنا نسخة إلى بريدك أيضًا.', afterTitle: 'وأنت تنتظر، جهّز صوتك بلعبة',
     afterSub: 'الإكمال التلقائي يستغرق دقيقتين وهو مجاني.',
     cancelPolicy: 'الظروف تتغير، ونحن نتفهم ذلك. أخبرنا قبل الجلسة بـ24 ساعة على الأقل وسننقلها إلى يوم آخر مجانًا. لديك سؤال عن الاسترداد؟ اسألنا فقط.', stickyTitle: 'مكالمة تعريفية مجانية', stickySub: 'من 15 إلى 20 دقيقة، بلا ضغط', prev: 'الصورة السابقة', next: 'الصورة التالية',
@@ -343,7 +347,38 @@
       checkChoice();
     });
   });
-  function checkChoice() { if (pickedDay >= 0 && pickedTime >= 0) $('choiceErr').classList.remove('show'); }
+  // Marks finished steps with a tick and clears hints as things get filled in.
+  function checkChoice() {
+    $('stepDay').classList.toggle('done', pickedDay >= 0);
+    $('stepTime').classList.toggle('done', pickedTime >= 0);
+    if (pickedDay >= 0) { $('dayHint').hidden = true; $('stepDay').classList.remove('need'); $('days').classList.remove('need-box'); }
+    if (pickedTime >= 0) { $('timeHint').hidden = true; $('stepTime').classList.remove('need'); document.querySelector('.times').classList.remove('need-box'); }
+    var detailsOk = ['fName', 'fContact', 'fReason'].every(function (id) { return $(id).value.trim(); });
+    $('stepDetails').classList.toggle('done', detailsOk);
+    if (detailsOk) $('stepDetails').classList.remove('need');
+    if (!$('missing').hidden) updateMissing();
+  }
+
+  // Lists what is still needed in plain words, e.g. "Just pick a day and add your name."
+  function missingItems() {
+    var items = [];
+    if (pickedDay < 0) items.push(t('mDay'));
+    if (pickedTime < 0) items.push(t('mTime'));
+    if (!$('fName').value.trim()) items.push(t('mName'));
+    if (!$('fContact').value.trim()) items.push(t('mContact'));
+    if (!$('fReason').value.trim()) items.push(t('mReason'));
+    return items;
+  }
+  function joinList(items) {
+    if (items.length < 2) return items.join('');
+    var and = lang === 'ar' ? ' و' : ' and ';
+    return items.slice(0, -1).join(lang === 'ar' ? '، ' : ', ') + and + items[items.length - 1];
+  }
+  function updateMissing() {
+    var items = missingItems();
+    $('missing').hidden = items.length === 0;
+    $('missingText').textContent = items.length ? t('mLead') + ' ' + joinList(items) + (lang === 'ar' ? '.' : '.') : '';
+  }
 
   function preferredTime() {
     var d = days[pickedDay];
@@ -359,7 +394,7 @@
     return ok;
   }
   ['fName', 'fContact', 'fReason'].forEach(function (id) {
-    $(id).addEventListener('input', function () { if ($(id).parentNode.classList.contains('bad')) fieldOk(id); });
+    $(id).addEventListener('input', function () { if ($(id).parentNode.classList.contains('bad')) fieldOk(id); checkChoice(); });
   });
 
   // ---------------------------------------------------------------- sessions
@@ -442,14 +477,28 @@
 
   $('bookForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    var choiceOk = pickedDay >= 0 && pickedTime >= 0;
-    $('choiceErr').classList.toggle('show', !choiceOk);
-    var ok = [fieldOk('fName'), fieldOk('fContact'), fieldOk('fReason')].every(Boolean) && choiceOk;
-    if (!ok) {
-      var first = !choiceOk ? $('days') : document.querySelector('.field.bad input');
-      if (first) { first.scrollIntoView({ block: 'center', behavior: 'smooth' }); if (first.focus) first.focus({ preventScroll: true }); }
+    var dayOk = pickedDay >= 0, timeOk = pickedTime >= 0;
+    var fieldsOk = [fieldOk('fName'), fieldOk('fContact'), fieldOk('fReason')].every(Boolean);
+    if (!(dayOk && timeOk && fieldsOk)) {
+      // Show exactly what is missing, right where it is, and say it in one line by the button.
+      var need = [];
+      if (!dayOk) need.push([$('stepDay'), $('days'), $('dayHint')]);
+      if (!timeOk) need.push([$('stepTime'), document.querySelector('.times'), $('timeHint')]);
+      need.forEach(function (n) {
+        n[0].classList.add('need');
+        n[2].hidden = false;
+        n[1].classList.remove('need-box'); void n[1].offsetWidth; n[1].classList.add('need-box');
+      });
+      if (!fieldsOk) $('stepDetails').classList.add('need');
+      $('missing').hidden = true; void $('missing').offsetWidth;
+      updateMissing();
+      track('booking_incomplete', { missing: missingItems().length });
+      var first = need.length ? need[0][0] : document.querySelector('.field.bad input');
+      if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      if (!need.length && first && first.focus) first.focus({ preventScroll: true });
       return;
     }
+    $('missing').hidden = true;
     var req = {
       name: $('fName').value.trim(),
       contact: $('fContact').value.trim(),
@@ -548,6 +597,8 @@
     } catch (_) {}
   }
 
+  $('stepSession').classList.add('done');
+
   $('moreBtn').addEventListener('click', function () {
     $('descField').hidden = false;
     $('moreBtn').hidden = true;
@@ -561,6 +612,8 @@
     pickedTime = -1;
     all('.time').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
     renderDays();
+    all('.step').forEach(function (s) { s.classList.remove('done', 'need'); });
+    $('missing').hidden = true;
     pickSession('intro');
     $('descField').hidden = true;
     $('moreBtn').hidden = false;
