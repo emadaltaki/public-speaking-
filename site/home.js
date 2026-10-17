@@ -31,7 +31,7 @@
     sending: 'Sending…', subject: 'Free intro call request',
     pickSession: 'Choose your session',
     mLead: 'Just', mDay: 'pick a day', mTime: 'pick a time', mName: 'add your name',
-    mContact: 'add an email or phone', mReason: 'tell us what you want help with',
+    mContact: 'add your email', mPhone: 'add a phone number', badEmail: 'That email doesn\'t look right. Please check it.', badPhone: 'Please add a phone number we can call or text.', mReason: 'tell us what you want help with',
     sIntro: 'Free intro call', sIntroMeta: '15 to 20 minutes on video',
     sSingle: 'One session', sSingleMeta: 'A good way to try it',
     sFour: '4 sessions', sFourMeta: '$45 a session, save $20',
@@ -114,8 +114,9 @@
     pickDay: 'اختر يومًا', pickTime: 'اختر وقتًا', morning: 'صباحًا', afternoon: 'ظهرًا', evening: 'مساءً',
     morningFull: 'صباحًا (من 9 إلى 12)', afternoonFull: 'ظهرًا (من 12 إلى 5)', eveningFull: 'مساءً (من 5 إلى 9)',
     choiceRequired: 'يرجى اختيار يوم ووقت.', yourDetails: 'عنك',
-    name: 'اسمك', contact: 'البريد أو الهاتف', reason: 'بماذا تريد أن نساعدك؟', desc: 'هل هناك شيء آخر تود أن نعرفه؟',
-    nameRequired: 'يرجى كتابة اسمك.', contactRequired: 'أضف بريدًا أو رقم هاتف لنتمكن من الرد.', reasonRequired: 'أخبرنا قليلًا بما تريد المساعدة فيه.',
+    name: 'اسمك', contact: 'البريد الإلكتروني', phone: 'رقم الهاتف', phoneRequired: 'يرجى إضافة رقم هاتف.',
+    badEmail: 'يبدو أن البريد غير صحيح. يرجى التحقق منه.', badPhone: 'أضف رقم هاتف يمكننا الاتصال به أو مراسلته.', reason: 'بماذا تريد أن نساعدك؟', desc: 'هل هناك شيء آخر تود أن نعرفه؟',
+    nameRequired: 'يرجى كتابة اسمك.', contactRequired: 'يرجى إضافة بريدك الإلكتروني.', reasonRequired: 'أخبرنا قليلًا بما تريد المساعدة فيه.',
     send: 'أرسل الطلب', sending: 'جارٍ الإرسال…', sendFailed: 'لم نتمكن من الإرسال من هنا، لذلك فتحنا رسالة بريد تحتوي على طلبك.',
     bookNote: 'يصلنا طلبك مباشرة، وسنرد عليك قريبًا للتأكيد.',
     sentTitle: 'وصلنا طلبك، شكرًا لك!', sentBody: 'سنتواصل معك قريبًا لتأكيد الموعد.', again: 'أرسل طلبًا آخر',
@@ -124,7 +125,7 @@
     explore: 'استكشف', mission: 'لماذا نفعل هذا', community: 'المجتمع', privacy: 'سياسة الخصوصية', contactLabel: 'تواصل',
     copyright: '© 2026 Speak Up Fearless. جميع الحقوق محفوظة.', close: 'إغلاق',
     stickyCta: 'احجز الآن', almostThere: 'اقتربت!', mLead: 'بقي فقط:', mDay: 'اختيار يوم', mTime: 'اختيار وقت',
-    mName: 'كتابة اسمك', mContact: 'إضافة بريد أو هاتف', mReason: 'إخبارنا بما تريد المساعدة فيه',
+    mName: 'كتابة اسمك', mContact: 'إضافة بريدك', mPhone: 'إضافة رقم هاتف', mReason: 'إخبارنا بما تريد المساعدة فيه',
     dayMissing: 'اختر اليوم الأنسب لك.', timeMissing: 'صباحًا أم ظهرًا أم مساءً؟', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب لعبة سريعة أولًا',
     sentMail: 'أرسلنا نسخة إلى بريدك أيضًا.', afterTitle: 'وأنت تنتظر، جهّز صوتك بلعبة',
     afterSub: 'الإكمال التلقائي يستغرق دقيقتين وهو مجاني.',
@@ -353,7 +354,7 @@
     $('stepTime').classList.toggle('done', pickedTime >= 0);
     if (pickedDay >= 0) { $('dayHint').hidden = true; $('stepDay').classList.remove('need'); $('days').classList.remove('need-box'); }
     if (pickedTime >= 0) { $('timeHint').hidden = true; $('stepTime').classList.remove('need'); document.querySelector('.times').classList.remove('need-box'); }
-    var detailsOk = ['fName', 'fContact', 'fReason'].every(function (id) { return $(id).value.trim(); });
+    var detailsOk = ['fName', 'fContact', 'fPhone', 'fReason'].every(function (id) { return $(id).value.trim(); });
     $('stepDetails').classList.toggle('done', detailsOk);
     if (detailsOk) $('stepDetails').classList.remove('need');
     if (!$('missing').hidden) updateMissing();
@@ -365,7 +366,8 @@
     if (pickedDay < 0) items.push(t('mDay'));
     if (pickedTime < 0) items.push(t('mTime'));
     if (!$('fName').value.trim()) items.push(t('mName'));
-    if (!$('fContact').value.trim()) items.push(t('mContact'));
+    if (!emailOk($('fContact').value)) items.push(t('mContact'));
+    if (!phoneOk($('fPhone').value)) items.push(t('mPhone'));
     if (!$('fReason').value.trim()) items.push(t('mReason'));
     return items;
   }
@@ -387,13 +389,19 @@
     return wd + ', ' + EXTRA_EN.months[d.getMonth()] + ' ' + d.getDate() + ', ' + EXTRA_EN[timeKeys[pickedTime]];
   }
 
+  function emailOk(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+  function phoneOk(v) { return v.replace(/\D/g, '').length >= 7; }
   function fieldOk(id) {
     var input = $(id);
-    var ok = input.value.trim().length > 0;
+    var v = input.value.trim();
+    var ok = id === 'fContact' ? emailOk(v) : id === 'fPhone' ? phoneOk(v) : v.length > 0;
+    var err = input.parentNode.querySelector('.err');
+    if (id === 'fContact') err.textContent = v ? t('badEmail') : t('contactRequired');
+    if (id === 'fPhone') err.textContent = v ? t('badPhone') : t('phoneRequired');
     input.parentNode.classList.toggle('bad', !ok);
     return ok;
   }
-  ['fName', 'fContact', 'fReason'].forEach(function (id) {
+  ['fName', 'fContact', 'fPhone', 'fReason'].forEach(function (id) {
     $(id).addEventListener('input', function () { if ($(id).parentNode.classList.contains('bad')) fieldOk(id); checkChoice(); });
   });
 
@@ -478,7 +486,7 @@
   $('bookForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var dayOk = pickedDay >= 0, timeOk = pickedTime >= 0;
-    var fieldsOk = [fieldOk('fName'), fieldOk('fContact'), fieldOk('fReason')].every(Boolean);
+    var fieldsOk = [fieldOk('fName'), fieldOk('fContact'), fieldOk('fPhone'), fieldOk('fReason')].every(Boolean);
     if (!(dayOk && timeOk && fieldsOk)) {
       // Show exactly what is missing, right where it is, and say it in one line by the button.
       var need = [];
@@ -501,7 +509,8 @@
     $('missing').hidden = true;
     var req = {
       name: $('fName').value.trim(),
-      contact: $('fContact').value.trim(),
+      email: $('fContact').value.trim(),
+      phone: $('fPhone').value.trim(),
       reason: $('fReason').value.trim(),
       description: $('fDesc').value.trim(),
       requestedCourse: pickedSession,
@@ -512,10 +521,11 @@
     var payload = {
       _subject: subject, _template: 'table', _captcha: 'false',
       'Requested session': req.requestedLabel, 'Preferred time': req.preferredTime,
-      'Name': req.name, 'Email or phone': req.contact, 'Reason': req.reason
+      'Name': req.name, 'Email': req.email, 'Phone': req.phone, 'Reason': req.reason
     };
     if (req.description) payload['More details'] = req.description;
-    var visitorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.contact) ? req.contact : '';
+    req.contact = req.email + ' / ' + req.phone;
+    var visitorEmail = req.email;
     if (visitorEmail) {
       // FormSubmit emails this message to the address in the "email" field.
       payload.email = visitorEmail;
@@ -551,7 +561,7 @@
         }
         // Fall back to an email draft so the request isn't lost.
         var body = 'Hi! I would like to book: ' + req.requestedLabel + '\n\n' +
-          'Preferred time: ' + req.preferredTime + '\nName: ' + req.name + '\nEmail or phone: ' + req.contact +
+          'Preferred time: ' + req.preferredTime + '\nName: ' + req.name + '\nEmail: ' + req.email + '\nPhone: ' + req.phone +
           '\nReason: ' + req.reason + '\n' + (req.description ? '\nMore details:\n' + req.description + '\n' : '');
         $('sendErr').classList.add('show');
         location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
