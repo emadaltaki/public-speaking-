@@ -189,35 +189,28 @@ Future<void> showHowToPlay(BuildContext context, GameInfo game) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 36,
-                        height: 36,
+                        width: 30,
+                        height: 30,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: GameColors.accentSoft,
+                          color: GameColors.accent,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
-                          game.howToPlay[i].icon,
-                          size: 18,
-                          color: GameColors.accentDark,
+                        child: Text(
+                          '${i + 1}',
+                          style: AppStyles.label.copyWith(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 7),
-                          child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${i + 1}. ',
-                                  style: AppStyles.label.copyWith(
-                                    color: GameColors.accentDark,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                TextSpan(text: game.howToPlay[i].text),
-                              ],
-                            ),
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            game.howToPlay[i].text,
                             style: AppStyles.body.copyWith(height: 1.45),
                           ),
                         ),

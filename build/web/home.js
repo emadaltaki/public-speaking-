@@ -192,6 +192,10 @@
   }
   function renderAccount() {
     var user = signedInUser();
+    all('a.game').forEach(function (a) {
+      var game = a.dataset.game || (a.dataset.game = a.getAttribute('href'));
+      a.href = user ? game : '/login?mode=signup&next=' + encodeURIComponent(game);
+    });
     var link = $('acct');
     var label = link.querySelector('.acct-label');
     if (user) {
