@@ -218,6 +218,11 @@ class Translations {
   static String get gamesPlay => _l('Play', 'العب');
   static String get gamesHowToPlay => _l('How to play', 'طريقة اللعب');
   static String get gamesGotIt => _l('Got it!', 'فهمت!');
+  static String get howToNext => _l('Next', 'التالي');
+  static String get howToBack => _l('Back', 'رجوع');
+  static String get howToLetsPlay => _l("Let's play!", 'هيا نلعب!');
+  static String howToStepOf(int n, int total) =>
+      _l('Step $n of $total', 'الخطوة $n من $total');
   static String get gamesImReady => _l("I'M READY", 'أنا جاهز');
   static String get gamesCueReady => _l('Ready?', 'مستعد؟');
   static String get gamesCueSet => _l('Set.', 'استعد.');

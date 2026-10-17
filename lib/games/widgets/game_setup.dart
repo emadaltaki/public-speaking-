@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../theme/colors.dart';
 import '../../theme/styles.dart';
 import '../../translations/translations.dart';
 import '../../account/account_page.dart';
+import '../../account/auth_storage.dart';
 import '../game_catalog.dart';
 import '../game_theme.dart';
 import '../games_hub_page.dart';
@@ -59,6 +62,7 @@ class GameSetupScaffold extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
+                            HowToPlayFirstTime(game: game),
                             _header(context),
                             const SizedBox(height: 24),
                             ...children,
@@ -153,103 +157,427 @@ class HowToPlayButton extends StatelessWidget {
   }
 }
 
-/// Shows the game's "How to play" steps in a simple popup.
+/// Shows the game's "How to play" as short cards you can swipe through.
 Future<void> showHowToPlay(BuildContext context, GameInfo game) {
   return showDialog<void>(
     context: context,
     builder: (context) => Dialog(
       insetPadding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       backgroundColor: AppColors.surface,
+      clipBehavior: Clip.antiAlias,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 440),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: HowToPlayCards(game: game),
+      ),
+    ),
+  );
+}
+
+/// Opens "How to play" by itself the first time someone opens a game.
+class HowToPlayFirstTime extends StatefulWidget {
+  const HowToPlayFirstTime({super.key, required this.game});
+
+  final GameInfo game;
+
+  /// Turned off in tests so setup screens open without the popup.
+  static bool enabled = true;
+
+  @override
+  State<HowToPlayFirstTime> createState() => _HowToPlayFirstTimeState();
+}
+
+class _HowToPlayFirstTimeState extends State<HowToPlayFirstTime> {
+  @override
+  void initState() {
+    super.initState();
+    final key = 'speakupfearless.howto.${widget.game.id}';
+    if (!HowToPlayFirstTime.enabled ||
+        widget.game.howToPlay.isEmpty ||
+        readLocal(key) != null) {
+      return;
+    }
+    writeLocal(key, '1');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) showHowToPlay(context, widget.game);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
+}
+
+/// One card per step, with a picture, dots and Next / Let's play buttons.
+class HowToPlayCards extends StatefulWidget {
+  const HowToPlayCards({super.key, required this.game});
+
+  final GameInfo game;
+
+  /// Turned off in tests, where endless animations never settle.
+  static bool animate = true;
+
+  @override
+  State<HowToPlayCards> createState() => _HowToPlayCardsState();
+}
+
+class _HowToPlayCardsState extends State<HowToPlayCards> {
+  final _pages = PageController();
+  int _page = 0;
+
+  List<HowToStep> get _steps => widget.game.howToPlay;
+  bool get _last => _page == _steps.length - 1;
+
+  @override
+  void dispose() {
+    _pages.dispose();
+    super.dispose();
+  }
+
+  void _go(int page) => _pages.animateToPage(
+    page,
+    duration: const Duration(milliseconds: 320),
+    curve: Curves.easeOutCubic,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final game = widget.game;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(22, 18, 8, 0),
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Icon(game.icon, color: GameColors.accent),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      '${Translations.gamesHowToPlay}: ${game.title}',
-                      style: AppStyles.title.copyWith(fontSize: 19),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Translations.gamesHowToPlay.toUpperCase(),
+                      style: AppStyles.label.copyWith(
+                        color: GameColors.accent,
+                        fontSize: 12,
+                        letterSpacing: 1.2,
+                      ),
                     ),
-                  ),
-                ],
+                    Text(
+                      game.title,
+                      style: AppStyles.title.copyWith(fontSize: 21),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 18),
-              for (var i = 0; i < game.howToPlay.length; i++)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: GameColors.accent,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          '${i + 1}',
-                          style: AppStyles.label.copyWith(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Text(
-                            game.howToPlay[i].text,
-                            style: AppStyles.body.copyWith(height: 1.45),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              if (game.tip != null) ...[
-                const SizedBox(height: 4),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppColors.warmSoft,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Text(
-                    '💡 ${game.tip}',
-                    style: AppStyles.bodySmall.copyWith(color: AppColors.navy),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 20),
-              FilledButton(
+              IconButton(
+                tooltip: Translations.privacyClose,
                 onPressed: () => Navigator.of(context).pop(),
-                style: FilledButton.styleFrom(
-                  backgroundColor: GameColors.accent,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: const StadiumBorder(),
-                  textStyle: AppStyles.label.copyWith(fontSize: 16),
-                ),
-                child: Text(Translations.gamesGotIt),
+                icon: const Icon(Icons.close_rounded),
               ),
             ],
           ),
         ),
+        SizedBox(
+          height: 300,
+          child: PageView.builder(
+            controller: _pages,
+            itemCount: _steps.length,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemBuilder: (context, i) => _StepCard(
+              game: game,
+              step: _steps[i],
+              index: i,
+              count: _steps.length,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(22, 4, 22, 0),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: _last && game.tip != null
+                ? Container(
+                    key: const ValueKey('tip'),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.warmSoft,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Text(
+                      '💡 ${game.tip}',
+                      style: AppStyles.bodySmall.copyWith(
+                        color: AppColors.navy,
+                      ),
+                    ),
+                  )
+                : const SizedBox(key: ValueKey('none'), height: 0),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(22, 14, 22, 20),
+          child: Row(
+            children: [
+              for (var i = 0; i < _steps.length; i++)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 220),
+                  margin: const EdgeInsetsDirectional.only(end: 6),
+                  width: i == _page ? 22 : 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: i == _page ? GameColors.accent : GameColors.track,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                ),
+              const Spacer(),
+              if (_page > 0)
+                TextButton(
+                  onPressed: () => _go(_page - 1),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.mutedText,
+                  ),
+                  child: Text(Translations.howToBack),
+                ),
+              const SizedBox(width: 6),
+              FilledButton(
+                onPressed: _last
+                    ? () => Navigator.of(context).pop()
+                    : () => _go(_page + 1),
+                style: FilledButton.styleFrom(
+                  backgroundColor: GameColors.accent,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(0, 46),
+                  padding: const EdgeInsets.symmetric(horizontal: 22),
+                  shape: const StadiumBorder(),
+                  textStyle: AppStyles.label.copyWith(fontSize: 15.5),
+                ),
+                child: Text(
+                  _last ? Translations.howToLetsPlay : Translations.howToNext,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StepCard extends StatelessWidget {
+  const _StepCard({
+    required this.game,
+    required this.step,
+    required this.index,
+    required this.count,
+  });
+
+  final GameInfo game;
+  final HowToStep step;
+  final int index;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(22, 12, 22, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 150,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(22),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [GameColors.accentSoft, AppColors.warmSoft],
+              ),
+            ),
+            child: Stack(
+              children: [
+                PositionedDirectional(
+                  top: 12,
+                  start: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                    child: Text(
+                      Translations.howToStepOf(index + 1, count),
+                      style: AppStyles.label.copyWith(
+                        fontSize: 12,
+                        color: GameColors.accentDark,
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: game.id == 'conductor' && index > 0
+                      ? const _PitchDemo()
+                      : _Pulse(
+                          child: Container(
+                            width: 76,
+                            height: 76,
+                            decoration: BoxDecoration(
+                              color: GameColors.accent,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: GameColors.accent.withValues(
+                                    alpha: .35,
+                                  ),
+                                  blurRadius: 24,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              step.icon,
+                              color: Colors.white,
+                              size: 36,
+                            ),
+                          ),
+                        ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            step.text,
+            textAlign: TextAlign.center,
+            style: AppStyles.body.copyWith(
+              fontSize: 17,
+              height: 1.45,
+              color: AppColors.navy,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
-    ),
+    );
+  }
+}
+
+/// Gently grows and shrinks its child so the picture feels alive.
+class _Pulse extends StatefulWidget {
+  const _Pulse({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_Pulse> createState() => _PulseState();
+}
+
+class _PulseState extends State<_Pulse> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1400),
   );
+
+  @override
+  void initState() {
+    super.initState();
+    if (HowToPlayCards.animate) _c.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ScaleTransition(
+    scale: Tween(
+      begin: .94,
+      end: 1.06,
+    ).animate(CurvedAnimation(parent: _c, curve: Curves.easeInOut)),
+    child: widget.child,
+  );
+}
+
+/// The Conductor in miniature: the number changes and the voice bars follow.
+class _PitchDemo extends StatefulWidget {
+  const _PitchDemo();
+
+  @override
+  State<_PitchDemo> createState() => _PitchDemoState();
+}
+
+class _PitchDemoState extends State<_PitchDemo> {
+  static const _levels = [2, 8, 5, 10, 1, 7];
+  Timer? _timer;
+  int _i = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (HowToPlayCards.animate) {
+      _timer = Timer.periodic(const Duration(milliseconds: 1300), (_) {
+        if (mounted) setState(() => _i = (_i + 1) % _levels.length);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final level = _levels[_i];
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          transitionBuilder: (child, a) =>
+              ScaleTransition(scale: a, child: child),
+          child: Text(
+            '$level',
+            key: ValueKey(level),
+            style: AppStyles.title.copyWith(
+              fontSize: 64,
+              height: 1,
+              color: GameColors.accentDark,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+        const SizedBox(width: 18),
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              for (var b = 1; b <= 10; b++)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutBack,
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  width: 8,
+                  height: 8.0 + b * 6,
+                  decoration: BoxDecoration(
+                    color: b <= level
+                        ? GameColors.accent
+                        : GameColors.accent.withValues(alpha: .18),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 /// Text fields for player names, used by multiplayer games.

@@ -215,23 +215,25 @@
 
       <div class="or" id="or"></div>
 
-      <form id="form" novalidate>
+      <!-- A real sign-in form (method, action, names, autocomplete) so the phone's
+           password manager offers to save and fill the email and password. -->
+      <form id="form" method="post" action="/login" autocomplete="on" novalidate>
         <div id="nameRow" class="hidden">
           <label for="name" id="nameLabel"></label>
           <div class="field">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            <input id="name" autocomplete="name">
+            <input id="name" name="name" autocomplete="name">
           </div>
         </div>
         <label for="email" id="emailLabel"></label>
         <div class="field">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>
-          <input id="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" placeholder="you@example.com" required>
+          <input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="you@example.com" required>
         </div>
         <label for="password" id="passwordLabel"></label>
         <div class="field">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-          <input id="password" type="password" autocomplete="current-password" required minlength="6">
+          <input id="password" name="password" type="password" autocomplete="current-password" required minlength="6">
           <button class="peek" id="peek" type="button"></button>
         </div>
         <div class="forgot-row" id="forgotRow"><button class="link" id="forgot" type="button"></button></div>
@@ -419,6 +421,17 @@
         setTimeout(() => reject({ code: 'app/timeout' }), ms))]);
     }
     function done() { location.replace(next); }
+    // Asks the browser to save the email and password (Chrome and Android show
+    // a "Save password?" prompt; iPhone Safari offers it from the form itself).
+    async function rememberLogin(email, password, name) {
+      $('password').type = 'password';
+      try {
+        if (window.PasswordCredential && navigator.credentials && navigator.credentials.store) {
+          const cred = new PasswordCredential({ id: email, password, name: name || email });
+          await Promise.race([navigator.credentials.store(cred), new Promise((r) => setTimeout(r, 3000))]);
+        }
+      } catch (_) {}
+    }
     // Creates (or refreshes) the visitor's account on the backend so their
     // profile exists before they play. Never blocks sign-in for long: if the
     // API is slow or down, the site carries on and the account is created on
@@ -476,9 +489,11 @@
           // Store the updated profile so the site sees the name.
           await auth.updateCurrentUser(cred.user);
           await syncAccount(cred.user, name);
+          await rememberLogin(email, password, name);
         } else {
           const cred = await withTimeout(signInWithEmailAndPassword(auth, email, password), 25000);
           await syncAccount(cred.user);
+          await rememberLogin(email, password);
         }
         done();
       } catch (e) { fail(e); }

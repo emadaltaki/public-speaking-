@@ -125,13 +125,16 @@ void main() {
 
     await tester.tap(find.text(Translations.gamesHowToPlay).first);
     await tester.pumpAndSettle();
-    expect(
-      find.text('${Translations.gamesHowToPlay}: Triple Step'),
-      findsOneWidget,
-    );
-    await tester.tap(find.text(Translations.gamesGotIt));
+    // Swipeable cards: step through to the end, then start playing.
+    expect(find.text(Translations.howToStepOf(1, 4)), findsOneWidget);
+    for (var i = 0; i < 3; i++) {
+      await tester.tap(find.text(Translations.howToNext));
+      await tester.pumpAndSettle();
+    }
+    expect(find.text(Translations.howToStepOf(4, 4)), findsOneWidget);
+    await tester.tap(find.text(Translations.howToLetsPlay));
     await tester.pumpAndSettle();
-    expect(find.text(Translations.gamesGotIt), findsNothing);
+    expect(find.text(Translations.howToLetsPlay), findsNothing);
   });
 
   testWidgets('podcast: ready, then a name to speak, then time is up', (
