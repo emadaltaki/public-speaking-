@@ -99,6 +99,15 @@ class Translations {
     'احجز مكالمة تعريفية مجانية لمدة 15 دقيقة.',
   );
   static String get accountBookCta => _l('Book', 'احجز');
+  static String get accountPhotoAdd => _l('Add a photo', 'أضف صورة');
+  static String get accountPhotoChange => _l('Change photo', 'غيّر الصورة');
+  static String get accountPhotoRemove => _l('Remove photo', 'احذف الصورة');
+  static String get accountPhotoSaved =>
+      _l('Your photo is saved.', 'تم حفظ صورتك.');
+  static String get accountPhotoLocal => _l(
+    "Saved on this device. We'll sync it to your account soon.",
+    'حُفظت على هذا الجهاز، وسنحفظها في حسابك قريبًا.',
+  );
   static String roundsCount(int n) => isArabic
       ? (n == 1 ? 'جولة واحدة' : '$n جولات')
       : (n == 1 ? '1 round' : '$n rounds');

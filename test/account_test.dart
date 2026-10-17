@@ -7,6 +7,7 @@ import 'package:http/testing.dart';
 import 'package:speak_up_fearless/account/account_page.dart';
 import 'package:speak_up_fearless/account/auth_service.dart';
 import 'package:speak_up_fearless/account/auth_storage.dart';
+import 'package:speak_up_fearless/account/avatar_store.dart';
 import 'package:speak_up_fearless/account/progress_store.dart';
 import 'package:speak_up_fearless/translations/translations.dart';
 
@@ -147,6 +148,26 @@ void main() {
       hasLength(1),
     );
     expect(history.any((s) => s.gameId == 'podcast'), isTrue);
+    AuthService.signOut();
+  });
+
+  test('profile photo is cached and sent to the backend', () async {
+    _signIn();
+    late http.Request sent;
+    AvatarStore.client = MockClient((req) async {
+      sent = req;
+      return http.Response('{}', 200);
+    });
+    const photo = 'data:image/jpeg;base64,AAAA';
+    expect(await AvatarStore.save(photo), isTrue);
+    expect(sent.method, 'PATCH');
+    expect(sent.url.path, '/v1/me');
+    expect(jsonDecode(sent.body)['avatar'], photo);
+    expect(AvatarStore.photo.value, photo);
+    await AvatarStore.save(null);
+    expect(jsonDecode(sent.body)['avatar'], '');
+    expect(AvatarStore.photo.value, isNull);
+    AvatarStore.client = MockClient((_) async => http.Response('{}', 404));
     AuthService.signOut();
   });
 
