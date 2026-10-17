@@ -2,8 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
-import '../triple_step/triple_step_data.dart';
-import '../triple_step/triple_step_game.dart' show TopicDeck;
+import '../topics.dart';
 
 class ConductorSettings {
   const ConductorSettings({
@@ -19,7 +18,7 @@ class ConductorSettings {
 
   /// "General" draws from the full topic list; other sets turn one of their
   /// words into the topic.
-  static const String generalSet = 'General';
+  static const String generalSet = generalWordSet;
 
   final int timerSeconds;
   final bool suggestTitle;
@@ -103,15 +102,11 @@ class ConductorGame extends ChangeNotifier {
     level = _randomLevel(avoid: null);
   }
 
-  String _pickTopic() {
-    if (!settings.suggestTitle) return 'Your Own Topic';
-    final words = TripleStepData.wordSets[settings.wordSet];
-    if (settings.wordSet == ConductorSettings.generalSet || words == null) {
-      return TopicDeck.shared.draw(_random);
-    }
-    final word = words[_random.nextInt(words.length)];
-    return word[0].toUpperCase() + word.substring(1);
-  }
+  String _pickTopic() => pickGameTopic(
+    suggestTitle: settings.suggestTitle,
+    wordSet: settings.wordSet,
+    random: _random,
+  );
 
   /// Picks a level that differs clearly from [avoid], so every change is
   /// noticeable.

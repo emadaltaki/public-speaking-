@@ -109,14 +109,11 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(
-      find.text(Translations.conductorReady.toUpperCase()),
-      findsOneWidget,
-    );
+    expect(find.text(Translations.gamesCueReady), findsOneWidget);
 
-    await tester.tap(find.text(Translations.conductorStart));
+    await tester.tap(find.text(Translations.gamesImReady));
     await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('3'), findsOneWidget);
+    expect(find.text(Translations.gamesCueReady), findsOneWidget);
 
     await tester.pump(const Duration(seconds: 4));
     expect(

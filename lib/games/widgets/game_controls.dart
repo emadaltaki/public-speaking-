@@ -170,3 +170,85 @@ class GameStartButton extends StatelessWidget {
     );
   }
 }
+
+/// Single Player / Multiplayer switch.
+class GameModeTabs extends StatelessWidget {
+  const GameModeTabs({
+    super.key,
+    required this.multiplayer,
+    required this.onChanged,
+    required this.singleLabel,
+    required this.multiLabel,
+  });
+
+  final bool multiplayer;
+  final ValueChanged<bool> onChanged;
+  final String singleLabel;
+  final String multiLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget tab(bool value, IconData icon, String label) {
+      final selected = multiplayer == value;
+      return Expanded(
+        child: Semantics(
+          selected: selected,
+          button: true,
+          child: GestureDetector(
+            onTap: () => onChanged(value),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: selected ? Colors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: selected ? AppStyles.softShadow : null,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 18,
+                      color: selected
+                          ? GameColors.accentDark
+                          : AppColors.mutedText,
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        label,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppStyles.label.copyWith(
+                          color: selected
+                              ? AppColors.navy
+                              : AppColors.mutedText,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: GameColors.track,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          tab(false, Icons.person_rounded, singleLabel),
+          tab(true, Icons.groups_rounded, multiLabel),
+        ],
+      ),
+    );
+  }
+}

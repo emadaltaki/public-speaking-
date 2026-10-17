@@ -8,7 +8,7 @@ import '../../theme/colors.dart';
 import '../../theme/styles.dart';
 import '../../translations/translations.dart';
 import '../game_catalog.dart';
-import '../game_theme.dart';
+import '../widgets/game_setup.dart';
 import 'conductor_game.dart';
 
 class ConductorPlayPage extends StatefulWidget {
@@ -105,27 +105,34 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
           title: 'The Conductor | ${Translations.siteName}',
           color: AppColors.navy,
           child: Scaffold(
-            backgroundColor: AppColors.navyDeep,
+            backgroundColor: showLevel ? AppColors.navyDeep : Colors.white,
             body: Stack(
               children: [
-                Positioned.fill(
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween(end: (showLevel ? _game.level : 4).toDouble()),
-                    duration: const Duration(milliseconds: 700),
-                    curve: Curves.easeInOut,
-                    builder: (context, level, _) => CustomPaint(
-                      painter: PitchBackgroundPainter(
-                        level: level,
-                        phase: _wave,
+                if (showLevel)
+                  Positioned.fill(
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(
+                        end: (showLevel ? _game.level : 4).toDouble(),
+                      ),
+                      duration: const Duration(milliseconds: 700),
+                      curve: Curves.easeInOut,
+                      builder: (context, level, _) => CustomPaint(
+                        painter: PitchBackgroundPainter(
+                          level: level,
+                          phase: _wave,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 SafeArea(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _TopBar(onBack: _back, onExit: _exit),
+                      GamePlayTopBar(
+                        onBack: _back,
+                        onExit: _exit,
+                        dark: showLevel,
+                      ),
                       Expanded(child: Center(child: _centre(wide))),
                       if (showLevel) _bottomBar(wide),
                     ],
@@ -133,9 +140,12 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
                 ),
                 if (_game.isOver)
                   Positioned.fill(
-                    child: _Finished(
-                      spoken: _game.elapsed,
-                      onNext: _game.nextRound,
+                    child: GameEndCard(
+                      title: Translations.tripleStepTimeUp,
+                      message:
+                          'You spoke for ${gameClock(_game.elapsed).replaceFirst(RegExp('^0'), '')}.',
+                      primaryLabel: Translations.tripleStepNextTopic,
+                      onPrimary: _game.nextRound,
                       onRetry: _game.retry,
                       onSettings: _back,
                     ),
@@ -149,84 +159,18 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
   }
 
   Widget _centre(bool wide) {
-    final white = AppStyles.display.copyWith(color: Colors.white);
     switch (_game.phase) {
       case ConductorPhase.ready:
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                Translations.conductorReady.toUpperCase(),
-                style: AppStyles.eyebrow.copyWith(
-                  color: GameColors.accent,
-                  fontSize: 16,
-                  letterSpacing: 3,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                _game.topic.toUpperCase(),
-                textAlign: TextAlign.center,
-                style: white.copyWith(fontSize: wide ? 56 : 34),
-              ),
-              const SizedBox(height: 16),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 520),
-                child: Text(
-                  Translations.conductorReadyHint,
-                  textAlign: TextAlign.center,
-                  style: AppStyles.body.copyWith(
-                    color: Colors.white.withValues(alpha: 0.8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              FilledButton.icon(
-                onPressed: _game.start,
-                style: FilledButton.styleFrom(
-                  backgroundColor: GameColors.accent,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(220, 58),
-                  shape: const StadiumBorder(),
-                  textStyle: AppStyles.label.copyWith(
-                    fontSize: 17,
-                    letterSpacing: 1.4,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                icon: const Icon(Icons.play_arrow_rounded, size: 26),
-                label: const Text(Translations.conductorStart),
-              ),
-            ],
-          ),
-        );
       case ConductorPhase.countdown:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              _game.topic.toUpperCase(),
-              textAlign: TextAlign.center,
-              style: white.copyWith(fontSize: wide ? 32 : 24),
-            ),
-            const SizedBox(height: 12),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
-              transitionBuilder: (child, a) =>
-                  ScaleTransition(scale: a, child: child),
-              child: Text(
-                '${_game.countdownNumber}',
-                key: ValueKey(_game.countdownNumber),
-                style: white.copyWith(
-                  fontSize: wide ? 220 : 160,
-                  fontWeight: FontWeight.w900,
-                  height: 1,
-                ),
-              ),
-            ),
-          ],
+        final waiting = _game.phase == ConductorPhase.ready;
+        return GameReadyView(
+          topic: _game.topic,
+          cue: GameReadyView.cueFor(
+            waiting: waiting,
+            countdownNumber: _game.countdownNumber,
+          ),
+          hint: waiting ? Translations.conductorReadyHint : null,
+          onStart: waiting ? _game.start : null,
         );
       case ConductorPhase.running:
       case ConductorPhase.paused:
@@ -384,48 +328,6 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
   }
 }
 
-class _TopBar extends StatelessWidget {
-  const _TopBar({required this.onBack, required this.onExit});
-
-  final VoidCallback onBack;
-  final VoidCallback onExit;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = IconButton.styleFrom(
-      backgroundColor: Colors.white.withValues(alpha: 0.15),
-      foregroundColor: Colors.white,
-      minimumSize: const Size(48, 48),
-    );
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      child: Row(
-        children: [
-          IconButton(
-            tooltip: Translations.tripleStepBackToSettings,
-            onPressed: onBack,
-            style: style,
-            icon: const Icon(Icons.arrow_back_rounded),
-          ),
-          const Spacer(),
-          TextButton(
-            onPressed: onExit,
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.white.withValues(alpha: 0.15),
-              minimumSize: const Size(48, 48),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              shape: const StadiumBorder(),
-              textStyle: AppStyles.label,
-            ),
-            child: const Text('× (Esc)'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _RoundIcon extends StatelessWidget {
   const _RoundIcon({
     required this.icon,
@@ -562,108 +464,4 @@ class PitchBackgroundPainter extends CustomPainter {
   @override
   bool shouldRepaint(PitchBackgroundPainter old) =>
       old.level != level || old.phase != phase;
-}
-
-class _Finished extends StatelessWidget {
-  const _Finished({
-    required this.spoken,
-    required this.onNext,
-    required this.onRetry,
-    required this.onSettings,
-  });
-
-  final Duration spoken;
-  final VoidCallback onNext;
-  final VoidCallback onRetry;
-  final VoidCallback onSettings;
-
-  @override
-  Widget build(BuildContext context) {
-    final clock =
-        '${spoken.inMinutes}:${(spoken.inSeconds % 60).toString().padLeft(2, '0')}';
-    return ColoredBox(
-      color: AppColors.navyDeep.withValues(alpha: 0.55),
-      child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 440),
-            child: Container(
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(28),
-                boxShadow: AppStyles.elevatedShadow,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 72,
-                      height: 72,
-                      decoration: const BoxDecoration(
-                        color: GameColors.accentSoft,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.emoji_events_rounded,
-                        size: 38,
-                        color: GameColors.accent,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    Translations.tripleStepTimeUp,
-                    textAlign: TextAlign.center,
-                    style: AppStyles.title.copyWith(fontSize: 24),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'You spoke for $clock.',
-                    textAlign: TextAlign.center,
-                    style: AppStyles.body,
-                  ),
-                  const SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: onNext,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: GameColors.accent,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size.fromHeight(52),
-                      shape: const StadiumBorder(),
-                      textStyle: AppStyles.label.copyWith(fontSize: 16),
-                    ),
-                    child: const Text(Translations.tripleStepNextTopic),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: onRetry,
-                          style: AppStyles.secondaryButton,
-                          child: const Text(Translations.tripleStepRetry),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: onSettings,
-                          style: AppStyles.secondaryButton,
-                          child: const Text(Translations.tripleStepSettings),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
