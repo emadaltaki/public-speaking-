@@ -110,6 +110,24 @@ class Translations {
   static const String tripleStepRetry = 'Retry';
   static const String tripleStepSettings = 'Settings';
 
+  static const String conductorTitle = 'The Conductor';
+  static const String conductorSetupSubtitle = 'Train your vocal range';
+  static const String conductorHowTo =
+      'Speak on your topic while a pitch number from 1 to 10 changes at random. '
+      '1 is your lowest, deepest voice and 10 your highest, brightest. Follow it like a conductor.';
+  static const String conductorReady = 'Ready?';
+  static const String conductorReadyHint =
+      'When the number changes, change your pitch: 1 is low, 10 is high. Keep talking the whole time.';
+  static const String conductorStart = "I'M READY";
+  static const String conductorPitch = 'Pitch';
+  static const String conductorTopic = 'Topic';
+  static const String conductorPaused = 'Paused. Press play to continue.';
+  static const String conductorLevelLow = 'Low and deep';
+  static const String conductorLevelLowMid = 'Low and calm';
+  static const String conductorLevelMid = 'Natural voice';
+  static const String conductorLevelHighMid = 'Bright and lifted';
+  static const String conductorLevelHigh = 'High and bright';
+
   static const String footerPrivacy = 'Privacy Policy';
   static const String privacyTitle = 'Privacy Policy';
   static const String privacyClose = 'Close';
