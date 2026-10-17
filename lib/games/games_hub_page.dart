@@ -93,7 +93,7 @@ class GamesHeader extends StatelessWidget {
                   ),
                 ),
                 AccountButton(compact: !wide),
-                LanguageToggle(compact: true),
+                if (wide) const LanguageToggle(compact: true),
                 const ThemeToggle(),
                 IconButton(
                   onPressed: () => _goHome(context),

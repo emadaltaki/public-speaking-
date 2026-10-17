@@ -91,8 +91,8 @@ class GameCatalog {
       HowToStep(
         Icons.tune_rounded,
         Translations.l(
-          'Pick how many words and how long.',
-          'اختر عدد الكلمات والمدة.',
+          'Choose how many surprise words you want and how long to talk.',
+          'اختر عدد الكلمات المفاجئة ومدة الحديث.',
         ),
       ),
       HowToStep(
@@ -105,15 +105,15 @@ class GameCatalog {
       HowToStep(
         Icons.bolt_rounded,
         Translations.l(
-          'A new word pops up every few seconds. Use it in your speech.',
-          'تظهر كلمة جديدة كل بضع ثوانٍ. استخدمها في كلامك.',
+          'Every few seconds a new word pops up. Work it into what you are saying.',
+          'كل بضع ثوانٍ تظهر كلمة جديدة. أدخلها في كلامك.',
         ),
       ),
       HowToStep(
         Icons.flag_rounded,
         Translations.l(
-          'Keep going until the timer ends.',
-          'استمر حتى ينتهي المؤقت.',
+          'Keep talking until the time is up.',
+          'استمر في الكلام حتى ينتهي الوقت.',
         ),
       ),
     ],
@@ -145,34 +145,34 @@ class GameCatalog {
       HowToStep(
         Icons.record_voice_over_rounded,
         Translations.l(
-          'You get a topic. Talk about it.',
-          'تحصل على موضوع. تحدّث عنه.',
+          'We give you a topic. Start talking about it.',
+          'نعطيك موضوعًا. ابدأ الحديث عنه.',
         ),
       ),
       HowToStep(
         Icons.looks_one_rounded,
         Translations.l(
-          'A number from 1 to 10 shows on screen.',
-          'يظهر رقم من 1 إلى 10 على الشاشة.',
+          'A big number from 1 to 10 shows on the screen.',
+          'يظهر رقم كبير من 1 إلى 10 على الشاشة.',
         ),
       ),
       HowToStep(
         Icons.graphic_eq_rounded,
         Translations.l(
-          '1 = low, deep voice. 10 = high, bright voice.',
-          '1 = صوت منخفض وعميق. 10 = صوت مرتفع ومشرق.',
+          'That number is how high your voice should be. 1 is low and deep, 10 is high and bright.',
+          'هذا الرقم هو مستوى صوتك. 1 منخفض وعميق، و10 مرتفع ومشرق.',
         ),
       ),
       HowToStep(
         Icons.swap_vert_rounded,
         Translations.l(
-          'When the number changes, change your voice to match.',
-          'عندما يتغيّر الرقم، غيّر صوتك ليطابقه.',
+          'Keep talking. Each time the number changes, move your voice up or down to match it.',
+          'استمر في الكلام. كلما تغيّر الرقم، ارفع صوتك أو اخفضه ليطابقه.',
         ),
       ),
     ],
     tip: Translations.l(
-      "Exaggerate! It feels silly, but it's how you build range.",
+      "Go big! It might feel silly, but that's how your voice gets more range.",
       'بالغ! قد يبدو الأمر مضحكًا، لكنه طريقتك لتوسيع مدى صوتك.',
     ),
   );
@@ -198,7 +198,10 @@ class GameCatalog {
     howToPlay: [
       HowToStep(
         Icons.group_add_rounded,
-        Translations.l('Add everyone who is playing.', 'أضف كل من يلعب.'),
+        Translations.l(
+          'Add the names of everyone playing.',
+          'أضف أسماء كل من يلعب.',
+        ),
       ),
       HowToStep(
         Icons.topic_rounded,
@@ -210,8 +213,8 @@ class GameCatalog {
       HowToStep(
         Icons.mic_rounded,
         Translations.l(
-          'The name on screen is who talks now.',
-          'صاحب الاسم الظاهر على الشاشة هو من يتحدث الآن.',
+          "Whoever's name is on the screen does the talking.",
+          'صاحب الاسم الظاهر على الشاشة هو من يتكلم.',
         ),
       ),
       HowToStep(
@@ -249,10 +252,7 @@ class GameCatalog {
     howToPlay: [
       HowToStep(
         Icons.short_text_rounded,
-        Translations.l(
-          'A half-finished sentence appears.',
-          'تظهر جملة غير مكتملة.',
-        ),
+        Translations.l('You see the start of a sentence.', 'ترى بداية جملة.'),
       ),
       HowToStep(
         Icons.record_voice_over_rounded,
@@ -263,13 +263,16 @@ class GameCatalog {
       ),
       HowToStep(
         Icons.timer_outlined,
-        Translations.l('Beat the little timer.', 'اسبق المؤقت الصغير.'),
+        Translations.l(
+          'Answer before the timer runs out.',
+          'أجب قبل أن ينتهي المؤقت.',
+        ),
       ),
       HowToStep(
         Icons.skip_next_rounded,
         Translations.l(
-          'A new sentence comes right away. Keep going!',
-          'تأتي جملة جديدة فورًا. استمر!',
+          'The next sentence comes right away. Keep going!',
+          'تأتي الجملة التالية فورًا. استمر!',
         ),
       ),
     ],
