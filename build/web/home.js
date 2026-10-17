@@ -230,13 +230,27 @@
     menuBtn.setAttribute('aria-label', open ? t('closeMenu') : t('openMenu'));
     menuBtn.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
   }
+  var menuOpenedAt = 0;
   function setMenu(open) {
+    if (open) menuOpenedAt = window.scrollY;
     menu.classList.toggle('open', open);
     menuBtn.setAttribute('aria-expanded', String(open));
     renderMenuLabel();
   }
   menuBtn.addEventListener('click', function () { setMenu(!menu.classList.contains('open')); });
   all('#mobileMenu a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+  // Tapping anywhere outside the open menu just closes it (without also
+  // pressing whatever was underneath).
+  document.addEventListener('click', function (e) {
+    if (!menu.classList.contains('open')) return;
+    if (menu.contains(e.target) || menuBtn.contains(e.target)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setMenu(false);
+  }, true);
+  window.addEventListener('scroll', function () {
+    if (menu.classList.contains('open') && window.scrollY > menuOpenedAt + 60) setMenu(false);
+  }, { passive: true });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     setMenu(false);
