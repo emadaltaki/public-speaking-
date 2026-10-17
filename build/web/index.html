@@ -437,6 +437,43 @@
       a.tier .amt { font-size: 24px; }
     }
 
+
+    /* Session dropdown */
+    .dd { position: relative; }
+    .dd-btn { width: 100%; display: flex; align-items: center; gap: 14px; padding: 12px 16px 12px 12px; border: 1.5px solid var(--border); border-radius: 18px; background: var(--surface); cursor: pointer; text-align: start; transition: border-color .15s, box-shadow .15s; }
+    :root[dir="rtl"] .dd-btn { padding: 12px 12px 12px 16px; }
+    .dd-btn:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); }
+    .dd.open .dd-btn, .dd-btn:focus-visible { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent); }
+    .dd-ic, .dd-opt .dd-ic { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; flex: none; background: var(--soft); color: var(--primary); }
+    .dd-ic svg { width: 21px; height: 21px; }
+    .dd-ic.hot { background: var(--panel); color: #F0B79F; }
+    .dd-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .dd-txt b { font-family: var(--head); color: var(--ink); font-size: 16px; line-height: 1.3; }
+    .dd-txt small { color: var(--muted); font-size: 13.5px; }
+    .dd-price { font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 19px; color: var(--ink); white-space: nowrap; }
+    .dd-price.is-free { color: var(--primary); }
+    .dd-chev { width: 20px; height: 20px; color: var(--muted); flex: none; transition: transform .25s; }
+    .dd.open .dd-chev { transform: rotate(180deg); }
+    .dd-list { position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; right: 0; margin: 0; padding: 6px; list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 24px 50px -18px rgba(43,33,24,.4); animation: ddIn .18s ease; }
+    @keyframes ddIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    .dd-opt { display: flex; align-items: center; gap: 14px; padding: 10px; border-radius: 14px; cursor: pointer; }
+    .dd-opt:hover, .dd-opt.active { background: var(--tint); }
+    .dd-opt[aria-selected="true"] { background: var(--soft); }
+    .dd-opt .tag { font-size: 10px; padding: 2px 8px; margin-inline-start: 6px; vertical-align: 2px; }
+    .dd-check { width: 22px; height: 22px; border-radius: 50%; flex: none; display: grid; place-items: center; color: transparent; }
+    .dd-opt[aria-selected="true"] .dd-check { background: var(--primary); color: var(--on-primary); }
+    .dd-check svg { width: 13px; height: 13px; }
+    .dd.flash .dd-btn { animation: ddFlash 1s ease; }
+    @keyframes ddFlash { 0%, 100% { box-shadow: none; } 30% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 25%, transparent); border-color: var(--primary); } }
+    @media (max-width: 640px) {
+      .dd-btn { gap: 10px; padding: 10px 12px 10px 10px; }
+      .dd-ic { width: 40px; height: 40px; }
+      .dd-txt b { font-size: 15px; }
+      .dd-txt small { font-size: 12.5px; }
+      .dd-price { font-size: 17px; }
+      .dd-opt { gap: 10px; padding: 8px; }
+    }
+
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
 
     /* Tablet */
@@ -690,7 +727,7 @@
           <div class="r">
             <div class="price">$0</div>
             <div class="meta" data-t="freeMeta">15–20 minutes · online video call</div>
-            <a class="btn btn-primary" href="#book" data-t="ctaBookShort" data-cta="pricing-free">Book my free call</a>
+            <a class="btn btn-primary" href="#book" data-t="ctaBookShort" data-cta="pricing-free" data-plan="intro">Book my free call</a>
           </div>
         </div>
         <div class="tiers">
@@ -733,18 +770,29 @@
         <div class="book-grid">
           <div class="card book-card" id="bookCard">
             <form id="bookForm" novalidate>
-              <h3 data-t="bookFormTitle">Choose a time for your free call</h3>
-              <p class="sub" data-t="freeMeta">15–20 minutes · online video call</p>
-              <div class="step"><b>1</b><span data-t="pickDay">Pick a day</span></div>
+              <h3 data-t="bookFormTitle">Request your session</h3>
+              <p class="sub" data-t="bookFormSub">Pick a session and a time. We'll reply to confirm.</p>
+              <div class="step"><b>1</b><span data-t="pickSession">Choose your session</span></div>
+              <div class="dd" id="sessionDd">
+                <button type="button" class="dd-btn" id="ddBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="ddLabel ddBtn">
+                  <span class="dd-ic" id="ddIc"></span>
+                  <span class="dd-txt"><b id="ddTitle"></b><small id="ddMeta"></small></span>
+                  <span class="dd-price" id="ddPrice"></span>
+                  <svg class="dd-chev" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <span id="ddLabel" hidden data-t="pickSession">Choose your session</span>
+                <ul class="dd-list" id="ddList" role="listbox" tabindex="-1" hidden></ul>
+              </div>
+              <div class="step"><b>2</b><span data-t="pickDay">Pick a day</span></div>
               <div class="days" id="days" role="group"></div>
-              <div class="step"><b>2</b><span data-t="pickTime">Pick a time</span></div>
+              <div class="step"><b>3</b><span data-t="pickTime">Pick a time</span></div>
               <div class="times" role="group">
                 <button type="button" class="time" data-time="0" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sunrise"/></svg><b data-t="morning">Morning</b><span>9am–12pm</span></button>
                 <button type="button" class="time" data-time="1" aria-pressed="false"><svg aria-hidden="true"><use href="#i-sun"/></svg><b data-t="afternoon">Afternoon</b><span>12–5pm</span></button>
                 <button type="button" class="time" data-time="2" aria-pressed="false"><svg aria-hidden="true"><use href="#i-moon"/></svg><b data-t="evening">Evening</b><span>5–9pm</span></button>
               </div>
               <p class="form-err" id="choiceErr" data-t="choiceRequired">Please pick a day and a time.</p>
-              <div class="step"><b>3</b><span data-t="yourDetails">Your details</span></div>
+              <div class="step"><b>4</b><span data-t="yourDetails">Your details</span></div>
               <div class="field"><input id="fName" autocomplete="name" placeholder="Name" data-t-ph="name" aria-label="Name"><span class="err" data-t="nameRequired">Please enter your name.</span></div>
               <div class="field"><input id="fContact" autocomplete="email" placeholder="Email or phone" data-t-ph="contact" aria-label="Email or phone"><span class="err" data-t="contactRequired">Please add an email or phone number.</span></div>
               <div class="field"><input id="fReason" maxlength="200" placeholder="Why are you booking?" data-t-ph="reason" aria-label="Why are you booking?"><span class="err" data-t="reasonRequired">Please tell us why you are booking.</span></div>

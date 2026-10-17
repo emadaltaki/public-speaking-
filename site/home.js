@@ -29,9 +29,12 @@
     close: 'Close', prev: 'Previous photo', next: 'Next photo',
     morningFull: 'Morning (9am–12pm)', afternoonFull: 'Afternoon (12–5pm)', eveningFull: 'Evening (5–9pm)',
     sending: 'Sending…', subject: 'Free intro call request',
-    planSingle: "I'm interested in a single session.",
-    planFour: "I'm interested in the 4-session package.",
-    planEight: "I'm interested in the 8-session package.",
+    pickSession: 'Choose your session',
+    sIntro: 'Free intro call', sIntroMeta: '15–20 min · online video call',
+    sSingle: 'Single Session', sSingleMeta: '1 speaking session',
+    sFour: '4-Session Package', sFourMeta: '$45 per session · save $20',
+    sEight: '8-Session Package', sEightMeta: '$40 per session · save $80',
+    sFree: 'Free', popular: 'MOST POPULAR', bestValue: 'BEST VALUE',
     weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     privacyBody: 'Speak Up Fearless respects your privacy.\n\n' +
@@ -97,7 +100,7 @@
     q8: 'كم التكلفة؟', a8: 'الأسعار بالدولار الكندي: 50$ للجلسة الواحدة، و180$ لأربع جلسات، و320$ لثماني جلسات. مكالمتك الأولى مجانية.',
     q9: 'هل يمكنني التحدث معكم قبل الانضمام إلى جلسة؟', a9: 'نعم. نقدّم جلسة تعريفية مجانية عبر الإنترنت لتتحدث مع أحد المضيفين وتفهم ما نفعله وتطرح أسئلتك. لا يُطلب منك التحدث ولا ضغط للانضمام.',
     eyebrowContact: 'تواصل معنا', bookHeadline: 'احجز مكالمتك التعريفية المجانية',
-    bookIntro: 'اختر اليوم والوقت المناسبين لك، وسنرد عليك للتأكيد.', bookFormTitle: 'اختر وقتًا لمكالمتك المجانية',
+    bookIntro: 'اختر اليوم والوقت المناسبين لك، وسنرد عليك للتأكيد.',
     pickDay: 'اختر يومًا', pickTime: 'اختر وقتًا', morning: 'صباحًا', afternoon: 'ظهرًا', evening: 'مساءً',
     morningFull: 'صباحًا (من 9 إلى 12)', afternoonFull: 'ظهرًا (من 12 إلى 5)', eveningFull: 'مساءً (من 5 إلى 9)',
     choiceRequired: 'يرجى اختيار يوم ووقت.', yourDetails: 'بياناتك',
@@ -112,7 +115,10 @@
     copyright: '© 2026 Speak Up Fearless. جميع الحقوق محفوظة.', close: 'إغلاق',
     stickyCta: 'احجز الآن', stickyTitle: 'مكالمة تعريفية مجانية', stickySub: '15–20 دقيقة · بلا أي التزام', prev: 'الصورة السابقة', next: 'الصورة التالية',
     subject: 'طلب مكالمة تعريفية مجانية',
-    planSingle: 'أنا مهتم بجلسة واحدة.', planFour: 'أنا مهتم بباقة 4 جلسات.', planEight: 'أنا مهتم بباقة 8 جلسات.',
+    pickSession: 'اختر جلستك', sIntro: 'مكالمة تعريفية مجانية', sIntroMeta: '15–20 دقيقة · مكالمة فيديو',
+    sSingle: 'جلسة واحدة', sSingleMeta: 'جلسة تحدّث واحدة', sFour: 'باقة 4 جلسات', sFourMeta: '45$ للجلسة · وفّر 20$',
+    sEight: 'باقة 8 جلسات', sEightMeta: '40$ للجلسة · وفّر 80$', sFree: 'مجاني',
+    bookFormTitle: 'اطلب جلستك', bookFormSub: 'اختر جلسة ووقتًا، وسنرد عليك للتأكيد.',
     weekdays: ['الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'],
     months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
     privacyBody: 'تحترم Speak Up Fearless خصوصيتك.\n\nما نجمعه: لا يحفظ هذا الموقع أي شيء تكتبه. عندما تطلب موعدًا عبر نموذج الحجز، يُرسل إلينا اسمك وبريدك أو هاتفك وسبب الحجز والوقت المفضّل عبر البريد من خلال خدمة FormSubmit (formsubmit.co) لإعادة توجيه النماذج. وإذا راسلتنا أو اتصلت بنا، نتلقى اسمك وبيانات التواصل وما تختار مشاركته.\n\nكيف نستخدمها: فقط للرد عليك وترتيب الجلسات والتواصل بخصوص الجلسات التي سألت عنها. لا نبيع معلوماتك ولا نؤجّرها أبدًا.\n\nإحصاءات الموقع: قد نستخدم أدوات تحليل تحترم الخصوصية ولا تستخدم ملفات تعريف الارتباط، تحسب الزيارات دون التعرف عليك.\n\nخياراتك: يمكنك في أي وقت أن تطلب الاطلاع على معلوماتك لدينا أو تصحيحها أو حذفها بمراسلة speakupfearless@gmail.com.\n\nنلتزم بقانون حماية المعلومات الشخصية والوثائق الإلكترونية الكندي (PIPEDA).'
@@ -143,6 +149,7 @@
     renderTheme();
     renderAccount();
     renderDays();
+    if (typeof renderSession === 'function' && SESSIONS) renderSession();
     root.classList.remove('ar-pending');
   }
 
@@ -317,13 +324,82 @@
     $(id).addEventListener('input', function () { if ($(id).parentNode.classList.contains('bad')) fieldOk(id); });
   });
 
-  // Package buttons prefill the reason so the request says what they want.
+  // ---------------------------------------------------------------- sessions
+  var SESSIONS = [
+    { id: 'intro', title: 'sIntro', meta: 'sIntroMeta', price: null, icon: '#i-chat' },
+    { id: 'single', title: 'sSingle', meta: 'sSingleMeta', price: '$50', icon: '#i-mic' },
+    { id: 'four', title: 'sFour', meta: 'sFourMeta', price: '$180', icon: '#i-bolt', tag: ['popular', 'warm'], hot: true },
+    { id: 'eight', title: 'sEight', meta: 'sEightMeta', price: '$320', icon: '#i-trophy', tag: ['bestValue', 'soft'] }
+  ];
+  var pickedSession = 'intro';
+  var dd = $('sessionDd');
+  var ddList = $('ddList');
+  var ddActive = 0;
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 12 4 4 8-8"/></svg>';
+
+  function sessionById(id) { return SESSIONS.filter(function (x) { return x.id === id; })[0] || SESSIONS[0]; }
+  function iconHtml(x) { return '<span class="dd-ic' + (x.hot ? ' hot' : '') + '"><svg aria-hidden="true"><use href="' + x.icon + '"/></svg></span>'; }
+  function esc(v) { var d = document.createElement('div'); d.textContent = v; return d.innerHTML; }
+  function priceHtml(x) { return x.price ? esc(x.price) : esc(t('sFree')); }
+
+  function renderSession() {
+    var x = sessionById(pickedSession);
+    $('ddIc').outerHTML = iconHtml(x).replace('class="dd-ic', 'id="ddIc" class="dd-ic');
+    $('ddTitle').textContent = t(x.title);
+    $('ddMeta').textContent = t(x.meta);
+    $('ddPrice').innerHTML = priceHtml(x);
+    $('ddPrice').classList.toggle('is-free', !x.price);
+    ddList.innerHTML = SESSIONS.map(function (o, i) {
+      var tag = o.tag ? '<span class="tag ' + o.tag[1] + '">' + esc(t(o.tag[0])) + '</span>' : '';
+      return '<li class="dd-opt' + (i === ddActive ? ' active' : '') + '" role="option" id="dd-' + o.id + '" data-id="' + o.id + '" aria-selected="' + (o.id === pickedSession) + '">' +
+        iconHtml(o) + '<span class="dd-txt"><b>' + esc(t(o.title)) + tag + '</b><small>' + esc(t(o.meta)) + '</small></span>' +
+        '<span class="dd-price' + (o.price ? '' : ' is-free') + '">' + priceHtml(o) + '</span><span class="dd-check">' + CHECK + '</span></li>';
+    }).join('');
+  }
+  function setDd(open) {
+    dd.classList.toggle('open', open);
+    ddList.hidden = !open;
+    $('ddBtn').setAttribute('aria-expanded', String(open));
+    if (open) {
+      ddActive = Math.max(0, SESSIONS.indexOf(sessionById(pickedSession)));
+      renderSession();
+      ddList.setAttribute('aria-activedescendant', 'dd-' + SESSIONS[ddActive].id);
+      ddList.focus({ preventScroll: true });
+    }
+  }
+  function pickSession(id, flash) {
+    pickedSession = sessionById(id).id;
+    renderSession();
+    if (flash) { dd.classList.remove('flash'); void dd.offsetWidth; dd.classList.add('flash'); }
+  }
+  $('ddBtn').addEventListener('click', function () { setDd(!dd.classList.contains('open')); });
+  ddList.addEventListener('click', function (e) {
+    var li = e.target.closest('.dd-opt');
+    if (!li) return;
+    pickSession(li.dataset.id);
+    setDd(false);
+    $('ddBtn').focus();
+  });
+  ddList.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      ddActive = (ddActive + (e.key === 'ArrowDown' ? 1 : -1) + SESSIONS.length) % SESSIONS.length;
+      renderSession();
+      ddList.setAttribute('aria-activedescendant', 'dd-' + SESSIONS[ddActive].id);
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      pickSession(SESSIONS[ddActive].id);
+      setDd(false);
+      $('ddBtn').focus();
+    } else if (e.key === 'Escape' || e.key === 'Tab') {
+      setDd(false);
+    }
+  });
+  document.addEventListener('click', function (e) { if (dd.classList.contains('open') && !dd.contains(e.target)) setDd(false); });
+
+  // Package buttons pick that session in the booking form.
   all('[data-plan]').forEach(function (a) {
-    a.addEventListener('click', function () {
-      var key = { single: 'planSingle', four: 'planFour', eight: 'planEight' }[a.dataset.plan];
-      var reason = $('fReason');
-      if (!reason.value.trim() || /package|session|باقة|جلسة/i.test(reason.value)) reason.value = t(key);
-    });
+    a.addEventListener('click', function () { pickSession(a.dataset.plan, true); });
   });
 
   $('bookForm').addEventListener('submit', function (e) {
@@ -341,12 +417,15 @@
       contact: $('fContact').value.trim(),
       reason: $('fReason').value.trim(),
       description: $('fDesc').value.trim(),
+      requestedCourse: pickedSession,
+      requestedLabel: EN[sessionById(pickedSession).title] + (sessionById(pickedSession).price ? ' (' + sessionById(pickedSession).price + ')' : ''),
       preferredTime: preferredTime()
     };
-    var subject = EXTRA_EN.subject + ' — ' + req.preferredTime;
+    var subject = (req.requestedCourse === 'intro' ? EXTRA_EN.subject : 'Session request: ' + req.requestedLabel) + ' — ' + req.preferredTime;
     var payload = {
       _subject: subject, _template: 'table', _captcha: 'false',
-      'Preferred time': req.preferredTime, 'Name': req.name, 'Email or phone': req.contact, 'Reason': req.reason
+      'Requested session': req.requestedLabel, 'Preferred time': req.preferredTime,
+      'Name': req.name, 'Email or phone': req.contact, 'Reason': req.reason
     };
     if (req.description) payload['More details'] = req.description;
     var btn = $('sendBtn');
@@ -376,7 +455,7 @@
           return;
         }
         // Fall back to an email draft so the request isn't lost.
-        var body = 'Hi! I would like to book a free intro call.\n\n' +
+        var body = 'Hi! I would like to book: ' + req.requestedLabel + '\n\n' +
           'Preferred time: ' + req.preferredTime + '\nName: ' + req.name + '\nEmail or phone: ' + req.contact +
           '\nReason: ' + req.reason + '\n' + (req.description ? '\nMore details:\n' + req.description + '\n' : '');
         $('sendErr').classList.add('show');
@@ -385,14 +464,20 @@
   });
 
   function saveToBackend(req) {
-    var body = { name: req.name, contact: req.contact, preferredTime: req.preferredTime, reason: req.reason };
+    var body = { name: req.name, contact: req.contact, preferredTime: req.preferredTime, reason: req.reason, requestedCourse: req.requestedCourse };
     if (req.description) body.description = req.description;
-    try {
-      fetch(API_BASE + '/v1/bookings', {
+    function post(b) {
+      return fetch(API_BASE + '/v1/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(b),
         keepalive: true
+      });
+    }
+    try {
+      post(body).then(function (r) {
+        // Older API versions reject unknown fields; save the rest anyway.
+        if (r.status === 400) { delete body.requestedCourse; return post(body); }
       }).catch(function () {});
     } catch (_) {}
   }
@@ -403,6 +488,7 @@
     pickedTime = -1;
     all('.time').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
     renderDays();
+    pickSession('intro');
     $('sent').hidden = true;
     $('bookForm').hidden = false;
   });
