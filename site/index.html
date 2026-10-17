@@ -560,11 +560,26 @@
     /* Hint that the day list scrolls */
     .days { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); padding-inline-end: 40px; }
     :root[dir="rtl"] .days { -webkit-mask-image: linear-gradient(270deg, #000 82%, transparent); mask-image: linear-gradient(270deg, #000 82%, transparent); }
+    /* Quick game links and policy line */
+    .try-game { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; color: var(--primary); font-weight: 700; font-size: 15px; text-decoration: none; }
+    .try-game svg { width: 14px; height: 14px; }
+    .try-game:hover span { text-decoration: underline; text-underline-offset: 3px; }
+    .sent-mail { font-size: 14px; margin-top: -6px; }
+    .sent-game { display: flex; align-items: center; gap: 12px; margin: 18px auto; max-width: 420px; padding: 14px; border-radius: 18px; text-align: start; text-decoration: none; color: #fff; background: linear-gradient(145deg, #D49A4E, #9C6420); box-shadow: 0 14px 26px -16px rgba(0,0,0,.5); }
+    .sent-game .g-ic { margin: 0; width: 44px; height: 44px; border-radius: 14px; }
+    .sent-game .g-ic svg { width: 22px; height: 22px; }
+    .sent-game b { display: block; font-family: var(--head); font-size: 15.5px; }
+    .sent-game small { display: block; font-size: 13px; color: rgba(255,255,255,.88); }
+    .sent-game .chev { width: 18px; height: 18px; margin-inline-start: auto; flex: none; }
+    :root[dir="rtl"] .sent-game .chev { transform: scaleX(-1); }
+    .cancel { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0 0; font-size: 14.5px; color: var(--muted); }
+    .cancel svg { width: 17px; height: 17px; flex: none; margin-top: 2px; color: var(--primary); }
+    @media (max-width: 640px) { .try-game { font-size: 14px; } .cancel { font-size: 13.5px; } }
     /* Dark theme polish */
     :root[data-theme="dark"] .eyebrow, :root[data-theme="dark"] .more-btn, :root[data-theme="dark"] .tier .save,
     :root[data-theme="dark"] .feelings svg, :root[data-theme="dark"] .trustline svg, :root[data-theme="dark"] .includes svg,
     :root[data-theme="dark"] .free .price, :root[data-theme="dark"] .dd-price.is-free, :root[data-theme="dark"] .time svg,
-    :root[data-theme="dark"] .host .q, :root[data-theme="dark"] .loc .dot { color: var(--accent); }
+    :root[data-theme="dark"] .try-game, :root[data-theme="dark"] .cancel svg, :root[data-theme="dark"] .host .q, :root[data-theme="dark"] .loc .dot { color: var(--accent); }
     :root[data-theme="dark"] .ic { background: var(--soft); color: var(--accent); }
     :root[data-theme="dark"] .ic.warm { background: var(--warm-soft); color: var(--warm); }
     :root[data-theme="dark"] .card, :root[data-theme="dark"] .faq details, :root[data-theme="dark"] .skills li { border-color: var(--border); box-shadow: 0 1px 0 rgba(255,255,255,.03) inset, var(--shadow); }
@@ -756,6 +771,7 @@
             <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="hero">Book a free intro call</a>
             <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">See what we practice</a>
           </div>
+          <a class="try-game" href="#games" data-track="try_game_hero"><svg aria-hidden="true"><use href="#i-play"/></svg><span data-t="tryGame">Not ready to talk yet? Try a quick game first</span></a>
           <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A friendly room where nobody judges you and you go at your own pace.</span></p>
         </div>
         <figure class="hero-photo" style="margin:0">
@@ -895,6 +911,7 @@
           </a>
         </div>
         <p class="includes"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="includes">Every session includes guided practice, friendly feedback and exercises that help you feel more confident.</span> <span data-t="pricingCurrency">Prices are in Canadian dollars.</span></p>
+        <p class="cancel"><svg aria-hidden="true"><use href="#i-heart"/></svg><span data-t="cancelPolicy">Plans change, we get it. Let us know at least 24 hours before a session and we'll move it to another day for free. Questions about refunds? Just ask us.</span></p>
       </div>
     </section>
 
@@ -956,6 +973,12 @@
               <span class="ic"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
               <h3 data-t="sentTitle">Got it, thank you!</h3>
               <p data-t="sentBody">We'll get back to you soon to confirm your time.</p>
+              <p class="sent-mail" id="sentMail" hidden data-t="sentMail">We also sent a copy to your email.</p>
+              <a class="sent-game" href="/games/autocomplete" data-track="game_after_booking">
+                <span class="g-ic"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>
+                <span><b data-t="afterTitle">While you wait, warm up with a game</b><small data-t="afterSub">Autocomplete takes 2 minutes and it's free.</small></span>
+                <svg class="chev" aria-hidden="true"><use href="#i-chev-r"/></svg>
+              </a>
               <button class="btn btn-ghost" type="button" id="again" data-t="again">Send another request</button>
             </div>
           </div>
@@ -1018,6 +1041,7 @@
   </div>
 
   <script src="/home.js" defer></script>
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
