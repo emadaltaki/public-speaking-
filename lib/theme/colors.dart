@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 
 /// Brand color tokens. Widgets should reference these instead of raw hex.
 ///
-/// Palette: warm amber header band, light grey page, white cards, a strong
-/// indigo for actions and deep indigo ink for headings and dark panels.
-/// Token names predate the palette (e.g. [teal] is now the indigo primary).
+/// Palette: warm amber header band, warm light page, white cards, a burnt
+/// orange for actions and a deep espresso brown for headings and dark panels.
+/// Token names predate the palette (e.g. [teal] is now the burnt-orange
+/// primary and [navy] the espresso ink).
 class AppColors {
   AppColors._();
 
-  /// Deep indigo ink: headings, dark panels, the footer.
-  static const Color navy = Color(0xFF1E1B4B);
+  /// Deep espresso ink: headings, dark panels, the footer.
+  static const Color navy = Color(0xFF2B2118);
 
-  /// Primary action colour (indigo).
-  static const Color teal = Color(0xFF4F46E5);
+  /// Primary action colour (burnt orange).
+  static const Color teal = Color(0xFFC2410C);
 
-  /// Light grey page background.
-  static const Color offWhite = Color(0xFFF5F6F8);
+  /// Warm light page background.
+  static const Color offWhite = Color(0xFFF7F5F2);
 
   /// Soft warm section background.
   static const Color lightBlue = Color(0xFFFFF7E6);
-  static const Color charcoal = Color(0xFF1F2937);
+  static const Color charcoal = Color(0xFF292524);
 
   /// Warm amber band behind the header.
   static const Color headerBand = Color(0xFFFFD27F);
@@ -27,24 +28,24 @@ class AppColors {
 
   static const Color onTeal = Color(0xFFFFFFFF);
   static const Color onNavy = Color(0xFFFFFFFF);
-  static const Color mutedText = Color(0xFF6B7280);
-  static const Color border = Color(0xFFE5E7EB);
-  static const Color focusRing = Color(0xFF4F46E5);
+  static const Color mutedText = Color(0xFF6B6259);
+  static const Color border = Color(0xFFE7E1DA);
+  static const Color focusRing = Color(0xFFC2410C);
   static const Color error = Color(0xFFB42318);
-  static const Color cardShadow = Color(0x141E1B4B);
-  static const Color popularAccent = Color(0xFF4F46E5);
-  static const Color tealPressed = Color(0xFF4338CA);
-  static const Color navyElevated = Color(0xFF2E2A6B);
-  static const Color personAccent = Color(0xFF3730A3);
+  static const Color cardShadow = Color(0x142B2118);
+  static const Color popularAccent = Color(0xFFC2410C);
+  static const Color tealPressed = Color(0xFF9A3412);
+  static const Color navyElevated = Color(0xFF3D3026);
+  static const Color personAccent = Color(0xFF7C2D12);
 
-  /// Deeper indigo used for gradients and the footer.
-  static const Color navyDeep = Color(0xFF17153B);
+  /// Deeper brown used for gradients and the footer.
+  static const Color navyDeep = Color(0xFF1F1812);
 
-  /// Soft indigo wash used behind icons and highlights.
-  static const Color tealSoft = Color(0xFFE0E7FF);
+  /// Soft peach wash used behind icons and highlights.
+  static const Color tealSoft = Color(0xFFFFEDD5);
 
-  /// Lighter indigo that stays legible on dark backgrounds.
-  static const Color tealLight = Color(0xFFA5B4FC);
+  /// Light orange that stays legible on dark backgrounds.
+  static const Color tealLight = Color(0xFFFDBA74);
 
   /// Warm amber accent.
   static const Color warm = Color(0xFFF2A33A);

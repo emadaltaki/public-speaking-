@@ -3,7 +3,7 @@
     "short_name": "Speak Up",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#F5F6F8",
+    "background_color": "#F7F5F2",
     "theme_color": "#FFD27F",
     "description": "A supportive public speaking community helping people normalize anxiety, practice speaking, and build confidence together.",
     "orientation": "any",
