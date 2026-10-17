@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
+import '../../account/progress_store.dart';
 import '../../theme/colors.dart';
 import '../../theme/styles.dart';
 import '../../translations/translations.dart';
@@ -55,7 +56,33 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
     _game.tick(delta);
   }
 
-  void _onGameChanged() => setState(() {});
+  bool _recorded = false;
+
+  /// Saves the round to the visitor's history once, when it ends.
+  void _recordIfOver({required Duration spoken, String? topic}) {
+    if (!_game.isOver) {
+      _recorded = false;
+      return;
+    }
+    if (_recorded) return;
+    _recorded = true;
+    ProgressStore.instance.record(
+      GameSession(
+        gameId: GameCatalog.tripleStep.id,
+        playedAt: DateTime.now(),
+        spoken: spoken,
+        topic: topic,
+      ),
+    );
+  }
+
+  void _onGameChanged() {
+    _recordIfOver(
+      spoken: _game.isOver ? _game.results.last.spoken : Duration.zero,
+      topic: _game.topic,
+    );
+    setState(() {});
+  }
 
   void _back() => Navigator.of(context).maybePop();
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'account/account_page.dart';
 import 'contact/contact_submit_handler.dart';
 import 'games/game_catalog.dart';
 import 'games/games_hub_page.dart';
@@ -44,6 +45,7 @@ class SpeakUpFearlessApp extends StatelessWidget {
   Route<void> _route(RouteSettings settings) {
     final Widget page = switch (settings.name) {
       AppRoutes.games => const GamesHubPage(),
+      AppRoutes.account => const AccountPage(),
       AppRoutes.tripleStep => const TripleStepSetupPage(),
       AppRoutes.conductor => const ConductorSetupPage(),
       AppRoutes.podcast => const PodcastSetupPage(),

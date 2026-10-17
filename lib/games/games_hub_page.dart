@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/responsive_card_grid.dart';
+import '../account/account_page.dart';
 import '../components/language_toggle.dart';
 import '../components/speech_mark_logo.dart';
 import '../theme/colors.dart';
@@ -45,6 +46,7 @@ class GamesHeader extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              AccountButton(compact: !wide),
               LanguageToggle(compact: !wide),
               const SizedBox(width: 4),
               TextButton.icon(

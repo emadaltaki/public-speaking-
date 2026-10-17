@@ -54,6 +54,7 @@ class AppRoutes {
   static const String conductor = '/games/conductor';
   static const String podcast = '/games/podcast';
   static const String autocomplete = '/games/autocomplete';
+  static const String account = '/account';
 }
 
 class GameCatalog {

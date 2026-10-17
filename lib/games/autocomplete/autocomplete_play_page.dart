@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
+import '../../account/progress_store.dart';
 import '../../theme/colors.dart';
 import '../../theme/styles.dart';
 import '../../translations/translations.dart';
@@ -53,7 +54,30 @@ class _AutocompletePlayPageState extends State<AutocompletePlayPage>
     _game.tick(delta);
   }
 
-  void _changed() => setState(() {});
+  bool _recorded = false;
+
+  /// Saves the round to the visitor's history once, when it ends.
+  void _recordIfOver({required Duration spoken, String? topic}) {
+    if (!_game.isOver) {
+      _recorded = false;
+      return;
+    }
+    if (_recorded) return;
+    _recorded = true;
+    ProgressStore.instance.record(
+      GameSession(
+        gameId: GameCatalog.autocomplete.id,
+        playedAt: DateTime.now(),
+        spoken: spoken,
+        topic: topic,
+      ),
+    );
+  }
+
+  void _changed() {
+    _recordIfOver(spoken: _game.played);
+    setState(() {});
+  }
 
   void _back() => Navigator.of(context).maybePop();
 
