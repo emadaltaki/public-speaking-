@@ -40,10 +40,20 @@ Future<String?> pickSquarePhoto({int size = 256}) {
   final input = web.HTMLInputElement()
     ..type = 'file'
     ..accept = 'image/*';
+  // iPhone Safari can drop the first pick of a file input that isn't on the
+  // page, so it stays in the page (hidden) until the pick is done.
+  input.style.display = 'none';
+  web.document.body?.append(input);
+  void finish(String? value) {
+    input.remove();
+    if (!done.isCompleted) done.complete(value);
+  }
+
+  input.oncancel = ((web.Event _) => finish(null)).toJS;
   input.onchange = (web.Event _) {
     final file = input.files?.item(0);
     if (file == null) {
-      done.complete(null);
+      finish(null);
       return;
     }
     final url = web.URL.createObjectURL(file);
@@ -67,11 +77,11 @@ Future<String?> pickSquarePhoto({int size = 256}) {
         size,
       );
       web.URL.revokeObjectURL(url);
-      done.complete(canvas.toDataURL('image/jpeg', 0.85.toJS));
+      finish(canvas.toDataURL('image/jpeg', 0.85.toJS));
     }.toJS;
     img.onerror = (web.Event _) {
       web.URL.revokeObjectURL(url);
-      done.complete(null);
+      finish(null);
     }.toJS;
     img.src = url;
   }.toJS;
