@@ -46,6 +46,8 @@ class _GalleryTileState extends State<GalleryTile> {
                 children: [
                   Image.asset(
                     widget.item.assetPath,
+                    // Decode near display size: much lighter to scroll.
+                    cacheWidth: 900,
                     fit: BoxFit.cover,
                     excludeFromSemantics: true,
                     errorBuilder: (context, error, stackTrace) =>

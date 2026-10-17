@@ -43,7 +43,7 @@ class AccountButton extends StatelessWidget {
           message: Translations.accountTitle,
           child: InkWell(
             borderRadius: BorderRadius.circular(999),
-            onTap: () => Navigator.of(context).pushNamed(AppRoutes.account),
+            onTap: () => AppRoutes.open(context, AppRoutes.account),
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: Row(
@@ -309,7 +309,7 @@ class _History extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: () => Navigator.of(context).pushNamed(AppRoutes.games),
+              onPressed: () => AppRoutes.open(context, AppRoutes.games),
               style: AppStyles.primaryButton,
               child: Text(Translations.navGames),
             ),
@@ -410,6 +410,102 @@ class _History extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Shows [child] only to signed-in visitors; everyone else gets a prompt
+/// to create a free account (games are for members).
+class SignInGate extends StatelessWidget {
+  const SignInGate({super.key, required this.child, this.returnTo});
+
+  final Widget child;
+
+  /// Where to come back to after signing in (defaults to this page).
+  final String? returnTo;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<AppUser?>(
+      valueListenable: AuthService.user,
+      builder: (context, user, _) {
+        if (user != null) return child;
+        final route =
+            returnTo ??
+            ModalRoute.of(context)?.settings.name ??
+            AppRoutes.games;
+        return _Card(
+          child: Column(
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: GameColors.accentSoft,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.lock_open_rounded,
+                  color: GameColors.accent,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                Translations.gamesGateTitle,
+                textAlign: TextAlign.center,
+                style: AppStyles.title.copyWith(fontSize: 24),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                Translations.gamesGateBody,
+                textAlign: TextAlign.center,
+                style: AppStyles.body,
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final game in GameCatalog.games.where(
+                    (g) => g.available,
+                  ))
+                    Chip(
+                      avatar: Icon(
+                        game.icon,
+                        size: 18,
+                        color: GameColors.accent,
+                      ),
+                      label: Text(game.title),
+                      backgroundColor: AppColors.offWhite,
+                      side: BorderSide(color: AppColors.border),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  FilledButton(
+                    onPressed: () =>
+                        AuthService.signIn(returnTo: route, signUp: true),
+                    style: AppStyles.primaryButtonLarge,
+                    child: Text(Translations.gamesGateSignUp),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => AuthService.signIn(returnTo: route),
+                    style: AppStyles.secondaryButton,
+                    child: Text(Translations.gamesGateSignIn),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

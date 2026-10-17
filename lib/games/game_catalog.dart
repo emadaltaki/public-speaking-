@@ -55,6 +55,15 @@ class AppRoutes {
   static const String podcast = '/games/podcast';
   static const String autocomplete = '/games/autocomplete';
   static const String account = '/account';
+
+  /// Opens [route], unless it is already the page on screen or a page change
+  /// is already under way (stops repeat taps from stacking the same page).
+  static void open(BuildContext context, String route) {
+    final current = ModalRoute.of(context);
+    if (current == null || !current.isCurrent) return;
+    if (current.settings.name == route) return;
+    Navigator.of(context).pushNamed(route);
+  }
 }
 
 class GameCatalog {

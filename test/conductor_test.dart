@@ -82,6 +82,7 @@ void main() {
   });
 
   testWidgets('games page opens The Conductor setup', (tester) async {
+    signInForTest();
     setSurface(tester, size: const Size(1280, 1000));
     await tester.pumpWidget(
       SpeakUpFearlessApp(contactHandler: RecordingContactHandler()),

@@ -77,6 +77,7 @@ class TestimonialsSection extends StatelessWidget {
                                   child: ClipOval(
                                     child: Image.asset(
                                       item.photoAsset!,
+                                      cacheWidth: 200,
                                       width: AppStyles.avatarSize,
                                       height: AppStyles.avatarSize,
                                       fit: BoxFit.cover,

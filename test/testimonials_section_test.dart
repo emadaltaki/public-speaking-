@@ -31,7 +31,7 @@ void main() {
 
     final assetNames = tester
         .widgetList<Image>(find.byType(Image))
-        .map((image) => (image.image as AssetImage).assetName)
+        .map((image) => _assetName(image.image))
         .toList();
 
     expect(assetNames, [
@@ -39,4 +39,9 @@ void main() {
       'assets/images/Elias-image.jpeg',
     ]);
   });
+}
+
+String _assetName(ImageProvider provider) {
+  final inner = provider is ResizeImage ? provider.imageProvider : provider;
+  return (inner as AssetImage).assetName;
 }

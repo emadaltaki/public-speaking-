@@ -26,7 +26,8 @@ class HeroSection extends StatelessWidget {
     final wide = width >= AppStyles.tabletBreakpoint;
     final desktop = width >= 960;
     final display = AppStyles.display.copyWith(
-      fontSize: desktop ? 60 : (wide ? 48 : 38),
+      // Scales with the screen so long words never crowd small phones.
+      fontSize: desktop ? 60 : (wide ? 48 : (width * 0.092).clamp(28.0, 38.0)),
       letterSpacing: wide ? -1.6 : -1,
     );
 
@@ -235,6 +236,7 @@ class _HeroPhoto extends StatelessWidget {
                       image: true,
                       child: Image.asset(
                         'assets/images/explaining-pic.jpeg',
+                        cacheWidth: 1000,
                         fit: BoxFit.cover,
                         alignment: const Alignment(-0.45, 0),
                         excludeFromSemantics: true,

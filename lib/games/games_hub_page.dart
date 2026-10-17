@@ -16,6 +16,12 @@ import 'widgets/game_setup.dart';
 class GamesHeader extends StatelessWidget {
   const GamesHeader({super.key});
 
+  static void _goHome(BuildContext context) {
+    // Ignore repeat taps while the page is already changing.
+    if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
@@ -27,23 +33,30 @@ class GamesHeader extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: wide ? 32 : 16),
           child: Row(
             children: [
-              InkWell(
-                borderRadius: BorderRadius.circular(8),
-                onTap: () => Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false),
-                child: Row(
-                  children: [
-                    const SpeechMarkLogo(size: 30),
-                    const SizedBox(width: 10),
-                    Text(
-                      Translations.siteName,
-                      style: AppStyles.title.copyWith(
-                        color: AppColors.navy,
-                        fontSize: wide ? 19 : 17,
-                      ),
-                    ),
-                  ],
+              Flexible(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () => _goHome(context),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SpeechMarkLogo(size: 30),
+                      if (wide) const SizedBox(width: 10),
+                      if (wide)
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              Translations.siteName,
+                              style: AppStyles.title.copyWith(
+                                color: AppColors.navy,
+                                fontSize: wide ? 19 : 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               const Spacer(),
@@ -51,18 +64,20 @@ class GamesHeader extends StatelessWidget {
               LanguageToggle(compact: !wide),
               const ThemeToggle(),
               const SizedBox(width: 4),
-              TextButton.icon(
-                onPressed: () => Navigator.of(
-                  context,
-                ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false),
-                style: TextButton.styleFrom(foregroundColor: AppColors.navy),
-                icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                label: Text(
-                  wide
-                      ? Translations.gamesBackToSite
-                      : Translations.l('Site', 'الموقع'),
+              if (wide)
+                TextButton.icon(
+                  onPressed: () => _goHome(context),
+                  style: TextButton.styleFrom(foregroundColor: AppColors.navy),
+                  icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                  label: Text(Translations.gamesBackToSite),
+                )
+              else
+                IconButton(
+                  onPressed: () => _goHome(context),
+                  tooltip: Translations.gamesBackToSite,
+                  color: AppColors.navy,
+                  icon: const Icon(Icons.home_rounded),
                 ),
-              ),
             ],
           ),
         ),
@@ -117,13 +132,17 @@ class GamesHubPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 32),
-                          ResponsiveCardGrid(
-                            minTileWidth: 320,
-                            gap: 20,
-                            children: [
-                              for (final game in GameCatalog.games)
-                                GameCard(game: game),
-                            ],
+                          // Games are for members: signed-out visitors see
+                          // a sign-up prompt instead of the list.
+                          SignInGate(
+                            child: ResponsiveCardGrid(
+                              minTileWidth: 320,
+                              gap: 20,
+                              children: [
+                                for (final game in GameCatalog.games)
+                                  GameCard(game: game),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -154,7 +173,7 @@ class _GameCardState extends State<GameCard> {
   void _open() {
     final route = widget.game.route;
     if (route != null) {
-      Navigator.of(context).pushNamed(route);
+      AppRoutes.open(context, route);
     }
   }
 

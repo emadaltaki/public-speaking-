@@ -115,6 +115,7 @@ void main() {
   });
 
   testWidgets('games tab leads to setup and into a game', (tester) async {
+    signInForTest();
     setSurface(tester, size: const Size(1280, 1000));
     await tester.pumpWidget(
       SpeakUpFearlessApp(contactHandler: RecordingContactHandler()),

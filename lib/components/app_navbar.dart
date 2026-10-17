@@ -59,7 +59,7 @@ class _AppNavbarState extends State<AppNavbar> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: 80,
+            height: wide ? 80 : 64,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: wide
@@ -73,23 +73,28 @@ class _AppNavbarState extends State<AppNavbar> {
                     flex: wide ? 3 : 1,
                     child: Row(
                       children: [
-                        const SpeechMarkLogo(size: 34),
-                        const SizedBox(width: 12),
+                        SpeechMarkLogo(size: wide ? 34 : 28),
+                        SizedBox(width: wide ? 12 : 8),
+                        // Shrinks to fit instead of cutting the name off on
+                        // narrow phones.
                         Flexible(
-                          child: Text(
-                            Translations.siteName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppStyles.title.copyWith(
-                              color: AppColors.navy,
-                              fontSize: 21,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              Translations.siteName,
+                              maxLines: 1,
+                              style: AppStyles.title.copyWith(
+                                color: AppColors.navy,
+                                fontSize: wide ? 21 : 18,
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 24),
+                  SizedBox(width: wide ? 24 : 4),
                   if (wide)
                     Expanded(
                       flex: 7,

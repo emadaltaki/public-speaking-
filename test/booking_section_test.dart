@@ -43,8 +43,9 @@ void main() {
     await tester.tap(find.text('Evening'));
     await tester.enterText(find.byType(TextFormField).at(0), 'Alex');
     await tester.enterText(find.byType(TextFormField).at(1), '416-555-0100');
+    await tester.enterText(find.byType(TextFormField).at(2), 'Nervous at work');
     await tester.enterText(
-      find.byType(TextFormField).at(2),
+      find.byType(TextFormField).at(3),
       'I freeze in meetings.',
     );
     await tester.tap(find.text(Translations.bookingSubmit));
@@ -66,6 +67,7 @@ void main() {
     expect(sent, hasLength(1));
     expect(sent.single.name, 'Alex');
     expect(sent.single.contact, '416-555-0100');
+    expect(sent.single.reason, 'Nervous at work');
     expect(sent.single.description, 'I freeze in meetings.');
     expect(
       sent.single.preferredTime,
@@ -87,6 +89,7 @@ void main() {
       name: 'Alex',
       contact: 'alex@example.com',
       preferredTime: 'Mon, Oct 19, Evening (5–9pm)',
+      reason: 'Job interviews',
     );
 
     test('posts the request as JSON to the inbox address', () async {

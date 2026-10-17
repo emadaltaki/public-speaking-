@@ -137,6 +137,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _contact = TextEditingController();
+  final _reason = TextEditingController();
   final _description = TextEditingController();
   late final List<DateTime> _days = _upcomingDays();
   DateTime? _day;
@@ -159,6 +160,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   void dispose() {
     _name.dispose();
     _contact.dispose();
+    _reason.dispose();
     _description.dispose();
     super.dispose();
   }
@@ -178,6 +180,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
       BookingRequest(
         name: _name.text.trim(),
         contact: _contact.text.trim(),
+        reason: _reason.text.trim(),
         description: _description.text.trim(),
         preferredTime: '${_label(_day!)}, $_time',
       ),
@@ -195,6 +198,7 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
   void _reset() {
     _name.clear();
     _contact.clear();
+    _reason.clear();
     _description.clear();
     setState(() {
       _day = null;
@@ -342,10 +346,23 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
           ),
           const SizedBox(height: 12),
           TextFormField(
+            controller: _reason,
+            maxLength: 200,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              labelText: Translations.bookingReasonLabel,
+              hintText: Translations.bookingReasonHint,
+            ),
+            validator: (v) => (v == null || v.trim().isEmpty)
+                ? Translations.bookingReasonRequired
+                : null,
+          ),
+          const SizedBox(height: 4),
+          TextFormField(
             controller: _description,
             minLines: 3,
             maxLines: 6,
-            maxLength: 1000,
+            maxLength: 2000,
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
               labelText: Translations.bookingDescriptionLabel,
