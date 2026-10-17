@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'contact/contact_submit_handler.dart';
 import 'games/game_catalog.dart';
 import 'games/games_hub_page.dart';
+import 'games/conductor/conductor_setup_page.dart';
 import 'games/triple_step/triple_step_setup_page.dart';
 import 'pages/home_page.dart';
 import 'theme/styles.dart';
@@ -32,6 +33,7 @@ class SpeakUpFearlessApp extends StatelessWidget {
     final Widget page = switch (settings.name) {
       AppRoutes.games => const GamesHubPage(),
       AppRoutes.tripleStep => const TripleStepSetupPage(),
+      AppRoutes.conductor => const ConductorSetupPage(),
       _ => HomePage(contactHandler: contactHandler),
     };
     return MaterialPageRoute<void>(settings: settings, builder: (_) => page);
