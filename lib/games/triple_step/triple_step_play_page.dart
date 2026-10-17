@@ -303,7 +303,7 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: AppStyles.softShadow,
       ),
@@ -327,7 +327,7 @@ class _TripleStepPlayPageState extends State<TripleStepPlayPage>
           if (next != null) ...[
             Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.hourglass_top_rounded,
                   size: 16,
                   color: AppColors.mutedText,
@@ -390,17 +390,17 @@ class _TopBar extends StatelessWidget {
             tooltip: Translations.tripleStepBackToSettings,
             onPressed: onBack,
             style: IconButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.surface,
               minimumSize: const Size(48, 48),
             ),
-            icon: const Icon(Icons.arrow_back_rounded, color: AppColors.navy),
+            icon: Icon(Icons.arrow_back_rounded, color: AppColors.navy),
           ),
           const Spacer(),
           TextButton(
             onPressed: onExit,
             style: TextButton.styleFrom(
               foregroundColor: AppColors.navy,
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.surface,
               minimumSize: const Size(48, 48),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               shape: const StadiumBorder(),
@@ -540,11 +540,7 @@ class _UpcomingTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.lock_clock_outlined,
-            size: 18,
-            color: AppColors.mutedText,
-          ),
+          Icon(Icons.lock_clock_outlined, size: 18, color: AppColors.mutedText),
           const SizedBox(width: 10),
           Text(Translations.tripleStepComingUp, style: AppStyles.bodySmall),
         ],
@@ -618,7 +614,7 @@ class _ResultsOverlay extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(28),
                 boxShadow: AppStyles.elevatedShadow,
               ),
@@ -630,7 +626,7 @@ class _ResultsOverlay extends StatelessWidget {
                     child: Container(
                       width: 72,
                       height: 72,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: GameColors.accentSoft,
                         shape: BoxShape.circle,
                       ),
@@ -661,7 +657,7 @@ class _ResultsOverlay extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.check_circle_rounded,
                               size: 18,
                               color: GameColors.accent,

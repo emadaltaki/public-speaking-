@@ -2,3 +2,7 @@
 String? loadSavedLanguage() => null;
 
 void saveLanguage(String code) {}
+
+String? loadSavedTheme() => null;
+
+void saveTheme(String value) {}

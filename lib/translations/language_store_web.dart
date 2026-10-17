@@ -18,3 +18,20 @@ void saveLanguage(String code) {
     // Private browsing can block storage; the choice just won't persist.
   }
 }
+
+const _themeKey = 'speakupfearless.theme';
+
+/// 'light' or 'dark' if the visitor picked one before.
+String? loadSavedTheme() {
+  try {
+    return web.window.localStorage.getItem(_themeKey);
+  } catch (_) {
+    return null;
+  }
+}
+
+void saveTheme(String value) {
+  try {
+    web.window.localStorage.setItem(_themeKey, value);
+  } catch (_) {}
+}

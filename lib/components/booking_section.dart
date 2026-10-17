@@ -211,15 +211,11 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
         Container(
           width: 56,
           height: 56,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.tealSoft,
             shape: BoxShape.circle,
           ),
-          child: const Icon(
-            Icons.check_rounded,
-            color: AppColors.teal,
-            size: 32,
-          ),
+          child: Icon(Icons.check_rounded, color: AppColors.teal, size: 32),
         ),
         const SizedBox(height: 20),
         Text(Translations.bookingSentTitle, style: AppStyles.title),
@@ -243,8 +239,8 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
             width: 24,
             height: 24,
             alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: AppColors.navy,
+            decoration: BoxDecoration(
+              color: AppColors.panel,
               shape: BoxShape.circle,
             ),
             child: Text(
@@ -412,8 +408,8 @@ class _ContactCard extends StatelessWidget {
     return SiteCard(
       elevated: true,
       hoverLift: false,
-      color: AppColors.navy,
-      borderColor: AppColors.navy,
+      color: AppColors.panel,
+      borderColor: AppColors.panel,
       padding: const EdgeInsets.all(28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -443,7 +439,7 @@ class _ContactCard extends StatelessWidget {
             uri: ContactLink.phone,
             builder: (context, open) => OutlinedButton(
               style: AppStyles.secondaryButton.copyWith(
-                foregroundColor: const WidgetStatePropertyAll(AppColors.onNavy),
+                foregroundColor: WidgetStatePropertyAll(AppColors.onNavy),
                 overlayColor: WidgetStatePropertyAll(
                   Colors.white.withValues(alpha: 0.08),
                 ),
@@ -488,7 +484,7 @@ class _DayTile extends StatelessWidget {
       selected: selected,
       label: '$weekday $month $day',
       child: Material(
-        color: selected ? AppColors.teal : Colors.white,
+        color: selected ? AppColors.teal : AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: selected ? AppColors.teal : AppColors.border),
@@ -560,7 +556,7 @@ class _TimeTile extends StatelessWidget {
       selected: selected,
       label: label,
       child: Material(
-        color: selected ? AppColors.teal : Colors.white,
+        color: selected ? AppColors.teal : AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
           side: BorderSide(color: selected ? AppColors.teal : AppColors.border),

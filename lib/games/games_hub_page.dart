@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../components/responsive_card_grid.dart';
 import '../account/account_page.dart';
 import '../components/language_toggle.dart';
+import '../components/theme_toggle.dart';
 import '../components/speech_mark_logo.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
@@ -48,6 +49,7 @@ class GamesHeader extends StatelessWidget {
               const Spacer(),
               AccountButton(compact: !wide),
               LanguageToggle(compact: !wide),
+              const ThemeToggle(),
               const SizedBox(width: 4),
               TextButton.icon(
                 onPressed: () => Navigator.of(
@@ -173,8 +175,8 @@ class _GameCardState extends State<GameCard> {
           transform: Matrix4.translationValues(0, lifted ? -4 : 0, 0),
           decoration: BoxDecoration(
             color: game.available
-                ? Colors.white
-                : Colors.white.withValues(alpha: 0.6),
+                ? AppColors.surface
+                : AppColors.surface.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: lifted

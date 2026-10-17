@@ -5,6 +5,7 @@ import '../data/site_content.dart';
 import '../translations/translations.dart';
 import 'gallery_tile.dart';
 import 'photo_viewer.dart';
+import '../theme/colors.dart';
 import 'section_container.dart';
 import 'section_header.dart';
 
@@ -17,7 +18,7 @@ class CommunityGallery extends StatelessWidget {
   Widget build(BuildContext context) {
     final gallery = items ?? SiteContent.gallery;
     return ColoredBox(
-      color: Colors.white,
+      color: AppColors.surface,
       child: SectionContainer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

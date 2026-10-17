@@ -93,6 +93,9 @@ class Translations {
       : (n == 1 ? '1 round' : '$n rounds');
   static String minutesShort(int n) => _l('$n min', '$n د');
 
+  static String get themeLight => _l('Light theme', 'المظهر الفاتح');
+  static String get themeDark => _l('Dark theme', 'المظهر الداكن');
+
   static String get languageToggle => isArabic ? 'English' : 'العربية';
 
   static const String siteName = 'Speak Up Fearless';

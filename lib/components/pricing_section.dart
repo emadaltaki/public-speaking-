@@ -79,7 +79,7 @@ class PricingSection extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 3),
                   child: Icon(
                     Icons.check_circle_rounded,
@@ -148,15 +148,11 @@ class _FeatureRow extends StatelessWidget {
             width: 20,
             height: 20,
             margin: const EdgeInsets.only(top: 1),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: AppColors.tealSoft,
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.check_rounded,
-              size: 14,
-              color: AppColors.teal,
-            ),
+            child: Icon(Icons.check_rounded, size: 14, color: AppColors.teal),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -225,7 +221,7 @@ class _FreeIntroCard extends StatelessWidget {
     return SiteCard(
       hoverLift: false,
       borderColor: AppColors.teal.withValues(alpha: 0.5),
-      color: Colors.white,
+      color: AppColors.surface,
       padding: const EdgeInsets.all(32),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -275,8 +271,8 @@ class _PricingCard extends StatelessWidget {
 
     return SiteCard(
       elevated: dark,
-      borderColor: dark ? AppColors.navy : null,
-      color: dark ? AppColors.navy : Colors.white,
+      borderColor: dark ? AppColors.panel : null,
+      color: dark ? AppColors.panel : AppColors.surface,
       padding: const EdgeInsets.all(32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -22,7 +22,7 @@ class AnxietySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Colors.white,
+      color: AppColors.surface,
       child: SectionContainer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,7 @@ class AnxietySection extends StatelessWidget {
                         IconBadge(
                           icon: _icons[i % _icons.length],
                           size: 44,
-                          background: Colors.white,
+                          background: AppColors.surface,
                         ),
                         const SizedBox(height: 18),
                         Text(
@@ -67,7 +67,7 @@ class AnxietySection extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 5,
                         child: ColoredBox(color: AppColors.teal),
                       ),

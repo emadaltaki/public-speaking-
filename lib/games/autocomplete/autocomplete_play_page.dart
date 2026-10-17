@@ -118,7 +118,7 @@ class _AutocompletePlayPageState extends State<AutocompletePlayPage>
           title: '${GameCatalog.autocomplete.title} | ${Translations.siteName}',
           color: AppColors.navy,
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.surface,
             body: Stack(
               children: [
                 SafeArea(

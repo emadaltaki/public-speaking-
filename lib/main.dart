@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'app.dart';
+import 'theme/theme_controller.dart';
 import 'translations/language_store.dart';
 import 'translations/translations.dart';
 
@@ -15,6 +16,10 @@ void main() {
   Translations.language.value = saved == 'ar' || saved == 'en'
       ? saved!
       : (browserLanguage == 'ar' ? 'ar' : 'en');
+  ThemeController.init(loadSavedTheme());
+  ThemeController.dark.addListener(
+    () => saveTheme(ThemeController.isDark ? 'dark' : 'light'),
+  );
   Translations.language.addListener(
     () => saveLanguage(Translations.language.value),
   );

@@ -31,7 +31,7 @@ class _NavLinkButtonState extends State<NavLinkButton> {
       style: TextButton.styleFrom(
         foregroundColor: AppColors.navy,
         backgroundColor: _active
-            ? Colors.white.withValues(alpha: 0.55)
+            ? AppColors.surface.withValues(alpha: 0.6)
             : Colors.transparent,
         minimumSize: Size(44, widget.alignStart ? 48 : 44),
         alignment: widget.alignStart ? Alignment.centerLeft : Alignment.center,

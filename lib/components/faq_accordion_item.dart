@@ -21,7 +21,7 @@ class _FaqAccordionItemState extends State<FaqAccordionItem> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        color: _open ? AppColors.offWhite : Colors.white,
+        color: _open ? AppColors.offWhite : AppColors.surface,
         borderRadius: BorderRadius.circular(AppStyles.radiusSmall + 4),
         border: Border.all(
           color: _open

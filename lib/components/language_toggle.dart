@@ -28,7 +28,7 @@ class LanguageToggle extends StatelessWidget {
       onPressed: toggle,
       style: TextButton.styleFrom(
         foregroundColor: AppColors.navy,
-        backgroundColor: Colors.white.withValues(alpha: 0.55),
+        backgroundColor: AppColors.surface.withValues(alpha: 0.6),
         shape: const StadiumBorder(),
         minimumSize: const Size(44, 44),
         padding: EdgeInsets.symmetric(horizontal: compact ? 10 : 14),
