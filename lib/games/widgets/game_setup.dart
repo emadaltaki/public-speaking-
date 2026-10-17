@@ -48,25 +48,27 @@ class GameSetupScaffold extends StatelessWidget {
                   horizontal: 16,
                   vertical: wide ? 48 : 20,
                 ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 560),
-                    child: SignInGate(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: AppStyles.elevatedShadow,
-                        ),
-                        padding: EdgeInsets.all(wide ? 36 : 22),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            HowToPlayFirstTime(game: game),
-                            _header(context),
-                            const SizedBox(height: 24),
-                            ...children,
-                          ],
+                child: RepaintBoundary(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 560),
+                      child: SignInGate(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(28),
+                            boxShadow: AppStyles.elevatedShadow,
+                          ),
+                          padding: EdgeInsets.all(wide ? 36 : 22),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              HowToPlayFirstTime(game: game),
+                              _header(context),
+                              const SizedBox(height: 24),
+                              ...children,
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -430,7 +432,7 @@ class _StepCard extends StatelessWidget {
                                   color: GameColors.accent.withValues(
                                     alpha: .35,
                                   ),
-                                  blurRadius: 24,
+                                  blurRadius: 12,
                                   offset: const Offset(0, 10),
                                 ),
                               ],

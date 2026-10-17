@@ -34,75 +34,79 @@ class GamesHeader extends StatelessWidget {
     final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
     final dark = AppColors.offWhite.computeLuminance() < 0.2;
     // Floating "glass" bar, matching the sign-in page.
-    return Container(
-      color: AppColors.headerBand.withValues(alpha: dark ? 1 : 0.55),
-      padding: EdgeInsets.fromLTRB(wide ? 24 : 12, 10, wide ? 24 : 12, 10),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1120),
-          child: Container(
-            height: 56,
-            padding: const EdgeInsetsDirectional.only(start: 14, end: 6),
-            decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: dark ? 0.7 : 0.72),
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: dark
-                    ? Colors.white.withValues(alpha: 0.07)
-                    : Colors.white.withValues(alpha: 0.85),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF502D14).withValues(alpha: 0.18),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
-                  spreadRadius: -12,
+    return RepaintBoundary(
+      child: Container(
+        color: AppColors.headerBand.withValues(alpha: dark ? 1 : 0.55),
+        padding: EdgeInsets.fromLTRB(wide ? 24 : 12, 10, wide ? 24 : 12, 10),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1120),
+            child: Container(
+              height: 56,
+              padding: const EdgeInsetsDirectional.only(start: 14, end: 6),
+              decoration: BoxDecoration(
+                color: AppColors.surface.withValues(alpha: dark ? 0.7 : 0.72),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: dark
+                      ? Colors.white.withValues(alpha: 0.07)
+                      : Colors.white.withValues(alpha: 0.85),
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(999),
-                      onTap: () => _goHome(context),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SpeechMarkLogo(size: 30),
-                          const SizedBox(width: 9),
-                          Flexible(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                Translations.siteName,
-                                textDirection: TextDirection.ltr,
-                                style: AppStyles.title.copyWith(
-                                  color: AppColors.navy,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 16,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF502D14).withValues(alpha: 0.18),
+                    blurRadius: 12,
+                    offset: const Offset(0, 8),
+                    spreadRadius: -12,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(999),
+                        onTap: () => _goHome(context),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SpeechMarkLogo(size: 30),
+                            const SizedBox(width: 9),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  Translations.siteName,
+                                  textDirection: TextDirection.ltr,
+                                  style: AppStyles.title.copyWith(
+                                    color: AppColors.navy,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                AccountButton(compact: !wide),
-                if (wide) const LanguageToggle(compact: true),
-                const ThemeToggle(),
-                IconButton(
-                  onPressed: () => _goHome(context),
-                  tooltip: Translations.gamesBackToSite,
-                  color: AppColors.navy,
-                  style: IconButton.styleFrom(minimumSize: const Size(40, 40)),
-                  icon: const Icon(Icons.home_outlined),
-                ),
-              ],
+                  AccountButton(compact: !wide),
+                  if (wide) const LanguageToggle(compact: true),
+                  const ThemeToggle(),
+                  IconButton(
+                    onPressed: () => _goHome(context),
+                    tooltip: Translations.gamesBackToSite,
+                    color: AppColors.navy,
+                    style: IconButton.styleFrom(
+                      minimumSize: const Size(40, 40),
+                    ),
+                    icon: const Icon(Icons.home_outlined),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -128,48 +132,55 @@ class GamesHubPage extends StatelessWidget {
             const GamesHeader(),
             Expanded(
               child: SingleChildScrollView(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1080),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, wide ? 56 : 32, 20, 56),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Translations.gamesEyebrow.toUpperCase(),
-                            style: AppStyles.eyebrow.copyWith(
-                              color: GameColors.accentDark,
+                child: RepaintBoundary(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1080),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          20,
+                          wide ? 56 : 32,
+                          20,
+                          56,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Translations.gamesEyebrow.toUpperCase(),
+                              style: AppStyles.eyebrow.copyWith(
+                                color: GameColors.accentDark,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            Translations.gamesTitle,
-                            style: AppStyles.headline.copyWith(
-                              fontSize: wide ? 40 : 30,
+                            const SizedBox(height: 10),
+                            Text(
+                              Translations.gamesTitle,
+                              style: AppStyles.headline.copyWith(
+                                fontSize: wide ? 40 : 30,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            Translations.gamesIntro,
-                            style: AppStyles.lead.copyWith(
-                              fontSize: wide ? 19 : 17,
+                            const SizedBox(height: 10),
+                            Text(
+                              Translations.gamesIntro,
+                              style: AppStyles.lead.copyWith(
+                                fontSize: wide ? 19 : 17,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 32),
-                          // Games are for members: signed-out visitors see
-                          // a sign-up prompt instead of the list.
-                          SignInGate(
-                            child: ResponsiveCardGrid(
-                              minTileWidth: 320,
-                              gap: 20,
-                              children: [
-                                for (final game in GameCatalog.games)
-                                  GameCard(game: game),
-                              ],
+                            const SizedBox(height: 32),
+                            // Games are for members: signed-out visitors see
+                            // a sign-up prompt instead of the list.
+                            SignInGate(
+                              child: ResponsiveCardGrid(
+                                minTileWidth: 320,
+                                gap: 20,
+                                children: [
+                                  for (final game in GameCatalog.games)
+                                    GameCard(game: game),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

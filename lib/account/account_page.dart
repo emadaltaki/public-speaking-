@@ -136,21 +136,21 @@ class AvatarCircle extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: color,
+        color: image == null ? color : null,
         shape: BoxShape.circle,
-        border: border,
+        image: image == null
+            ? null
+            : DecorationImage(
+                image: image,
+                fit: BoxFit.cover,
+                onError: (_, _) {},
+              ),
       ),
-      child: image == null
-          ? letter
-          : Image(
-              image: image,
-              width: size,
-              height: size,
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => letter,
-            ),
+      foregroundDecoration: border == null
+          ? null
+          : BoxDecoration(shape: BoxShape.circle, border: border),
+      child: image == null ? letter : null,
     );
   }
 }
@@ -177,14 +177,16 @@ class AccountPage extends StatelessWidget {
                   horizontal: 16,
                   vertical: wide ? 48 : 20,
                 ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 720),
-                    child: ValueListenableBuilder<AppUser?>(
-                      valueListenable: AuthService.user,
-                      builder: (context, user, _) => user == null
-                          ? const _SignedOut()
-                          : _SignedIn(user: user),
+                child: RepaintBoundary(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 720),
+                      child: ValueListenableBuilder<AppUser?>(
+                        valueListenable: AuthService.user,
+                        builder: (context, user, _) => user == null
+                            ? const _SignedOut()
+                            : _SignedIn(user: user),
+                      ),
                     ),
                   ),
                 ),
@@ -439,7 +441,7 @@ class _ProfileHeaderState extends State<_ProfileHeader> {
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF8E3B22).withValues(alpha: .35),
-            blurRadius: 30,
+            blurRadius: 14,
             offset: const Offset(0, 14),
             spreadRadius: -12,
           ),
@@ -466,7 +468,7 @@ class _ProfileHeaderState extends State<_ProfileHeader> {
                         size: 72,
                         color: Colors.white.withValues(alpha: .18),
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: .6),
+                          color: Colors.white,
                           width: 2,
                         ),
                       ),
