@@ -342,7 +342,6 @@ class _ProfileHeader extends StatefulWidget {
 
 class _ProfileHeaderState extends State<_ProfileHeader> {
   bool _busy = false;
-  Future<String?>? _pending;
 
   @override
   void initState() {
@@ -350,66 +349,18 @@ class _ProfileHeaderState extends State<_ProfileHeader> {
     AvatarStore.refresh();
   }
 
-  Future<void> _change() async {
-    final hasPhoto = AvatarStore.photo.value != null;
-    // The file picker must open inside the tap itself (iPhone Safari blocks
-    // it otherwise), so it starts in the sheet and is awaited here.
-    _pending = null;
-    final choice = await showModalBottomSheet<String>(
-      context: context,
-      backgroundColor: AppColors.surface,
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(
-                  Icons.photo_camera_outlined,
-                  color: GameColors.accent,
-                ),
-                title: Text(
-                  hasPhoto
-                      ? Translations.accountPhotoChange
-                      : Translations.accountPhotoAdd,
-                  style: AppStyles.label.copyWith(fontSize: 16),
-                ),
-                onTap: () {
-                  _pending = pickSquarePhoto();
-                  Navigator.pop(context, 'pick');
-                },
-              ),
-              if (hasPhoto)
-                ListTile(
-                  leading: Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.error,
-                  ),
-                  title: Text(
-                    Translations.accountPhotoRemove,
-                    style: AppStyles.label.copyWith(
-                      fontSize: 16,
-                      color: AppColors.error,
-                    ),
-                  ),
-                  onTap: () => Navigator.pop(context, 'remove'),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-    if (choice == null || !mounted) return;
-    String? photo;
-    if (choice == 'pick') {
-      photo = await _pending;
-      if (photo == null || !mounted) return;
-    }
+  /// Opens the phone's own photo picker straight away (on iPhone it offers
+  /// Photo Library, Take Photo or Choose File), so there is only one menu.
+  void _pick() {
+    final pending = pickSquarePhoto();
+    _save(pending);
+  }
+
+  void _remove() => _save(Future.value(null), removing: true);
+
+  Future<void> _save(Future<String?> pending, {bool removing = false}) async {
+    final photo = await pending;
+    if (!mounted || (photo == null && !removing)) return;
     setState(() => _busy = true);
     final saved = await AvatarStore.save(photo);
     if (!mounted) return;
@@ -453,7 +404,7 @@ class _ProfileHeaderState extends State<_ProfileHeader> {
             button: true,
             label: Translations.accountPhotoChange,
             child: GestureDetector(
-              onTap: _busy ? null : _change,
+              onTap: _busy ? null : _pick,
               child: SizedBox(
                 width: 72,
                 height: 72,
@@ -467,10 +418,7 @@ class _ProfileHeaderState extends State<_ProfileHeader> {
                         photo: photo,
                         size: 72,
                         color: Colors.white.withValues(alpha: .18),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2,
-                        ),
+                        border: Border.all(color: Colors.white, width: 2),
                       ),
                     ),
                     if (_busy)
@@ -532,6 +480,26 @@ class _ProfileHeaderState extends State<_ProfileHeader> {
                       color: Colors.white.withValues(alpha: .85),
                     ),
                   ),
+                ValueListenableBuilder<String?>(
+                  valueListenable: AvatarStore.photo,
+                  builder: (context, photo, _) => photo == null
+                      ? const SizedBox.shrink()
+                      : GestureDetector(
+                          onTap: _busy ? null : _remove,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              Translations.accountPhotoRemove,
+                              style: AppStyles.bodySmall.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.underline,
+                                decorationColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
               ],
             ),
           ),
