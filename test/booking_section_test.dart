@@ -39,8 +39,8 @@ void main() {
   }
 
   Future<void> fillAndSend(WidgetTester tester) async {
-    await tester.tap(find.byType(ChoiceChip).first);
-    await tester.tap(find.text(Translations.bookingTimeEvening));
+    await tester.tap(find.byKey(const ValueKey('day-0')));
+    await tester.tap(find.text('Evening'));
     await tester.enterText(find.byType(TextFormField).at(0), 'Alex');
     await tester.enterText(find.byType(TextFormField).at(1), '416-555-0100');
     await tester.enterText(

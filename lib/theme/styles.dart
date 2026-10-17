@@ -72,20 +72,43 @@ class AppStyles {
     );
   }
 
-  static TextStyle get display => _inter(
-    fontSize: 60,
-    height: 1.08,
+  /// Headings use Montserrat, a geometric sans, for a bolder, more
+  /// professional look next to Inter body text.
+  static const String headingFontFamily = 'Montserrat';
+
+  static TextStyle _heading({
+    double? fontSize,
+    double? height,
+    FontWeight? fontWeight,
+    Color? color,
+    double? letterSpacing,
+  }) {
+    final weight = fontWeight ?? FontWeight.w700;
+    return TextStyle(
+      fontFamily: headingFontFamily,
+      fontSize: fontSize,
+      height: height,
+      fontWeight: weight,
+      color: color,
+      letterSpacing: letterSpacing,
+      fontVariations: [FontVariation('wght', weight.value.toDouble())],
+    );
+  }
+
+  static TextStyle get display => _heading(
+    fontSize: 56,
+    height: 1.1,
     fontWeight: FontWeight.w800,
     color: AppColors.navy,
-    letterSpacing: -1.6,
+    letterSpacing: -1.2,
   );
 
-  static TextStyle get headline => _inter(
-    fontSize: 40,
-    height: 1.15,
-    fontWeight: FontWeight.w700,
+  static TextStyle get headline => _heading(
+    fontSize: 38,
+    height: 1.18,
+    fontWeight: FontWeight.w800,
     color: AppColors.navy,
-    letterSpacing: -0.9,
+    letterSpacing: -0.6,
   );
 
   /// Small uppercase kicker shown above section headlines.
@@ -97,10 +120,10 @@ class AppStyles {
     letterSpacing: 1.6,
   );
 
-  static TextStyle get title => _inter(
-    fontSize: 22,
+  static TextStyle get title => _heading(
+    fontSize: 21,
     height: 1.3,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w700,
     color: AppColors.navy,
     letterSpacing: -0.2,
   );
@@ -129,8 +152,8 @@ class AppStyles {
   static TextStyle get navLink => _inter(
     fontSize: 17,
     height: 1.2,
-    fontWeight: FontWeight.w500,
-    color: AppColors.onNavy,
+    fontWeight: FontWeight.w600,
+    color: AppColors.navy,
     letterSpacing: 0.1,
   );
 

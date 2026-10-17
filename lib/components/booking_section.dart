@@ -98,6 +98,11 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
     'Nov',
     'Dec',
   ];
+  static const _timeIcons = [
+    Icons.wb_twilight_rounded,
+    Icons.wb_sunny_outlined,
+    Icons.nightlight_outlined,
+  ];
   static const _times = [
     Translations.bookingTimeMorning,
     Translations.bookingTimeAfternoon,
@@ -204,28 +209,6 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
     );
   }
 
-  Widget _choice({
-    required String label,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    return ChoiceChip(
-      label: Text(label),
-      selected: selected,
-      onSelected: (_) => onTap(),
-      showCheckmark: false,
-      labelStyle: AppStyles.label.copyWith(
-        color: selected ? AppColors.onTeal : AppColors.navy,
-        fontSize: 14,
-      ),
-      selectedColor: AppColors.teal,
-      backgroundColor: Colors.white,
-      side: BorderSide(color: selected ? AppColors.teal : AppColors.border),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-    );
-  }
-
   Widget _stepLabel(String number, String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -269,30 +252,42 @@ class _TimeRequestFormState extends State<_TimeRequestForm> {
           Text(Translations.pricingIntroMeta, style: AppStyles.bodySmall),
           const SizedBox(height: 24),
           _stepLabel('1', Translations.bookingPickDay),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final d in _days)
-                _choice(
-                  label: _label(d),
+          // One swipeable row of day cards: easy to tap on a phone and
+          // never wraps into ragged lines.
+          SizedBox(
+            height: 84,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: _days.length,
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
+              itemBuilder: (context, i) {
+                final d = _days[i];
+                return _DayTile(
+                  key: ValueKey('day-$i'),
+                  weekday: _weekdays[d.weekday - 1],
+                  day: d.day,
+                  month: _months[d.month - 1],
                   selected: _day == d,
                   onTap: () => setState(() => _day = d),
-                ),
-            ],
+                );
+              },
+            ),
           ),
           const SizedBox(height: 24),
           _stepLabel('2', Translations.bookingPickTime),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          Row(
             children: [
-              for (final t in _times)
-                _choice(
-                  label: t,
-                  selected: _time == t,
-                  onTap: () => setState(() => _time = t),
+              for (var i = 0; i < _times.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _TimeTile(
+                    label: _times[i],
+                    icon: _timeIcons[i],
+                    selected: _time == _times[i],
+                    onTap: () => setState(() => _time = _times[i]),
+                  ),
                 ),
+              ],
             ],
           ),
           if (_showChoiceError && (_day == null || _time == null)) ...[
@@ -439,6 +434,139 @@ class _ContactCard extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DayTile extends StatelessWidget {
+  const _DayTile({
+    super.key,
+    required this.weekday,
+    required this.day,
+    required this.month,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String weekday;
+  final int day;
+  final String month;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = selected ? AppColors.onTeal : AppColors.navy;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: '$weekday $month $day',
+      child: Material(
+        color: selected ? AppColors.teal : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: selected ? AppColors.teal : AppColors.border),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: SizedBox(
+            width: 64,
+            child: ExcludeSemantics(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    weekday.toUpperCase(),
+                    style: AppStyles.label.copyWith(
+                      fontSize: 11,
+                      letterSpacing: 0.8,
+                      color: selected ? fg : AppColors.mutedText,
+                    ),
+                  ),
+                  Text(
+                    '$day',
+                    style: AppStyles.title.copyWith(fontSize: 22, color: fg),
+                  ),
+                  Text(
+                    month,
+                    style: AppStyles.bodySmall.copyWith(
+                      fontSize: 12,
+                      height: 1.2,
+                      color: selected ? fg : AppColors.mutedText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TimeTile extends StatelessWidget {
+  const _TimeTile({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  /// e.g. "Morning (9am-12pm)"; shown as a name with the hours underneath.
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final split = label.indexOf(' (');
+    final name = split < 0 ? label : label.substring(0, split);
+    final hours = split < 0 ? '' : label.substring(split + 2, label.length - 1);
+    final fg = selected ? AppColors.onTeal : AppColors.navy;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: selected ? AppColors.teal : Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: selected ? AppColors.teal : AppColors.border),
+        ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: ExcludeSemantics(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+              child: Column(
+                children: [
+                  Icon(icon, size: 22, color: selected ? fg : AppColors.teal),
+                  const SizedBox(height: 6),
+                  Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: AppStyles.label.copyWith(color: fg),
+                  ),
+                  if (hours.isNotEmpty)
+                    Text(
+                      hours,
+                      textAlign: TextAlign.center,
+                      style: AppStyles.bodySmall.copyWith(
+                        fontSize: 12,
+                        height: 1.3,
+                        color: selected ? fg : AppColors.mutedText,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
