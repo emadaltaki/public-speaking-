@@ -13,3 +13,6 @@ void writeLocal(String key, String value) => _memory[key] = value;
 
 /// Opens a page of this site outside the Flutter app (the sign-in page).
 void openSitePage(String path) {}
+
+/// Photo picking only exists in the browser.
+Future<String?> pickSquarePhoto({int size = 256}) async => null;

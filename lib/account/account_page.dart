@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../games/game_catalog.dart';
@@ -8,6 +10,7 @@ import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'auth_service.dart';
 import 'auth_storage.dart';
+import 'avatar_store.dart';
 import 'progress_store.dart';
 
 /// "Sign in" in the header, or the signed-in visitor's name linking to
@@ -73,18 +76,81 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<String?>(
+      valueListenable: AvatarStore.photo,
+      builder: (context, photo, _) => AvatarCircle(
+        user: user,
+        photo: photo,
+        size: size,
+        color: AppColors.panel,
+      ),
+    );
+  }
+}
+
+/// A round profile picture: the uploaded photo, then the Google photo,
+/// then the first letter of the visitor's name.
+class AvatarCircle extends StatelessWidget {
+  const AvatarCircle({
+    super.key,
+    required this.user,
+    required this.photo,
+    required this.size,
+    required this.color,
+    this.border,
+  });
+
+  final AppUser user;
+  final String? photo;
+  final double size;
+  final Color color;
+  final BoxBorder? border;
+
+  static final Map<String, MemoryImage> _decoded = {};
+
+  static ImageProvider? imageFor(String? photo, String? googleUrl) {
+    if (photo != null && photo.startsWith('data:image')) {
+      return _decoded.putIfAbsent(photo, () {
+        final comma = photo.indexOf(',');
+        return MemoryImage(base64Decode(photo.substring(comma + 1)));
+      });
+    }
+    if (googleUrl != null && googleUrl.isNotEmpty) {
+      return NetworkImage(googleUrl);
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final image = imageFor(photo, user.photoUrl);
+    final letter = Text(
+      user.initial,
+      style: AppStyles.label.copyWith(
+        color: Colors.white,
+        fontSize: size * 0.42,
+        fontWeight: FontWeight.w800,
+      ),
+    );
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
-      decoration: BoxDecoration(color: AppColors.panel, shape: BoxShape.circle),
-      child: Text(
-        user.initial,
-        style: AppStyles.label.copyWith(
-          color: Colors.white,
-          fontSize: size * 0.42,
-        ),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: border,
       ),
+      child: image == null
+          ? letter
+          : Image(
+              image: image,
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) => letter,
+            ),
     );
   }
 }
@@ -261,17 +327,108 @@ class _SignedIn extends StatelessWidget {
   }
 }
 
-/// Warm banner with the visitor's initial, a greeting and their email.
-class _ProfileHeader extends StatelessWidget {
+/// Warm banner with the visitor's photo, a greeting and their email.
+class _ProfileHeader extends StatefulWidget {
   const _ProfileHeader({required this.user, required this.firstName});
 
   final AppUser user;
   final String firstName;
 
   @override
+  State<_ProfileHeader> createState() => _ProfileHeaderState();
+}
+
+class _ProfileHeaderState extends State<_ProfileHeader> {
+  bool _busy = false;
+  Future<String?>? _pending;
+
+  @override
+  void initState() {
+    super.initState();
+    AvatarStore.refresh();
+  }
+
+  Future<void> _change() async {
+    final hasPhoto = AvatarStore.photo.value != null;
+    // The file picker must open inside the tap itself (iPhone Safari blocks
+    // it otherwise), so it starts in the sheet and is awaited here.
+    _pending = null;
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(
+                  Icons.photo_camera_outlined,
+                  color: GameColors.accent,
+                ),
+                title: Text(
+                  hasPhoto
+                      ? Translations.accountPhotoChange
+                      : Translations.accountPhotoAdd,
+                  style: AppStyles.label.copyWith(fontSize: 16),
+                ),
+                onTap: () {
+                  _pending = pickSquarePhoto();
+                  Navigator.pop(context, 'pick');
+                },
+              ),
+              if (hasPhoto)
+                ListTile(
+                  leading: Icon(
+                    Icons.delete_outline_rounded,
+                    color: AppColors.error,
+                  ),
+                  title: Text(
+                    Translations.accountPhotoRemove,
+                    style: AppStyles.label.copyWith(
+                      fontSize: 16,
+                      color: AppColors.error,
+                    ),
+                  ),
+                  onTap: () => Navigator.pop(context, 'remove'),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (choice == null || !mounted) return;
+    String? photo;
+    if (choice == 'pick') {
+      photo = await _pending;
+      if (photo == null || !mounted) return;
+    }
+    setState(() => _busy = true);
+    final saved = await AvatarStore.save(photo);
+    if (!mounted) return;
+    setState(() => _busy = false);
+    ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Text(
+          saved
+              ? Translations.accountPhotoSaved
+              : Translations.accountPhotoLocal,
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final user = widget.user;
     return Container(
-      padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         gradient: const LinearGradient(
@@ -290,24 +447,65 @@ class _ProfileHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: .18),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white.withValues(alpha: .5),
-                width: 2,
-              ),
-            ),
-            child: Text(
-              user.initial,
-              style: AppStyles.title.copyWith(
-                color: Colors.white,
-                fontSize: 26,
-                fontWeight: FontWeight.w800,
+          Semantics(
+            button: true,
+            label: Translations.accountPhotoChange,
+            child: GestureDetector(
+              onTap: _busy ? null : _change,
+              child: SizedBox(
+                width: 72,
+                height: 72,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ValueListenableBuilder<String?>(
+                      valueListenable: AvatarStore.photo,
+                      builder: (context, photo, _) => AvatarCircle(
+                        user: user,
+                        photo: photo,
+                        size: 72,
+                        color: Colors.white.withValues(alpha: .18),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: .6),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    if (_busy)
+                      const Positioned.fill(
+                        child: Padding(
+                          padding: EdgeInsets.all(20),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    PositionedDirectional(
+                      end: -2,
+                      bottom: -2,
+                      child: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: .2),
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.photo_camera_rounded,
+                          size: 16,
+                          color: Color(0xFF8E3B22),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -317,7 +515,7 @@ class _ProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  Translations.accountHello(firstName),
+                  Translations.accountHello(widget.firstName),
                   style: AppStyles.title.copyWith(
                     color: Colors.white,
                     fontSize: 23,
