@@ -98,7 +98,7 @@ class _ConductorPlayPageState extends State<ConductorPlayPage>
       (route) => route.settings.name == AppRoutes.games || route.isFirst,
     );
     if (ModalRoute.of(context)?.isCurrent ?? false) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.games);
+      AppRoutes.toGames(context);
     }
   }
 

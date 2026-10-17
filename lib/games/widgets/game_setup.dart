@@ -112,13 +112,7 @@ class GameSetupScaffold extends StatelessWidget {
             ),
             IconButton(
               tooltip: Translations.tripleStepBackToGames,
-              onPressed:
-                  onClose ??
-                  () => Navigator.of(context).canPop()
-                      ? Navigator.of(context).pop()
-                      : Navigator.of(
-                          context,
-                        ).pushReplacementNamed(AppRoutes.games),
+              onPressed: onClose ?? () => AppRoutes.toGames(context),
               icon: const Icon(Icons.close_rounded),
             ),
           ],

@@ -7,14 +7,14 @@
     },
     {
       "source": "/games",
-      "destination": "/app.html"
-    },
-    {
-      "source": "/games/:path*",
-      "destination": "/app.html"
+      "destination": "/games.html"
     },
     {
       "source": "/account",
+      "destination": "/account.html"
+    },
+    {
+      "source": "/games/:path*",
       "destination": "/app.html"
     }
   ],

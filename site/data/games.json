@@ -1,0 +1,142 @@
+{
+ "en": {
+  "triple-step": {
+   "title": "Triple Step",
+   "tagline": "Speak on a topic while weaving in surprise words.",
+   "description": "Get a topic and keep talking. Random words pop up one at a time, and you work each one into your speech.",
+   "skills": [
+    "Impromptu",
+    "Focus",
+    "Flow"
+   ],
+   "steps": [
+    "Choose how many surprise words you want and how long to talk.",
+    "You get a topic. Start talking about it.",
+    "Every few seconds a new word pops up. Work it into what you are saying.",
+    "Keep talking until the time is up."
+   ],
+   "tip": "It's fine if a word doesn't fit. Make it fit. That's the fun!"
+  },
+  "conductor": {
+   "title": "The Conductor",
+   "tagline": "Follow the pitch from 1 (low) to 10 (high).",
+   "description": "Talk on a topic while a pitch number changes at random. Move your voice up and down to match it and build vocal variety.",
+   "skills": [
+    "Pitch",
+    "Vocal variety",
+    "Control"
+   ],
+   "steps": [
+    "We give you a topic. Start talking about it.",
+    "A big number from 1 to 10 shows on the screen.",
+    "That number is how high your voice should be. 1 is low and deep, 10 is high and bright.",
+    "Keep talking. Each time the number changes, move your voice up or down to match it."
+   ],
+   "tip": "Go big! It might feel silly, but that's how your voice gets more range."
+  },
+  "podcast": {
+   "title": "The Podcast Game",
+   "tagline": "One topic, a group, and the mic keeps jumping.",
+   "description": "Everyone shares one topic. A name lights up on screen and that person speaks until the name switches to someone else.",
+   "skills": [
+    "Group",
+    "Listening",
+    "Quick thinking"
+   ],
+   "steps": [
+    "Add the names of everyone playing.",
+    "The whole group gets one topic.",
+    "Whoever's name is on the screen does the talking.",
+    "When the name changes, the new person picks up where the last one stopped."
+   ],
+   "tip": "Listen closely so you can continue the story when it is your turn."
+  },
+  "autocomplete": {
+   "title": "Autocomplete",
+   "tagline": "Rapid fire: finish the sentence out loud, fast.",
+   "description": "A sentence starter appears, sometimes silly, sometimes deep. Finish it out loud before the timer runs out. Then the next one!",
+   "skills": [
+    "Rapid fire",
+    "Creativity",
+    "Confidence"
+   ],
+   "steps": [
+    "You see the start of a sentence.",
+    "Finish it out loud. Any answer works, even a silly one.",
+    "Answer before the timer runs out.",
+    "The next sentence comes right away. Keep going!"
+   ],
+   "tip": "Don't stop to think of the perfect answer. Say the first thing!"
+  }
+ },
+ "ar": {
+  "triple-step": {
+   "title": "الخطوة الثلاثية",
+   "tagline": "تحدّث عن موضوع وأدخل كلمات مفاجئة في كلامك.",
+   "description": "تحصل على موضوع وتستمر في الحديث. تظهر كلمات عشوائية واحدة تلو الأخرى، وتدخل كل واحدة في كلامك.",
+   "skills": [
+    "ارتجال",
+    "تركيز",
+    "انسيابية"
+   ],
+   "steps": [
+    "اختر عدد الكلمات المفاجئة ومدة الحديث.",
+    "تحصل على موضوع. ابدأ الحديث عنه.",
+    "كل بضع ثوانٍ تظهر كلمة جديدة. أدخلها في كلامك.",
+    "استمر في الكلام حتى ينتهي الوقت."
+   ],
+   "tip": "لا بأس إن لم تناسب الكلمة. اجعلها تناسب، هذه هي المتعة!"
+  },
+  "conductor": {
+   "title": "قائد الأوركسترا",
+   "tagline": "اتبع طبقة الصوت من 1 (منخفض) إلى 10 (مرتفع).",
+   "description": "تحدّث عن موضوع بينما يتغيّر رقم طبقة الصوت عشوائيًا. ارفع صوتك واخفضه ليطابقه وتبني تنوّعًا في صوتك.",
+   "skills": [
+    "طبقة الصوت",
+    "تنوّع الصوت",
+    "تحكّم"
+   ],
+   "steps": [
+    "نعطيك موضوعًا. ابدأ الحديث عنه.",
+    "يظهر رقم كبير من 1 إلى 10 على الشاشة.",
+    "هذا الرقم هو مستوى صوتك. 1 منخفض وعميق، و10 مرتفع ومشرق.",
+    "استمر في الكلام. كلما تغيّر الرقم، ارفع صوتك أو اخفضه ليطابقه."
+   ],
+   "tip": "بالغ! قد يبدو الأمر مضحكًا، لكنه طريقتك لتوسيع مدى صوتك."
+  },
+  "podcast": {
+   "title": "لعبة البودكاست",
+   "tagline": "موضوع واحد ومجموعة، والميكروفون يتنقّل باستمرار.",
+   "description": "يتشارك الجميع موضوعًا واحدًا. يظهر اسم على الشاشة فيتحدث صاحبه حتى ينتقل الاسم إلى شخص آخر.",
+   "skills": [
+    "جماعي",
+    "إصغاء",
+    "سرعة بديهة"
+   ],
+   "steps": [
+    "أضف أسماء كل من يلعب.",
+    "تحصل المجموعة كلها على موضوع واحد.",
+    "صاحب الاسم الظاهر على الشاشة هو من يتكلم.",
+    "عندما يتغيّر الاسم، يكمل الشخص الجديد من حيث توقّف السابق."
+   ],
+   "tip": "أصغِ جيدًا لتتمكن من إكمال القصة عندما يأتي دورك."
+  },
+  "autocomplete": {
+   "title": "الإكمال التلقائي",
+   "tagline": "أسئلة سريعة: أكمل الجملة بصوت عالٍ وبسرعة.",
+   "description": "تظهر بداية جملة، مضحكة أحيانًا وعميقة أحيانًا. أكملها بصوت عالٍ قبل انتهاء المؤقت. ثم التالية!",
+   "skills": [
+    "أسئلة سريعة",
+    "إبداع",
+    "ثقة"
+   ],
+   "steps": [
+    "ترى بداية جملة.",
+    "أكملها بصوت عالٍ. أي إجابة مقبولة، حتى المضحكة.",
+    "أجب قبل أن ينتهي المؤقت.",
+    "تأتي الجملة التالية فورًا. استمر!"
+   ],
+   "tip": "لا تتوقف للتفكير في الإجابة المثالية. قل أول ما يخطر لك!"
+  }
+ }
+}
