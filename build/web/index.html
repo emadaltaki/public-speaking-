@@ -335,9 +335,20 @@
     footer .copy { border-top: 1px solid rgba(255,255,255,.14); margin-top: 44px; padding-top: 24px; font-size: 15px; }
 
     /* Sticky phone CTA */
-    .sticky-cta { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 40; display: none; transform: translateY(140%); transition: transform .3s ease; }
-    .sticky-cta.show { transform: none; }
-    .sticky-cta .btn { width: 100%; min-height: 54px; box-shadow: 0 14px 30px -10px rgba(43,33,24,.55); }
+    .sticky-cta { position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 40; display: none;
+      align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 999px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+      box-shadow: 0 14px 34px -14px rgba(43,33,24,.45);
+      transform: translateY(160%); opacity: 0; transition: transform .35s cubic-bezier(.3,.7,.2,1), opacity .25s; }
+    :root[dir="rtl"] .sticky-cta { padding: 8px 16px 8px 8px; }
+    .sticky-cta.show { transform: none; opacity: 1; }
+    .sticky-cta .txt { flex: 1; min-width: 0; line-height: 1.25; }
+    .sticky-cta .txt b { display: block; color: var(--ink); font-family: var(--head); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sticky-cta .txt small { display: block; color: var(--muted); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sticky-cta .btn { flex: none; min-height: 44px; padding: 0 20px; font-size: 15.5px; }
+    .sticky-cta .btn svg { width: 16px; height: 16px; }
+    :root[dir="rtl"] .sticky-cta .btn svg { transform: scaleX(-1); }
 
     /* Lightbox and dialog */
     .lightbox, .dialog { position: fixed; inset: 0; z-index: 80; display: none; }
@@ -390,7 +401,7 @@
       .book-grid { grid-template-columns: 1fr; }
       footer .cols { grid-template-columns: 1fr 1fr; }
       footer .cols > :first-child { grid-column: 1 / -1; }
-      .sticky-cta { display: block; }
+      .sticky-cta { display: flex; }
       body.has-sticky footer { padding-bottom: 110px; }
     }
     /* Phone */
@@ -754,7 +765,10 @@
     </div>
   </footer>
 
-  <div class="sticky-cta" id="stickyCta"><a class="btn btn-primary" href="#book" data-t="stickyCta" data-cta="sticky">Book your free intro call</a></div>
+  <div class="sticky-cta" id="stickyCta">
+    <span class="txt"><b data-t="stickyTitle">Free intro call</b><small data-t="stickySub">15–20 min · no pressure to join</small></span>
+    <a class="btn btn-primary" href="#book" data-cta="sticky"><span data-t="stickyCta">Book now</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
     <figure style="margin:0"><img id="lbImg" alt=""><figcaption class="cap" id="lbCap"></figcaption></figure>
