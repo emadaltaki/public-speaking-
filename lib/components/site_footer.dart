@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
+import 'contact_link.dart';
 import 'section_container.dart';
 import 'speech_mark_logo.dart';
 
@@ -14,16 +15,9 @@ class FooterLink {
 }
 
 class SiteFooter extends StatelessWidget {
-  const SiteFooter({
-    super.key,
-    required this.links,
-    required this.onEmail,
-    required this.onPhone,
-  });
+  const SiteFooter({super.key, required this.links});
 
   final List<FooterLink> links;
-  final VoidCallback onEmail;
-  final VoidCallback onPhone;
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +39,7 @@ class SiteFooter extends StatelessWidget {
                       constraints.maxWidth >= AppStyles.tabletBreakpoint;
                   final brand = _FooterBrand();
                   final navigation = _FooterLinks(links: links);
-                  final contact = _FooterContact(
-                    onEmail: onEmail,
-                    onPhone: onPhone,
-                  );
+                  final contact = const _FooterContact();
 
                   if (!wide) {
                     return Column(
@@ -160,10 +151,7 @@ class _FooterLinks extends StatelessWidget {
 }
 
 class _FooterContact extends StatelessWidget {
-  const _FooterContact({required this.onEmail, required this.onPhone});
-
-  final VoidCallback onEmail;
-  final VoidCallback onPhone;
+  const _FooterContact();
 
   @override
   Widget build(BuildContext context) {
@@ -177,26 +165,32 @@ class _FooterContact extends StatelessWidget {
         const SizedBox(height: 6),
         Align(
           alignment: Alignment.centerLeft,
-          child: TextButton(
-            onPressed: onEmail,
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.tealLight,
-              minimumSize: const Size(44, 44),
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: ContactLink(
+            uri: ContactLink.email(subject: Translations.contactJoinSubject),
+            builder: (context, open) => TextButton(
+              onPressed: open,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.tealLight,
+                minimumSize: const Size(44, 44),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+              ),
+              child: const Text(Translations.contactEmail),
             ),
-            child: const Text(Translations.contactEmail),
           ),
         ),
         Align(
           alignment: Alignment.centerLeft,
-          child: TextButton(
-            onPressed: onPhone,
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.tealLight,
-              minimumSize: const Size(44, 44),
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: ContactLink(
+            uri: ContactLink.phone,
+            builder: (context, open) => TextButton(
+              onPressed: open,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.tealLight,
+                minimumSize: const Size(44, 44),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+              ),
+              child: const Text(Translations.contactPhoneDisplay),
             ),
-            child: const Text(Translations.contactPhoneDisplay),
           ),
         ),
       ],

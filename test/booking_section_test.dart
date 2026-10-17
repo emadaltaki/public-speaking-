@@ -29,8 +29,6 @@ void main() {
                 sent.add(request);
                 return succeed;
               },
-              onEmail: () {},
-              onCall: () {},
             ),
           ),
         ),
