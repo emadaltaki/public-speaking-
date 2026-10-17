@@ -148,10 +148,6 @@ class _HomePageState extends State<HomePage> {
             onJoinUs: () => _scrollTo(_contactKey),
             items: [
               NavItem(
-                label: Translations.navHome,
-                onPressed: () => _scrollTo(_homeKey),
-              ),
-              NavItem(
                 label: Translations.navWhy,
                 onPressed: () => _scrollTo(_whyKey),
               ),

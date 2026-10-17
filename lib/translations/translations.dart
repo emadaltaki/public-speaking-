@@ -70,6 +70,29 @@ class Translations {
   /// Short label for tight spaces such as the phone header.
   static String get languageToggleShort => isArabic ? 'EN' : 'ع';
 
+  static String get accountSignIn => _l('Sign in', 'تسجيل الدخول');
+  static String get accountCreate => _l('Create account', 'إنشاء حساب');
+  static String get accountTitle => _l('Your account', 'حسابك');
+  static String get accountSignOut => _l('Sign out', 'تسجيل الخروج');
+  static String get accountSignedOutTitle =>
+      _l('Save your progress', 'احفظ تقدّمك');
+  static String get accountSignedOutBody => _l(
+    'Sign in to keep a history of the games you play. Games always work without an account.',
+    'سجّل الدخول لتحتفظ بسجل الألعاب التي تلعبها. الألعاب تعمل دائمًا دون حساب.',
+  );
+  static String get accountRounds => _l('Rounds played', 'الجولات');
+  static String get accountSpeakingTime => _l('Speaking time', 'وقت الحديث');
+  static String get accountByGame => _l('By game', 'حسب اللعبة');
+  static String get accountRecent => _l('Recent rounds', 'آخر الجولات');
+  static String get accountNoHistory => _l(
+    'No rounds yet. Play a game and it will show up here.',
+    'لا توجد جولات بعد. العب لعبة وستظهر هنا.',
+  );
+  static String roundsCount(int n) => isArabic
+      ? (n == 1 ? 'جولة واحدة' : '$n جولات')
+      : (n == 1 ? '1 round' : '$n rounds');
+  static String minutesShort(int n) => _l('$n min', '$n د');
+
   static String get languageToggle => isArabic ? 'English' : 'العربية';
 
   static const String siteName = 'Speak Up Fearless';

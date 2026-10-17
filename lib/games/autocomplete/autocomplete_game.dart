@@ -66,6 +66,9 @@ class AutocompleteGame extends ChangeNotifier {
   int round = 0;
   AutocompletePhase phase = AutocompletePhase.ready;
   Duration _roundElapsed = Duration.zero;
+
+  /// Total time spent in rounds this game.
+  Duration played = Duration.zero;
   Duration _countdown = Duration.zero;
 
   Duration get perRound => Duration(seconds: settings.secondsPerRound);
@@ -96,6 +99,7 @@ class AutocompleteGame extends ChangeNotifier {
     )..shuffle(_random);
     phrases = [for (var i = 0; i < settings.rounds; i++) pool[i % pool.length]];
     round = 0;
+    played = Duration.zero;
     _roundElapsed = Duration.zero;
     _countdown = Duration.zero;
     phase = AutocompletePhase.ready;
@@ -116,6 +120,7 @@ class AutocompleteGame extends ChangeNotifier {
         }
       case AutocompletePhase.running:
         _roundElapsed += delta;
+        played += delta;
         if (_roundElapsed >= perRound) next();
       case AutocompletePhase.ready:
       case AutocompletePhase.paused:

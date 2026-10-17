@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../theme/styles.dart';
 import '../translations/translations.dart';
+import '../account/account_page.dart';
 import 'language_toggle.dart';
 import 'nav_link_button.dart';
 import 'primary_button.dart';
@@ -102,6 +103,8 @@ class _AppNavbarState extends State<AppNavbar> {
                                 onPressed: item.onPressed,
                               ),
                             const SizedBox(width: 8),
+                            const AccountButton(),
+                            const SizedBox(width: 4),
                             const LanguageToggle(),
                             const SizedBox(width: 16),
                             PrimaryButton(
@@ -114,6 +117,7 @@ class _AppNavbarState extends State<AppNavbar> {
                       ),
                     )
                   else ...[
+                    const AccountButton(compact: true),
                     const LanguageToggle(compact: true),
                     const SizedBox(width: 4),
                     IconButton(
