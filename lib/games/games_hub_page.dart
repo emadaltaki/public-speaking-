@@ -16,7 +16,7 @@ class GamesHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
     return Material(
-      color: AppColors.navy,
+      color: AppColors.headerBand,
       child: SizedBox(
         height: 68,
         child: Padding(
@@ -35,7 +35,7 @@ class GamesHeader extends StatelessWidget {
                     Text(
                       Translations.siteName,
                       style: AppStyles.title.copyWith(
-                        color: AppColors.onNavy,
+                        color: AppColors.navy,
                         fontSize: wide ? 19 : 17,
                       ),
                     ),
@@ -47,7 +47,7 @@ class GamesHeader extends StatelessWidget {
                 onPressed: () => Navigator.of(
                   context,
                 ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false),
-                style: TextButton.styleFrom(foregroundColor: AppColors.onNavy),
+                style: TextButton.styleFrom(foregroundColor: AppColors.navy),
                 icon: const Icon(Icons.arrow_back_rounded, size: 18),
                 label: Text(wide ? Translations.gamesBackToSite : 'Site'),
               ),

@@ -88,10 +88,16 @@ class HeroSection extends StatelessWidget {
 
     return DecoratedBox(
       decoration: const BoxDecoration(
+        // Continues the amber header band and fades into the page.
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppColors.offWhite, AppColors.lightBlue],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            AppColors.headerBand,
+            AppColors.headerBandSoft,
+            AppColors.offWhite,
+          ],
+          stops: [0, 0.55, 1],
         ),
       ),
       child: Stack(

@@ -48,7 +48,7 @@ class _AppNavbarState extends State<AppNavbar> {
     }
 
     return Material(
-      color: AppColors.navy,
+      color: AppColors.headerBand,
       elevation: 0,
       shadowColor: Colors.transparent,
       child: Column(
@@ -78,7 +78,7 @@ class _AppNavbarState extends State<AppNavbar> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppStyles.title.copyWith(
-                              color: AppColors.onNavy,
+                              color: AppColors.navy,
                               fontSize: 21,
                             ),
                           ),
@@ -121,7 +121,7 @@ class _AppNavbarState extends State<AppNavbar> {
                       },
                       icon: Icon(
                         _menuOpen ? Icons.close : Icons.menu,
-                        color: AppColors.onNavy,
+                        color: AppColors.navy,
                       ),
                     ),
                 ],
@@ -131,8 +131,8 @@ class _AppNavbarState extends State<AppNavbar> {
           if (!wide && _menuOpen)
             DecoratedBox(
               decoration: const BoxDecoration(
-                color: AppColors.navyElevated,
-                border: Border(top: BorderSide(color: Color(0x33FFFFFF))),
+                color: AppColors.headerBandSoft,
+                border: Border(top: BorderSide(color: Color(0x221E1B4B))),
               ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
