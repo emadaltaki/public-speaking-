@@ -7,6 +7,7 @@ import '../theme/styles.dart';
 import '../translations/translations.dart';
 import 'game_catalog.dart';
 import 'game_theme.dart';
+import 'widgets/game_setup.dart';
 
 /// Slim navy header shared by the games screens.
 class GamesHeader extends StatelessWidget {
@@ -255,6 +256,13 @@ class _GameCardState extends State<GameCard> {
               const Spacer(),
               if (game.available) ...[
                 const SizedBox(height: 24),
+                if (game.howToPlay.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Center(
+                      child: HowToPlayButton(game: game, compact: true),
+                    ),
+                  ),
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton.icon(

@@ -40,8 +40,7 @@ class Translations {
   static const String bookingContactLabel = 'Email or phone';
   static const String bookingContactRequired =
       'Please add an email or phone number.';
-  static const String bookingDescriptionLabel =
-      'Anything to share? (optional)';
+  static const String bookingDescriptionLabel = 'Anything to share? (optional)';
   static const String bookingDescriptionHint =
       'For example: what makes speaking hard for you, or what you hope to work on.';
   static const String bookingSubmit = 'Send Request';
@@ -65,6 +64,12 @@ class Translations {
       'Quick games to build speaking confidence, on your own or with friends.';
   static const String gamesComingSoon = 'COMING SOON';
   static const String gamesPlay = 'Play';
+  static const String gamesHowToPlay = 'How to play';
+  static const String gamesGotIt = 'Got it!';
+  static const String gamesImReady = "I'M READY";
+  static const String gamesCueReady = 'Ready?';
+  static const String gamesCueSet = 'Set.';
+  static const String gamesCueGo = 'Go!';
 
   static const String tripleStepSetupSubtitle = 'Set up your training round';
   static const String tripleStepBackToGames = 'Back to games';
@@ -112,13 +117,8 @@ class Translations {
 
   static const String conductorTitle = 'The Conductor';
   static const String conductorSetupSubtitle = 'Train your vocal range';
-  static const String conductorHowTo =
-      'Speak on your topic while a pitch number from 1 to 10 changes at random. '
-      '1 is your lowest, deepest voice and 10 your highest, brightest. Follow it like a conductor.';
-  static const String conductorReady = 'Ready?';
   static const String conductorReadyHint =
       'When the number changes, change your pitch: 1 is low, 10 is high. Keep talking the whole time.';
-  static const String conductorStart = "I'M READY";
   static const String conductorPitch = 'Pitch';
   static const String conductorTopic = 'Topic';
   static const String conductorPaused = 'Paused. Press play to continue.';
@@ -127,6 +127,28 @@ class Translations {
   static const String conductorLevelMid = 'Natural voice';
   static const String conductorLevelHighMid = 'Bright and lifted';
   static const String conductorLevelHigh = 'High and bright';
+
+  static const String podcastDifficulty = 'Difficulty';
+  static const String podcastDifficultyHelp =
+      'How often the microphone jumps to someone else.';
+  static const String podcastPlayers = 'Number of players';
+  static const String podcastNext = 'NEXT';
+  static const String podcastBackToRules = 'Back to settings';
+  static const String podcastWhoIsPlaying = "Who's playing?";
+  static const String podcastReadyHint =
+      'Everyone talks about this topic. When your name shows up, it is your turn to speak.';
+  static const String podcastNowSpeaking = 'Now speaking';
+  static const String podcastEnd = 'Great conversation, everyone!';
+
+  static const String autocompleteSubtitle = 'Rapid fire';
+  static const String autocompleteSecondsPerRound = 'How long per round?';
+  static const String autocompleteRounds = 'How many rounds?';
+  static const String autocompletePhraseSet = 'Sentence set';
+  static const String autocompleteReadyHint =
+      'Finish each sentence out loud before the timer runs out. Any answer works!';
+  static const String autocompleteNext = 'Next';
+  static const String autocompleteDone = 'All done!';
+  static const String autocompletePlayAgain = 'Play again';
 
   static const String footerPrivacy = 'Privacy Policy';
   static const String privacyTitle = 'Privacy Policy';

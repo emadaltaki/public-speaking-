@@ -5,8 +5,8 @@ import '../../theme/styles.dart';
 import '../../translations/translations.dart';
 import '../game_catalog.dart';
 import '../game_theme.dart';
-import '../games_hub_page.dart';
 import '../widgets/game_controls.dart';
+import '../widgets/game_setup.dart';
 import 'triple_step_data.dart';
 import 'triple_step_game.dart';
 import 'triple_step_play_page.dart';
@@ -64,159 +64,83 @@ class _TripleStepSetupPageState extends State<TripleStepSetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    final wide = MediaQuery.sizeOf(context).width >= AppStyles.tabletBreakpoint;
-    return Title(
-      title: 'Triple Step | ${Translations.siteName}',
-      color: AppColors.navy,
-      child: Scaffold(
-        backgroundColor: GameColors.background,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const GamesHeader(),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: wide ? 48 : 20,
-                ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 560),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: AppStyles.elevatedShadow,
-                      ),
-                      padding: EdgeInsets.all(wide ? 36 : 22),
-                      child: _form(),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return GameSetupScaffold(
+      game: GameCatalog.tripleStep,
+      subtitle: Translations.tripleStepSetupSubtitle,
+      children: _fields(),
     );
   }
 
-  Widget _form() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: GameColors.accent,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Icon(
-                Icons.record_voice_over_rounded,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Triple Step',
-                    style: AppStyles.title.copyWith(fontSize: 24),
-                  ),
-                  Text(
-                    Translations.tripleStepSetupSubtitle,
-                    style: AppStyles.bodySmall,
-                  ),
-                ],
-              ),
-            ),
-            IconButton(
-              tooltip: Translations.tripleStepBackToGames,
-              onPressed: () => Navigator.of(context).canPop()
-                  ? Navigator.of(context).pop()
-                  : Navigator.of(context).pushReplacementNamed(AppRoutes.games),
-              icon: const Icon(Icons.close_rounded),
-            ),
-          ],
-        ),
-        const SizedBox(height: 28),
-        _ModeTabs(
-          mode: _settings.mode,
-          onChanged: (m) => _update(_settings.copyWith(mode: m)),
-        ),
-        if (_settings.isMultiplayer) ...[
-          const SizedBox(height: 20),
-          _playersEditor(),
-        ],
-        const SizedBox(height: 28),
-        GameSliderRow(
-          icon: Icons.format_list_numbered_rounded,
-          label: Translations.tripleStepTopics,
-          help: Translations.tripleStepTopicsHelp,
-          valueLabel: '${_settings.topicCount}',
-          value: _settings.topicCount.toDouble(),
-          min: TripleStepSettings.minTopicCount.toDouble(),
-          max: TripleStepSettings.maxTopicCount.toDouble(),
-          divisions:
-              TripleStepSettings.maxTopicCount -
-              TripleStepSettings.minTopicCount,
-          onChanged: (v) => _update(_settings.copyWith(topicCount: v.round())),
-        ),
+  List<Widget> _fields() {
+    return [
+      _ModeTabs(
+        mode: _settings.mode,
+        onChanged: (m) => _update(_settings.copyWith(mode: m)),
+      ),
+      if (_settings.isMultiplayer) ...[
         const SizedBox(height: 20),
-        GameSliderRow(
-          icon: Icons.schedule_rounded,
-          label: Translations.tripleStepTimer,
-          valueLabel: _timerLabel(_settings.timerSeconds),
-          value: _settings.timerSeconds.toDouble(),
-          min: TripleStepSettings.minTimerSeconds.toDouble(),
-          max: TripleStepSettings.maxTimerSeconds.toDouble(),
-          divisions:
-              (TripleStepSettings.maxTimerSeconds -
-                  TripleStepSettings.minTimerSeconds) ~/
-              TripleStepSettings.timerStepSeconds,
-          onChanged: (v) =>
-              _update(_settings.copyWith(timerSeconds: v.round())),
-        ),
-        const SizedBox(height: 16),
-        GameToggleRow(
-          label: Translations.tripleStepSuggestTitle,
-          help: Translations.tripleStepSuggestTitleHelp,
-          value: _settings.suggestTitle,
-          onChanged: (v) => _update(_settings.copyWith(suggestTitle: v)),
-        ),
-        GameToggleRow(
-          label: Translations.tripleStepSurvival,
-          help: Translations.tripleStepSurvivalHelp,
-          value: _settings.survivalMode,
-          onChanged: (v) => _update(_settings.copyWith(survivalMode: v)),
-        ),
-        const SizedBox(height: 16),
-        Text(Translations.tripleStepWordSet, style: AppStyles.label),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          initialValue: _settings.wordSet,
-          borderRadius: BorderRadius.circular(12),
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.style_outlined),
-          ),
-          items: [
-            for (final name in TripleStepData.wordSetNames)
-              DropdownMenuItem(value: name, child: Text(name)),
-          ],
-          onChanged: (v) {
-            if (v != null) _update(_settings.copyWith(wordSet: v));
-          },
-        ),
-        const SizedBox(height: 32),
-        GameStartButton(label: Translations.tripleStepStart, onPressed: _start),
+        _playersEditor(),
       ],
-    );
+      const SizedBox(height: 28),
+      GameSliderRow(
+        icon: Icons.format_list_numbered_rounded,
+        label: Translations.tripleStepTopics,
+        help: Translations.tripleStepTopicsHelp,
+        valueLabel: '${_settings.topicCount}',
+        value: _settings.topicCount.toDouble(),
+        min: TripleStepSettings.minTopicCount.toDouble(),
+        max: TripleStepSettings.maxTopicCount.toDouble(),
+        divisions:
+            TripleStepSettings.maxTopicCount - TripleStepSettings.minTopicCount,
+        onChanged: (v) => _update(_settings.copyWith(topicCount: v.round())),
+      ),
+      const SizedBox(height: 20),
+      GameSliderRow(
+        icon: Icons.schedule_rounded,
+        label: Translations.tripleStepTimer,
+        valueLabel: _timerLabel(_settings.timerSeconds),
+        value: _settings.timerSeconds.toDouble(),
+        min: TripleStepSettings.minTimerSeconds.toDouble(),
+        max: TripleStepSettings.maxTimerSeconds.toDouble(),
+        divisions:
+            (TripleStepSettings.maxTimerSeconds -
+                TripleStepSettings.minTimerSeconds) ~/
+            TripleStepSettings.timerStepSeconds,
+        onChanged: (v) => _update(_settings.copyWith(timerSeconds: v.round())),
+      ),
+      const SizedBox(height: 16),
+      GameToggleRow(
+        label: Translations.tripleStepSuggestTitle,
+        help: Translations.tripleStepSuggestTitleHelp,
+        value: _settings.suggestTitle,
+        onChanged: (v) => _update(_settings.copyWith(suggestTitle: v)),
+      ),
+      GameToggleRow(
+        label: Translations.tripleStepSurvival,
+        help: Translations.tripleStepSurvivalHelp,
+        value: _settings.survivalMode,
+        onChanged: (v) => _update(_settings.copyWith(survivalMode: v)),
+      ),
+      const SizedBox(height: 16),
+      Text(Translations.tripleStepWordSet, style: AppStyles.label),
+      const SizedBox(height: 8),
+      DropdownButtonFormField<String>(
+        initialValue: _settings.wordSet,
+        borderRadius: BorderRadius.circular(12),
+        decoration: const InputDecoration(
+          prefixIcon: Icon(Icons.style_outlined),
+        ),
+        items: [
+          for (final name in TripleStepData.wordSetNames)
+            DropdownMenuItem(value: name, child: Text(name)),
+        ],
+        onChanged: (v) {
+          if (v != null) _update(_settings.copyWith(wordSet: v));
+        },
+      ),
+      const SizedBox(height: 32),
+      GameStartButton(label: Translations.tripleStepStart, onPressed: _start),
+    ];
   }
 
   Widget _playersEditor() {
