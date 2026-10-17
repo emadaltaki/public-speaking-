@@ -11,6 +11,7 @@ import '../translations/translations.dart';
 import 'auth_service.dart';
 import 'auth_storage.dart';
 import 'avatar_store.dart';
+import 'verify_store.dart';
 import 'progress_store.dart';
 
 /// "Sign in" in the header, or the signed-in visitor's name linking to
@@ -776,11 +777,18 @@ class SignInGate extends StatelessWidget {
     return ValueListenableBuilder<AppUser?>(
       valueListenable: AuthService.user,
       builder: (context, user, _) {
-        if (user != null) return child;
         final route =
             returnTo ??
             ModalRoute.of(context)?.settings.name ??
             AppRoutes.games;
+        if (user != null) {
+          Future.microtask(VerifyStore.check);
+          return ValueListenableBuilder<bool?>(
+            valueListenable: VerifyStore.verified,
+            builder: (context, ok, _) =>
+                ok == false ? _VerifyPrompt(user: user, route: route) : child,
+          );
+        }
         return _Card(
           child: Column(
             children: [
@@ -853,6 +861,57 @@ class SignInGate extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// Asks email sign-ups to confirm their address before playing.
+class _VerifyPrompt extends StatelessWidget {
+  const _VerifyPrompt({required this.user, required this.route});
+
+  final AppUser user;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Card(
+      child: Column(
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: GameColors.accentSoft,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.mark_email_unread_outlined,
+              color: GameColors.accent,
+              size: 30,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            Translations.verifyGateTitle,
+            textAlign: TextAlign.center,
+            style: AppStyles.title.copyWith(fontSize: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            Translations.verifyGateBody(user.email ?? ''),
+            textAlign: TextAlign.center,
+            style: AppStyles.body,
+          ),
+          const SizedBox(height: 22),
+          FilledButton(
+            onPressed: () => openSitePage(
+              '/login?verify=1&next=${Uri.encodeComponent(route)}',
+            ),
+            style: AppStyles.primaryButtonLarge,
+            child: Text(Translations.verifyGateCta),
+          ),
+        ],
+      ),
     );
   }
 }

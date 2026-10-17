@@ -123,6 +123,13 @@ class Translations {
   );
   static String get gamesGateSignUp =>
       _l('Create free account', 'أنشئ حسابًا مجانيًا');
+  static String get verifyGateTitle =>
+      _l('Confirm your email to play', 'أكّد بريدك لتلعب');
+  static String verifyGateBody(String email) => _l(
+    "We'll send a 6-digit code to $email. It only takes a moment.",
+    'سنرسل رمزًا من 6 أرقام إلى $email. لن يستغرق الأمر سوى لحظة.',
+  );
+  static String get verifyGateCta => _l('Send my code', 'أرسل الرمز');
   static String get gamesGateSignIn =>
       _l('I already have an account', 'لدي حساب بالفعل');
 
