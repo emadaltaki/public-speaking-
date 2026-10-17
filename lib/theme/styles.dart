@@ -238,6 +238,17 @@ class AppStyles {
   static ThemeData get theme {
     final base = ThemeData(
       useMaterial3: true,
+      // A quick fade between pages: the iPhone-style slide redraws the whole
+      // page every frame, which is slow in the browser.
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.macOS: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+        },
+      ),
       brightness: ThemeController.isDark ? Brightness.dark : Brightness.light,
       scaffoldBackgroundColor: AppColors.offWhite,
       primaryColor: AppColors.navy,
