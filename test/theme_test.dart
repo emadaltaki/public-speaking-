@@ -20,6 +20,15 @@ void main() {
     ThemeController.dark.value = false;
   });
 
+  test('starts light unless the visitor chose dark', () {
+    ThemeController.init(null);
+    expect(ThemeController.isDark, isFalse);
+    ThemeController.init('dark');
+    expect(ThemeController.isDark, isTrue);
+    ThemeController.init('light');
+    expect(ThemeController.isDark, isFalse);
+  });
+
   test('header CTA style is a large, comfortable tap target', () {
     final size = AppStyles.primaryButtonLarge.minimumSize?.resolve({});
     expect(size, isNotNull);
