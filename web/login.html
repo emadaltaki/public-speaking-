@@ -398,6 +398,27 @@
       if (busy) show(T[lang].working);
     }
     function done() { location.replace(next); }
+    // Creates (or refreshes) the visitor's account on the backend so their
+    // profile exists before they play. Never blocks sign-in for long: if the
+    // API is slow or down, the site carries on and the account is created on
+    // the next API call instead.
+    const API_BASE = 'https://public-speaking-backend.vercel.app';
+    async function syncAccount(user, name) {
+      try {
+        const token = await user.getIdToken();
+        const ctl = new AbortController();
+        const timer = setTimeout(() => ctl.abort(), 6000);
+        const headers = { Authorization: 'Bearer ' + token };
+        if (name) {
+          headers['Content-Type'] = 'application/json';
+          await fetch(API_BASE + '/v1/me', { method: 'PATCH', headers, signal: ctl.signal,
+            body: JSON.stringify({ displayName: name, language: lang }) });
+        } else {
+          await fetch(API_BASE + '/v1/me', { headers, signal: ctl.signal });
+        }
+        clearTimeout(timer);
+      } catch (_) {}
+    }
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -411,7 +432,7 @@
 
     $('google').addEventListener('click', async () => {
       setBusy(true);
-      try { await signInWithPopup(auth, new GoogleAuthProvider()); done(); } catch (e) { fail(e); }
+      try { const cred = await signInWithPopup(auth, new GoogleAuthProvider()); await syncAccount(cred.user); done(); } catch (e) { fail(e); }
     });
 
     $('form').addEventListener('submit', async (ev) => {
@@ -426,8 +447,10 @@
           if (name) await updateProfile(cred.user, { displayName: name });
           // Store the updated profile so the site sees the name.
           await auth.updateCurrentUser(cred.user);
+          await syncAccount(cred.user, name);
         } else {
-          await signInWithEmailAndPassword(auth, email, password);
+          const cred = await signInWithEmailAndPassword(auth, email, password);
+          await syncAccount(cred.user);
         }
         done();
       } catch (e) { fail(e); }
