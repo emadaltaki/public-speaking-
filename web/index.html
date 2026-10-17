@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#FFD27F">
+  <meta name="theme-color" content="#F1DDBC">
 
   <title>Public Speaking Classes in Mississauga | Speak Up Fearless</title>
   <meta name="description" content="Overcome the fear of public speaking in Mississauga, Ontario. Small, supportive practice sessions for nervous speakers. Free online intro session, then $50 per session or packages from $180 CAD.">
@@ -76,59 +76,29 @@
   </script>
 
   <style>
-    /* Readable copy of the page. Search engines index it, and visitors see it
-       while the app loads; the app then draws on top of it. */
-    html, body { margin: 0; background: #F7F5F2; }
-    #static-site { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1F2933; line-height: 1.6; }
-    #static-site header { background: #FFD27F; color: #2B2118; padding: 22px 24px; font-weight: 700; font-size: 20px; }
-    #static-site main { max-width: 1112px; margin: 0 auto; padding: 48px 24px 64px; }
-    #static-site h1 { color: #2B2118; font-size: clamp(36px, 6vw, 60px); line-height: 1.08; letter-spacing: -1px; margin: 16px 0 20px; }
-    #static-site h2 { color: #2B2118; font-size: 28px; margin: 48px 0 12px; }
-    #static-site h3 { color: #2B2118; font-size: 18px; margin: 20px 0 4px; }
-    #static-site .pill { display: inline-block; background: #fff; border: 1px solid #D5DEE5; border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: #2B2118; }
-    #static-site .lead { font-size: 19px; color: #4B5A67; max-width: 640px; }
-    #static-site a.btn { display: inline-block; background: #C2410C; color: #fff; text-decoration: none; padding: 14px 26px; border-radius: 999px; font-weight: 600; margin: 8px 8px 0 0; }
-    #static-site a { color: #9A3412; }
-    #static-site .loading { margin-top: 28px; color: #4B5A67; font-size: 14px; }
+    /* Shown while the games load; the app draws on top of it. */
+    html, body { margin: 0; height: 100%; background: #F8F5F1; }
+    #loading { position: fixed; inset: 0; display: grid; place-items: center; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #6E645B; }
+    #loading div { display: flex; flex-direction: column; align-items: center; gap: 14px; font-size: 15px; }
+    #loading svg { width: 56px; height: 56px; animation: pulse 1.4s ease-in-out infinite; }
+    .dark body { background: #17120F; } .dark #loading { color: #B3A699; }
+    @keyframes pulse { 50% { transform: scale(.9); opacity: .7; } }
   </style>
+  <script>
+    try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.className = 'dark'; } catch (_) {}
+  </script>
 </head>
 <body>
-  <div id="static-site">
-    <header>Speak Up Fearless</header>
-    <main>
-      <span class="pill">Now meeting in Mississauga, Ontario</span>
-      <h1>You Don't Have to Be Fearless to Speak.</h1>
-      <p class="lead">Public speaking anxiety is normal. You don't have to overcome it alone. Speak Up Fearless is a supportive public speaking community in Mississauga where you can practice, build confidence, and learn to speak with courage.</p>
-      <a class="btn" href="mailto:speakupfearless@gmail.com?subject=Free%20explanation%20session">Book a Free Explanation Session</a>
-      <a class="btn" href="tel:+14169955347">Call (416) 995-5347</a>
-      <p class="loading">Loading the full site…</p>
-
-      <h2>If Speaking Makes You Nervous, You're Not Alone.</h2>
-      <p>My heart starts racing. I overthink everything I want to say. I'm afraid people will judge me. I know what I want to say, but I freeze. These feelings don't mean you're bad at speaking. They mean you're human.</p>
-
-      <h2>How It Works</h2>
-      <p>Show up to a welcoming session where everyone is learning. Speak in a supportive environment. Reflect on what worked and where you can improve. Grow your confidence through repetition and community.</p>
-
-      <h2>Practice Without the Pressure</h2>
-      <h3>Speaking Practice</h3><p>Practice expressing ideas clearly and confidently.</p>
-      <h3>Impromptu Speaking</h3><p>Learn how to think and respond when you're put on the spot.</p>
-      <h3>Storytelling</h3><p>Learn how to turn experiences and ideas into engaging stories.</p>
-      <h3>Feedback &amp; Growth</h3><p>Receive constructive feedback in a supportive environment.</p>
-      <h3>Confidence Challenges</h3><p>Small challenges designed to gradually push comfort zones.</p>
-
-      <h2>Pricing (CAD)</h2>
-      <p>Free online explanation session (15–20 minutes). Single session $50. 4-session package $180 ($45 per session). 8-session package $320 ($40 per session).</p>
-
-      <h2>Contact</h2>
-      <p>Email <a href="mailto:speakupfearless@gmail.com">speakupfearless@gmail.com</a> or call <a href="tel:+14169955347">(416) 995-5347</a>. Speak Up Fearless, Mississauga, Ontario.</p>
-    </main>
+  <div id="loading" aria-live="polite">
+    <div>
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect x="8" y="8" width="84" height="64" rx="22" fill="#B4583A"/><path d="M28 68 L22 92 L48 68 Z" fill="#B4583A"/><path d="M38 48 L50 28 L62 48 M50 28 L50 56" fill="none" stroke="#FFF8F1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Loading…</span>
+    </div>
   </div>
   <script>
-    // Once the app has drawn, hide the copy from screen readers so content
-    // isn't announced twice. It stays in the page for search engines.
     window.addEventListener('flutter-first-frame', function () {
-      var el = document.getElementById('static-site');
-      if (el) { el.setAttribute('aria-hidden', 'true'); el.inert = true; }
+      var el = document.getElementById('loading');
+      if (el) el.remove();
     });
   </script>
   <script src="flutter_bootstrap.js" async></script>

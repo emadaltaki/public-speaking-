@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../components/responsive_card_grid.dart';
 import '../account/account_page.dart';
+import '../account/auth_storage.dart';
 import '../components/language_toggle.dart';
 import '../components/theme_toggle.dart';
 import '../components/speech_mark_logo.dart';
@@ -19,6 +21,11 @@ class GamesHeader extends StatelessWidget {
   static void _goHome(BuildContext context) {
     // Ignore repeat taps while the page is already changing.
     if (!(ModalRoute.of(context)?.isCurrent ?? false)) return;
+    // On the web the home page is a separate, plain HTML page.
+    if (kIsWeb) {
+      openSitePage('/');
+      return;
+    }
     Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);
   }
 

@@ -7,15 +7,15 @@
     },
     {
       "source": "/games",
-      "destination": "/index.html"
+      "destination": "/app.html"
     },
     {
       "source": "/games/:path*",
-      "destination": "/index.html"
+      "destination": "/app.html"
     },
     {
       "source": "/account",
-      "destination": "/index.html"
+      "destination": "/app.html"
     }
   ],
   "headers": [
