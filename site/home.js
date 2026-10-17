@@ -120,7 +120,10 @@
     footerBlurb: 'مجموعة ودودة في ميسيساغا يتدرّب فيها الناس على التحدث ويرتاحون له أكثر فأكثر.',
     explore: 'استكشف', mission: 'لماذا نفعل هذا', community: 'المجتمع', privacy: 'سياسة الخصوصية', contactLabel: 'تواصل',
     copyright: '© 2026 Speak Up Fearless. جميع الحقوق محفوظة.', close: 'إغلاق',
-    stickyCta: 'احجز الآن', stickyTitle: 'مكالمة تعريفية مجانية', stickySub: 'من 15 إلى 20 دقيقة، بلا ضغط', prev: 'الصورة السابقة', next: 'الصورة التالية',
+    stickyCta: 'احجز الآن', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب لعبة سريعة أولًا',
+    sentMail: 'أرسلنا نسخة إلى بريدك أيضًا.', afterTitle: 'وأنت تنتظر، جهّز صوتك بلعبة',
+    afterSub: 'الإكمال التلقائي يستغرق دقيقتين وهو مجاني.',
+    cancelPolicy: 'الظروف تتغير، ونحن نتفهم ذلك. أخبرنا قبل الجلسة بـ24 ساعة على الأقل وسننقلها إلى يوم آخر مجانًا. لديك سؤال عن الاسترداد؟ اسألنا فقط.', stickyTitle: 'مكالمة تعريفية مجانية', stickySub: 'من 15 إلى 20 دقيقة، بلا ضغط', prev: 'الصورة السابقة', next: 'الصورة التالية',
     subject: 'طلب مكالمة تعريفية مجانية',
     pickSession: 'ماذا تريد؟', sIntro: 'مكالمة تعريفية مجانية', sIntroMeta: 'من 15 إلى 20 دقيقة بالفيديو',
     sSingle: 'جلسة واحدة', sSingleMeta: 'طريقة جيدة للتجربة', sFour: '4 جلسات', sFourMeta: '45$ للجلسة، وفّر 20$',
@@ -439,6 +442,12 @@
       'Name': req.name, 'Email or phone': req.contact, 'Reason': req.reason
     };
     if (req.description) payload['More details'] = req.description;
+    var visitorEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.contact) ? req.contact : '';
+    if (visitorEmail) {
+      // FormSubmit emails this message to the address in the "email" field.
+      payload.email = visitorEmail;
+      payload._autoresponse = confirmationText(req);
+    }
     var btn = $('sendBtn');
     btn.disabled = true;
     btn.textContent = t('sending');
@@ -459,7 +468,9 @@
         clearTimeout(timer);
         btn.disabled = false;
         btn.textContent = t('send');
+        track('booking_sent', { session: req.requestedCourse });
         if (sent) {
+          $('sentMail').hidden = !visitorEmail;
           $('bookForm').hidden = true;
           $('sent').hidden = false;
           $('bookCard').scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -473,6 +484,26 @@
         location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
       });
   });
+
+  function localTime() {
+    var d = days[pickedDay];
+    return weekday(d) + ' ' + d.getDate() + ' ' + t('months')[d.getMonth()] + '، ' + t(timeKeys[pickedTime]);
+  }
+
+  // A friendly copy for the visitor, in the language they used.
+  function confirmationText(req) {
+    var first = req.name.split(' ')[0];
+    if (lang === 'ar') {
+      return 'مرحبًا ' + first + '،\n\nشكرًا لتواصلك مع Speak Up Fearless! وصلنا طلبك:\n\n' +
+        req.requestedLabel + '\n' + req.preferredTime + '\n\n' +
+        'سنرد عليك قريبًا لتأكيد الموعد. إن احتجت إلى تغيير أي شيء، فقط رد على هذه الرسالة أو اتصل بنا على 5347-995 (416).\n\n' +
+        'نتطلع للقائك!\nفريق Speak Up Fearless';
+    }
+    return 'Hi ' + first + ',\n\nThanks for reaching out to Speak Up Fearless! We got your request:\n\n' +
+      req.requestedLabel + '\n' + req.preferredTime + '\n\n' +
+      "We'll get back to you soon to confirm your time. If anything changes, just reply to this email or call us at (416) 995-5347.\n\n" +
+      'Looking forward to meeting you!\nThe Speak Up Fearless team';
+  }
 
   function saveToBackend(req) {
     var body = { name: req.name, contact: req.contact, preferredTime: req.preferredTime, reason: req.reason, requestedCourse: req.requestedCourse };
@@ -511,6 +542,20 @@
     $('sent').hidden = true;
     $('bookForm').hidden = false;
   });
+
+  // ---------------------------------------------------------------- tracking
+  // Counts in Vercel Analytics: which buttons people tap and how many send a request.
+  function track(name, data) {
+    try { if (window.va) window.va('event', { name: name, data: data || {} }); } catch (_) {}
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-cta], [data-track], [data-plan], a.game');
+    if (!el) return;
+    if (el.dataset.cta) track('book_click', { where: el.dataset.cta });
+    else if (el.dataset.plan) track('package_click', { session: el.dataset.plan });
+    else if (el.dataset.track) track(el.dataset.track);
+    else track('game_click', { game: (el.dataset.game || el.getAttribute('href')).split('/').pop() });
+  }, true);
 
   // ---------------------------------------------------------------- sticky CTA
   // Shown on phones once the hero is out of view, hidden near the form.
