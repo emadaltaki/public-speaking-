@@ -504,7 +504,7 @@
     var first = req.name.split(' ')[0];
     if (lang === 'ar') {
       return 'مرحبًا ' + first + '،\n\nشكرًا لتواصلك مع Speak Up Fearless! وصلنا طلبك:\n\n' +
-        req.requestedLabel + '\n' + req.preferredTime + '\n\n' +
+        t(sessionById(req.requestedCourse).title) + '\n' + localTime() + '\n\n' +
         'سنرد عليك قريبًا لتأكيد الموعد. إن احتجت إلى تغيير أي شيء، فقط رد على هذه الرسالة أو اتصل بنا على 5347-995 (416).\n\n' +
         'نتطلع للقائك!\nفريق Speak Up Fearless';
     }
