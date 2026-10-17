@@ -77,8 +77,8 @@ class Translations {
   static String get accountSignedOutTitle =>
       _l('Save your progress', 'احفظ تقدّمك');
   static String get accountSignedOutBody => _l(
-    'Sign in to keep a history of the games you play. Games always work without an account.',
-    'سجّل الدخول لتحتفظ بسجل الألعاب التي تلعبها. الألعاب تعمل دائمًا دون حساب.',
+    'Sign in to play the games and keep a history of every round.',
+    'سجّل الدخول لتلعب الألعاب وتحتفظ بسجل كل جولة.',
   );
   static String get accountRounds => _l('Rounds played', 'الجولات');
   static String get accountSpeakingTime => _l('Speaking time', 'وقت الحديث');
@@ -358,8 +358,8 @@ class Translations {
   static const String contactPhoneDisplay = '(416) 995-5347';
   static const String telUri = 'tel:+14169955347';
   static String get contactJoinSubject => _l(
-    'Speak Up Fearless — I would like to join',
-    'Speak Up Fearless — أرغب في الانضمام',
+    'Speak Up Fearless: I would like to join',
+    'Speak Up Fearless: أرغب في الانضمام',
   );
 
   static String get skipToContent => _l('Skip to content', 'انتقل إلى المحتوى');
@@ -527,8 +527,8 @@ class Translations {
   static String get pricingIntroFeatureUnderstand =>
       _l('Understand how sessions work', 'افهم كيف تعمل الجلسات');
   static String get pricingIntroFeatureFit => _l(
-    'See if it feels like a fit — no commitment',
-    'تأكد إن كانت مناسبة لك — دون أي التزام',
+    'See if it feels right, with no commitment',
+    'تأكد إن كانت مناسبة لك دون أي التزام',
   );
   static String get pricingSingleTitle => _l('Single Session', 'جلسة واحدة');
   static const String pricingSinglePrice = '\$50';
@@ -622,8 +622,8 @@ class Translations {
       _l('The People Behind the Sessions.', 'الأشخاص وراء الجلسات.');
   static String get testimonialPlaceholderLabel => _l('Placeholder', 'مثال');
   static String get testimonialEmadQuote => _l(
-    'I know what it feels like to have something worth saying and freeze anyway. Speak Up Fearless is the room I wanted back then — you practice first, and confidence follows.',
-    'أعرف شعور أن يكون لديك ما يستحق القول ثم تتجمّد رغم ذلك. Speak Up Fearless هو المكان الذي تمنّيته حينها — تتدرّب أولًا، ثم تأتي الثقة.',
+    'I know what it feels like to have something worth saying and freeze anyway. Speak Up Fearless is the room I wanted back then. You practice first, and confidence follows.',
+    'أعرف شعور أن يكون لديك ما يستحق القول ثم تتجمّد رغم ذلك. Speak Up Fearless هو المكان الذي تمنّيته حينها. تتدرّب أولًا، ثم تأتي الثقة.',
   );
   static const String testimonialEmadName = 'Emad';
   static String get testimonialEmadRole =>
@@ -660,14 +660,14 @@ class Translations {
     'هل أحتاج إلى خبرة في التحدث أمام الناس؟',
   );
   static String get faqA1 => _l(
-    'No. We welcome people who are just starting. You do not need to feel confident before you join — the community is how confidence grows.',
-    'لا. نرحّب بمن يبدأ للتو. لا تحتاج أن تشعر بالثقة قبل الانضمام — فالمجتمع هو ما ينمّي الثقة.',
+    'No. We welcome people who are just starting. You do not need to feel confident before you join. The community is how confidence grows.',
+    'لا. نرحّب بمن يبدأ للتو. لا تحتاج أن تشعر بالثقة قبل الانضمام، فالمجتمع هو ما ينمّي الثقة.',
   );
   static String get faqQ2 =>
       _l("What if I'm extremely nervous?", 'ماذا لو كنت متوترًا جدًا؟');
   static String get faqA2 => _l(
-    "Then you're in the right place. Nervousness is common here. We normalize it, understand it, and practice speaking through it — together.",
-    'إذًا أنت في المكان الصحيح. التوتر أمر شائع هنا. نتقبّله ونفهمه ونتدرّب على التحدث رغمه — معًا.',
+    "Then you're in the right place. Nervousness is common here. We normalize it, understand it, and practice speaking through it together.",
+    'إذًا أنت في المكان الصحيح. التوتر أمر شائع هنا. نتقبّله ونفهمه ونتدرّب على التحدث رغمه معًا.',
   );
   static String get faqQ3 => _l(
     'Do I have to speak during my first session?',
