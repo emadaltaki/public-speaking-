@@ -193,8 +193,17 @@
   function signedInUser() {
     try { var raw = localStorage.getItem(AUTH_KEY); return raw ? JSON.parse(raw) : null; } catch (_) { return null; }
   }
+  // Signed-in visitors get their name and email filled in on the booking form.
+  function prefillBooking() {
+    var user = signedInUser();
+    if (!user) return;
+    if (!$('fName').value && user.displayName) $('fName').value = user.displayName;
+    if (!$('fContact').value && user.email) $('fContact').value = user.email;
+  }
+
   function renderAccount() {
     var user = signedInUser();
+    prefillBooking();
     all('a.game').forEach(function (a) {
       var game = a.dataset.game || (a.dataset.game = a.getAttribute('href'));
       a.href = user ? game : '/login?mode=signup&next=' + encodeURIComponent(game);
@@ -532,6 +541,7 @@
 
   $('again').addEventListener('click', function () {
     $('bookForm').reset();
+    prefillBooking();
     pickedDay = -1;
     pickedTime = -1;
     all('.time').forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
