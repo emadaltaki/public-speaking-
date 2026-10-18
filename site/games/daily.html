@@ -39,8 +39,8 @@
     .d-go svg { width: 20px; height: 20px; }
     .d-done { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,.16); font-weight: 700; }
     .d-done b { font-size: 22px; }
-    .d-actions { display: flex; gap: 10px; margin-top: 14px; }
-    .d-actions .btn { flex: 1; min-height: 48px; }
+    .d-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+    .d-actions .btn { width: 100%; min-height: 52px; white-space: nowrap; }
     .d-ghost { background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.3); }
     .week { margin-top: 16px; }
     .week h3 { font-size: 15px; margin: 0 0 10px; }
@@ -213,8 +213,8 @@
           '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
           (st.doneToday
             ? '<div class="d-done"><b>✓</b><span>' + esc(t('dDoneToday')) + '</span></div>' +
-              '<div class="d-actions"><button class="btn d-ghost" type="button" id="again">' + esc(t('dAgain')) + '</button>' +
-              '<button class="btn d-go" style="margin:0" type="button" id="share">' + SHARE + esc(t('dShare')) + '</button></div>'
+              '<div class="d-actions"><button class="btn d-go" style="margin:0" type="button" id="share">' + SHARE + esc(t('dShare')) + '</button>' +
+              '<button class="btn d-ghost" type="button" id="again">' + esc(t('dAgain')) + '</button></div>'
             : '<p class="d-rule">' + esc(t('dRule')) + '</p><button class="btn d-go" type="button" id="go">' + G.ICON.play + esc(t('dStart')) + '</button>') +
           '</section>' +
           '<section class="card week"><h3>' + esc(t('dWeek')) + '</h3><div class="days">' + week + '</div>' +
