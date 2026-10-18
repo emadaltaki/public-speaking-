@@ -24,7 +24,7 @@
 
   // ---------------------------------------------------------------- copy
   var EXTRA_EN = {
-    langLong: 'العربية', langShort: 'ع', signIn: 'Sign in', account: 'Your account',
+    langLong: 'العربية', langShort: 'ع', signIn: 'Sign in', signOut: 'Sign out', account: 'Your account',
     themeDark: 'Dark theme', themeLight: 'Light theme', openMenu: 'Open menu', closeMenu: 'Close menu',
     close: 'Close', prev: 'Previous photo', next: 'Next photo',
     morningFull: 'Morning (9am to 12pm)', afternoonFull: 'Afternoon (12 to 5pm)', eveningFull: 'Evening (5 to 9pm)',
@@ -57,7 +57,7 @@
     gPodcast: 'لعبة البودكاست', gPodcastTag: 'موضوع واحد وبعض الأصدقاء، والميكروفون يتنقّل بينكم.',
     gAuto: 'الإكمال التلقائي', gAutoTag: 'أكمل كل جملة بصوت عالٍ قبل أن ينتهي الوقت.',
     moreDetails: 'أضف ملاحظة', navFaq: 'الأسئلة الشائعة', navContact: 'تواصل معنا', navHome: 'الرئيسية',
-    langLong: 'English', langShort: 'EN', signIn: 'تسجيل الدخول', account: 'حسابك',
+    langLong: 'English', langShort: 'EN', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', account: 'حسابك',
     themeDark: 'المظهر الداكن', themeLight: 'المظهر الفاتح', openMenu: 'افتح القائمة', closeMenu: 'أغلق القائمة',
     joinUs: 'احجز مكالمة', ctaBookShort: 'احجز مكالمتي المجانية', ctaBook: 'احجز مكالمة تعريفية مجانية', ctaLearn: 'اطّلع على ما نتدرّب عليه',
     heroLocation: 'عبر الإنترنت، أو حضوريًا في منطقة تورونتو الكبرى',
@@ -207,6 +207,13 @@
     if (!$('fContact').value && user.email) $('fContact').value = user.email;
   }
 
+  $('signOutBtn').addEventListener('click', function () {
+    try { localStorage.removeItem(AUTH_KEY); } catch (_) {}
+    setMenu(false);
+    renderAccount();
+    window.scrollTo(0, 0);
+  });
+
   function renderAccount() {
     var user = signedInUser();
     prefillBooking();
@@ -214,6 +221,7 @@
       var game = a.dataset.game || (a.dataset.game = a.getAttribute('href'));
       a.href = user ? game : '/login?mode=signup&next=' + encodeURIComponent(game);
     });
+    $('signOutBtn').hidden = !user;
     var link = $('acct');
     var label = link.querySelector('.acct-label');
     if (user) {
