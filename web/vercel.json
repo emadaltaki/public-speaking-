@@ -14,8 +14,8 @@
       "destination": "/account.html"
     },
     {
-      "source": "/games/:path*",
-      "destination": "/app.html"
+      "source": "/games/:id",
+      "destination": "/games/:id.html"
     }
   ],
   "headers": [
@@ -25,19 +25,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/((?!login).*)",
-      "headers": [
-        {
-          "key": "Cross-Origin-Opener-Policy",
-          "value": "same-origin"
-        },
-        {
-          "key": "Cross-Origin-Embedder-Policy",
-          "value": "require-corp"
         }
       ]
     },

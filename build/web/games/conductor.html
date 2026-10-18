@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F1DDBC">
+  <title>The Conductor | Speak Up Fearless</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/game.css">
+  <style>
+    .stage canvas.waves { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+    .stage > .topbar, .stage > .body, .stage > .bottom { position: relative; z-index: 1; }
+    .stage.dark .topbar button { background: rgba(255,255,255,.14); }
+    .lvl-label { font-size: 15px; font-weight: 800; letter-spacing: .3em; color: rgba(255,255,255,.8); }
+    .lvl { font-family: "Montserrat", sans-serif; font-weight: 900; font-size: clamp(150px, 46vw, 260px); line-height: 1; color: #fff; text-shadow: 0 6px 24px rgba(0,0,0,.25); }
+    .lvl.pop { animation: pop .3s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes pop { from { transform: scale(.6); opacity: .3; } }
+    .lvl-desc { font-family: var(--head); font-weight: 700; font-size: 22px; color: #fff; }
+    .meter { display: flex; align-items: flex-end; gap: 6px; margin-top: 18px; direction: ltr; }
+    .meter i { width: 14px; border-radius: 4px; background: rgba(255,255,255,.25); transition: background .3s; }
+    .meter i.on { background: #fff; }
+    .paused-note { margin-top: 16px; color: #fff; font-weight: 700; }
+    .bottom { display: flex; align-items: flex-end; gap: 12px; padding: 0 20px calc(env(safe-area-inset-bottom) + 16px); color: #fff; }
+    .bottom .tp { flex: 1; min-width: 0; }
+    .bottom small { display: block; font-size: 11px; font-weight: 800; letter-spacing: .14em; color: rgba(255,255,255,.7); text-transform: uppercase; }
+    .bottom b { display: block; font-family: var(--head); font-weight: 800; font-size: 18px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .bottom .rt { text-align: end; }
+    .round { width: 46px; height: 46px; border: 0; border-radius: 50%; background: rgba(255,255,255,.18); color: #fff; display: inline-grid; place-items: center; cursor: pointer; margin-inline-start: 8px; }
+    .round svg { width: 22px; height: 22px; }
+    .bottom .clock { color: #fff; font-size: 34px; margin-top: 6px; }
+  </style>
+  <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
+</head>
+<body>
+  <main class="wrap" id="main"></main>
+  <script src="/app.js"></script>
+  <script src="/game.js"></script>
+  <script>
+    (function () {
+      var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
+      var ID = 'conductor';
+      var settings = { seconds: 60, suggest: true, set: 'General' };
+
+      G.boot(ID, function (games, words) {
+        G.setup({
+          id: ID, games: games, subtitle: t('conductorSetupSubtitle'),
+          render: function (rows) {
+            rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('tripleStepTimer'), min: 30, max: 300, step: 30, value: settings.seconds,
+              format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
+            rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
+            rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
+          },
+          onStart: function () { play(); }
+        });
+
+        function describe(l) {
+          return t(l <= 2 ? 'conductorLevelLow' : l <= 4 ? 'conductorLevelLowMid' : l <= 6 ? 'conductorLevelMid' : l <= 8 ? 'conductorLevelHighMid' : 'conductorLevelHigh');
+        }
+        function randomLevel(avoid) {
+          for (;;) { var n = 1 + Math.floor(Math.random() * 10); if (avoid == null || Math.abs(n - avoid) >= 3) return n; }
+        }
+        function gap() { return 4000 + Math.random() * 4000; }
+
+        // Background that "sounds" like the pitch: calm blues with slow, wide
+        // waves at 1, hot reds with fast, tight waves at 10.
+        var LOW = [[11, 30, 58], [28, 78, 128]], MID = [[31, 111, 107], [217, 147, 47]], HIGH = [[184, 50, 42], [255, 138, 43]];
+        function mix(a, b, k) { return a.map(function (v, i) { return Math.round(v + (b[i] - v) * k); }); }
+        function colors(level) {
+          var x = Math.max(0, Math.min(1, (level - 1) / 9));
+          if (x < .5) { var k = x / .5; return [mix(LOW[0], MID[0], k), mix(LOW[1], MID[1], k)]; }
+          var k2 = (x - .5) / .5; return [mix(MID[0], HIGH[0], k2), mix(MID[1], HIGH[1], k2)];
+        }
+        function paint(canvas, level, phase) {
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          var w = canvas.clientWidth, h = canvas.clientHeight;
+          if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+          var c = canvas.getContext('2d');
+          c.setTransform(dpr, 0, 0, dpr, 0, 0);
+          var col = colors(level);
+          var g = c.createLinearGradient(0, 0, w, h);
+          g.addColorStop(0, 'rgb(' + col[0] + ')'); g.addColorStop(1, 'rgb(' + col[1] + ')');
+          c.fillStyle = g; c.fillRect(0, 0, w, h);
+          var x = Math.max(0, Math.min(1, (level - 1) / 9));
+          var cycles = 1.2 + x * 7, amp = h * (0.03 + x * 0.07);
+          for (var i = 0; i < 5; i++) {
+            var y0 = h * (0.55 + i * 0.08);
+            c.beginPath();
+            for (var px = 0; px <= w; px += 8) {
+              var a = (px / w) * cycles * 2 * Math.PI + phase + i * 0.9;
+              var y = y0 + Math.sin(a) * amp * (1 - i * 0.12);
+              if (px === 0) c.moveTo(px, y); else c.lineTo(px, y);
+            }
+            c.lineWidth = 2.5; c.strokeStyle = 'rgba(255,255,255,' + (0.10 + 0.04 * (5 - i)) + ')'; c.stroke();
+          }
+          var shade = c.createLinearGradient(0, 0, 0, h);
+          shade.addColorStop(.55, 'rgba(0,0,0,0)'); shade.addColorStop(1, 'rgba(0,0,0,.45)');
+          c.fillStyle = shade; c.fillRect(0, 0, w, h);
+        }
+
+        function play(keepTopic) {
+          var topic = keepTopic || G.pickTopic(settings.suggest, settings.set);
+          var st = G.stage({});
+          var total = settings.seconds * 1000, elapsed = 0, paused = false;
+          var level = randomLevel(null), shown = level, nextAt = 0, wave = 0;
+          G.ready(st.body, { topic: topic, hint: t('conductorReadyHint') }, run);
+
+          function run() {
+            st.dark(true);
+            var canvas = document.createElement('canvas');
+            canvas.className = 'waves';
+            st.el.insertBefore(canvas, st.el.firstChild);
+            st.body.innerHTML = '<div class="lvl-label">' + esc(t('conductorPitch').toUpperCase()) + '</div><div class="lvl" aria-live="polite"></div>' +
+              '<div class="lvl-desc"></div><div class="meter">' + Array.apply(null, Array(10)).map(function (_, i) { return '<i style="height:' + (14 + i * 4) + 'px"></i>'; }).join('') + '</div>' +
+              '<div class="paused-note" hidden>' + esc(t('conductorPaused')) + '</div>';
+            var bottom = document.createElement('div');
+            bottom.className = 'bottom';
+            bottom.innerHTML = '<div class="tp"><small>' + esc(t('conductorTopic')) + '</small><b>' + esc(topic) + '</b></div>' +
+              '<div class="rt"><div><button class="round" type="button" id="pause"></button><button class="round" type="button" id="stop" aria-label="' + esc(t('tripleStepFinish')) + '">' + G.ICON.flag + '</button></div><div class="clock"></div></div>';
+            st.el.appendChild(bottom);
+            bottom.querySelector('#pause').addEventListener('click', function () { paused = !paused; paintPause(); });
+            bottom.querySelector('#stop').addEventListener('click', finish);
+            nextAt = gap();
+            showLevel(true);
+            paintPause();
+            G.loop(function (d) {
+              if (!paused) {
+                elapsed += d;
+                if (elapsed >= total) { elapsed = total; return finish(); }
+                if (elapsed >= nextAt) { level = randomLevel(level); nextAt = elapsed + gap(); showLevel(true); }
+                bottom.querySelector('.clock').textContent = G.clock(total - elapsed);
+              }
+              // Higher pitch, faster waves; the colour eases toward the new level.
+              wave += d / 1000 * (0.6 + level * 0.35);
+              shown += (level - shown) * Math.min(1, d / 350);
+              paint(canvas, shown, wave);
+            });
+          }
+          function showLevel(animate) {
+            var el = st.body.querySelector('.lvl');
+            el.textContent = level;
+            if (animate) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+            st.body.querySelector('.lvl-desc').textContent = describe(level);
+            st.body.querySelectorAll('.meter i').forEach(function (b, i) { b.classList.toggle('on', i < level); });
+          }
+          function paintPause() {
+            var b = st.el.querySelector('#pause');
+            b.innerHTML = paused ? G.ICON.play : G.ICON.pause;
+            b.setAttribute('aria-label', paused ? t('tripleStepResume') : t('tripleStepPause'));
+            st.body.querySelector('.paused-note').hidden = !paused;
+          }
+          function finish() {
+            G.loopStop();
+            S.recordRound({ gameId: ID, spokenSeconds: elapsed / 1000, topic: settings.suggest ? topic : null });
+            G.end({
+              title: t('tripleStepTimeUp'), message: t('youSpokeFor', { n: G.clock(elapsed).replace(/^0/, '') }),
+              primary: t('tripleStepNextTopic'),
+              onPrimary: function () { st.close(); play(); },
+              onRetry: function () { st.close(); play(topic); },
+              onSettings: function () { st.close(); }
+            });
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

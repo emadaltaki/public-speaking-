@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F1DDBC">
+  <title>Autocomplete | Speak Up Fearless</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/game.css">
+  <style>
+    .phrase { font-family: var(--head); font-weight: 400; font-size: clamp(28px, 8vw, 52px); line-height: 1.2; color: var(--ink); max-width: 900px; text-transform: uppercase; animation: rise .25s ease; }
+    .phrase b { font-weight: 900; color: var(--accent); }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+    .chips-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 20px; }
+  </style>
+  <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
+</head>
+<body>
+  <main class="wrap" id="main"></main>
+  <script src="/app.js"></script>
+  <script src="/game.js"></script>
+  <script>
+    (function () {
+      var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
+      var ID = 'autocomplete';
+      var settings = { multi: false, seconds: 5, rounds: 6, set: 'Mixed', players: [] };
+
+      G.boot(ID, function (games, words) {
+        var namesRow;
+        function showSetup() {
+          G.setup({
+            id: ID, games: games, subtitle: t('autocompleteSubtitle'),
+            render: function (rows) {
+              var playersBox = document.createElement('div');
+              rows.appendChild(G.modeTabs({ value: settings.multi, onChange: function (v) { settings.multi = v; paintPlayers(); } }));
+              rows.appendChild(playersBox);
+              function paintPlayers() {
+                playersBox.innerHTML = '';
+                namesRow = null;
+                if (!settings.multi) return;
+                if (settings.players.length < 2) settings.players = [G.playerName(1), G.playerName(2)];
+                namesRow = G.players({ names: settings.players, min: 2, max: 8 });
+                playersBox.appendChild(namesRow);
+              }
+              paintPlayers();
+              rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('autocompleteSecondsPerRound'), min: 3, max: 20, value: settings.seconds,
+                format: function (v) { return t('seconds', { n: v }); }, onChange: function (v) { settings.seconds = v; } }));
+              rows.appendChild(G.slider({ icon: G.ICON.repeat, label: t('autocompleteRounds'), min: 3, max: 30, value: settings.rounds,
+                format: function (v) { return String(v); }, onChange: function (v) { settings.rounds = v; } }));
+              rows.appendChild(G.select({ label: t('autocompletePhraseSet'), value: settings.set, options: ['Mixed'].concat(Object.keys(words.phrases)),
+                onChange: function (v) { settings.set = v; } }));
+            },
+            onStart: function () {
+              if (namesRow) settings.players = namesRow.names();
+              play();
+            }
+          });
+        }
+
+        function deal() {
+          var pool = settings.set === 'Mixed' ? [].concat.apply([], Object.values(words.phrases)) : (words.phrases[settings.set] || []);
+          pool = G.shuffle(pool.slice());
+          var out = [];
+          for (var i = 0; i < settings.rounds; i++) out.push(pool[i % pool.length]);
+          return out;
+        }
+
+        function play(keep) {
+          var phrases = keep || deal();
+          var st = G.stage({});
+          var round = 0, elapsed = 0, played = 0, paused = false;
+          var per = settings.seconds * 1000;
+          G.ready(st.body, { hint: t('autocompleteReadyHint') }, run);
+
+          function bold(p) {
+            return p.toUpperCase().split('**').map(function (part, i) { return i % 2 ? '<b>' + esc(part) + '</b>' : esc(part); }).join('');
+          }
+          function draw() {
+            var player = settings.multi && settings.players.length ? settings.players[round % settings.players.length] : null;
+            st.body.innerHTML = '<div class="chips-row"><span class="chip">' + (round + 1) + ' / ' + settings.rounds + '</span>' +
+              (player ? '<span class="chip strong">' + esc(t('turnOf', { n: player })) + '</span>' : '') + '</div>' +
+              '<div class="phrase" aria-live="polite">' + bold(phrases[round]) + '</div>' +
+              '<div style="margin-top:32px">' + G.pie(1) + '<div class="clock"></div></div>' +
+              '<div class="controls"><button class="btn btn-ghost" type="button" id="pause"></button>' +
+              '<button class="btn btn-primary" type="button" id="next">' + G.ICON.next + esc(t('autocompleteNext')) + '</button></div>';
+            st.body.querySelector('#pause').addEventListener('click', function () { paused = !paused; paintPause(); });
+            st.body.querySelector('#next').addEventListener('click', next);
+            paintPause();
+            update();
+          }
+          function paintPause() {
+            var b = st.body.querySelector('#pause');
+            if (b) b.innerHTML = (paused ? G.ICON.play : G.ICON.pause) + esc(paused ? t('tripleStepResume') : t('tripleStepPause'));
+          }
+          function update() {
+            G.setPie(st.body, (per - elapsed) / per);
+            var c = st.body.querySelector('.clock');
+            if (c) c.textContent = G.clock(per - elapsed);
+          }
+          function next() {
+            if (round >= settings.rounds - 1) return finish();
+            round++; elapsed = 0; paused = false;
+            draw();
+          }
+          function finish() {
+            G.loopStop();
+            S.recordRound({ gameId: ID, spokenSeconds: played / 1000 });
+            G.end({
+              title: t('autocompleteDone'), message: t('finishedSentences', { n: settings.rounds }),
+              primary: t('autocompletePlayAgain'),
+              onPrimary: function () { st.close(); play(); },
+              onRetry: function () { st.close(); play(phrases); },
+              onSettings: function () { st.close(); }
+            });
+          }
+          function run() {
+            draw();
+            G.loop(function (d) {
+              if (paused) return;
+              elapsed += d; played += d;
+              if (elapsed >= per) next(); else update();
+            });
+          }
+        }
+
+        showSetup();
+      });
+    })();
+  </script>
+</body>
+</html>

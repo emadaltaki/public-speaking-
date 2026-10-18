@@ -27,7 +27,7 @@
       gateTitle: 'Sign up to play', gateBody: 'Create a free account to unlock all our speaking games and keep track of your practice.',
       gateSignUp: 'Create free account', gateSignIn: 'I already have an account',
       verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
-      minutes: '{n} min', round1: '1 round', rounds: '{n} rounds'
+      minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s'
     },
     ar: {
       home: 'العودة إلى الموقع', signIn: 'تسجيل الدخول', account: 'حسابك', light: 'المظهر الفاتح', dark: 'المظهر الداكن', langName: 'English', langShort: 'EN',
@@ -35,7 +35,7 @@
       gateTitle: 'سجّل لتلعب', gateBody: 'أنشئ حسابًا مجانيًا لتفتح جميع ألعاب التحدث وتتابع تدريبك.',
       gateSignUp: 'أنشئ حسابًا مجانيًا', gateSignIn: 'لدي حساب بالفعل',
       verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
-      minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات'
+      minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث'
     }
   };
   function t(key, vars) {
@@ -260,6 +260,13 @@
     if (GAMES) return Promise.resolve(GAMES);
     return fetch('/data/games.json').then(function (r) { return r.json(); }).then(function (d) {
       GAMES = d[lang] || d.en;
+      // Game wording shared with the app ("9999" and "@@" mark where values go).
+      var fix = function (o) {
+        var out = {};
+        Object.keys(o).forEach(function (k) { out[k] = typeof o[k] === 'string' ? o[k].replace('9999', '{n}').replace('@@', '{n}') : o[k]; });
+        return out;
+      };
+      if (d.strings) addStrings(fix(d.strings.en), fix(d.strings.ar));
       return GAMES;
     });
   }
