@@ -482,6 +482,7 @@
       const errs = ui().errors;
       show(errs[e && e.code] || errs.default, 'error');
       setBusy(false);
+      releaseKeyboard();
     }
     // The language the page is showing right now.
     const ui = () => T[document.documentElement.lang === 'ar' ? 'ar' : 'en'];
@@ -741,8 +742,9 @@
       $('vSkip').textContent = t.vSkip;
       $('vHow').textContent = t.vHow;
       $('code').value = '';
+      $('code').focus({ preventScroll: true });
       slots();
-      setTimeout(() => $('code').focus(), 50);
+      setTimeout(() => { if (document.activeElement !== $('code')) $('code').focus({ preventScroll: true }); }, 60);
       if (!noSend) sendCode(true);
       pollTimer = setInterval(pollVerified, 5000);
       document.addEventListener('visibilitychange', pollVerified);
@@ -797,8 +799,27 @@
       try { const cred = await signInWithPopup(auth, new GoogleAuthProvider()); saveAccount(cred.user, 'google'); await syncAccount(cred.user); done(); } catch (e) { fail(e); }
     });
 
+    // iPhones only open the keyboard for a focus inside the tap itself, and
+    // the code screen shows up after sign-up finishes. So the tap focuses a
+    // hidden number field right away, and focus moves to the code boxes once
+    // they appear: the keyboard stays open the whole time.
+    function holdKeyboard() {
+      let el = $('kbHold');
+      if (!el) {
+        el = document.createElement('input');
+        el.id = 'kbHold';
+        el.setAttribute('inputmode', 'numeric');
+        el.setAttribute('aria-hidden', 'true');
+        el.tabIndex = -1;
+        el.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0;pointer-events:none;';
+        document.body.appendChild(el);
+      }
+      el.focus({ preventScroll: true });
+    }
+    function releaseKeyboard() { const el = $('kbHold'); if (el && document.activeElement === el) el.blur(); }
     $('form').addEventListener('submit', async (ev) => {
       ev.preventDefault();
+      if (mode === 'signup') holdKeyboard();
       const email = $('email').value.trim();
       const password = $('password').value;
       setBusy(true);
