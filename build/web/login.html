@@ -400,7 +400,9 @@
     const LANG_KEY = 'speakupfearless.language';
     const THEME_KEY = 'speakupfearless.theme';
     const params = new URLSearchParams(location.search);
-    const next = (params.get('next') || '/').startsWith('/') ? (params.get('next') || '/') : '/';
+    // Signed-in people start on the games, unless they came from a specific page.
+    const asked = params.get('next') || '';
+    const next = asked.startsWith('/') && !asked.startsWith('//') && asked !== '/' ? asked : '/games';
     let lang = 'en';
     try { lang = localStorage.getItem(LANG_KEY) === 'ar' ? 'ar' : 'en'; } catch (_) {}
     let mode = params.get('mode') === 'signup' ? 'signup' : 'signin';
