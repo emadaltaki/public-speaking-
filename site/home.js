@@ -31,7 +31,7 @@
     sending: 'Sending…', subject: 'Free intro call request',
     pickSession: 'Choose your session',
     mLead: 'Just', mDay: 'pick a day', mTime: 'pick a time', mName: 'add your name',
-    mContact: 'add your email', mPhone: 'add a phone number', badEmail: 'That email doesn\'t look right. Please check it.', badPhone: 'Please add a phone number we can call or text.', mReason: 'tell us what you want help with',
+    mContact: 'add your email', mPhone: 'add a phone number', badEmail: 'That email doesn\'t look right. Please check it.', badPhone: 'Please enter a 10-digit phone number, like (416) 555-0123.', mReason: 'tell us what you want help with',
     sIntro: 'Free intro call', sIntroMeta: '15 to 20 minutes on video',
     sSingle: 'One session', sSingleMeta: 'A good way to try it',
     sFour: '4 sessions', sFourMeta: '$45 a session, save $20',
@@ -115,7 +115,7 @@
     morningFull: 'صباحًا (من 9 إلى 12)', afternoonFull: 'ظهرًا (من 12 إلى 5)', eveningFull: 'مساءً (من 5 إلى 9)',
     choiceRequired: 'يرجى اختيار يوم ووقت.', yourDetails: 'عنك',
     name: 'اسمك', contact: 'البريد الإلكتروني', phone: 'رقم الهاتف', phoneRequired: 'يرجى إضافة رقم هاتف.',
-    badEmail: 'يبدو أن البريد غير صحيح. يرجى التحقق منه.', badPhone: 'أضف رقم هاتف يمكننا الاتصال به أو مراسلته.', reason: 'بماذا تريد أن نساعدك؟', desc: 'هل هناك شيء آخر تود أن نعرفه؟',
+    badEmail: 'يبدو أن البريد غير صحيح. يرجى التحقق منه.', badPhone: 'أدخل رقم هاتف من 10 أرقام، مثل 0123-555 (416).', reason: 'بماذا تريد أن نساعدك؟', desc: 'هل هناك شيء آخر تود أن نعرفه؟',
     nameRequired: 'يرجى كتابة اسمك.', contactRequired: 'يرجى إضافة بريدك الإلكتروني.', reasonRequired: 'أخبرنا قليلًا بما تريد المساعدة فيه.',
     send: 'أرسل الطلب', sending: 'جارٍ الإرسال…', sendFailed: 'لم نتمكن من الإرسال من هنا، لذلك فتحنا رسالة بريد تحتوي على طلبك.',
     bookNote: 'يصلنا طلبك مباشرة، وسنرد عليك قريبًا للتأكيد.',
@@ -390,7 +390,32 @@
   }
 
   function emailOk(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
-  function phoneOk(v) { return v.replace(/\D/g, '').length >= 7; }
+  // Phone numbers use one standard: (416) 555-0123 for Canada and the US
+  // (a leading 1 is fine). Numbers starting with + are kept as international.
+  function phoneDigits(v) {
+    var d = v.replace(/\D/g, '');
+    return d.length === 11 && d[0] === '1' ? d.slice(1) : d;
+  }
+  function phoneOk(v) {
+    v = v.trim();
+    if (v[0] === '+' && !/^\+1/.test(v)) return v.replace(/\D/g, '').length >= 8 && v.replace(/\D/g, '').length <= 15;
+    return phoneDigits(v).length === 10;
+  }
+  function formatPhone(v) {
+    if (v.trim()[0] === '+' && !/^\s*\+1/.test(v)) return v;
+    var d = phoneDigits(v).slice(0, 10);
+    if (d.length < 4) return d.length ? '(' + d : '';
+    if (d.length < 7) return '(' + d.slice(0, 3) + ') ' + d.slice(3);
+    return '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
+  }
+  // Formats the number as it's typed, e.g. 4165550123 -> (416) 555-0123.
+  $('fPhone').addEventListener('input', function (e) {
+    if (e.inputType && e.inputType.indexOf('delete') === 0) return;
+    var el = $('fPhone');
+    var f = formatPhone(el.value);
+    if (f !== el.value) el.value = f;
+  });
+  $('fPhone').addEventListener('blur', function () { var el = $('fPhone'); if (phoneOk(el.value)) el.value = formatPhone(el.value); });
   function fieldOk(id) {
     var input = $(id);
     var v = input.value.trim();
