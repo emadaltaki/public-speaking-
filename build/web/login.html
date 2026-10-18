@@ -335,7 +335,7 @@
         vTitle: 'Check your email', vSub: 'We sent a 6-digit code to', vSubmit: 'Verify', vResend: 'Send a new code',
         vResendIn: 'New code in {s}s', vChange: 'Use a different email', vSent: 'A new code is on its way.',
         vWrong: "That code isn't right. {n} tries left.", vExpired: 'That code has expired. We sent you a new one.',
-        vTooMany: 'Please wait a moment before asking for another code.', vNeed6: 'Enter all 6 digits.',
+        vTooMany: 'Please wait a moment before asking for another code.', vWait: 'Please wait {s} seconds before asking for a new code.', vAlready: 'We just sent you a code. Check your email.', vNeed6: 'Enter all 6 digits.',
         vOff: "We can't send codes just yet. You can carry on for now.", vSkip: 'Continue for now', vDone: 'All set! Taking you there…',
         vFail: "We couldn't send the email. Try again in a moment.",
         savedLabel: 'Continue as', savedHint: 'Tap to sign in', signedInHint: 'Signed in, tap to continue', removeSaved: 'Remove from this device',
@@ -373,7 +373,7 @@
         vTitle: 'تفقّد بريدك', vSub: 'أرسلنا رمزًا من 6 أرقام إلى', vSubmit: 'تحقّق', vResend: 'أرسل رمزًا جديدًا',
         vResendIn: 'رمز جديد بعد {s} ث', vChange: 'استخدم بريدًا آخر', vSent: 'رمز جديد في الطريق إليك.',
         vWrong: 'الرمز غير صحيح. تبقّى {n} محاولات.', vExpired: 'انتهت صلاحية الرمز، وأرسلنا لك رمزًا جديدًا.',
-        vTooMany: 'انتظر قليلًا قبل طلب رمز آخر.', vNeed6: 'أدخل الأرقام الستة.',
+        vTooMany: 'انتظر قليلًا قبل طلب رمز آخر.', vWait: 'انتظر {s} ثانية قبل طلب رمز جديد.', vAlready: 'أرسلنا لك رمزًا للتو. تفقّد بريدك.', vNeed6: 'أدخل الأرقام الستة.',
         vOff: 'لا يمكننا إرسال الرموز بعد. يمكنك المتابعة الآن.', vSkip: 'تابع الآن', vDone: 'تم! ننقلك الآن…',
         vFail: 'لم نتمكن من إرسال البريد. حاول بعد قليل.',
         savedLabel: 'تابع باسم', savedHint: 'اضغط لتسجيل الدخول', signedInHint: 'مسجّل الدخول، اضغط للمتابعة', removeSaved: 'إزالة من هذا الجهاز',
@@ -646,15 +646,50 @@
       tick();
       cooldownTimer = setInterval(tick, 1000);
     }
+    // One request at a time, and no automatic resend while the last code is fresh.
+    let sending = false;
+    const sentKey = () => 'speakupfearless.codeSentAt.' + (auth.currentUser ? auth.currentUser.uid : '');
+    function sentAgo() {
+      try { return (Date.now() - Number(localStorage.getItem(sentKey()) || 0)) / 1000; } catch (_) { return Infinity; }
+    }
     async function sendCode(quiet) {
+      if (sending) return;
+      if (quiet && sentAgo() < 60) { vShow(ui().vAlready, 'ok'); cooldown(Math.ceil(60 - sentAgo())); return; }
+      sending = true;
       try {
         const r = await api('/v1/me/verify/send', { method: 'POST', body: '{}' });
         if (r.body.verified) { vShow(ui().vDone, 'ok'); done(); return; }
-        if (r.status === 200) { if (!quiet) vShow(ui().vSent, 'ok'); cooldown(60); return; }
-        if (r.status === 429) { vShow(ui().vTooMany, 'error'); cooldown(r.body.retryAfter || 60); return; }
+        if (r.status === 200) {
+          try { localStorage.setItem(sentKey(), String(Date.now())); } catch (_) {}
+          if (!quiet) vShow(ui().vSent, 'ok');
+          cooldown(60);
+          return;
+        }
+        if (r.status === 429) {
+          const wait = Math.max(1, Math.ceil(r.body.retryAfter || 60));
+          // Opening the screen right after a code went out: that code is still good.
+          if (quiet) { vShow(ui().vAlready, 'ok'); cooldown(wait); return; }
+          waitMessage(wait);
+          cooldown(wait);
+          return;
+        }
         if (r.status === 503) { offline(); return; }
         vShow(ui().vFail, 'error'); cooldown(15);
       } catch (_) { vShow(ui().vFail, 'error'); cooldown(15); }
+      finally { sending = false; }
+    }
+    // "Please wait 44 seconds…", counting down, then cleared.
+    let waitTimer = null;
+    function waitMessage(seconds) {
+      clearInterval(waitTimer);
+      let left = seconds;
+      const paint = () => {
+        if (left <= 0) { clearInterval(waitTimer); vShow(''); return; }
+        vShow(ui().vWait.replace('{s}', left), 'error');
+        left--;
+      };
+      paint();
+      waitTimer = setInterval(paint, 1000);
     }
     function offline() {
       // Codes aren't switched on yet: let people carry on instead of getting stuck.
@@ -665,7 +700,10 @@
       $('vForm').classList.add('hidden');
       $('vResend').classList.add('hidden');
     }
+    let verifyShown = false;
     function showVerify() {
+      if (verifyShown) return;
+      verifyShown = true;
       const t = ui();
       for (const id of ['tabs', 'title', 'subtitle', 'saved', 'google', 'or', 'form', 'msg']) $(id).classList.add('hidden');
       $('verify').classList.remove('hidden');
@@ -697,9 +735,11 @@
         const r = await api('/v1/me/verify/check', { method: 'POST', body: JSON.stringify({ code }) });
         if (r.body.verified) { $('codeBoxes').classList.add('good'); vShow(ui().vDone, 'ok'); setTimeout(done, 600); return; }
         $('codeBoxes').classList.add('bad');
-        if (r.body.error === 'expired') { vShow(ui().vExpired, 'error'); $('code').value = ''; sendCode(true); }
+        if (r.body.error === 'expired') { vShow(ui().vExpired, 'error'); $('code').value = ''; try { localStorage.removeItem(sentKey()); } catch (_) {} sendCode(true); }
         else if (r.status === 503) offline();
-        else vShow(ui().vWrong.replace('{n}', r.body.attemptsLeft ?? ''), 'error');
+        else if (r.body.error === 'wrong') vShow(ui().vWrong.replace('{n}', r.body.attemptsLeft ?? ''), 'error');
+        else if (r.status === 429) { waitMessage(Math.ceil(r.body.retryAfter || 60)); }
+        else vShow(ui().vFail, 'error');
       } catch (_) { vShow(ui().vFail, 'error'); }
       finally { $('vSubmit').disabled = false; }
     });
