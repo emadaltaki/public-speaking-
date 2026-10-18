@@ -306,14 +306,25 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
     import {
       getAuth, setPersistence, browserLocalPersistence, GoogleAuthProvider,
-      signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+      signInWithPopup, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, createUserWithEmailAndPassword,
       updateProfile, sendPasswordResetEmail, signOut,
     } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+
+    // Google sign-in runs through our own domain (/__/auth is passed on to
+    // Firebase by vercel.json), so phones and the home-screen app can sign in
+    // in the same tab instead of opening another one. It needs
+    // https://public-speaking-lemon.vercel.app/__/auth/handler listed as a
+    // redirect URI on the Google OAuth client; until then, keep the popup.
+    const OWN_AUTH_DOMAIN = 'public-speaking-lemon.vercel.app';
+    const SAME_TAB_GOOGLE = false && location.hostname === OWN_AUTH_DOMAIN;
+    // Phones, tablets and the installed app: a popup there becomes a new tab.
+    const POPUP_UNSAFE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true ||
+      matchMedia('(pointer: coarse)').matches;
 
     // Public web config for the Speak Up Fearless Firebase project.
     const firebaseConfig = {
       apiKey: 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow',
-      authDomain: 'speakup-ca500.firebaseapp.com',
+      authDomain: SAME_TAB_GOOGLE ? OWN_AUTH_DOMAIN : 'speakup-ca500.firebaseapp.com',
       projectId: 'speakup-ca500',
       storageBucket: 'speakup-ca500.firebasestorage.app',
       messagingSenderId: '228155483447',
@@ -794,9 +805,27 @@
       showVerify();
     }
 
+    async function googleDone(cred) {
+      saveAccount(cred.user, 'google');
+      await syncAccount(cred.user);
+      done();
+    }
+    // Back from Google after a same-tab sign-in.
+    if (SAME_TAB_GOOGLE) {
+      getRedirectResult(auth).then((cred) => { if (cred) { setBusy(true); return googleDone(cred); } }).catch(fail);
+    }
+
     $('google').addEventListener('click', async () => {
       setBusy(true);
-      try { const cred = await signInWithPopup(auth, new GoogleAuthProvider()); saveAccount(cred.user, 'google'); await syncAccount(cred.user); done(); } catch (e) { fail(e); }
+      try {
+        if (SAME_TAB_GOOGLE && POPUP_UNSAFE) {
+          // Leaves for Google and comes back to this same page.
+          await signInWithRedirect(auth, new GoogleAuthProvider());
+          return;
+        }
+        const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+        await googleDone(cred);
+      } catch (e) { fail(e); }
     });
 
     // iPhones only open the keyboard for a focus inside the tap itself, and
