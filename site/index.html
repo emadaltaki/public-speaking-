@@ -465,6 +465,24 @@
     .feelings { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .feelings li { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--tint); border: 1px solid var(--border); border-radius: 16px; font-family: var(--head); font-weight: 600; font-size: 15.5px; color: var(--ink); line-height: 1.35; }
     .feelings svg { width: 20px; height: 20px; color: var(--primary); flex: none; }
+    /* Tap a feeling to flip it and see how the sessions help */
+    .feelings li { position: relative; display: grid; align-items: stretch; padding: 0; background: none; border: 0; perspective: 900px; cursor: pointer; -webkit-tap-highlight-color: transparent; opacity: 0; transform: translateY(14px); transition: opacity .45s ease, transform .45s cubic-bezier(.2,.8,.2,1); }
+    .feelings li.in { opacity: 1; transform: none; }
+    .feelings li:nth-child(2) { transition-delay: .07s; } .feelings li:nth-child(3) { transition-delay: .14s; } .feelings li:nth-child(4) { transition-delay: .21s; }
+    .feel-in { grid-area: 1 / 1; display: grid; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.3,1.3,.5,1); }
+    .feelings li.flip .feel-in { transform: rotateY(180deg); }
+    .feel-face { grid-area: 1 / 1; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px; border: 1px solid var(--border); background: var(--tint); -webkit-backface-visibility: hidden; backface-visibility: hidden; transition: box-shadow .2s, border-color .2s, transform .2s; }
+    .feel-front .more { margin-inline-start: auto; flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--primary); font-size: 15px; font-weight: 800; transition: transform .25s; }
+    .feelings li:hover .feel-front { border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); box-shadow: 0 10px 22px -14px rgba(80,45,20,.45); transform: translateY(-2px); }
+    .feelings li:hover .feel-front .more { transform: rotate(90deg); }
+    .feelings li:active .feel-face { transform: scale(.97); }
+    .feelings li.wiggle .feel-front svg { animation: beat .6s ease; }
+    @keyframes beat { 25% { transform: scale(1.3); } 50% { transform: scale(.95); } 75% { transform: scale(1.15); } }
+    .feel-back { transform: rotateY(180deg); background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-family: var(--body); font-weight: 500; font-size: 14px; line-height: 1.4; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; }
+    .feel-back small { font-family: var(--head); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+    .feel-tip { margin: 12px 0 0; color: var(--muted); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+    .feel-tip::before { content: "👆"; }
+    @media (prefers-reduced-motion: reduce) { .feelings li, .feel-in, .feel-face { transition: none; } .feelings li { opacity: 1; transform: none; } }
     .tight .human { margin-top: 18px; font-size: 18px; padding: 16px 22px; }
     .skills { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .skills li { display: flex; align-items: flex-start; gap: 14px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
@@ -512,7 +530,9 @@
     @media (max-width: 640px) {
       section.tight { padding: 48px 0; }
       .feelings { gap: 8px; margin-top: 20px; }
-      .feelings li { padding: 10px 12px; font-size: 14px; gap: 8px; border-radius: 14px; }
+      .feelings li { font-size: 14px; }
+      .feel-face { padding: 10px 12px; gap: 8px; border-radius: 14px; }
+      .feel-back { font-size: 12.5px; }
       .feelings svg { width: 17px; height: 17px; }
       .tight .human { font-size: 16px; padding: 14px 16px; }
       .skills { grid-template-columns: 1fr; gap: 8px; margin-top: 20px; }
@@ -898,11 +918,12 @@
         <span class="eyebrow" data-t="eyebrowWhy">You're not alone</span>
         <h2 class="s-title" data-t="anxietyHeadline">Speaking makes you nervous? Most of us feel the same.</h2>
         <ul class="feelings">
-          <li><svg aria-hidden="true"><use href="#i-heart"/></svg><span data-t="feel1">“My heart starts racing.”</span></li>
-          <li><svg aria-hidden="true"><use href="#i-head"/></svg><span data-t="feel2">“I overthink everything I want to say.”</span></li>
-          <li><svg aria-hidden="true"><use href="#i-eye"/></svg><span data-t="feel3">“I'm afraid people will judge me.”</span></li>
-          <li><svg aria-hidden="true"><use href="#i-pause"/></svg><span data-t="feel4">“I know what I want to say, but I freeze.”</span></li>
+          <li tabindex="0" role="button" aria-pressed="false"><span class="feel-in"><span class="feel-face feel-front"><svg aria-hidden="true"><use href="#i-heart"/></svg><span data-t="feel1">“My heart starts racing.”</span><span class="more" aria-hidden="true">+</span></span><span class="feel-face feel-back"><small data-t="howWeHelp">How we help</small><span data-t="help1">We start with tiny, low-pressure rounds, so your body learns speaking is safe.</span></span></span></li>
+          <li tabindex="0" role="button" aria-pressed="false"><span class="feel-in"><span class="feel-face feel-front"><svg aria-hidden="true"><use href="#i-head"/></svg><span data-t="feel2">“I overthink everything I want to say.”</span><span class="more" aria-hidden="true">+</span></span><span class="feel-face feel-back"><small data-t="howWeHelp">How we help</small><span data-t="help2">Quick games train you to speak first and polish later.</span></span></span></li>
+          <li tabindex="0" role="button" aria-pressed="false"><span class="feel-in"><span class="feel-face feel-front"><svg aria-hidden="true"><use href="#i-eye"/></svg><span data-t="feel3">“I'm afraid people will judge me.”</span><span class="more" aria-hidden="true">+</span></span><span class="feel-face feel-back"><small data-t="howWeHelp">How we help</small><span data-t="help3">Everyone here feels nervous too, and all feedback is kind and useful.</span></span></span></li>
+          <li tabindex="0" role="button" aria-pressed="false"><span class="feel-in"><span class="feel-face feel-front"><svg aria-hidden="true"><use href="#i-pause"/></svg><span data-t="feel4">“I know what I want to say, but I freeze.”</span><span class="more" aria-hidden="true">+</span></span><span class="feel-face feel-back"><small data-t="howWeHelp">How we help</small><span data-t="help4">We practice getting unstuck, so a pause stops feeling like a disaster.</span></span></span></li>
         </ul>
+        <p class="feel-tip" data-t="feelTip">Tap a card to see how we help.</p>
         <p class="human" data-t="anxietyHuman">Feeling this way doesn't mean you're bad at speaking. It just means you care.</p>
       </div>
     </section>

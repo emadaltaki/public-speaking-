@@ -57,6 +57,11 @@
   };
 
   var AR = {
+    howWeHelp: 'كيف نساعدك', feelTip: 'اضغط على أي بطاقة لترى كيف نساعدك.',
+    help1: 'نبدأ بجولات صغيرة بلا ضغط، فيتعلّم جسمك أن الكلام آمن.',
+    help2: 'ألعاب سريعة تدرّبك على أن تتكلم أولًا وتحسّن لاحقًا.',
+    help3: 'الجميع هنا يتوترون مثلك، وكل الملاحظات لطيفة ومفيدة.',
+    help4: 'نتدرّب على تجاوز التوقف، فلا يعود الصمت يبدو كارثة.',
     joinKicker: 'مجانية', joinTitle: 'خطوة واحدة وتبدأ اللعب',
     joinBody: 'أنشئ حسابًا مجانيًا لتبدأ {game}. يستغرق الأمر لحظة، وتلعب فورًا.',
     joinB1: 'ألعاب التحدث الأربع، مجانًا للأبد', joinB2: 'شاهد تقدّمك وسلسلة أيامك تكبر', joinB3: 'تدرّب وحدك أولًا، بلا جمهور',
@@ -314,6 +319,27 @@
     setMenu(false);
     closeLightbox();
     closePrivacy();
+  });
+
+  // ---------------------------------------------------------------- feelings
+  // Cards slide in once, and flip to show how the sessions help.
+  var feelCards = all('.feelings li');
+  if ('IntersectionObserver' in window) {
+    var feelIo = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); feelIo.unobserve(e.target); } });
+    }, { threshold: .2 });
+    feelCards.forEach(function (li) { feelIo.observe(li); });
+  } else feelCards.forEach(function (li) { li.classList.add('in'); });
+  function flipFeel(li) {
+    var on = !li.classList.contains('flip');
+    li.classList.toggle('flip', on);
+    li.setAttribute('aria-pressed', String(on));
+    if (!on) { li.classList.remove('wiggle'); void li.offsetWidth; li.classList.add('wiggle'); }
+    track('feeling_flip', { which: li.querySelector('[data-t^="feel"]').dataset.t });
+  }
+  feelCards.forEach(function (li) {
+    li.addEventListener('click', function () { flipFeel(li); });
+    li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipFeel(li); } });
   });
 
   // ---------------------------------------------------------------- photos
