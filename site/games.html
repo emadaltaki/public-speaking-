@@ -34,6 +34,24 @@
       .game { min-height: 0; padding: 18px; }
       .game h2 { font-size: 20px; margin-top: 12px; }
     }
+
+    /* Playful game cards: floating icon, shine on hover, pop and ripple on tap */
+    .game { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    .game::before { content: ""; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.35) 48%, transparent 66%); transform: translateX(-120%); }
+    .game:hover::before, .game.tapped::before { animation: gShine .7s ease; }
+    @keyframes gShine { to { transform: translateX(120%); } }
+    .game .g-ic { animation: gFloat 3.2s ease-in-out infinite; }
+    .game:nth-child(2) .g-ic { animation-delay: -.8s; }
+    .game:nth-child(3) .g-ic { animation-delay: -1.6s; }
+    .game:nth-child(4) .g-ic { animation-delay: -2.4s; }
+    @keyframes gFloat { 50% { transform: translateY(-5px) rotate(-4deg); } }
+    .game.tapped { animation: gPop .42s cubic-bezier(.3,1.5,.5,1); }
+    @keyframes gPop { 30% { transform: scale(.94); } 70% { transform: scale(1.04); } }
+    .game.tapped .g-ic { animation: gSpin .5s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes gSpin { 40% { transform: scale(1.35) rotate(-14deg); } 100% { transform: none; } }
+    .g-ripple { position: absolute; z-index: 0; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: rgba(255,255,255,.45); pointer-events: none; animation: gRipple .6s ease-out forwards; }
+    @keyframes gRipple { to { transform: scale(26); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .game .g-ic, .game.tapped, .game.tapped .g-ic, .game:hover::before, .game.tapped::before, .g-ripple { animation: none !important; } }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
 </head>
@@ -59,6 +77,20 @@
       document.title = S.t('title') + ' | Speak Up Fearless';
       var BULB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg>';
       var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>';
+
+      // A little bounce, shine and ripple when a game is tapped, then carry on.
+      function gameTap(card, e, then) {
+        var r = card.getBoundingClientRect();
+        var dot = document.createElement('span');
+        dot.className = 'g-ripple';
+        dot.style.left = ((e.clientX || r.left + r.width / 2) - r.left) + 'px';
+        dot.style.top = ((e.clientY || r.top + r.height / 2) - r.top) + 'px';
+        card.appendChild(dot);
+        setTimeout(function () { dot.remove(); }, 650);
+        card.classList.remove('tapped'); void card.offsetWidth; card.classList.add('tapped');
+        var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        setTimeout(then, calm ? 0 : 280);
+      }
       var content = document.getElementById('content');
       S.gate(content, function () {
         return S.loadGames().then(function (games) {
@@ -71,6 +103,15 @@
               '<button class="how" type="button" data-how="' + id + '">' + BULB + S.esc(S.t('howTo')) + '</button></div></article>';
           }).join('') + '</div>' +
           '<div class="soon"><span class="ic">' + BULB + '</span><span><b>' + S.esc(S.t('soonTitle')) + '</b>' + S.esc(S.t('soonBody')) + '</span></div>';
+          // The whole card plays the game, with a bounce first.
+          content.querySelectorAll('.game').forEach(function (card) {
+            card.addEventListener('click', function (e) {
+              if (e.target.closest('[data-how]')) return;
+              e.preventDefault();
+              var href = card.querySelector('.play').getAttribute('href');
+              gameTap(card, e, function () { location.href = href; });
+            });
+          });
           content.querySelectorAll('[data-how]').forEach(function (b) {
             b.addEventListener('click', function () {
               var id = b.dataset.how;

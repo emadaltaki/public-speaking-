@@ -76,8 +76,10 @@
       '<button class="howbtn" type="button">' + ICON.bulb + esc(t('howTo')) + '</button>' +
       '<div class="rows" id="rows"></div>' +
       '<button class="btn btn-primary start" type="button" id="startBtn">' + (opts.startIcon || ICON.play) + esc(opts.startLabel || t('tripleStepStart')) + '</button></div>';
-    main.querySelector('.howbtn').addEventListener('click', function () { S.howToPlay(opts.id); });
-    S.howToPlayFirstTime(opts.id);
+    // "Let's play" at the end of How to play starts the game.
+    var play = function () { var b = main.querySelector('#startBtn'); if (b) b.click(); };
+    main.querySelector('.howbtn').addEventListener('click', function () { S.howToPlay(opts.id, play); });
+    S.howToPlayFirstTime(opts.id, play);
     var rows = main.querySelector('#rows');
     opts.render(rows);
     main.querySelector('#startBtn').addEventListener('click', opts.onStart);
