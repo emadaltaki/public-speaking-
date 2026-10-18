@@ -562,8 +562,8 @@
       /* Fewer words on phones */
       #sessions .s-intro, #community .s-intro, #pricing .s-intro, #book .s-intro, .games-band .s-intro { display: none; }
       .hero-photo button { aspect-ratio: 16 / 11; }
-      .tight .free .l p { display: none; }
-      .tight .free .l { padding-bottom: 0; }
+      .tight .free .l p { font-size: 14px; }
+      .tight .free .l { padding-bottom: 4px; }
       .tight .free .r { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 14px; border-top: 0; padding-top: 10px; }
       .tight .free .r .meta { margin: 0; font-size: 13.5px; }
       .tight .free .r .btn { grid-column: 1 / -1; margin-top: 14px; }
@@ -583,6 +583,12 @@
     .area::before { content: ""; width: 14px; height: 14px; flex: none; background: var(--accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z'/%3E%3C/svg%3E") center / contain no-repeat; }
     .field.bad .area { display: none; }
     /* Quick game links and policy line */
+    .how3 { display: flex; flex-wrap: wrap; gap: 8px; margin: -12px 0 28px; padding: 0; list-style: none; }
+    .how3 li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: 14.5px; font-weight: 600; color: var(--ink); }
+    .how3 b { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); font-size: 13px; }
+    .cta-note { display: flex; align-items: flex-start; gap: 8px; max-width: 520px; margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+    .cta-note svg { width: 18px; height: 18px; flex: none; margin-top: 2px; color: var(--primary); }
+    @media (max-width: 640px) { .how3 { margin: -8px 0 22px; } .how3 { gap: 6px; } .how3 li { font-size: 13px; padding: 5px 11px 5px 5px; gap: 6px; } .how3 b { width: 21px; height: 21px; font-size: 12px; } }
     .try-game { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; color: var(--primary); font-weight: 700; font-size: 15px; text-decoration: none; }
     .try-game svg { width: 14px; height: 14px; }
     .try-game:hover span { text-decoration: underline; text-underline-offset: 3px; }
@@ -788,13 +794,19 @@
     <section class="hero" id="top">
       <div class="wrap">
         <div>
-          <span class="loc"><span class="dot"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Online, or in person around the GTA</span></span>
-          <h1 data-t="heroHeadline">You Don't Have to Be Fearless to Speak.</h1>
-          <p class="lead" data-t="heroSupport">Nervous about speaking? That's normal. Come practice with a friendly group in Mississauga and feel a little more confident every time.</p>
+          <span class="loc"><span class="dot"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Public speaking practice, online or around the GTA</span></span>
+          <h1 data-t="heroHeadline">Get speaking. Let the nerves go.</h1>
+          <p class="lead" data-t="heroSupport">We help people who get nervous speaking in front of others. Small friendly groups, fun speaking exercises, one small step at a time, until the anxiety fades.</p>
+          <ul class="how3">
+            <li><b>1</b><span data-t="how1">Show up</span></li>
+            <li><b>2</b><span data-t="how2">Speak a little</span></li>
+            <li><b>3</b><span data-t="how3">Feel the fear fade</span></li>
+          </ul>
           <div class="ctas">
             <a class="btn btn-primary" href="#book" data-t="ctaBook" data-cta="hero">Book a free intro call</a>
             <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">See what we practice</a>
           </div>
+          <p class="cta-note"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="ctaNote">The intro call is a free 15 minute video chat with a host about your goals. No speech needed.</span></p>
           <a class="try-game" href="#games" data-track="try_game_hero"><svg aria-hidden="true"><use href="#i-play"/></svg><span data-t="tryGame">Not ready to talk yet? Try a quick game first</span></a>
           <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A friendly room where nobody judges you and you go at your own pace.</span></p>
         </div>
@@ -907,16 +919,16 @@
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowPricing">Pricing</span>
         <h2 class="s-title" data-t="pricingHeadline">Simple, honest pricing</h2>
-        <p class="s-intro" data-t="pricingSupport">Start with a free call and only continue if it feels right.</p>
+        <p class="s-intro" data-t="pricingSupport">Start with a free intro call to talk about your goals, then join practice sessions only if it feels right.</p>
         <div class="free">
           <div class="l">
             <span class="tag" data-t="free">FREE</span>
-            <h3 data-t="freeTitle">Free intro call</h3>
-            <p data-t="freeDesc">Meet a host, ask anything, and see if it's for you. You won't have to speak, and there's no pressure to sign up.</p>
+            <h3 data-t="freeTitle">Free intro call: see if it's for you</h3>
+            <p data-t="freeDesc">A short video chat with one of our hosts. Tell us what makes speaking hard for you, hear how the practice sessions work, and ask anything. It's not a session, so you won't have to give a speech, and there's no pressure to sign up.</p>
           </div>
           <div class="r">
             <div class="price">$0</div>
-            <div class="meta" data-t="freeMeta">15 to 20 minutes on a video call</div>
+            <div class="meta" data-t="freeMeta">15 to 20 minute video call</div>
             <a class="btn btn-primary" href="#book" data-t="ctaBookShort" data-cta="pricing-free" data-plan="intro">Book my free call</a>
           </div>
         </div>
@@ -958,7 +970,7 @@
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowContact">Get in touch</span>
         <h2 class="s-title" data-t="bookHeadline">Book your free intro call</h2>
-        <p class="s-intro" data-t="bookIntro">Pick a time that works for you and we'll get back to you to confirm.</p>
+        <p class="s-intro" data-t="bookIntro">A free 15 to 20 minute video chat about your speaking goals. Pick a time that works for you and we'll get back to you to confirm.</p>
         <div class="book-grid">
           <div class="card book-card" id="bookCard">
             <form id="bookForm" novalidate>
@@ -1057,7 +1069,7 @@
   </footer>
 
   <div class="sticky-cta" id="stickyCta">
-    <span class="txt"><b data-t="stickyTitle">Free intro call</b><small data-t="stickySub">15 to 20 minutes, no pressure</small></span>
+    <span class="txt"><b data-t="stickyTitle">Free intro call</b><small data-t="stickySub">15 min chat about your goals</small></span>
     <a class="btn btn-primary" href="#book" data-cta="sticky"><span data-t="stickyCta">Book now</span><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </div>
 
