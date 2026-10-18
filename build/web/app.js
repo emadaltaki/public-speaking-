@@ -26,6 +26,8 @@
       howTo: 'How to play', next: 'Next', back: 'Back', letsPlay: "Let's play!", close: 'Close', stepOf: 'Step {n} of {t}', play: 'Play',
       gateTitle: 'Sign up to play', gateBody: 'Create a free account to unlock all our speaking games and keep track of your practice.',
       gateSignUp: 'Create free account', gateSignIn: 'I already have an account',
+      dailyName: 'Daily Challenge', dailyTag: 'A new one-minute topic every day. Keep your streak going.',
+      dailyCardTitle: "Today's 1-minute challenge", dailyCardDone: 'Done today. Come back tomorrow!', dailyCardGo: 'Take the challenge',
       joinKicker: 'Free to play', joinTitle: "You're one step away from playing", joinAll: 'Speaking games',
       joinBody: 'Make a free account to start {game}. It only takes a moment, and you can play right away.',
       joinBodyAll: 'Make a free account to play all our speaking games. It only takes a moment.',
@@ -39,6 +41,8 @@
       howTo: 'طريقة اللعب', next: 'التالي', back: 'رجوع', letsPlay: 'هيا نلعب!', close: 'إغلاق', stepOf: 'الخطوة {n} من {t}', play: 'العب',
       gateTitle: 'سجّل لتلعب', gateBody: 'أنشئ حسابًا مجانيًا لتفتح جميع ألعاب التحدث وتتابع تدريبك.',
       gateSignUp: 'أنشئ حسابًا مجانيًا', gateSignIn: 'لدي حساب بالفعل',
+      dailyName: 'التحدي اليومي', dailyTag: 'موضوع جديد لدقيقة واحدة كل يوم. حافظ على سلسلتك.',
+      dailyCardTitle: 'تحدي الدقيقة لليوم', dailyCardDone: 'أنجزته اليوم. عد غدًا!', dailyCardGo: 'خُض التحدي',
       joinKicker: 'مجانية', joinTitle: 'خطوة واحدة وتبدأ اللعب', joinAll: 'ألعاب التحدث',
       joinBody: 'أنشئ حسابًا مجانيًا لتبدأ {game}. يستغرق الأمر لحظة، وتلعب فورًا.',
       joinBodyAll: 'أنشئ حسابًا مجانيًا لتلعب جميع ألعاب التحدث. يستغرق الأمر لحظة.',
@@ -246,7 +250,8 @@
     'triple-step': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     conductor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 12h1M7 8v8M11 4v16M15 7v10M19 10v4"/></svg>',
     podcast: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="11" r="2.5"/><path d="M12 13.5V21M7.8 15.2a6 6 0 1 1 8.4 0M5 18a10 10 0 1 1 14 0"/></svg>',
-    autocomplete: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></svg>'
+    autocomplete: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></svg>',
+    daily: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2s1 3.3-1.5 6C9.1 10 7 11.6 7 14.8A5 5 0 0 0 12 20a5 5 0 0 0 5-5c0-1.8-.7-3.2-1.5-4.2 0 0-.1 1.9-1.8 2.4 0 0 1-4.8-1.2-11.2z"/></svg>'
   };
   // Pictures for each "How to play" step.
   var STEP_ICONS = {
@@ -415,7 +420,7 @@
     if (!u) {
       return loadGames().then(function (games) {
         var id = (here.match(/^\/games\/([\w-]+)/) || [])[1];
-        var g = id && games[id];
+        var g = id === 'daily' ? { title: t('dailyName'), tagline: t('dailyTag') } : id && games[id];
         var name = g ? g.title : t('joinAll');
         var tick = function (icon, key) { return '<li><span class="tick">' + icon + '</span><span>' + esc(t(key)) + '</span></li>'; };
         el.innerHTML = '<div class="join join-inline">' +
@@ -444,7 +449,7 @@
     cachedAvatar: cachedAvatar, refreshAvatar: refreshAvatar, saveAvatar: saveAvatar, onAvatar: onAvatar, avatarStyle: avatarStyle, pickPhoto: pickPhoto,
     checkVerified: checkVerified, recordRound: recordRound, history: history,
     loadGames: loadGames, ORDER: ORDER, ICONS: ICONS, howToPlay: howToPlay, howToPlayFirstTime: howToPlayFirstTime,
-    renderHeader: renderHeader, toast: toast
+    renderHeader: renderHeader, toast: toast, localHistory: localHistory
   };
   document.addEventListener('DOMContentLoaded', renderHeader);
 })();

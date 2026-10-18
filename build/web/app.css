@@ -81,6 +81,7 @@ svg.i { width: 1em; height: 1em; flex: none; }
 .g-conductor { background: linear-gradient(145deg, #3F6F8E, #23455E); }
 .g-podcast { background: linear-gradient(145deg, #7A4E9A, #4A2C66); }
 .g-autocomplete { background: linear-gradient(145deg, #D49A4E, #9C6420); }
+.g-daily { background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); }
 
 /* Chips */
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 4px; padding: 0; list-style: none; }

@@ -27,6 +27,15 @@
     .play svg { width: 14px; height: 14px; }
     .how { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; border: 0; border-radius: 999px; background: rgba(255,255,255,.16); color: #fff; font-weight: 700; cursor: pointer; }
     .how svg { width: 16px; height: 16px; }
+    .daily-card { position: relative; display: flex; align-items: center; gap: 14px; margin-bottom: 16px; padding: 18px 20px; border-radius: 24px; color: #fff; text-decoration: none; overflow: hidden; isolation: isolate; box-shadow: 0 16px 28px -18px rgba(122,42,22,.7); }
+    .daily-card::after { content: ""; position: absolute; z-index: -1; right: -40px; top: -60px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.1); }
+    .daily-card .g-ic svg { width: 28px; height: 28px; color: #fff; }
+    .daily-card .txt { flex: 1; min-width: 0; }
+    .daily-card small { display: block; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+    .daily-card b { display: block; font-family: var(--head); font-size: 19px; line-height: 1.25; margin-top: 2px; }
+    .daily-card .st { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: 13px; font-weight: 700; }
+    .daily-card .go { flex: none; padding: 10px 16px; border-radius: 999px; background: #fff; color: #A23B1E; font-weight: 800; font-size: 14px; }
+    @media (max-width: 520px) { .daily-card .go { display: none; } }
     .soon { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 18px 20px; border: 1.5px dashed var(--border); border-radius: 20px; color: var(--muted); }
     .soon b { display: block; color: var(--ink); }
     @media (max-width: 720px) {
@@ -92,9 +101,21 @@
         setTimeout(then, calm ? 0 : 280);
       }
       var content = document.getElementById('content');
+      // Today's daily challenge, with the streak from this device's rounds.
+      function dailyCard() {
+        var key = function (d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); };
+        var days = {};
+        S.localHistory().forEach(function (r) { if (r.gameId === 'daily') days[key(new Date(r.playedAt))] = true; });
+        var d = new Date(), done = !!days[key(d)], n = 0;
+        if (!done) d.setDate(d.getDate() - 1);
+        while (days[key(d)]) { n++; d.setDate(d.getDate() - 1); }
+        return '<a class="daily-card g-daily" href="/games/daily"><span class="g-ic">' + S.ICONS.daily + '</span><span class="txt"><small>' + S.esc(S.t('dailyName')) + '</small>' +
+          '<b>' + S.esc(done ? S.t('dailyCardDone') : S.t('dailyCardTitle')) + '</b>' +
+          (n ? '<span class="st">🔥 ' + n + '</span>' : '') + '</span><span class="go">' + S.esc(S.t('dailyCardGo')) + '</span></a>';
+      }
       S.gate(content, function () {
         return S.loadGames().then(function (games) {
-          content.innerHTML = '<div class="grid">' + S.ORDER.map(function (id) {
+          content.innerHTML = dailyCard() + '<div class="grid">' + S.ORDER.map(function (id) {
             var g = games[id];
             return '<article class="game g-' + id + '"><span class="g-ic">' + S.ICONS[id] + '</span>' +
               '<h2>' + S.esc(g.title) + '</h2><p>' + S.esc(g.tagline) + '</p>' +

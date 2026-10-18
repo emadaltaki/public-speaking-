@@ -137,7 +137,7 @@
         rounds.forEach(function (r) { (by[r.gameId] = by[r.gameId] || []).push(r); });
         var fmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
         var gi = function (id) { return '<span class="gi g-' + id + '">' + (S.ICONS[id] || '') + '</span>'; };
-        var title = function (id) { return games[id] ? games[id].title : id; };
+        var title = function (id) { return games[id] ? games[id].title : id === 'daily' ? S.t('dailyName') : id; };
         box.innerHTML =
           '<div class="stats"><div class="card stat"><b>' + rounds.length + '</b><span>' + esc(S.t('roundsLabel')) + '</span></div>' +
           '<div class="card stat"><b>' + esc(minutes(total)) + '</b><span>' + esc(S.t('time')) + '</span></div></div>' +
