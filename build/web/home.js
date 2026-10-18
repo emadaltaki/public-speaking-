@@ -57,6 +57,12 @@
   };
 
   var AR = {
+    skInSession: 'في الجلسة', skTip: 'اضغط على أي مهارة لترى كيف تبدو في الجلسة.',
+    skD1: 'جولات قصيرة وسهلة تتحدث فيها من 30 إلى 60 ثانية، وبالسرعة التي تناسبك.',
+    skD2: 'أسئلة وكلمات مفاجئة، كما في Triple Step، لتتعلّم الرد دون أن تتجمّد.',
+    skD3: 'تصوغ قصة واحدة من حياتك وترويها أمام مجموعة ودودة.',
+    skD4: 'يسمع الجميع شيئًا نجح وشيئًا يجرّبونه بعدها. دون قسوة أبدًا.',
+    skD5: 'خطوة صغيرة في كل مرة، مثل وقفة مقصودة أو رفع نظرك عن أوراقك.',
     howWeHelp: 'كيف نساعدك', feelTip: 'اضغط على أي بطاقة لترى كيف نساعدك.',
     help1: 'نبدأ بجولات صغيرة بلا ضغط، فيتعلّم جسمك أن الكلام آمن.',
     help2: 'ألعاب سريعة تدرّبك على أن تتكلم أولًا وتحسّن لاحقًا.',
@@ -340,6 +346,27 @@
   feelCards.forEach(function (li) {
     li.addEventListener('click', function () { flipFeel(li); });
     li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipFeel(li); } });
+  });
+
+  // ---------------------------------------------------------------- skills
+  // Skills slide in once, and open to show what they look like in a session.
+  var skillCards = all('.skills li');
+  if ('IntersectionObserver' in window) {
+    var skillIo = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); skillIo.unobserve(e.target); } });
+    }, { threshold: .2 });
+    skillCards.forEach(function (li) { skillIo.observe(li); });
+  } else skillCards.forEach(function (li) { li.classList.add('in'); });
+  function toggleSkill(li) {
+    var open = !li.classList.contains('open');
+    skillCards.forEach(function (o) { if (o !== li) { o.classList.remove('open'); o.setAttribute('aria-expanded', 'false'); } });
+    li.classList.toggle('open', open);
+    li.setAttribute('aria-expanded', String(open));
+    if (open) track('skill_open', { which: li.querySelector('b').dataset.t });
+  }
+  skillCards.forEach(function (li) {
+    li.addEventListener('click', function () { toggleSkill(li); });
+    li.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSkill(li); } });
   });
 
   // ---------------------------------------------------------------- photos
