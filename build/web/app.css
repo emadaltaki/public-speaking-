@@ -25,7 +25,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; min-height: 100vh; background: var(--page); color: var(--text); font: 16px/1.55 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { margin: 0; min-height: 100vh; background: var(--page); color: var(--text); font: 16px/1.55 var(--body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
 h1, h2, h3 { font-family: var(--head); color: var(--ink); margin: 0; letter-spacing: -.01em; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }

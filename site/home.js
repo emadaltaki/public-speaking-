@@ -715,7 +715,11 @@
     var heroOut = false;
     var bookIn = false;
     var footIn = false;
-    var update = function () { sticky.classList.toggle('show', heroOut && !bookIn && !footIn); };
+    var priceIn = false;
+    // Hidden near the form, the footer, and the free-call card (which has its own button).
+    var update = function () { sticky.classList.toggle('show', heroOut && !bookIn && !footIn && !priceIn); };
+    var free = document.querySelector('.free');
+    if (free) new IntersectionObserver(function (es) { priceIn = es[0].isIntersecting; update(); }).observe(free);
     new IntersectionObserver(function (es) { heroOut = !es[0].isIntersecting; update(); }).observe($('top'));
     new IntersectionObserver(function (es) { bookIn = es[0].isIntersecting; update(); }, { rootMargin: '0px 0px -20% 0px' }).observe($('book'));
     new IntersectionObserver(function (es) { footIn = es[0].isIntersecting; update(); }).observe(document.querySelector('footer'));
