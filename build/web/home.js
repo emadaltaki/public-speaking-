@@ -448,6 +448,17 @@
     var f = formatPhone(el.value);
     if (f !== el.value) el.value = f;
   });
+  // Shows where the number is from as soon as the area code is typed.
+  function showArea() {
+    var v = $('fPhone').value, d = v.replace(/\D/g, '');
+    if (d.length === 11 && d[0] === '1') d = d.slice(1);
+    var area = '';
+    if (v.trim()[0] === '+' && d[0] !== '1') area = d.length >= 2 ? phoneArea(v) : '';
+    else if (d.length >= 3) area = phoneArea((d.slice(0, 3) + '0000000').slice(0, 10));
+    $('phoneArea').hidden = !area;
+    $('phoneArea').textContent = area;
+  }
+  $('fPhone').addEventListener('input', showArea);
   $('fPhone').addEventListener('blur', function () { var el = $('fPhone'); if (phoneOk(el.value)) el.value = formatPhone(el.value); });
   function fieldOk(id) {
     var input = $(id);
