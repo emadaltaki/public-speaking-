@@ -15,6 +15,7 @@
 .tabs2 svg { width: 18px; height: 18px; }
 .row-head { display: flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 700; }
 .row-head svg { width: 19px; height: 19px; color: var(--accent); }
+.row-head > span:not(.val) { white-space: nowrap; }
 .row-head .val { margin-inline-start: auto; padding: 3px 12px; border-radius: 999px; background: var(--soft); color: var(--accent); font-size: 14px; font-weight: 700; }
 .help { margin: 2px 0 0; color: var(--muted); font-size: 13.5px; }
 input[type=range] { width: 100%; margin: 10px 0 0; accent-color: var(--primary); height: 28px; }

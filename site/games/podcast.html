@@ -42,24 +42,22 @@
       var ID = 'podcast';
       var PACES = [[12, 18], [8, 12], [5, 8], [2, 4]];
       S.addStrings(
-        { pcSwitch: 'How fast names switch', pcSwitchHelp: 'Names come up in a random order, and everyone gets a turn before anyone goes twice.',
-          pcPaces: ['Relaxed, every 12 to 18s', 'Steady, every 8 to 12s', 'Quick, every 5 to 8s', 'Wild, every 2 to 4s'] },
-        { pcSwitch: 'سرعة تبديل الأسماء', pcSwitchHelp: 'تظهر الأسماء بترتيب عشوائي، ويأخذ الجميع دورهم قبل أن يتكلم أحد مرتين.',
-          pcPaces: ['هادئ، كل 12 إلى 18 ث', 'ثابت، كل 8 إلى 12 ث', 'سريع، كل 5 إلى 8 ث', 'جنوني، كل 2 إلى 4 ث'] }
+        { pcSwitch: 'Switch speed', pcSwitchHelp: 'Names come up in a random order, and everyone gets a turn before anyone goes twice.',
+          pcPaces: ['Relaxed · 12 to 18s', 'Steady · 8 to 12s', 'Quick · 5 to 8s', 'Wild · 2 to 4s'] },
+        { pcSwitch: 'سرعة التبديل', pcSwitchHelp: 'تظهر الأسماء بترتيب عشوائي، ويأخذ الجميع دورهم قبل أن يتكلم أحد مرتين.',
+          pcPaces: ['هادئ · 12 إلى 18 ث', 'ثابت · 8 إلى 12 ث', 'سريع · 5 إلى 8 ث', 'جنوني · 2 إلى 4 ث'] }
       );
       var settings = { seconds: 60, pace: 0, count: 5, suggest: true, set: 'General', names: [] };
 
       G.boot(ID, function (games, words) {
         function showRules() {
           G.setup({
-            id: ID, games: games, startLabel: t('podcastNext'), startIcon: G.ICON.arrow,
+            id: ID, games: games, startLabel: t('podcastNext'), startIcon: G.ICON.arrow, playFromHow: false,
             render: function (rows) {
               rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('tripleStepTimer'), min: 30, max: 600, step: 30, value: settings.seconds,
                 format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
               rows.appendChild(G.slider({ icon: G.ICON.speed, label: t('pcSwitch'), help: t('pcSwitchHelp'), min: 0, max: 3, value: settings.pace,
                 format: function (v) { return t('pcPaces')[v]; }, onChange: function (v) { settings.pace = v; } }));
-              rows.appendChild(G.slider({ icon: G.ICON.group, label: t('podcastPlayers'), min: 2, max: 8, value: settings.count,
-                format: String, onChange: function (v) { settings.count = v; } }));
               rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
               rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
             },
@@ -68,6 +66,7 @@
         }
 
         function showNames() {
+          // Page two: who's playing. Add or remove people here (2 to 8).
           var names = [];
           for (var i = 0; i < settings.count; i++) names.push(settings.names[i] || G.playerName(i + 1));
           var namesRow;
@@ -78,12 +77,12 @@
               back.className = 'back-link';
               back.type = 'button';
               back.innerHTML = G.ICON.back + esc(t('podcastBackToRules'));
-              back.addEventListener('click', function () { settings.names = namesRow.names(); showRules(); });
+              back.addEventListener('click', function () { settings.names = namesRow.names(); settings.count = settings.names.length; showRules(); });
               rows.appendChild(back);
-              namesRow = G.players({ names: names, min: settings.count, max: settings.count, fixed: true, label: t('podcastWhoIsPlaying') });
+              namesRow = G.players({ names: names, min: 2, max: 8, label: t('podcastWhoIsPlaying') });
               rows.appendChild(namesRow);
             },
-            onStart: function () { settings.names = namesRow.names(); play(); }
+            onStart: function () { settings.names = namesRow.names(); settings.count = settings.names.length; play(); }
           });
         }
 
