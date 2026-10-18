@@ -354,14 +354,46 @@
   var skillCards = all('.skills li');
   if ('IntersectionObserver' in window) {
     var skillIo = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); skillIo.unobserve(e.target); } });
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        // Staggered once on the way in, then no delay on later taps.
+        var li = e.target;
+        li.style.transitionDelay = (skillCards.indexOf(li) * 60) + 'ms';
+        li.classList.add('in');
+        setTimeout(function () { li.style.transitionDelay = ''; }, 900);
+        skillIo.unobserve(li);
+      });
     }, { threshold: .2 });
     skillCards.forEach(function (li) { skillIo.observe(li); });
   } else skillCards.forEach(function (li) { li.classList.add('in'); });
+  // Glide each card from its old height to its new one.
+  function glide(change) {
+    var before = skillCards.map(function (c) { return c.offsetHeight; });
+    change();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    skillCards.forEach(function (c, i) {
+      var after = c.offsetHeight;
+      if (after === before[i]) return;
+      c.style.height = before[i] + 'px';
+      c.style.overflow = 'hidden';
+      void c.offsetHeight;
+      c.style.transition = 'height .38s cubic-bezier(.2,.8,.2,1), border-color .2s, box-shadow .2s';
+      c.style.height = after + 'px';
+      var done = function (e) {
+        if (e && e.propertyName !== 'height') return;
+        c.style.height = c.style.overflow = c.style.transition = '';
+        c.removeEventListener('transitionend', done);
+      };
+      c.addEventListener('transitionend', done);
+      setTimeout(done, 500);
+    });
+  }
   function toggleSkill(li) {
     var open = !li.classList.contains('open');
-    skillCards.forEach(function (o) { if (o !== li) { o.classList.remove('open'); o.setAttribute('aria-expanded', 'false'); } });
-    li.classList.toggle('open', open);
+    glide(function () {
+      skillCards.forEach(function (o) { if (o !== li) { o.classList.remove('open'); o.setAttribute('aria-expanded', 'false'); } });
+      li.classList.toggle('open', open);
+    });
     li.setAttribute('aria-expanded', String(open));
     if (open) track('skill_open', { which: li.querySelector('b').dataset.t });
   }
