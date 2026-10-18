@@ -28,6 +28,15 @@
     themeDark: 'Dark theme', themeLight: 'Light theme', openMenu: 'Open menu', closeMenu: 'Close menu',
     close: 'Close', prev: 'Previous photo', next: 'Next photo',
     morningFull: 'Morning (9am to 12pm)', afternoonFull: 'Afternoon (12 to 5pm)', eveningFull: 'Evening (5 to 9pm)',
+    joinBody: 'Make a free account to start {game}. It only takes a moment, and you can play right away.',
+    lbT0: 'Everyone gets a turn',
+    lbD0: 'A host guides every session. You start small, everyone takes part, and mistakes are welcome.',
+    lbD1: 'You sit with a small, friendly group and warm up together before anyone stands up.',
+    lbD2: "You speak in short, playful rounds like the Podcast Game, so it feels like a chat, not a speech.",
+    lbD3: 'After each round you get kind, specific tips: what worked, and one thing to try next.',
+    lbD4: 'Simple ground rules keep it safe: everyone takes part, nobody judges, mistakes are part of learning.',
+    lbD5: 'Games like Triple Step get you talking on your feet while the group cheers you on.',
+    lbD6: 'Expect lots of laughs. Most people leave feeling lighter than when they walked in.',
     sending: 'Sending…', subject: 'Free intro call request',
     pickSession: 'Choose your session',
     mLead: 'Just', mDay: 'pick a day', mTime: 'pick a time', mName: 'add your name',
@@ -48,6 +57,18 @@
   };
 
   var AR = {
+    joinKicker: 'مجانية', joinTitle: 'خطوة واحدة وتبدأ اللعب',
+    joinBody: 'أنشئ حسابًا مجانيًا لتبدأ {game}. يستغرق الأمر لحظة، وتلعب فورًا.',
+    joinB1: 'ألعاب التحدث الأربع، مجانًا للأبد', joinB2: 'شاهد تقدّمك وسلسلة أيامك تكبر', joinB3: 'تدرّب وحدك أولًا، بلا جمهور',
+    joinCta: 'أنشئ حسابي المجاني', joinHave: 'لديك حساب؟', joinSignIn: 'سجّل الدخول', joinFine: 'يستغرق 30 ثانية. بلا بطاقة وبلا رسائل مزعجة.',
+    lbKicker: 'ما الذي ستحصل عليه', lbT0: 'الجميع يأخذ دوره',
+    lbD0: 'يقود كل جلسة مضيف. تبدأ بخطوات صغيرة، ويشارك الجميع، والأخطاء مرحّب بها.',
+    lbD1: 'تجلس مع مجموعة صغيرة وودودة وتتحمّسون معًا قبل أن يقف أحد.',
+    lbD2: 'تتحدث في جولات قصيرة ومرحة مثل لعبة البودكاست، فتشعر أنها دردشة لا خطبة.',
+    lbD3: 'بعد كل جولة تحصل على نصائح لطيفة ومحددة: ما نجح، وشيء واحد تجرّبه بعدها.',
+    lbD4: 'قواعد بسيطة تحافظ على الأمان: الجميع يشارك، لا أحد يحكم، والأخطاء جزء من التعلّم.',
+    lbD5: 'ألعاب مثل Triple Step تجعلك تتحدث واقفًا والمجموعة تشجّعك.',
+    lbD6: 'توقّع الكثير من الضحك. معظم الناس يغادرون أخفّ مما دخلوا.',
     skip: 'انتقل إلى المحتوى', navWhy: 'لماذا نفعل هذا', navSessions: 'الجلسات', navCommunity: 'مجتمعنا',
     navGames: 'الألعاب', newBadge: 'جديد', playNow: 'العب',
     gamesEyebrow: 'ألعاب تحدّث مجانية', gamesHeadline: 'جهّز صوتك للحديث في دقيقتين.',
@@ -308,7 +329,11 @@
     var p = photos[lbIndex];
     $('lbImg').src = p.img.currentSrc || p.img.src;
     $('lbImg').alt = p.img.alt;
-    $('lbCap').textContent = p.cap ? p.cap.textContent : '';
+    $('lbCap').textContent = p.cap ? p.cap.textContent : t('lbT0');
+    $('lbDesc').textContent = t('lbD' + lbIndex);
+    $('lbCount').textContent = (lbIndex + 1) + ' / ' + photos.length;
+    var img = $('lbImg');
+    img.style.animation = 'none'; void img.offsetWidth; img.style.animation = '';
   }
   function openLightbox(i) { showPhoto(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; $('lbClose').focus(); }
   function closeLightbox() { if (!lb.classList.contains('open')) return; lb.classList.remove('open'); document.body.style.overflow = ''; }
@@ -317,6 +342,7 @@
     btn.addEventListener('click', function () { openLightbox(i); });
   });
   $('lbClose').addEventListener('click', closeLightbox);
+  $('lbCta').addEventListener('click', closeLightbox);
   $('lbPrev').addEventListener('click', function () { showPhoto(lbIndex - (root.dir === 'rtl' ? -1 : 1)); });
   $('lbNext').addEventListener('click', function () { showPhoto(lbIndex + (root.dir === 'rtl' ? -1 : 1)); });
   lb.addEventListener('click', function (e) { if (e.target === lb) closeLightbox(); });
@@ -328,6 +354,43 @@
     if (Math.abs(dx) > 50) showPhoto(lbIndex + (dx < 0 ? 1 : -1));
     touchX = null;
   });
+
+  // ---------------------------------------------------------------- game sign-up prompt
+  // Signed-out visitors who pick a game see what they get and sign up from here.
+  var join = $('join');
+  var joinFrom = null;
+  function openJoin(a) {
+    var game = a.dataset.game || a.getAttribute('href');
+    var name = a.querySelector('b').textContent;
+    var tint = [].filter.call(a.classList, function (c) { return /^g\d$/.test(c); })[0] || 'g1';
+    $('joinTop').className = 'join-top ' + tint;
+    $('joinIcon').innerHTML = a.querySelector('.g-ic').innerHTML;
+    $('joinName').textContent = name;
+    $('joinTag').textContent = a.querySelector('small').textContent;
+    $('joinBody').textContent = t('joinBody').replace('{game}', name);
+    $('joinUp').href = '/login?mode=signup&next=' + encodeURIComponent(game);
+    $('joinIn').href = '/login?next=' + encodeURIComponent(game);
+    joinFrom = a;
+    join.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    $('joinUp').focus({ preventScroll: true });
+    track('join_prompt', { game: game });
+  }
+  function closeJoin() {
+    if (!join.classList.contains('open')) return;
+    join.classList.remove('open');
+    document.body.style.overflow = '';
+    if (joinFrom) joinFrom.focus({ preventScroll: true });
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a.game');
+    if (!a || signedInUser()) return;
+    e.preventDefault();
+    openJoin(a);
+  });
+  $('joinClose').addEventListener('click', closeJoin);
+  join.addEventListener('click', function (e) { if (e.target === join) closeJoin(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeJoin(); });
 
   // ---------------------------------------------------------------- privacy
   var privacy = $('privacy');
