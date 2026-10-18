@@ -29,6 +29,16 @@
     .results li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 14.5px; }
     .results li:first-child { border-top: 0; }
     .results b { color: var(--ink); }
+    /* Topic picker on the setup card */
+    .tp-card { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 14px 14px 14px 18px; border-radius: 18px; background: linear-gradient(135deg, var(--soft), var(--warm-soft)); border: 1px solid var(--border); }
+    .tp-card b { flex: 1; font-family: var(--head); font-size: 18px; line-height: 1.3; color: var(--ink); }
+    .tp-card b.pop { animation: tpPop .35s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes tpPop { from { transform: scale(.9); opacity: 0; } }
+    .tp-card.off { opacity: .45; }
+    .tp-shuffle { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--surface); color: var(--accent); font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px -6px rgba(0,0,0,.3); }
+    .tp-shuffle svg { width: 18px; height: 18px; }
+    @media (max-width: 420px) { .tp-shuffle { width: 44px; height: 44px; padding: 0; justify-content: center; } .tp-shuffle span { display: none; } }
+    .tp-own { width: 100%; height: 48px; margin-top: 10px; padding: 0 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--field); color: var(--ink); font: inherit; font-size: 16px; }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
 </head>
@@ -40,7 +50,14 @@
     (function () {
       var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
       var ID = 'triple-step';
-      var settings = { multi: false, players: [], count: 6, seconds: 60, suggest: true, survival: false, set: 'General' };
+      var settings = { multi: false, players: [], count: 6, seconds: 60, own: '', survival: false, set: 'General' };
+      S.addStrings(
+        { tsTopic: 'Your topic', tsAnother: 'Another one', tsOwn: 'Or type your own topic' },
+        { tsTopic: 'موضوعك', tsAnother: 'موضوع آخر', tsOwn: 'أو اكتب موضوعك الخاص' }
+      );
+      var SHUFFLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>';
+      var shownTopic = '';
+      var useShown = false;
 
       G.boot(ID, function (games, words) {
         var namesRow;
@@ -63,12 +80,30 @@
               format: String, onChange: function (v) { settings.count = v; } }));
             rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('tripleStepTimer'), min: 30, max: 300, step: 30, value: settings.seconds,
               format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
-            rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
+            // Always shows a ready topic; typing your own replaces it.
+            var tp = document.createElement('div');
+            tp.innerHTML = '<span class="row-head">' + G.ICON.list + '<span>' + esc(t('tsTopic')) + '</span></span>' +
+              '<div class="tp-card"><b></b><button class="tp-shuffle" type="button" aria-label="' + esc(t('tsAnother')) + '">' + SHUFFLE + '<span>' + esc(t('tsAnother')) + '</span></button></div>' +
+              '<input class="tp-own" type="text" maxlength="120" autocomplete="off" placeholder="' + esc(t('tsOwn')) + '">';
+            var tpText = tp.querySelector('b'), tpOwn = tp.querySelector('.tp-own');
+            function newTopic() {
+              shownTopic = G.pickTopic(true, 'General');
+              tpText.textContent = shownTopic;
+              tpText.classList.remove('pop'); void tpText.offsetWidth; tpText.classList.add('pop');
+            }
+            if (!shownTopic) shownTopic = G.pickTopic(true, 'General');
+            tpText.textContent = shownTopic;
+            tpOwn.value = settings.own;
+            tp.querySelector('.tp-card').classList.toggle('off', !!settings.own.trim());
+            tp.querySelector('.tp-shuffle').addEventListener('click', function () { tpOwn.value = ''; settings.own = ''; tp.querySelector('.tp-card').classList.remove('off'); newTopic(); });
+            tpOwn.addEventListener('input', function () { settings.own = tpOwn.value; tp.querySelector('.tp-card').classList.toggle('off', !!tpOwn.value.trim()); });
+            rows.appendChild(tp);
             rows.appendChild(G.toggle({ label: t('tripleStepSurvival'), help: t('tripleStepSurvivalHelp'), value: settings.survival, onChange: function (v) { settings.survival = v; } }));
             rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
           },
           onStart: function () {
             if (namesRow) settings.players = namesRow.names();
+            useShown = true;
             game(0, []);
           }
         });
@@ -76,7 +111,9 @@
         // One turn. playerIndex counts multiplayer turns; results collects them.
         function game(playerIndex, results) {
           var player = settings.multi ? settings.players[playerIndex] : null;
-          var topic = settings.suggest ? G.pickTopic(true, 'General') : t('yourOwnTopic');
+          var own = settings.own.trim();
+          var topic = own || (useShown ? shownTopic : G.pickTopic(true, 'General'));
+          useShown = false;
           var pool = G.shuffle((words.wordSets[settings.set] || words.wordSets.General).slice());
           var total = settings.seconds * 1000;
           var interval = total / (settings.count + 1);
@@ -143,7 +180,7 @@
           function finish(timeUp) {
             G.loopStop();
             var handled = revealed().length;
-            S.recordRound({ gameId: ID, spokenSeconds: elapsed / 1000, topic: settings.suggest ? topic : null });
+            S.recordRound({ gameId: ID, spokenSeconds: elapsed / 1000, topic: own ? null : topic });
             var all = results.concat([{ player: player, topic: topic, words: handled, ms: elapsed }]);
             var more = settings.multi && playerIndex < settings.players.length - 1;
             var everyone = settings.multi && !more;
