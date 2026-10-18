@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F1DDBC">
+  <title>Daily Challenge | Speak Up Fearless</title>
+  <meta name="description" content="A new one-minute speaking topic every day. Keep your streak going and share it.">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/game.css">
+  <style>
+    .daily { max-width: 560px; margin: 0 auto; }
+    .d-hero { position: relative; overflow: hidden; isolation: isolate; padding: 24px 22px 22px; border-radius: 28px; color: #fff; background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); box-shadow: 0 24px 40px -24px rgba(122,42,22,.7); }
+    .d-hero::before, .d-hero::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; background: rgba(255,255,255,.1); }
+    .d-hero::before { width: 220px; height: 220px; right: -70px; top: -90px; }
+    .d-hero::after { width: 140px; height: 140px; left: -50px; bottom: -80px; }
+    .d-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .d-kick { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
+    .d-date { font-size: 13px; opacity: .85; }
+    .streak { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 14px 6px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-weight: 800; font-size: 15px; }
+    .streak .fire { font-size: 20px; line-height: 1; display: inline-block; animation: flick 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+    .streak.cold .fire { filter: grayscale(1); opacity: .7; animation: none; }
+    @keyframes flick { 25% { transform: scale(1.12) rotate(-6deg); } 50% { transform: scale(.96) rotate(4deg); } 75% { transform: scale(1.08) rotate(-2deg); } }
+    .d-label { margin-top: 20px; font-size: 12.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+    .d-topic { font-family: var(--head); font-weight: 800; font-size: clamp(26px, 7.4vw, 36px); line-height: 1.15; margin: 6px 0 0; color: #fff; }
+    .d-rule { margin: 12px 0 0; opacity: .92; font-size: 15px; }
+    .d-go { width: 100%; margin-top: 20px; min-height: 56px; background: #fff; color: #A23B1E; font-size: 17px; box-shadow: 0 10px 22px -12px rgba(0,0,0,.5); }
+    .d-go:hover { background: #FFF4EE; }
+    .d-go svg { width: 20px; height: 20px; }
+    .d-done { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,.16); font-weight: 700; }
+    .d-done b { font-size: 22px; }
+    .d-actions { display: flex; gap: 10px; margin-top: 14px; }
+    .d-actions .btn { flex: 1; min-height: 48px; }
+    .d-ghost { background: rgba(255,255,255,.16); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+    .week { margin-top: 16px; }
+    .week h3 { font-size: 15px; margin: 0 0 10px; }
+    .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .days span { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 0; border-radius: 14px; background: var(--tint); border: 1px solid var(--border); font-size: 12px; font-weight: 700; color: var(--muted); }
+    .days i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; background: var(--surface); border: 1.5px dashed var(--border); font-size: 14px; }
+    .days span.on i { background: linear-gradient(145deg, #E0703E, #A23B1E); border: 0; color: #fff; }
+    .days span.today { border-color: var(--primary); color: var(--ink); }
+    .best { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
+    .best b { color: var(--ink); }
+    .why { margin-top: 16px; }
+    .why ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
+    .why li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
+    .why li::before { content: "✓"; color: var(--ok); font-weight: 900; }
+    .back-games { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 14px; color: var(--accent); font-weight: 700; text-decoration: none; }
+    .back-games svg { width: 18px; height: 18px; }
+    /* End card */
+    .d-end .flame { font-size: 64px; line-height: 1; animation: grow .6s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes grow { from { transform: scale(.3); opacity: 0; } }
+    .d-end .count { font-family: var(--head); font-weight: 900; font-size: 44px; color: var(--primary); line-height: 1; margin-top: 6px; }
+    .d-end .btn-primary svg { width: 20px; height: 20px; }
+    .shared { margin-top: 10px; color: var(--ok); font-size: 14px; font-weight: 700; }
+    @media (prefers-reduced-motion: reduce) { .streak .fire, .d-end .flame { animation: none; } }
+  </style>
+  <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
+</head>
+<body>
+  <main class="wrap" id="main"></main>
+  <script src="/app.js"></script>
+  <script src="/game.js"></script>
+  <script>
+    (function () {
+      var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
+      var ID = 'daily';
+      var SECONDS = 60;
+      var SITE = 'https://public-speaking-lemon.vercel.app';
+      S.addStrings({
+        dTitle: 'Daily Challenge', dKick: "Today's challenge", dTopicLabel: 'Your topic', dRule: 'Speak about it for one minute. No retakes, no pressure, just talk.',
+        dStart: 'Start my minute', dDoneToday: 'Done for today. New topic tomorrow!', dAgain: 'Practice again', dShare: 'Share my streak',
+        dStreak: '{n}-day streak', dStreak1: '1-day streak', dStreak0: 'Start your streak today', dKeep: 'Speak today to keep your {n}-day streak',
+        dWeek: 'This week', dBest: 'Best streak', dTotal: 'Days spoken',
+        dWhy: 'Why one minute a day works', dWhy1: 'Short and easy, so it fits any day', dWhy2: 'Speaking often is what makes the nerves fade', dWhy3: 'Your streak shows how far you have come',
+        dEndTitle: 'You did it!', dEndBody: 'One minute about "{topic}". See you tomorrow for a new one.',
+        dEndStreak: 'day streak', dEndPractice: 'Nice practice! Your streak already counts today.',
+        dShared: 'Copied! Paste it anywhere to share.', dSaved: 'Saved your streak card.', dShareText: "I've spoken every day for {n} days on Speak Up Fearless. Today's topic: \"{topic}\". Try today's challenge:",
+        dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}'
+      }, {
+        dTitle: 'التحدي اليومي', dKick: 'تحدي اليوم', dTopicLabel: 'موضوعك', dRule: 'تحدّث عنه لمدة دقيقة واحدة. بلا إعادة وبلا ضغط، فقط تكلّم.',
+        dStart: 'ابدأ دقيقتي', dDoneToday: 'أنجزت تحدي اليوم. موضوع جديد غدًا!', dAgain: 'تدرّب مجددًا', dShare: 'شارك سلسلتي',
+        dStreak: 'سلسلة {n} أيام', dStreak1: 'سلسلة يوم واحد', dStreak0: 'ابدأ سلسلتك اليوم', dKeep: 'تحدّث اليوم لتحافظ على سلسلة {n} أيام',
+        dWeek: 'هذا الأسبوع', dBest: 'أفضل سلسلة', dTotal: 'أيام تحدّثت فيها',
+        dWhy: 'لماذا تنجح دقيقة يوميًا', dWhy1: 'قصيرة وسهلة فتناسب أي يوم', dWhy2: 'التحدث كثيرًا هو ما يُذهب التوتر', dWhy3: 'سلسلتك تُظهر كم تقدّمت',
+        dEndTitle: 'أحسنت!', dEndBody: 'دقيقة عن «{topic}». نراك غدًا مع موضوع جديد.',
+        dEndStreak: 'أيام متتالية', dEndPractice: 'تدريب رائع! يومك محسوب بالفعل في سلسلتك.',
+        dShared: 'تم النسخ! الصقه في أي مكان للمشاركة.', dSaved: 'حفظنا بطاقة سلسلتك.', dShareText: 'تحدّثت كل يوم لمدة {n} أيام على Speak Up Fearless. موضوع اليوم: «{topic}». جرّب تحدي اليوم:',
+        dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}'
+      });
+      var FIRE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2.5s.9 3.1-1.4 5.6C10.3 10 8 11.4 8 14.6A4.4 4.4 0 0 0 12.4 19a4.6 4.6 0 0 0 4.6-4.6c0-1.6-.6-2.9-1.3-3.9 0 0-.1 1.7-1.6 2.2 0 0 .9-4.4-.6-10.2zM6.6 9.4C5 11.2 4 13.3 4 15.4 4 19.6 7.6 23 12 23s8-3.4 8-7.6c0-1.2-.3-2.4-.8-3.5-.4 3.5-3.4 6.1-7 6.1A6.3 6.3 0 0 1 6 11.7c0-.8.2-1.6.6-2.3z"/></svg>';
+      var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>';
+      var BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>';
+      document.title = t('dTitle') + ' | Speak Up Fearless';
+
+      // ------------------------------------------------------------ dates and streaks
+      function dayKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+      function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+      var today = new Date();
+      var TODAY = dayKey(today);
+      // Same topic for everyone on the same day.
+      function topicFor(words, key) {
+        var list = words.topics, h = 0;
+        for (var i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+        return list[h % list.length];
+      }
+      function stats(rounds) {
+        var days = {};
+        rounds.forEach(function (r) { if (r.gameId === ID) days[dayKey(new Date(r.playedAt))] = true; });
+        // A streak stays alive until the end of the day after the last one.
+        var start = days[TODAY] ? today : addDays(today, -1);
+        var cur = 0;
+        while (days[dayKey(addDays(start, -cur))]) cur++;
+        var keys = Object.keys(days).sort(), best = 0, run = 0, prev = null;
+        keys.forEach(function (k) {
+          var d = new Date(k + 'T12:00:00');
+          run = prev && Math.round((d - prev) / 86400000) === 1 ? run + 1 : 1;
+          best = Math.max(best, run);
+          prev = d;
+        });
+        return { days: days, current: cur, best: best, total: keys.length, doneToday: !!days[TODAY] };
+      }
+      function streakLabel(n) { return n === 0 ? t('dStreak0') : n === 1 ? t('dStreak1') : t('dStreak', { n: n }); }
+
+      // ------------------------------------------------------------ page
+      var main = document.getElementById('main');
+      Promise.all([S.loadGames(), G.loadWords()]).then(function (res) {
+        var words = res[1];
+        var topic = topicFor(words, TODAY);
+        S.gate(main, function () {
+          var local = S.localHistory ? S.localHistory() : [];
+          render(stats(local), topic);
+          S.history().then(function (rounds) { render(stats(rounds), topic); });
+        });
+      });
+
+      function render(st, topic) {
+        var dateFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'long', month: 'long', day: 'numeric' });
+        var dayFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'narrow' });
+        var keepAlive = !st.doneToday && st.current > 0;
+        var week = '';
+        for (var i = 6; i >= 0; i--) {
+          var d = addDays(today, -i), k = dayKey(d);
+          week += '<span class="' + (st.days[k] ? 'on' : '') + (k === TODAY ? ' today' : '') + '">' + esc(dayFmt.format(d)) + '<i>' + (st.days[k] ? '🔥' : '') + '</i></span>';
+        }
+        main.innerHTML = '<div class="daily">' +
+          '<a class="back-games" href="/games">' + BACK + esc(t('dBackGames')) + '</a>' +
+          '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span><span class="d-date">' + esc(dateFmt.format(today)) + '</span></div>' +
+          '<div class="streak' + (st.current ? '' : ' cold') + '"><span class="fire">🔥</span>' + esc(keepAlive ? t('dKeep', { n: st.current }) : streakLabel(st.current)) + '</div>' +
+          '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
+          (st.doneToday
+            ? '<div class="d-done"><b>✓</b><span>' + esc(t('dDoneToday')) + '</span></div>' +
+              '<div class="d-actions"><button class="btn d-ghost" type="button" id="again">' + esc(t('dAgain')) + '</button>' +
+              '<button class="btn d-go" style="margin:0" type="button" id="share">' + SHARE + esc(t('dShare')) + '</button></div>'
+            : '<p class="d-rule">' + esc(t('dRule')) + '</p><button class="btn d-go" type="button" id="go">' + G.ICON.play + esc(t('dStart')) + '</button>') +
+          '</section>' +
+          '<section class="card week"><h3>' + esc(t('dWeek')) + '</h3><div class="days">' + week + '</div>' +
+          '<div class="best"><span>' + esc(t('dBest')) + ': <b>' + st.best + '</b></span><span>' + esc(t('dTotal')) + ': <b>' + st.total + '</b></span></div></section>' +
+          '<section class="card why"><h3 style="font-size:15px;margin:0">' + esc(t('dWhy')) + '</h3><ul><li>' + esc(t('dWhy1')) + '</li><li>' + esc(t('dWhy2')) + '</li><li>' + esc(t('dWhy3')) + '</li></ul></section>' +
+          '</div>';
+        var go = main.querySelector('#go') || main.querySelector('#again');
+        go.addEventListener('click', function () { play(topic, st); });
+        var sh = main.querySelector('#share');
+        if (sh) sh.addEventListener('click', function () { share(st.current, topic, sh); });
+      }
+
+      // ------------------------------------------------------------ one minute
+      function play(topic, before) {
+        var stg = G.stage({});
+        var total = SECONDS * 1000, elapsed = 0, paused = false;
+        G.ready(stg.body, { topic: topic, topicLabel: t('dTopicLabel') }, function () {
+          stg.body.innerHTML = '<div class="topic-label">' + esc(t('dTopicLabel')) + '</div><div class="topic">' + esc(topic) + '</div>' +
+            '<div style="margin-top:28px">' + G.pie(1) + '<div class="clock">' + G.clock(total) + '</div></div>' +
+            '<div class="controls"><button class="btn btn-ghost" type="button" id="pause"></button>' +
+            '<button class="btn btn-primary" type="button" id="stop">' + G.ICON.flag + esc(t('dFinish')) + '</button></div>';
+          var paint = function () { stg.body.querySelector('#pause').innerHTML = (paused ? G.ICON.play : G.ICON.pause) + esc(paused ? t('tripleStepResume') : t('tripleStepPause')); };
+          paint();
+          stg.body.querySelector('#pause').addEventListener('click', function () { paused = !paused; paint(); });
+          stg.body.querySelector('#stop').addEventListener('click', function () { finish(); });
+          G.loop(function (d) {
+            if (paused) return;
+            elapsed += d;
+            if (elapsed >= total) { elapsed = total; return finish(); }
+            G.setPie(stg.body, 1 - elapsed / total);
+            stg.body.querySelector('.clock').textContent = G.clock(total - elapsed);
+          });
+        });
+        function finish() {
+          G.loopStop();
+          var spoke = elapsed / 1000;
+          var counts = spoke >= 10;
+          if (counts) S.recordRound({ gameId: ID, spokenSeconds: spoke, topic: topic });
+          var after = stats(S.localHistory());
+          var wasDone = before.doneToday;
+          var n = after.current;
+          var el = document.createElement('div');
+          el.className = 'end d-end';
+          el.innerHTML = '<div class="card"><div class="flame">🔥</div><div class="count">' + n + '</div><div style="font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-size:12px">' + esc(t('dEndStreak')) + '</div>' +
+            '<h2 style="margin-top:14px">' + esc(t('dEndTitle')) + '</h2>' +
+            '<p>' + esc(wasDone ? t('dEndPractice') : t('dEndBody', { topic: topic })) + '</p>' +
+            '<button class="btn btn-primary" type="button" id="eShare">' + SHARE + esc(t('dShare')) + '</button>' +
+            '<div class="shared" id="eMsg" hidden></div>' +
+            '<div class="more"><button type="button" id="eDone">' + esc(t('dBackGames')) + '</button><button type="button" id="eStay">' + esc(t('close')) + '</button></div></div>';
+          document.body.appendChild(el);
+          el.querySelector('#eShare').addEventListener('click', function () { share(n, topic, el.querySelector('#eShare'), el.querySelector('#eMsg')); });
+          el.querySelector('#eDone').addEventListener('click', function () { location.href = '/games'; });
+          el.querySelector('#eStay').addEventListener('click', function () { el.remove(); stg.close(); render(after, topic); });
+        }
+      }
+
+      // ------------------------------------------------------------ share card
+      function card(n, topic) {
+        var c = document.createElement('canvas');
+        c.width = 1080; c.height = 1350;
+        var x = c.getContext('2d');
+        var g = x.createLinearGradient(0, 0, 1080, 1350);
+        g.addColorStop(0, '#E0703E'); g.addColorStop(.7, '#A23B1E'); g.addColorStop(1, '#7A2A16');
+        x.fillStyle = g; x.fillRect(0, 0, 1080, 1350);
+        x.fillStyle = 'rgba(255,255,255,.08)';
+        x.beginPath(); x.arc(940, 160, 300, 0, Math.PI * 2); x.fill();
+        x.beginPath(); x.arc(120, 1300, 220, 0, Math.PI * 2); x.fill();
+        x.fillStyle = '#fff'; x.textAlign = 'center';
+        var head = S.lang === 'ar' ? '800 {s}px Cairo, sans-serif' : '800 {s}px Montserrat, sans-serif';
+        var body = S.lang === 'ar' ? '600 {s}px Cairo, sans-serif' : '600 {s}px Inter, sans-serif';
+        var f = function (tpl, size) { return tpl.replace('{s}', size); };
+        x.font = f(body, 40); x.globalAlpha = .9; x.fillText('SPEAK UP FEARLESS', 540, 150); x.globalAlpha = 1;
+        x.font = '220px serif'; x.fillText('🔥', 540, 470);
+        x.font = f(head, 200); x.fillText(String(n), 540, 700);
+        x.font = f(head, 60); x.fillText(t('dEndStreak'), 540, 790);
+        x.font = f(body, 38); x.globalAlpha = .85; x.fillText(t('dKick'), 540, 930); x.globalAlpha = 1;
+        // Wrap the topic over up to three lines.
+        x.font = f(head, 64);
+        var wordsOf = String(topic).split(' '), lines = [], line = '';
+        wordsOf.forEach(function (w) { var test = line ? line + ' ' + w : w; if (x.measureText(test).width > 900 && line) { lines.push(line); line = w; } else line = test; });
+        if (line) lines.push(line);
+        lines.slice(0, 3).forEach(function (l, i) { x.fillText(l, 540, 1020 + i * 78); });
+        x.font = f(body, 34); x.globalAlpha = .85; x.fillText(SITE.replace('https://', '') + '/games/daily', 540, 1290);
+        return c;
+      }
+      function share(n, topic, btn, msgEl) {
+        var text = t('dShareText', { n: n, topic: topic });
+        var url = SITE + '/games/daily';
+        var say = function (m) { if (msgEl) { msgEl.hidden = false; msgEl.textContent = m; } else S.toast(m); };
+        card(n, topic).toBlob(function (blob) {
+          var file = blob && new File([blob], 'speak-up-streak.png', { type: 'image/png' });
+          if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ files: [file], text: text + ' ' + url }).catch(function () {});
+          } else if (navigator.share) {
+            navigator.share({ text: text, url: url }).catch(function () {});
+          } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(text + ' ' + url).then(function () { say(t('dShared')); });
+            if (blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'speak-up-streak.png'; a.click(); say(t('dSaved') + ' ' + t('dShared')); }
+          }
+        }, 'image/png');
+      }
+    })();
+  </script>
+</body>
+</html>

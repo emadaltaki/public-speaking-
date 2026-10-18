@@ -385,6 +385,10 @@
     .lb-prev { left: 14px; top: 50%; transform: translateY(-50%); }
     .lb-next { right: 14px; top: 50%; transform: translateY(-50%); }
 
+    .daily-pill { display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 0; padding: 8px 14px 8px 10px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: #fff; font-weight: 700; font-size: 14.5px; text-decoration: none; }
+    .daily-pill .fl { display: inline-block; animation: flick 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+    @keyframes flick { 25% { transform: scale(1.15) rotate(-6deg); } 50% { transform: scale(.95) rotate(4deg); } }
+    .daily-pill:hover { background: rgba(255,255,255,.2); }
     /* Playful game cards: floating icon, shine on hover, pop and ripple on tap */
     .game { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     .game::before { content: ""; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.35) 48%, transparent 66%); transform: translateX(-120%); }
@@ -978,6 +982,7 @@
             <span class="eyebrow" data-t="gamesEyebrow">Free speaking games</span>
             <h2 class="s-title" data-t="gamesHeadline">Warm up your voice in 2 minutes.</h2>
             <p class="s-intro" data-t="gamesIntro">Quick games you can play alone or with friends. All you need is a free account.</p>
+            <a class="daily-pill" href="/games/daily"><span class="fl">🔥</span><span data-t="dailyPill">New: a 1-minute speaking challenge every day</span></a>
           </div>
           <a class="btn btn-primary games-all" href="/games"><svg aria-hidden="true" class="i"><use href="#i-play"/></svg><span data-t="gamesCta">Play the games</span></a>
         </div>

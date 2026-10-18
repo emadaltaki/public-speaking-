@@ -259,6 +259,6 @@
   window.G = {
     ICON: ICON, boot: boot, setup: setup, slider: slider, toggle: toggle, select: select, modeTabs: modeTabs, players: players,
     stage: stage, loop: loop, loopStop: loopStop, ready: ready, pie: pie, setPie: setPie, end: end,
-    pickTopic: pickTopic, shuffle: shuffle, setName: setName, clock: clock, timerLabel: timerLabel, playerName: playerName
+    loadWords: loadWords, pickTopic: pickTopic, shuffle: shuffle, setName: setName, clock: clock, timerLabel: timerLabel, playerName: playerName
   };
 })();
