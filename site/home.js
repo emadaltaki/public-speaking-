@@ -401,6 +401,39 @@
     if (v[0] === '+' && !/^\+1/.test(v)) return v.replace(/\D/g, '').length >= 8 && v.replace(/\D/g, '').length <= 15;
     return phoneDigits(v).length === 10;
   }
+
+  // Where a phone number was registered (area code or country code). People
+  // keep numbers when they move, so it's a hint for the inbox, not proof.
+  var AREAS = {
+    'Toronto, ON': [416, 647, 437], 'GTA (Mississauga, Brampton, Hamilton…), ON': [905, 289, 365, 742],
+    'Southwestern Ontario': [519, 226, 548, 382], 'Ottawa & Eastern Ontario': [613, 343, 753],
+    'Central & Northern Ontario': [705, 249, 683], 'Northwestern Ontario': [807],
+    'Montreal, QC': [514, 438, 263], 'Montreal area, QC': [450, 579, 354], 'Quebec City & Eastern Quebec': [418, 581, 367],
+    'Western Quebec': [819, 873, 468], 'Vancouver area, BC': [604, 778, 236, 672], 'British Columbia': [250],
+    'Calgary & Southern Alberta': [403, 587, 825, 368], 'Edmonton & Northern Alberta': [780],
+    'Saskatchewan': [306, 639, 474], 'Manitoba': [204, 431, 584], 'Nova Scotia / PEI': [902, 782],
+    'New Brunswick': [506, 428], 'Newfoundland & Labrador': [709, 879], 'Northern Canada': [867]
+  };
+  var COUNTRIES = {
+    44: 'United Kingdom', 971: 'UAE', 966: 'Saudi Arabia', 20: 'Egypt', 962: 'Jordan', 961: 'Lebanon', 963: 'Syria',
+    964: 'Iraq', 965: 'Kuwait', 974: 'Qatar', 973: 'Bahrain', 968: 'Oman', 970: 'Palestine', 212: 'Morocco', 213: 'Algeria',
+    216: 'Tunisia', 218: 'Libya', 249: 'Sudan', 967: 'Yemen', 90: 'Turkey', 91: 'India', 92: 'Pakistan', 63: 'Philippines',
+    86: 'China', 33: 'France', 49: 'Germany', 39: 'Italy', 34: 'Spain', 31: 'Netherlands', 61: 'Australia', 52: 'Mexico', 55: 'Brazil'
+  };
+  function phoneArea(raw) {
+    var v = raw.trim();
+    var d = v.replace(/\D/g, '');
+    if (v[0] === '+' && d[0] !== '1') {
+      for (var len = 3; len >= 1; len--) { var c = COUNTRIES[d.slice(0, len)]; if (c) return c + ' (+' + d.slice(0, len) + ')'; }
+      return 'Outside North America (+' + d.slice(0, 3) + '…)';
+    }
+    if (d.length === 11 && d[0] === '1') d = d.slice(1);
+    if (d.length !== 10) return '';
+    var code = +d.slice(0, 3);
+    for (var name in AREAS) if (AREAS[name].indexOf(code) >= 0) return name + ' (' + code + ')';
+    return 'United States or elsewhere in North America (' + code + ')';
+  }
+
   function formatPhone(v) {
     if (v.trim()[0] === '+' && !/^\s*\+1/.test(v)) return v;
     var d = phoneDigits(v).slice(0, 10);
@@ -546,7 +579,7 @@
     var payload = {
       _subject: subject, _template: 'table', _captcha: 'false',
       'Requested session': req.requestedLabel, 'Preferred time': req.preferredTime,
-      'Name': req.name, 'Email': req.email, 'Phone': req.phone, 'Reason': req.reason
+      'Name': req.name, 'Email': req.email, 'Phone': req.phone, 'Phone area': phoneArea(req.phone) || '—', 'Reason': req.reason
     };
     if (req.description) payload['More details'] = req.description;
     req.contact = req.email + ' / ' + req.phone;
@@ -586,7 +619,7 @@
         }
         // Fall back to an email draft so the request isn't lost.
         var body = 'Hi! I would like to book: ' + req.requestedLabel + '\n\n' +
-          'Preferred time: ' + req.preferredTime + '\nName: ' + req.name + '\nEmail: ' + req.email + '\nPhone: ' + req.phone +
+          'Preferred time: ' + req.preferredTime + '\nName: ' + req.name + '\nEmail: ' + req.email + '\nPhone: ' + req.phone + (phoneArea(req.phone) ? ' (' + phoneArea(req.phone) + ')' : '') +
           '\nReason: ' + req.reason + '\n' + (req.description ? '\nMore details:\n' + req.description + '\n' : '');
         $('sendErr').classList.add('show');
         location.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
