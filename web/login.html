@@ -140,14 +140,23 @@
     .trust { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 18px 0 0; font-size: 12.5px; color: var(--muted); text-align: center; }
     .trust svg { width: 15px; height: 15px; flex: none; color: var(--ok); }
     .hidden { display: none !important; }
-    /* Email confirmation */
+    /* Email code */
     .verify { text-align: center; padding-top: 18px; }
     .v-ic { width: 64px; height: 64px; margin: 0 auto 14px; border-radius: 20px; display: grid; place-items: center; background: var(--soft); color: var(--primary); }
     .v-ic svg { width: 30px; height: 30px; }
     .verify .sub b { display: block; color: var(--ink); overflow-wrap: anywhere; }
-    .v-how { margin: 4px auto 18px; max-width: 340px; color: var(--muted); font-size: 14.5px; }
+    .code { position: relative; margin: 6px auto 0; max-width: 330px; }
+    .code input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font-size: 16px; padding: 0; border: 0; caret-color: transparent; }
+    .slots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; pointer-events: none; }
+    .slots i { height: 58px; border: 1.5px solid var(--border); border-radius: 14px; background: var(--field); display: grid; place-items: center; font-style: normal; font-family: "Montserrat", sans-serif; font-weight: 800; font-size: 26px; color: var(--ink); transition: border-color .15s, box-shadow .15s; }
+    .slots i.on { border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 18%, transparent); }
+    .code.bad .slots i { border-color: var(--error); animation: vshake .4s; }
+    .code.good .slots i { border-color: var(--ok); }
+    @keyframes vshake { 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+    .v-how { margin: 0 auto 14px; max-width: 340px; color: var(--muted); font-size: 14px; }
     .v-links { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-top: 14px; }
     .link[disabled] { color: var(--muted); cursor: default; text-decoration: none; }
+    #vSkip { margin-top: 14px; }
 
     main > * { min-width: 0; }
     .saved { margin: 0 0 18px; }
@@ -275,12 +284,19 @@
         <h2 id="vTitle"></h2>
         <p class="sub"><span id="vSub"></span> <b id="vEmail" dir="ltr"></b></p>
         <p class="v-how" id="vHow"></p>
-        <button class="btn btn-primary" id="vSubmit" type="button"><span id="vSubmitLabel"></span></button>
+        <form id="vForm" novalidate>
+          <div class="code" id="codeBoxes" dir="ltr">
+            <input id="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" aria-label="Code">
+            <div class="slots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <button class="btn btn-primary" id="vSubmit" type="submit"><span id="vSubmitLabel"></span></button>
+        </form>
         <div class="msg" id="vMsg" role="status" aria-live="polite"></div>
         <div class="v-links">
           <button class="link" id="vResend" type="button"></button>
           <button class="link" id="vChange" type="button"></button>
         </div>
+        <button class="btn btn-google hidden" id="vSkip" type="button"></button>
       </div>
       <p class="trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span id="note"></span></p>
     </section>
@@ -291,7 +307,7 @@
     import {
       getAuth, setPersistence, browserLocalPersistence, GoogleAuthProvider,
       signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-      updateProfile, sendPasswordResetEmail, signOut, sendEmailVerification,
+      updateProfile, sendPasswordResetEmail, signOut,
     } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
     // Public web config for the Speak Up Fearless Firebase project.
@@ -318,11 +334,12 @@
         google: 'Continue with Google', or: 'or with email',
         name: 'Your name', email: 'Email', password: 'Password', passwordUp: 'Password (6+ characters)',
         signIn: 'Sign in', signUp: 'Create my account',
-        vTitle: 'Check your email', vSub: 'We sent a confirmation link to', vHow: "Open the email and tap the link to confirm it's you, then come back here. Can't find it? Check your spam folder.",
-        vSubmit: "I've confirmed my email", vResend: 'Send the link again', vResendIn: 'Send again in {s}s',
-        vChange: 'Use a different email', vSent: 'A new link is on its way.', vNotYet: "We can't see the confirmation yet. Tap the link in the email, then try again.",
-        vTooMany: 'Too many tries for now. Please wait a few minutes and try again.', vDone: 'All set! Taking you there…',
-        vFail: "We couldn't send the email. Try again in a moment.", vConfirmed: 'Your email is confirmed. Sign in to continue.',
+        vTitle: 'Check your email', vHow: 'Tap "Verify my email" in the email, or enter the code below. On iPhone, tap the code above your keyboard to fill it in.', vLinkOk: 'Your email is confirmed. Sign in to continue.', vLinkBad: "That link didn't work. Sign in and ask for a new code.", vLinkNew: "That link didn't work, so we sent you a new code.", vLinkNew: "That link didn't work, so we sent you a new code.", vSub: 'We sent a 6-digit code to', vSubmit: 'Verify', vResend: 'Send a new code',
+        vResendIn: 'New code in {s}s', vChange: 'Use a different email', vSent: 'A new code is on its way.',
+        vWrong: "That code isn't right. {n} tries left.", vExpired: 'That code has expired. We sent you a new one.',
+        vTooMany: 'Please wait a moment before asking for another code.', vWait: 'Please wait {s} seconds before asking for a new code.', vAlready: 'We just sent you a code. Check your email.', vNeed6: 'Enter all 6 digits.',
+        vOff: "We can't send codes just yet. You can carry on for now.", vSkip: 'Continue for now', vDone: 'All set! Taking you there…',
+        vFail: "We couldn't send the email. Try again in a moment.",
         savedLabel: 'Continue as', savedHint: 'Tap to sign in', signedInHint: 'Signed in, tap to continue', removeSaved: 'Remove from this device',
         forgot: 'Forgot password?', resetSent: 'Check your email for a reset link.',
         needEmail: 'Enter your email first.', working: 'One moment…',
@@ -355,11 +372,12 @@
         google: 'المتابعة باستخدام Google', or: 'أو بالبريد الإلكتروني',
         name: 'اسمك', email: 'البريد الإلكتروني', password: 'كلمة المرور', passwordUp: 'كلمة المرور (6 أحرف أو أكثر)',
         signIn: 'تسجيل الدخول', signUp: 'أنشئ حسابي',
-        vTitle: 'تفقّد بريدك', vSub: 'أرسلنا رابط تأكيد إلى', vHow: 'افتح الرسالة واضغط على الرابط لتأكيد بريدك، ثم عد إلى هنا. لم تجدها؟ تفقّد مجلد الرسائل غير المرغوب فيها.',
-        vSubmit: 'أكّدت بريدي', vResend: 'أرسل الرابط مجددًا', vResendIn: 'إعادة الإرسال بعد {s} ث',
-        vChange: 'استخدم بريدًا آخر', vSent: 'رابط جديد في الطريق إليك.', vNotYet: 'لم يصلنا التأكيد بعد. اضغط على الرابط في الرسالة ثم حاول مجددًا.',
-        vTooMany: 'محاولات كثيرة الآن. انتظر بضع دقائق ثم حاول مجددًا.', vDone: 'تم! ننقلك الآن…',
-        vFail: 'لم نتمكن من إرسال البريد. حاول بعد قليل.', vConfirmed: 'تم تأكيد بريدك. سجّل الدخول للمتابعة.',
+        vTitle: 'تفقّد بريدك', vHow: 'اضغط «تأكيد بريدي» في الرسالة، أو أدخل الرمز أدناه. على iPhone اضغط الرمز فوق لوحة المفاتيح ليُكتب تلقائيًا.', vLinkOk: 'تم تأكيد بريدك. سجّل الدخول للمتابعة.', vLinkBad: 'لم يعمل هذا الرابط. سجّل الدخول واطلب رمزًا جديدًا.', vLinkNew: 'لم يعمل هذا الرابط، فأرسلنا لك رمزًا جديدًا.', vLinkNew: 'لم يعمل هذا الرابط، فأرسلنا لك رمزًا جديدًا.', vSub: 'أرسلنا رمزًا من 6 أرقام إلى', vSubmit: 'تحقّق', vResend: 'أرسل رمزًا جديدًا',
+        vResendIn: 'رمز جديد بعد {s} ث', vChange: 'استخدم بريدًا آخر', vSent: 'رمز جديد في الطريق إليك.',
+        vWrong: 'الرمز غير صحيح. تبقّى {n} محاولات.', vExpired: 'انتهت صلاحية الرمز، وأرسلنا لك رمزًا جديدًا.',
+        vTooMany: 'انتظر قليلًا قبل طلب رمز آخر.', vWait: 'انتظر {s} ثانية قبل طلب رمز جديد.', vAlready: 'أرسلنا لك رمزًا للتو. تفقّد بريدك.', vNeed6: 'أدخل الأرقام الستة.',
+        vOff: 'لا يمكننا إرسال الرموز بعد. يمكنك المتابعة الآن.', vSkip: 'تابع الآن', vDone: 'تم! ننقلك الآن…',
+        vFail: 'لم نتمكن من إرسال البريد. حاول بعد قليل.',
         savedLabel: 'تابع باسم', savedHint: 'اضغط لتسجيل الدخول', signedInHint: 'مسجّل الدخول، اضغط للمتابعة', removeSaved: 'إزالة من هذا الجهاز',
         forgot: 'نسيت كلمة المرور؟', resetSent: 'تفقّد بريدك للحصول على رابط إعادة التعيين.',
         needEmail: 'أدخل بريدك الإلكتروني أولًا.', working: 'لحظة…',
@@ -589,9 +607,9 @@
     }
 
 
-    // ---------------------------------------------------------------- email link
-    // Email sign-ups confirm their address with Firebase's verification link
-    // before playing. Google accounts are already confirmed.
+    // ---------------------------------------------------------------- email code
+    // Email sign-ups confirm their address with a 6-digit code before playing.
+    const SKIP_KEY = (uid) => 'speakupfearless.verifySkip.' + uid;
     let cooldownTimer = null;
     async function api(path, opts) {
       const token = await auth.currentUser.getIdToken();
@@ -614,6 +632,14 @@
       } catch (_) { return true; }  // Never lock people out if the API is down.
     }
     function vShow(text, kind) { $('vMsg').textContent = text || ''; $('vMsg').className = 'msg ' + (kind || ''); }
+    function slots() {
+      const v = $('code').value.replace(/\D/g, '').slice(0, 6);
+      $('code').value = v;
+      const items = $('codeBoxes').querySelectorAll('.slots i');
+      items.forEach((el, i) => { el.textContent = v[i] || ''; el.classList.toggle('on', document.activeElement === $('code') && i === Math.min(v.length, 5)); });
+      $('codeBoxes').classList.remove('bad');
+      if (v.length === 6) $('vForm').requestSubmit();
+    }
     function cooldown(seconds) {
       clearInterval(cooldownTimer);
       let left = seconds;
@@ -625,56 +651,83 @@
       tick();
       cooldownTimer = setInterval(tick, 1000);
     }
-    // One email at a time, and no automatic resend while the last link is fresh.
+    // One request at a time, and no automatic resend while the last code is fresh.
     let sending = false;
-    const sentKey = () => 'speakupfearless.linkSentAt.' + (auth.currentUser ? auth.currentUser.uid : '');
+    const sentKey = () => 'speakupfearless.codeSentAt.' + (auth.currentUser ? auth.currentUser.uid : '');
     function sentAgo() {
       try { return (Date.now() - Number(localStorage.getItem(sentKey()) || 0)) / 1000; } catch (_) { return Infinity; }
     }
-    async function sendLink(quiet) {
-      if (sending || !auth.currentUser) return;
-      if (quiet && sentAgo() < 60) { cooldown(Math.ceil(60 - sentAgo())); return; }
+    async function sendCode(quiet) {
+      if (sending) return;
+      if (quiet && sentAgo() < 60) { vShow(ui().vAlready, 'ok'); cooldown(Math.ceil(60 - sentAgo())); return; }
       sending = true;
       try {
-        auth.languageCode = lang;
-        const back = location.origin + '/login?verified=1&next=' + encodeURIComponent(next);
-        await sendEmailVerification(auth.currentUser, { url: back });
-        try { localStorage.setItem(sentKey(), String(Date.now())); } catch (_) {}
-        if (!quiet) vShow(ui().vSent, 'ok');
-        cooldown(60);
-      } catch (e) {
-        if (e && e.code === 'auth/too-many-requests') { vShow(ui().vTooMany, 'error'); cooldown(120); }
-        else { vShow(ui().vFail, 'error'); cooldown(15); }
-      } finally { sending = false; }
-    }
-    // Ask Firebase again. Once confirmed, refresh the token so the backend
-    // records it too, then carry on.
-    let checking = false, finished = false;
-    async function checkLink(fromButton) {
-      if (checking || finished || !auth.currentUser) return;
-      checking = true;
-      if (fromButton) $('vSubmit').disabled = true;
-      try {
-        await auth.currentUser.reload();
-        if (auth.currentUser.emailVerified) {
-          finished = true;
-          await auth.currentUser.getIdToken(true);
-          await auth.updateCurrentUser(auth.currentUser);
-          try { await api('/v1/me'); } catch (_) {}
-          vShow(ui().vDone, 'ok');
-          setTimeout(done, 600);
+        const r = await api('/v1/me/verify/send', { method: 'POST', body: '{}' });
+        if (r.body.verified) { finishVerified(); return; }
+        if (r.status === 200) {
+          try { localStorage.setItem(sentKey(), String(Date.now())); } catch (_) {}
+          if (!quiet) vShow(ui().vSent, 'ok');
+          cooldown(60);
           return;
         }
-        if (fromButton) vShow(ui().vNotYet, 'error');
-      } catch (e) {
-        if (fromButton) vShow(e && e.code === 'auth/too-many-requests' ? ui().vTooMany : ui().vFail, 'error');
-      } finally {
-        checking = false;
-        $('vSubmit').disabled = false;
-      }
+        if (r.status === 429) {
+          const wait = Math.max(1, Math.ceil(r.body.retryAfter || 60));
+          // Opening the screen right after a code went out: that code is still good.
+          if (quiet) { vShow(ui().vAlready, 'ok'); cooldown(wait); return; }
+          waitMessage(wait);
+          cooldown(wait);
+          return;
+        }
+        if (r.status === 503) { offline(); return; }
+        vShow(ui().vFail, 'error'); cooldown(15);
+      } catch (_) { vShow(ui().vFail, 'error'); cooldown(15); }
+      finally { sending = false; }
     }
-    let verifyShown = false, pollTimer = null;
-    function showVerify(fresh) {
+    // "Please wait 44 seconds…", counting down, then cleared.
+    let waitTimer = null;
+    function waitMessage(seconds) {
+      clearInterval(waitTimer);
+      let left = seconds;
+      const paint = () => {
+        if (left <= 0) { clearInterval(waitTimer); vShow(''); return; }
+        vShow(ui().vWait.replace('{s}', left), 'error');
+        left--;
+      };
+      paint();
+      waitTimer = setInterval(paint, 1000);
+    }
+    function offline() {
+      // Codes aren't switched on yet: let people carry on instead of getting stuck.
+      try { localStorage.setItem(SKIP_KEY(auth.currentUser.uid), '1'); } catch (_) {}
+      vShow(ui().vOff);
+      $('vSub').parentNode.classList.add('hidden');
+      $('vSkip').classList.remove('hidden');
+      $('vForm').classList.add('hidden');
+      $('vResend').classList.add('hidden');
+    }
+    // Confirmed (by code, by the email's button, or on another device):
+    // refresh the sign-in so it carries the change, then carry on.
+    let finished = false, pollTimer = null;
+    async function finishVerified() {
+      if (finished) return;
+      finished = true;
+      clearInterval(pollTimer);
+      $('codeBoxes').classList.add('good');
+      vShow(ui().vDone, 'ok');
+      try { await auth.currentUser.getIdToken(true); } catch (_) {}
+      setTimeout(done, 600);
+    }
+    // Someone may tap "Verify my email" on their phone while this screen is
+    // open on a laptop: check now and then and move on once it's confirmed.
+    async function pollVerified() {
+      if (finished || document.hidden || !auth.currentUser) return;
+      try {
+        const r = await api('/v1/me');
+        if (r.status === 200 && r.body.emailVerified === true) finishVerified();
+      } catch (_) {}
+    }
+    let verifyShown = false;
+    function showVerify(noSend) {
       if (verifyShown) return;
       verifyShown = true;
       const t = ui();
@@ -683,37 +736,60 @@
       $('vTitle').textContent = t.vTitle;
       $('vSub').textContent = t.vSub;
       $('vEmail').textContent = auth.currentUser.email || '';
-      $('vHow').textContent = t.vHow;
       $('vSubmitLabel').textContent = t.vSubmit;
       $('vChange').textContent = t.vChange;
-      if (fresh !== false) sendLink(true); else cooldown(0);
-      // Pick it up on its own when they come back from the email.
-      pollTimer = setInterval(() => { if (!document.hidden) checkLink(false); }, 5000);
-      document.addEventListener('visibilitychange', () => { if (!document.hidden) checkLink(false); });
-      window.addEventListener('focus', () => checkLink(false));
+      $('vSkip').textContent = t.vSkip;
+      $('vHow').textContent = t.vHow;
+      $('code').value = '';
+      slots();
+      setTimeout(() => $('code').focus(), 50);
+      if (!noSend) sendCode(true);
+      pollTimer = setInterval(pollVerified, 5000);
+      document.addEventListener('visibilitychange', pollVerified);
     }
     async function afterSignIn(user) {
       if (await isVerified(user)) { done(); return; }
       setBusy(false);
       showVerify();
     }
-    $('vSubmit').addEventListener('click', () => checkLink(true));
-    $('vResend').addEventListener('click', () => sendLink(false));
+    $('code').addEventListener('input', slots);
+    $('code').addEventListener('focus', slots);
+    $('code').addEventListener('blur', slots);
+    $('vForm').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const code = $('code').value;
+      if (code.length !== 6) { vShow(ui().vNeed6, 'error'); return; }
+      $('vSubmit').disabled = true;
+      try {
+        const r = await api('/v1/me/verify/check', { method: 'POST', body: JSON.stringify({ code }) });
+        if (r.body.verified) { finishVerified(); return; }
+        $('codeBoxes').classList.add('bad');
+        if (r.body.error === 'expired') { vShow(ui().vExpired, 'error'); $('code').value = ''; try { localStorage.removeItem(sentKey()); } catch (_) {} sendCode(true); }
+        else if (r.status === 503) offline();
+        else if (r.body.error === 'wrong') vShow(ui().vWrong.replace('{n}', r.body.attemptsLeft ?? ''), 'error');
+        else if (r.status === 429) { waitMessage(Math.ceil(r.body.retryAfter || 60)); }
+        else vShow(ui().vFail, 'error');
+      } catch (_) { vShow(ui().vFail, 'error'); }
+      finally { $('vSubmit').disabled = false; }
+    });
+    $('vResend').addEventListener('click', () => sendCode(false));
+    $('vSkip').addEventListener('click', done);
     $('vChange').addEventListener('click', async () => {
-      clearInterval(pollTimer);
       await signOut(auth);
       location.replace('/login?mode=signup&next=' + encodeURIComponent(next));
     });
 
-    if (params.has('verified')) {
-      // Back from the link in the email.
-      if (auth.currentUser) { showVerify(false); checkLink(false); }
-      else show(ui().vConfirmed, 'ok');
-    } else if (params.has('verify') && auth.currentUser) {
-      // Opened from a game: maybe they already confirmed somewhere else.
-      auth.currentUser.reload()
-        .then(() => { if (auth.currentUser.emailVerified) checkLink(false); else showVerify(); })
-        .catch(() => showVerify());
+    // ?verify=verified|wrong|expired: back from the button in the code email.
+    // ?verify=1: opened from a game, signed in but not confirmed yet.
+    const verifyParam = params.get('verify');
+    if (verifyParam === 'verified') {
+      if (auth.currentUser) { showVerify(true); finishVerified(); }
+      else show(ui().vLinkOk, 'ok');
+    } else if (verifyParam === 'wrong' || verifyParam === 'expired') {
+      if (auth.currentUser) { vShow(ui().vLinkNew, 'error'); showVerify(); }
+      else show(ui().vLinkBad, 'error');
+    } else if (verifyParam !== null && auth.currentUser) {
+      showVerify();
     }
 
     $('google').addEventListener('click', async () => {

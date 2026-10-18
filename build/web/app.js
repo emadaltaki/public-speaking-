@@ -26,7 +26,7 @@
       howTo: 'How to play', next: 'Next', back: 'Back', letsPlay: "Let's play!", close: 'Close', stepOf: 'Step {n} of {t}', play: 'Play',
       gateTitle: 'Sign up to play', gateBody: 'Create a free account to unlock all our speaking games and keep track of your practice.',
       gateSignUp: 'Create free account', gateSignIn: 'I already have an account',
-      verifyTitle: 'Confirm your email to play', verifyBody: "We'll email a confirmation link to {e}. Just tap it and you're in.", verifyCta: 'Send my link',
+      verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
       minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s'
     },
     ar: {
@@ -34,7 +34,7 @@
       howTo: 'طريقة اللعب', next: 'التالي', back: 'رجوع', letsPlay: 'هيا نلعب!', close: 'إغلاق', stepOf: 'الخطوة {n} من {t}', play: 'العب',
       gateTitle: 'سجّل لتلعب', gateBody: 'أنشئ حسابًا مجانيًا لتفتح جميع ألعاب التحدث وتتابع تدريبك.',
       gateSignUp: 'أنشئ حسابًا مجانيًا', gateSignIn: 'لدي حساب بالفعل',
-      verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رابط تأكيد إلى {e}. اضغط عليه وتابع اللعب.', verifyCta: 'أرسل الرابط',
+      verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
       minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث'
     }
   };
