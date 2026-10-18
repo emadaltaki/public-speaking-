@@ -24,7 +24,7 @@
 
   // ---------------------------------------------------------------- copy
   var EXTRA_EN = {
-    langLong: 'العربية', langShort: 'ع', signIn: 'Sign in', signOut: 'Sign out', account: 'Your account',
+    langLong: 'العربية', langShort: 'ع', signIn: 'Sign in', signOut: 'Sign out', signedOut: "You're signed out. See you soon!", account: 'Your account',
     themeDark: 'Dark theme', themeLight: 'Light theme', openMenu: 'Open menu', closeMenu: 'Close menu',
     close: 'Close', prev: 'Previous photo', next: 'Next photo',
     morningFull: 'Morning (9am to 12pm)', afternoonFull: 'Afternoon (12 to 5pm)', eveningFull: 'Evening (5 to 9pm)',
@@ -57,7 +57,7 @@
     gPodcast: 'لعبة البودكاست', gPodcastTag: 'موضوع واحد وبعض الأصدقاء، والميكروفون يتنقّل بينكم.',
     gAuto: 'الإكمال التلقائي', gAutoTag: 'أكمل كل جملة بصوت عالٍ قبل أن ينتهي الوقت.',
     moreDetails: 'أضف ملاحظة', navFaq: 'الأسئلة الشائعة', navContact: 'تواصل معنا', navHome: 'الرئيسية',
-    langLong: 'English', langShort: 'EN', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', account: 'حسابك',
+    langLong: 'English', langShort: 'EN', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', signedOut: 'تم تسجيل خروجك. نراك قريبًا!', account: 'حسابك',
     themeDark: 'المظهر الداكن', themeLight: 'المظهر الفاتح', openMenu: 'افتح القائمة', closeMenu: 'أغلق القائمة',
     joinUs: 'احجز مكالمة', getStarted: 'ابدأ معنا', getStartedFree: 'ابدأ مجانًا', ctaBookShort: 'احجز مكالمتي المجانية', ctaBook: 'احجز مكالمة تعريفية مجانية', ctaLearn: 'اطّلع على ما نتدرّب عليه',
     heroLocation: 'تدريب على التحدث أمام الناس، عبر الإنترنت أو حضوريًا في منطقة تورونتو',
@@ -214,7 +214,28 @@
     setMenu(false);
     renderAccount();
     window.scrollTo(0, 0);
+    notice(t('signedOut'));
   });
+
+  // A short message under the header that fades away on its own.
+  function notice(msg) {
+    var el = $('notice');
+    el.querySelector('span').textContent = msg;
+    el.hidden = false;
+    requestAnimationFrame(function () { el.classList.add('show'); });
+    clearTimeout(el._t);
+    el._t = setTimeout(function () {
+      el.classList.remove('show');
+      setTimeout(function () { el.hidden = true; }, 300);
+    }, 3500);
+  }
+  // Signed out from another page: say so once we're back home.
+  try {
+    if (sessionStorage.getItem('speakupfearless.signedOut')) {
+      sessionStorage.removeItem('speakupfearless.signedOut');
+      setTimeout(function () { notice(t('signedOut')); }, 300);
+    }
+  } catch (_) {}
 
   function renderAccount() {
     var user = signedInUser();

@@ -82,6 +82,7 @@
   }
   function signOut() {
     store(AUTH_KEY, null);
+    try { sessionStorage.setItem('speakupfearless.signedOut', '1'); } catch (_) {}
     location.href = '/';
   }
 
