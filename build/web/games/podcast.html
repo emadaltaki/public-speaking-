@@ -20,6 +20,13 @@
     .mic { width: 110px; height: 110px; margin: 0 auto 22px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, #7A4E9A, #4A2C66); box-shadow: 0 0 0 12px color-mix(in srgb, #7A4E9A 18%, transparent); }
     .mic svg { width: 52px; height: 52px; }
     .tp { margin-top: 26px; }
+    /* Everyone on the mic: who has had a turn this round */
+    .who { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 16px; max-width: 520px; }
+    .who span { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--border); background: var(--tint); color: var(--muted); font-size: 13.5px; font-weight: 700; transition: background .25s, color .25s, border-color .25s, transform .25s; }
+    .who span.done { color: var(--ink); }
+    .who span.done::before { content: "✓"; color: var(--ok); font-weight: 900; }
+    .who span.on { background: #7A4E9A; border-color: #7A4E9A; color: #fff; transform: scale(1.08); }
+    .who span.on::before { content: "🎙"; color: inherit; }
     .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; background: none; border: 0; color: var(--accent); font-weight: 700; cursor: pointer; padding: 0; }
     .back-link svg { width: 18px; height: 18px; }
   </style>
@@ -34,6 +41,12 @@
       var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
       var ID = 'podcast';
       var PACES = [[12, 18], [8, 12], [5, 8], [2, 4]];
+      S.addStrings(
+        { pcSwitch: 'How fast names switch', pcSwitchHelp: 'Names come up in a random order, and everyone gets a turn before anyone goes twice.',
+          pcPaces: ['Relaxed, every 12 to 18s', 'Steady, every 8 to 12s', 'Quick, every 5 to 8s', 'Wild, every 2 to 4s'] },
+        { pcSwitch: 'سرعة تبديل الأسماء', pcSwitchHelp: 'تظهر الأسماء بترتيب عشوائي، ويأخذ الجميع دورهم قبل أن يتكلم أحد مرتين.',
+          pcPaces: ['هادئ، كل 12 إلى 18 ث', 'ثابت، كل 8 إلى 12 ث', 'سريع، كل 5 إلى 8 ث', 'جنوني، كل 2 إلى 4 ث'] }
+      );
       var settings = { seconds: 60, pace: 0, count: 5, suggest: true, set: 'General', names: [] };
 
       G.boot(ID, function (games, words) {
@@ -43,8 +56,8 @@
             render: function (rows) {
               rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('tripleStepTimer'), min: 30, max: 600, step: 30, value: settings.seconds,
                 format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
-              rows.appendChild(G.slider({ icon: G.ICON.speed, label: t('podcastDifficulty'), help: t('podcastDifficultyHelp'), min: 0, max: 3, value: settings.pace,
-                format: function (v) { return t('paces')[v]; }, onChange: function (v) { settings.pace = v; } }));
+              rows.appendChild(G.slider({ icon: G.ICON.speed, label: t('pcSwitch'), help: t('pcSwitchHelp'), min: 0, max: 3, value: settings.pace,
+                format: function (v) { return t('pcPaces')[v]; }, onChange: function (v) { settings.pace = v; } }));
               rows.appendChild(G.slider({ icon: G.ICON.group, label: t('podcastPlayers'), min: 2, max: 8, value: settings.count,
                 format: String, onChange: function (v) { settings.count = v; } }));
               rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
@@ -79,7 +92,18 @@
           var players = settings.names.slice(0, settings.count);
           var st = G.stage({});
           var total = settings.seconds * 1000, elapsed = 0, paused = false, nextAt = 0;
-          var speaker = Math.floor(Math.random() * players.length);
+          // Shuffle-bag order: random, but nobody goes twice until everyone has spoken,
+          // and the same person never gets the mic two times in a row.
+          var bag = [], spoken = {};
+          function nextSpeaker(prev) {
+            if (!bag.length) {
+              bag = G.shuffle(players.map(function (_, i) { return i; }));
+              if (players.length > 1 && bag[bag.length - 1] === prev) bag.unshift(bag.pop());
+              spoken = {};
+            }
+            return bag.pop();
+          }
+          var speaker = nextSpeaker(-1);
           var pace = PACES[settings.pace];
           var gap = function () { return (pace[0] + Math.random() * (pace[1] - pace[0])) * 1000; };
           G.ready(st.body, { topic: topic, hint: t('podcastReadyHint') }, run);
@@ -87,6 +111,7 @@
           function run() {
             st.body.innerHTML = '<div class="mic">' + S.ICONS.podcast + '</div><div class="now">' + esc(t('podcastNowSpeaking')) + '</div>' +
               '<div class="speaker" aria-live="assertive"></div>' +
+              '<div class="who">' + players.map(function (n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div>' +
               '<div class="tp"><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic" style="font-size:clamp(20px,5.5vw,30px)">' + esc(topic) + '</div></div>' +
               '<div class="clock"></div>' +
               '<div class="controls"><button class="btn btn-ghost" type="button" id="pause"></button>' +
@@ -101,9 +126,7 @@
               elapsed += d;
               if (elapsed >= total) { elapsed = total; return finish(); }
               if (elapsed >= nextAt && players.length > 1) {
-                var n = speaker;
-                while (n === speaker) n = Math.floor(Math.random() * players.length);
-                speaker = n;
+                speaker = nextSpeaker(speaker);
                 nextAt = elapsed + gap();
                 showSpeaker();
                 if (navigator.vibrate) navigator.vibrate(60);
@@ -115,6 +138,11 @@
             var el = st.body.querySelector('.speaker');
             el.textContent = players[speaker];
             el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+            spoken[speaker] = true;
+            st.body.querySelectorAll('.who span').forEach(function (c, i) {
+              c.classList.toggle('on', i === speaker);
+              c.classList.toggle('done', !!spoken[i] && i !== speaker);
+            });
           }
           function paintPause() {
             var b = st.body.querySelector('#pause');
