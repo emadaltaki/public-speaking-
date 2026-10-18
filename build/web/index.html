@@ -384,6 +384,24 @@
     .lb-prev { left: 14px; top: 50%; transform: translateY(-50%); }
     .lb-next { right: 14px; top: 50%; transform: translateY(-50%); }
 
+    /* Playful game cards: floating icon, shine on hover, pop and ripple on tap */
+    .game { cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+    .game::before { content: ""; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.35) 48%, transparent 66%); transform: translateX(-120%); }
+    .game:hover::before, .game.tapped::before { animation: gShine .7s ease; }
+    @keyframes gShine { to { transform: translateX(120%); } }
+    .game .g-ic { animation: gFloat 3.2s ease-in-out infinite; }
+    .game:nth-child(2) .g-ic { animation-delay: -.8s; }
+    .game:nth-child(3) .g-ic { animation-delay: -1.6s; }
+    .game:nth-child(4) .g-ic { animation-delay: -2.4s; }
+    @keyframes gFloat { 50% { transform: translateY(-5px) rotate(-4deg); } }
+    .game.tapped { animation: gPop .42s cubic-bezier(.3,1.5,.5,1); }
+    @keyframes gPop { 30% { transform: scale(.94); } 70% { transform: scale(1.04); } }
+    .game.tapped .g-ic { animation: gSpin .5s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes gSpin { 40% { transform: scale(1.35) rotate(-14deg); } 100% { transform: none; } }
+    .g-ripple { position: absolute; z-index: 0; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: rgba(255,255,255,.45); pointer-events: none; animation: gRipple .6s ease-out forwards; }
+    @keyframes gRipple { to { transform: scale(26); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .game .g-ic, .game.tapped, .game.tapped .g-ic, .game:hover::before, .game.tapped::before, .g-ripple { animation: none !important; } }
+
     /* Sign-up prompt for games */
     .join-wrap { position: fixed; inset: 0; z-index: 85; display: none; place-items: center; padding: 16px; background: rgba(10,7,5,.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
     .join-wrap.open { display: grid; animation: joinFade .2s ease; }

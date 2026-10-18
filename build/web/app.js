@@ -284,7 +284,12 @@
 
   // ------------------------------------------------------------ How to play
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+  var howOpen = false;
   function howToPlay(id, onPlay) {
+    // Seen once, from anywhere: the game page won't open it again by itself.
+    store('speakupfearless.howto.' + id, '1');
+    if (howOpen) return Promise.resolve();
+    howOpen = true;
     return loadGames().then(function (games) {
       var g = games[id];
       var pics = STEP_PICS[id] || [];
@@ -308,7 +313,7 @@
       document.body.style.overflow = 'hidden';
       var slides = wrap.querySelector('.slides');
       var page = 0;
-      var close = function () { clearInterval(demoTimer); wrap.remove(); document.body.style.overflow = ''; };
+      var close = function () { clearInterval(demoTimer); wrap.remove(); document.body.style.overflow = ''; howOpen = false; };
       var go = function (i) { slides.scrollTo({ left: slides.clientWidth * i * (root.dir === 'rtl' ? -1 : 1), behavior: 'smooth' }); };
       var render = function () {
         wrap.querySelectorAll('.dots i').forEach(function (d, i) { d.classList.toggle('on', i === page); });

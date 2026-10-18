@@ -382,11 +382,28 @@
     document.body.style.overflow = '';
     if (joinFrom) joinFrom.focus({ preventScroll: true });
   }
+
+  // A little bounce, shine and ripple when a game is tapped, then carry on.
+  function gameTap(card, e, then) {
+    var r = card.getBoundingClientRect();
+    var dot = document.createElement('span');
+    dot.className = 'g-ripple';
+    dot.style.left = ((e.clientX || r.left + r.width / 2) - r.left) + 'px';
+    dot.style.top = ((e.clientY || r.top + r.height / 2) - r.top) + 'px';
+    card.appendChild(dot);
+    setTimeout(function () { dot.remove(); }, 650);
+    card.classList.remove('tapped'); void card.offsetWidth; card.classList.add('tapped');
+    var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(then, calm ? 0 : 280);
+  }
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a.game');
-    if (!a || signedInUser()) return;
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
-    openJoin(a);
+    gameTap(a, e, function () {
+      if (signedInUser()) location.href = a.dataset.game || a.getAttribute('href');
+      else openJoin(a);
+    });
   });
   $('joinClose').addEventListener('click', closeJoin);
   join.addEventListener('click', function (e) { if (e.target === join) closeJoin(); });
