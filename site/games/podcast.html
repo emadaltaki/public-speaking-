@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F1DDBC">
+  <title>The Podcast Game | Speak Up Fearless</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/game.css">
+  <style>
+    .now { font-size: 13px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 8px; }
+    .now::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #E5484D; animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: .3; } }
+    .speaker { font-family: var(--head); font-weight: 900; font-size: clamp(44px, 14vw, 96px); line-height: 1.05; margin-top: 10px; color: var(--ink); word-break: break-word; }
+    .speaker.pop { animation: pop .35s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes pop { from { transform: scale(.7); opacity: 0; } }
+    .mic { width: 110px; height: 110px; margin: 0 auto 22px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, #7A4E9A, #4A2C66); box-shadow: 0 0 0 12px color-mix(in srgb, #7A4E9A 18%, transparent); }
+    .mic svg { width: 52px; height: 52px; }
+    .tp { margin-top: 26px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px; background: none; border: 0; color: var(--accent); font-weight: 700; cursor: pointer; padding: 0; }
+    .back-link svg { width: 18px; height: 18px; }
+  </style>
+  <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
+</head>
+<body>
+  <main class="wrap" id="main"></main>
+  <script src="/app.js"></script>
+  <script src="/game.js"></script>
+  <script>
+    (function () {
+      var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
+      var ID = 'podcast';
+      var PACES = [[12, 18], [8, 12], [5, 8], [2, 4]];
+      var settings = { seconds: 60, pace: 0, count: 5, suggest: true, set: 'General', names: [] };
+
+      G.boot(ID, function (games, words) {
+        function showRules() {
+          G.setup({
+            id: ID, games: games, startLabel: t('podcastNext'), startIcon: G.ICON.arrow,
+            render: function (rows) {
+              rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('tripleStepTimer'), min: 30, max: 600, step: 30, value: settings.seconds,
+                format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
+              rows.appendChild(G.slider({ icon: G.ICON.speed, label: t('podcastDifficulty'), help: t('podcastDifficultyHelp'), min: 0, max: 3, value: settings.pace,
+                format: function (v) { return t('paces')[v]; }, onChange: function (v) { settings.pace = v; } }));
+              rows.appendChild(G.slider({ icon: G.ICON.group, label: t('podcastPlayers'), min: 2, max: 8, value: settings.count,
+                format: String, onChange: function (v) { settings.count = v; } }));
+              rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
+              rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
+            },
+            onStart: showNames
+          });
+        }
+
+        function showNames() {
+          var names = [];
+          for (var i = 0; i < settings.count; i++) names.push(settings.names[i] || G.playerName(i + 1));
+          var namesRow;
+          G.setup({
+            id: ID, games: games, subtitle: t('podcastWhoIsPlaying'),
+            render: function (rows) {
+              var back = document.createElement('button');
+              back.className = 'back-link';
+              back.type = 'button';
+              back.innerHTML = G.ICON.back + esc(t('podcastBackToRules'));
+              back.addEventListener('click', function () { settings.names = namesRow.names(); showRules(); });
+              rows.appendChild(back);
+              namesRow = G.players({ names: names, min: settings.count, max: settings.count, fixed: true, label: t('podcastWhoIsPlaying') });
+              rows.appendChild(namesRow);
+            },
+            onStart: function () { settings.names = namesRow.names(); play(); }
+          });
+        }
+
+        function play(keepTopic) {
+          var topic = keepTopic || G.pickTopic(settings.suggest, settings.set);
+          var players = settings.names.slice(0, settings.count);
+          var st = G.stage({});
+          var total = settings.seconds * 1000, elapsed = 0, paused = false, nextAt = 0;
+          var speaker = Math.floor(Math.random() * players.length);
+          var pace = PACES[settings.pace];
+          var gap = function () { return (pace[0] + Math.random() * (pace[1] - pace[0])) * 1000; };
+          G.ready(st.body, { topic: topic, hint: t('podcastReadyHint') }, run);
+
+          function run() {
+            st.body.innerHTML = '<div class="mic">' + S.ICONS.podcast + '</div><div class="now">' + esc(t('podcastNowSpeaking')) + '</div>' +
+              '<div class="speaker" aria-live="assertive"></div>' +
+              '<div class="tp"><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic" style="font-size:clamp(20px,5.5vw,30px)">' + esc(topic) + '</div></div>' +
+              '<div class="clock"></div>' +
+              '<div class="controls"><button class="btn btn-ghost" type="button" id="pause"></button>' +
+              '<button class="btn btn-primary" type="button" id="stop">' + G.ICON.flag + esc(t('tripleStepFinish')) + '</button></div>';
+            st.body.querySelector('#pause').addEventListener('click', function () { paused = !paused; paintPause(); });
+            st.body.querySelector('#stop').addEventListener('click', finish);
+            nextAt = gap();
+            showSpeaker();
+            paintPause();
+            G.loop(function (d) {
+              if (paused) return;
+              elapsed += d;
+              if (elapsed >= total) { elapsed = total; return finish(); }
+              if (elapsed >= nextAt && players.length > 1) {
+                var n = speaker;
+                while (n === speaker) n = Math.floor(Math.random() * players.length);
+                speaker = n;
+                nextAt = elapsed + gap();
+                showSpeaker();
+                if (navigator.vibrate) navigator.vibrate(60);
+              }
+              st.body.querySelector('.clock').textContent = G.clock(total - elapsed);
+            });
+          }
+          function showSpeaker() {
+            var el = st.body.querySelector('.speaker');
+            el.textContent = players[speaker];
+            el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+          }
+          function paintPause() {
+            var b = st.body.querySelector('#pause');
+            b.innerHTML = (paused ? G.ICON.play : G.ICON.pause) + esc(paused ? t('tripleStepResume') : t('tripleStepPause'));
+          }
+          function finish() {
+            G.loopStop();
+            S.recordRound({ gameId: ID, spokenSeconds: elapsed / 1000, topic: settings.suggest ? topic : null });
+            G.end({
+              title: t('podcastEnd'), message: t('youSpokeFor', { n: G.clock(elapsed).replace(/^0/, '') }),
+              primary: t('tripleStepNextTopic'),
+              onPrimary: function () { st.close(); play(); },
+              onRetry: function () { st.close(); play(topic); },
+              onSettings: function () { st.close(); }
+            });
+          }
+        }
+
+        showRules();
+      });
+    })();
+  </script>
+</body>
+</html>
