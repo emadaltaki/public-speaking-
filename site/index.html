@@ -383,6 +383,58 @@
     .lb-close { top: calc(14px + env(safe-area-inset-top)); right: 14px; }
     .lb-prev { left: 14px; top: 50%; transform: translateY(-50%); }
     .lb-next { right: 14px; top: 50%; transform: translateY(-50%); }
+
+    /* Sign-up prompt for games */
+    .join-wrap { position: fixed; inset: 0; z-index: 85; display: none; place-items: center; padding: 16px; background: rgba(10,7,5,.6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .join-wrap.open { display: grid; animation: joinFade .2s ease; }
+    @keyframes joinFade { from { opacity: 0; } }
+    @keyframes joinPop { from { opacity: 0; transform: translateY(24px) scale(.96); } }
+    .join { position: relative; width: 100%; max-width: 420px; max-height: calc(100vh - 32px); overflow: auto; border-radius: 28px; background: var(--surface); color: var(--text); box-shadow: 0 40px 80px -30px rgba(0,0,0,.6); animation: joinPop .32s cubic-bezier(.2,.8,.2,1); }
+    .join-top { position: relative; overflow: hidden; isolation: isolate; padding: 26px 24px 24px; color: #fff; }
+    .join-top::before, .join-top::after { content: ""; position: absolute; z-index: -1; border-radius: 50%; background: rgba(255,255,255,.12); }
+    .join-top::before { width: 200px; height: 200px; right: -60px; top: -80px; }
+    .join-top::after { width: 120px; height: 120px; left: -40px; bottom: -70px; }
+    .join-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.2); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .join-game { display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+    .join-ic { width: 60px; height: 60px; flex: none; border-radius: 18px; display: grid; place-items: center; background: rgba(255,255,255,.2); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); animation: joinBob 2.4s ease-in-out infinite; }
+    @keyframes joinBob { 50% { transform: translateY(-4px) rotate(-3deg); } }
+    .join-ic svg { width: 30px; height: 30px; color: #fff; }
+    .join-game b { display: block; font-family: var(--head); font-size: 22px; line-height: 1.2; }
+    .join-game small { display: block; margin-top: 2px; color: rgba(255,255,255,.88); font-size: 14px; line-height: 1.4; }
+    .join-x { position: absolute; top: 12px; inset-inline-end: 12px; width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(255,255,255,.2); color: #fff; display: grid; place-items: center; cursor: pointer; }
+    .join-x svg { width: 20px; height: 20px; }
+    .join-body { padding: 22px 24px 24px; }
+    .join-body h3 { font-family: var(--head); font-size: 21px; line-height: 1.25; color: var(--ink); margin: 0; }
+    .join-body > p { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+    .join-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
+    .join-list li { display: flex; align-items: center; gap: 12px; color: var(--ink); font-weight: 600; font-size: 15px; }
+    .join-list .tick { width: 30px; height: 30px; flex: none; border-radius: 10px; display: grid; place-items: center; background: var(--soft); color: var(--primary); }
+    .join-list .tick svg { width: 17px; height: 17px; }
+    .join-cta { display: flex; width: 100%; margin-top: 20px; min-height: 54px; font-size: 17px; }
+    .join-cta svg { width: 20px; height: 20px; }
+    .join-alt { margin: 14px 0 0; text-align: center; color: var(--muted); font-size: 14.5px; }
+    .join-alt a { color: var(--primary); font-weight: 700; text-decoration: none; }
+    .join-fine { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 12px 0 0; color: var(--muted); font-size: 12.5px; }
+    .join-fine svg { width: 14px; height: 14px; color: var(--ok, #3F7D4E); }
+    @media (max-width: 640px) {
+      .join-wrap { place-items: end center; padding: 0; }
+      .join { max-width: none; border-radius: 28px 28px 0 0; max-height: 92vh; padding-bottom: env(safe-area-inset-bottom); animation-name: joinUp; }
+      @keyframes joinUp { from { transform: translateY(100%); } }
+    }
+    @media (prefers-reduced-motion: reduce) { .join, .join-ic, .join-wrap.open { animation: none; } }
+
+    /* Enlarged photos: what you'll get */
+    .lightbox figure { display: flex; flex-direction: column; align-items: center; gap: 14px; max-width: min(94vw, 760px); }
+    .lightbox img { max-height: 58vh; animation: lbZoom .3s cubic-bezier(.2,.8,.2,1); }
+    @keyframes lbZoom { from { opacity: 0; transform: scale(.94); } }
+    .lb-card { width: 100%; max-width: 560px; padding: 16px 18px 18px; border-radius: 20px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: #fff; text-align: start; animation: lbUp .35s .05s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes lbUp { from { opacity: 0; transform: translateY(12px); } }
+    .lb-card .lb-k { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #F0B79F; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .lb-card .lb-k span:last-child { color: rgba(255,255,255,.6); letter-spacing: .04em; }
+    .lb-card b { display: block; margin-top: 6px; font-family: "Montserrat", sans-serif; font-size: 19px; line-height: 1.25; }
+    .lb-card p { margin: 6px 0 0; color: rgba(255,255,255,.86); font-size: 15px; line-height: 1.5; }
+    .lb-card .btn { margin-top: 14px; min-height: 46px; }
+    @media (max-width: 640px) { .lb-prev, .lb-next { top: 30%; } .lightbox img { max-height: 46vh; } .lb-card b { font-size: 17px; } .lb-card p { font-size: 14px; } }
     .dialog { background: rgba(10,7,5,.55); place-items: center; padding: 16px; }
     .dialog .box { background: var(--surface); border-radius: 24px; max-width: 600px; width: 100%; max-height: 86vh; overflow: auto; padding: 28px; }
     .dialog h3 { font-size: 22px; margin-bottom: 12px; }
@@ -1078,10 +1130,31 @@
   </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
-    <figure style="margin:0"><img id="lbImg" alt=""><figcaption class="cap" id="lbCap"></figcaption></figure>
+    <figure style="margin:0"><img id="lbImg" alt=""><figcaption class="lb-card"><span class="lb-k"><span data-t="lbKicker">What you'll get</span><span id="lbCount"></span></span><b id="lbCap"></b><p id="lbDesc"></p><a class="btn btn-primary" href="#pricing" id="lbCta" data-cta="photo" data-t="getStartedFree">Get started for free</a></figcaption></figure>
     <button class="lb-btn lb-close" type="button" id="lbClose"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
     <button class="lb-btn lb-prev" type="button" id="lbPrev"><svg aria-hidden="true"><use href="#i-chev-l"/></svg></button>
     <button class="lb-btn lb-next" type="button" id="lbNext"><svg aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+  </div>
+  <div class="join-wrap" id="join" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
+    <div class="join">
+      <div class="join-top g1" id="joinTop">
+        <span class="join-badge"><svg aria-hidden="true" width="14" height="14"><use href="#i-play"/></svg><span data-t="joinKicker">Free to play</span></span>
+        <div class="join-game"><span class="join-ic" id="joinIcon"></span><span><b id="joinName"></b><small id="joinTag"></small></span></div>
+        <button class="join-x" type="button" id="joinClose" aria-label="Close"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="join-body">
+        <h3 id="joinTitle" data-t="joinTitle">You're one step away from playing</h3>
+        <p id="joinBody"></p>
+        <ul class="join-list">
+          <li><span class="tick"><svg aria-hidden="true"><use href="#i-play"/></svg></span><span data-t="joinB1">All 4 speaking games, free forever</span></li>
+          <li><span class="tick"><svg aria-hidden="true"><use href="#i-trophy"/></svg></span><span data-t="joinB2">Watch your progress and streaks grow</span></li>
+          <li><span class="tick"><svg aria-hidden="true"><use href="#i-heart"/></svg></span><span data-t="joinB3">Practice alone first, no audience needed</span></li>
+        </ul>
+        <a class="btn btn-primary join-cta" id="joinUp" href="/login?mode=signup"><span data-t="joinCta">Create my free account</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></a>
+        <p class="join-alt"><span data-t="joinHave">Already have an account?</span> <a id="joinIn" href="/login" data-t="joinSignIn">Sign in</a></p>
+        <p class="join-fine"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="joinFine">Takes 30 seconds. No card, no spam.</span></p>
+      </div>
+    </div>
   </div>
   <div class="dialog" id="privacy" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
     <div class="box"><h3 id="privacyTitle" data-t="privacy">Privacy Policy</h3><p data-t="privacyBody"></p><button class="btn btn-primary" type="button" id="privacyClose" data-t="close">Close</button></div>

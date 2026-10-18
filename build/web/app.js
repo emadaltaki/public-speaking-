@@ -26,6 +26,11 @@
       howTo: 'How to play', next: 'Next', back: 'Back', letsPlay: "Let's play!", close: 'Close', stepOf: 'Step {n} of {t}', play: 'Play',
       gateTitle: 'Sign up to play', gateBody: 'Create a free account to unlock all our speaking games and keep track of your practice.',
       gateSignUp: 'Create free account', gateSignIn: 'I already have an account',
+      joinKicker: 'Free to play', joinTitle: "You're one step away from playing", joinAll: 'Speaking games',
+      joinBody: 'Make a free account to start {game}. It only takes a moment, and you can play right away.',
+      joinBodyAll: 'Make a free account to play all our speaking games. It only takes a moment.',
+      joinB1: 'All 4 speaking games, free forever', joinB2: 'Watch your progress and streaks grow', joinB3: 'Practice alone first, no audience needed',
+      joinCta: 'Create my free account', joinHave: 'Already have an account?', joinSignIn: 'Sign in', joinFine: 'Takes 30 seconds. No card, no spam.',
       verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
       minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s'
     },
@@ -34,6 +39,11 @@
       howTo: 'طريقة اللعب', next: 'التالي', back: 'رجوع', letsPlay: 'هيا نلعب!', close: 'إغلاق', stepOf: 'الخطوة {n} من {t}', play: 'العب',
       gateTitle: 'سجّل لتلعب', gateBody: 'أنشئ حسابًا مجانيًا لتفتح جميع ألعاب التحدث وتتابع تدريبك.',
       gateSignUp: 'أنشئ حسابًا مجانيًا', gateSignIn: 'لدي حساب بالفعل',
+      joinKicker: 'مجانية', joinTitle: 'خطوة واحدة وتبدأ اللعب', joinAll: 'ألعاب التحدث',
+      joinBody: 'أنشئ حسابًا مجانيًا لتبدأ {game}. يستغرق الأمر لحظة، وتلعب فورًا.',
+      joinBodyAll: 'أنشئ حسابًا مجانيًا لتلعب جميع ألعاب التحدث. يستغرق الأمر لحظة.',
+      joinB1: 'ألعاب التحدث الأربع، مجانًا للأبد', joinB2: 'شاهد تقدّمك وسلسلة أيامك تكبر', joinB3: 'تدرّب وحدك أولًا، بلا جمهور',
+      joinCta: 'أنشئ حسابي المجاني', joinHave: 'لديك حساب؟', joinSignIn: 'سجّل الدخول', joinFine: 'يستغرق 30 ثانية. بلا بطاقة وبلا رسائل مزعجة.',
       verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
       minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث'
     }
@@ -392,16 +402,26 @@
   // (unconfirmed) inside [el]; otherwise calls onAllowed.
   var LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg>';
   var MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>';
+  var TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>';
+  var HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
   function gate(el, onAllowed) {
     var u = user();
     var here = location.pathname;
     if (!u) {
       return loadGames().then(function (games) {
-        el.innerHTML = '<div class="card center"><div class="ic round">' + LOCK + '</div>' +
-          '<h2>' + esc(t('gateTitle')) + '</h2><p class="lead" style="margin:8px auto 0">' + esc(t('gateBody')) + '</p>' +
-          '<ul class="chips">' + ORDER.map(function (id) { return '<li>' + ICONS[id] + esc(games[id].title) + '</li>'; }).join('') + '</ul>' +
-          '<div class="btn-row" style="margin-top:20px"><a class="btn btn-primary" href="/login?mode=signup&next=' + encodeURIComponent(here) + '">' + esc(t('gateSignUp')) + '</a>' +
-          '<a class="btn btn-ghost" href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('gateSignIn')) + '</a></div></div>';
+        var id = (here.match(/^\/games\/([\w-]+)/) || [])[1];
+        var g = id && games[id];
+        var name = g ? g.title : t('joinAll');
+        var tick = function (icon, key) { return '<li><span class="tick">' + icon + '</span><span>' + esc(t(key)) + '</span></li>'; };
+        el.innerHTML = '<div class="join join-inline">' +
+          '<div class="join-top ' + (g ? 'g-' + id : 'g-all') + '"><span class="join-badge">' + esc(t('joinKicker')) + '</span>' +
+          '<div class="join-game"><span class="join-ic">' + (g ? ICONS[id] : LOCK) + '</span><span><b>' + esc(name) + '</b>' +
+          (g ? '<small>' + esc(g.tagline || '') + '</small>' : '') + '</span></div></div>' +
+          '<div class="join-body"><h3>' + esc(t('joinTitle')) + '</h3><p>' + esc(g ? t('joinBody').replace('{game}', name) : t('joinBodyAll')) + '</p>' +
+          '<ul class="join-list">' + tick(ICONS['triple-step'], 'joinB1') + tick(TROPHY, 'joinB2') + tick(HEART, 'joinB3') + '</ul>' +
+          '<a class="btn btn-primary join-cta" href="/login?mode=signup&next=' + encodeURIComponent(here) + '">' + esc(t('joinCta')) + '</a>' +
+          '<p class="join-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('joinSignIn')) + '</a></p>' +
+          '<p class="join-fine">' + esc(t('joinFine')) + '</p></div></div>';
       });
     }
     return checkVerified().then(function (ok) {
