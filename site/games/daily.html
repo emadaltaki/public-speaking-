@@ -6,6 +6,13 @@
   <meta name="theme-color" content="#F1DDBC">
   <title>Daily Challenge | Speak Up Fearless</title>
   <meta name="description" content="A new one-minute speaking topic every day. Keep your streak going and share it.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Speak Up Fearless">
+  <meta property="og:title" content="Take today's 1-minute speaking challenge">
+  <meta property="og:description" content="A new speaking topic every day. Speak for one minute, build your streak, and get comfortable talking.">
+  <meta property="og:url" content="https://public-speaking-lemon.vercel.app/games/daily">
+  <meta property="og:image" content="https://public-speaking-lemon.vercel.app/assets/assets/images/playing-a-game-pic.jpeg">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -51,12 +58,41 @@
     .back-games { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 14px; color: var(--accent); font-weight: 700; text-decoration: none; }
     .back-games svg { width: 18px; height: 18px; }
     /* End card */
-    .d-end .flame { font-size: 64px; line-height: 1; animation: grow .6s cubic-bezier(.3,1.6,.5,1); }
-    @keyframes grow { from { transform: scale(.3); opacity: 0; } }
-    .d-end .count { font-family: var(--head); font-weight: 900; font-size: 44px; color: var(--primary); line-height: 1; margin-top: 6px; }
+    .d-end { background: rgba(20,10,6,.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+    .d-end .card { padding: 0; overflow: hidden; border-radius: 30px; animation: endPop .45s cubic-bezier(.2,.9,.3,1.2); }
+    @keyframes endPop { from { transform: translateY(30px) scale(.9); opacity: 0; } }
+    .de-top { position: relative; overflow: hidden; isolation: isolate; padding: 30px 20px 22px; color: #fff; text-align: center; background: radial-gradient(120% 90% at 50% 0%, #F08A4B 0%, #C24E26 45%, #7A2A16 100%); }
+    .de-top::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 58px; width: 220px; height: 220px; margin-left: -110px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,214,120,.55), transparent); animation: glow 2.4s ease-in-out infinite; }
+    @keyframes glow { 50% { transform: scale(1.15); opacity: .7; } }
+    .ember { position: absolute; z-index: -1; bottom: -10px; width: 6px; height: 6px; border-radius: 50%; background: #FFD27A; box-shadow: 0 0 8px #FFB347; opacity: 0; animation: rise 2.8s ease-in infinite; }
+    @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-260px) scale(.3); opacity: 0; } }
+    .de-flame { font-size: 78px; line-height: 1; display: inline-block; animation: grow .7s cubic-bezier(.3,1.6,.5,1), flick 1.6s 0.7s ease-in-out infinite; transform-origin: 50% 90%; }
+    @keyframes grow { from { transform: scale(.2); opacity: 0; } }
+    .de-count { font-family: var(--head); font-weight: 900; font-size: 64px; line-height: 1; margin-top: 4px; text-shadow: 0 6px 18px rgba(0,0,0,.25); }
+    .de-label { font-size: 12.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; opacity: .9; }
+    .de-week { display: flex; justify-content: center; gap: 7px; margin-top: 16px; }
+    .de-week span { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; opacity: .85; }
+    .de-week i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 13px; background: rgba(255,255,255,.14); border: 1.5px dashed rgba(255,255,255,.4); }
+    .de-week span.on i { background: #fff; border: 0; }
+    .de-week span.now i { animation: light .6s .5s cubic-bezier(.3,1.6,.5,1) both; }
+    @keyframes light { from { transform: scale(.2); background: rgba(255,255,255,.14); } }
+    .de-body { padding: 20px 22px 22px; text-align: center; }
+    .de-body h2 { font-size: 26px; }
+    .de-topic { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 14px; border-radius: 999px; background: var(--soft); color: var(--accent); font-weight: 700; font-size: 14px; }
+    .de-body p { margin: 10px 0 0; color: var(--muted); }
+    .d-end .btn-primary { width: 100%; margin-top: 18px; min-height: 54px; font-size: 17px; background: linear-gradient(135deg, #E0703E, #A23B1E); }
     .d-end .btn-primary svg { width: 20px; height: 20px; }
+    /* Signed-out visitors (often from a shared streak) */
+    .d-from { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 10px 14px; border-radius: 16px; background: rgba(255,255,255,.16); font-weight: 600; font-size: 14.5px; }
+    .d-from b { font-size: 22px; }
+    .d-join { margin-top: 16px; }
+    .d-join ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+    .d-join li { display: flex; gap: 10px; font-size: 14.5px; color: var(--ink); font-weight: 600; }
+    .d-join li::before { content: "✓"; color: var(--ok); font-weight: 900; }
+    .d-join .alt { margin: 12px 0 0; text-align: center; color: var(--muted); font-size: 14.5px; }
+    .d-join .alt a { color: var(--accent); font-weight: 700; text-decoration: none; }
     .shared { margin-top: 10px; color: var(--ok); font-size: 14px; font-weight: 700; }
-    @media (prefers-reduced-motion: reduce) { .streak .fire, .d-end .flame { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .streak .fire, .de-flame, .ember, .de-top::before, .d-end .card, .de-week i { animation: none !important; } }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
 </head>
@@ -79,7 +115,10 @@
         dEndTitle: 'You did it!', dEndBody: 'One minute about "{topic}". See you tomorrow for a new one.',
         dEndStreak: 'day streak', dEndPractice: 'Nice practice! Your streak already counts today.',
         dShared: 'Copied! Paste it anywhere to share.', dSaved: 'Saved your streak card.', dShareText: "I've spoken every day for {n} days on Speak Up Fearless. Today's topic: \"{topic}\". Try today's challenge:",
-        dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}'
+        dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
+        dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
+        dJoinTitle: 'Take today\'s challenge too', dJoinB1: 'A new one-minute topic every day', dJoinB2: 'Build your own streak and share it', dJoinB3: 'Plus 4 more speaking games, all free',
+        dJoinCta: 'Join free and start', dJoinHave: 'Already have an account?', dJoinIn: 'Sign in', dPractice: 'Practice round. Today already counts.'
       }, {
         dTitle: 'التحدي اليومي', dKick: 'تحدي اليوم', dTopicLabel: 'موضوعك', dRule: 'تحدّث عنه لمدة دقيقة واحدة. بلا إعادة وبلا ضغط، فقط تكلّم.',
         dStart: 'ابدأ دقيقتي', dDoneToday: 'أنجزت تحدي اليوم. موضوع جديد غدًا!', dAgain: 'تدرّب مجددًا', dShare: 'شارك سلسلتي',
@@ -89,7 +128,10 @@
         dEndTitle: 'أحسنت!', dEndBody: 'دقيقة عن «{topic}». نراك غدًا مع موضوع جديد.',
         dEndStreak: 'أيام متتالية', dEndPractice: 'تدريب رائع! يومك محسوب بالفعل في سلسلتك.',
         dShared: 'تم النسخ! الصقه في أي مكان للمشاركة.', dSaved: 'حفظنا بطاقة سلسلتك.', dShareText: 'تحدّثت كل يوم لمدة {n} أيام على Speak Up Fearless. موضوع اليوم: «{topic}». جرّب تحدي اليوم:',
-        dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}'
+        dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
+        dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
+        dJoinTitle: 'خُض تحدي اليوم أنت أيضًا', dJoinB1: 'موضوع جديد لدقيقة واحدة كل يوم', dJoinB2: 'ابنِ سلسلتك وشاركها', dJoinB3: 'و4 ألعاب تحدّث أخرى، كلها مجانية',
+        dJoinCta: 'انضم مجانًا وابدأ', dJoinHave: 'لديك حساب؟', dJoinIn: 'سجّل الدخول', dPractice: 'جولة تدريب. يومك محسوب بالفعل.'
       });
       var FIRE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2.5s.9 3.1-1.4 5.6C10.3 10 8 11.4 8 14.6A4.4 4.4 0 0 0 12.4 19a4.6 4.6 0 0 0 4.6-4.6c0-1.6-.6-2.9-1.3-3.9 0 0-.1 1.7-1.6 2.2 0 0 .9-4.4-.6-10.2zM6.6 9.4C5 11.2 4 13.3 4 15.4 4 19.6 7.6 23 12 23s8-3.4 8-7.6c0-1.2-.3-2.4-.8-3.5-.4 3.5-3.4 6.1-7 6.1A6.3 6.3 0 0 1 6 11.7c0-.8.2-1.6.6-2.3z"/></svg>';
       var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>';
@@ -130,12 +172,30 @@
       Promise.all([S.loadGames(), G.loadWords()]).then(function (res) {
         var words = res[1];
         var topic = topicFor(words, TODAY);
+        if (!S.user()) return teaser(topic);
         S.gate(main, function () {
           var local = S.localHistory ? S.localHistory() : [];
           render(stats(local), topic);
           S.history().then(function (rounds) { render(stats(rounds), topic); });
         });
       });
+
+      // Signed out: show today's topic (and who shared it) with a free sign-up
+      // that comes straight back here to play.
+      function teaser(topic) {
+        var q = new URLSearchParams(location.search);
+        var n = parseInt(q.get('s'), 10) || 0, by = (q.get('by') || '').slice(0, 24);
+        var from = n ? (by ? (n === 1 ? t('dFrom1', { name: by }) : t('dFrom', { name: by, n: n })) : t('dFromAnon', { n: n })) : '';
+        var back = encodeURIComponent('/games/daily');
+        main.innerHTML = '<div class="daily">' +
+          '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span></div>' +
+          (from ? '<div class="d-from"><b>🔥</b><span>' + esc(from) + '</span></div>' : '') +
+          '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
+          '<p class="d-rule">' + esc(t('dRule')) + '</p>' +
+          '<a class="btn d-go" href="/login?mode=signup&next=' + back + '">' + G.ICON.play + esc(t('dJoinCta')) + '</a></section>' +
+          '<section class="card d-join"><h3 style="font-size:17px;margin:0">' + esc(t('dJoinTitle')) + '</h3><ul><li>' + esc(t('dJoinB1')) + '</li><li>' + esc(t('dJoinB2')) + '</li><li>' + esc(t('dJoinB3')) + '</li></ul>' +
+          '<p class="alt">' + esc(t('dJoinHave')) + ' <a href="/login?next=' + back + '">' + esc(t('dJoinIn')) + '</a></p></section></div>';
+      }
 
       function render(st, topic) {
         var dateFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -164,7 +224,7 @@
         var go = main.querySelector('#go') || main.querySelector('#again');
         go.addEventListener('click', function () { play(topic, st); });
         var sh = main.querySelector('#share');
-        if (sh) sh.addEventListener('click', function () { share(st.current, topic, sh); });
+        if (sh) { var ready = prepare(st.current, topic); sh.addEventListener('click', function () { share(ready); }); }
       }
 
       // ------------------------------------------------------------ one minute
@@ -196,16 +256,32 @@
           var after = stats(S.localHistory());
           var wasDone = before.doneToday;
           var n = after.current;
+          var dayFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'narrow' });
+          var week = '';
+          for (var i = 6; i >= 0; i--) {
+            var d = addDays(today, -i), k = dayKey(d), on = !!after.days[k];
+            week += '<span class="' + (on ? 'on' : '') + (k === TODAY && on && !wasDone ? ' now' : '') + '"><i>' + (on ? '🔥' : '') + '</i>' + esc(dayFmt.format(d)) + '</span>';
+          }
+          var embers = '';
+          for (var e = 0; e < 14; e++) embers += '<span class="ember" style="left:' + (8 + Math.random() * 84).toFixed(1) + '%;animation-delay:' + (Math.random() * 2.8).toFixed(2) + 's;animation-duration:' + (2.2 + Math.random() * 1.6).toFixed(2) + 's"></span>';
           var el = document.createElement('div');
           el.className = 'end d-end';
-          el.innerHTML = '<div class="card"><div class="flame">🔥</div><div class="count">' + n + '</div><div style="font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-size:12px">' + esc(t('dEndStreak')) + '</div>' +
-            '<h2 style="margin-top:14px">' + esc(t('dEndTitle')) + '</h2>' +
-            '<p>' + esc(wasDone ? t('dEndPractice') : t('dEndBody', { topic: topic })) + '</p>' +
+          el.innerHTML = '<div class="card"><div class="de-top">' + embers + '<div class="de-flame">🔥</div><div class="de-count">0</div><div class="de-label">' + esc(t('dEndStreak')) + '</div>' +
+            '<div class="de-week">' + week + '</div></div>' +
+            '<div class="de-body"><h2>' + esc(t('dEndTitle')) + '</h2>' +
+            '<div class="de-topic">💬 ' + esc(topic) + '</div>' +
+            '<p>' + esc(wasDone ? t('dPractice') : t('dEndBody', { topic: topic }).replace(/^.*?\. /, '')) + '</p>' +
             '<button class="btn btn-primary" type="button" id="eShare">' + SHARE + esc(t('dShare')) + '</button>' +
             '<div class="shared" id="eMsg" hidden></div>' +
-            '<div class="more"><button type="button" id="eDone">' + esc(t('dBackGames')) + '</button><button type="button" id="eStay">' + esc(t('close')) + '</button></div></div>';
+            '<div class="more"><button type="button" id="eDone">' + esc(t('dBackGames')) + '</button><button type="button" id="eStay">' + esc(t('close')) + '</button></div></div></div>';
           document.body.appendChild(el);
-          el.querySelector('#eShare').addEventListener('click', function () { share(n, topic, el.querySelector('#eShare'), el.querySelector('#eMsg')); });
+          // Count up to the streak.
+          var cnt = el.querySelector('.de-count'), step = 0, steps = Math.min(n, 20);
+          var tick = setInterval(function () { step++; cnt.textContent = Math.round(n * step / Math.max(steps, 1)); if (step >= steps) { clearInterval(tick); cnt.textContent = n; } }, 45);
+          if (!steps) cnt.textContent = n;
+          if (navigator.vibrate) navigator.vibrate([30, 40, 60]);
+          var ready = prepare(n, topic);
+          el.querySelector('#eShare').addEventListener('click', function () { share(ready, el.querySelector('#eMsg')); });
           el.querySelector('#eDone').addEventListener('click', function () { location.href = '/games'; });
           el.querySelector('#eStay').addEventListener('click', function () { el.remove(); stg.close(); render(after, topic); });
         }
@@ -240,21 +316,26 @@
         x.font = f(body, 34); x.globalAlpha = .85; x.fillText(SITE.replace('https://', '') + '/games/daily', 540, 1290);
         return c;
       }
-      function share(n, topic, btn, msgEl) {
-        var text = t('dShareText', { n: n, topic: topic });
-        var url = SITE + '/games/daily';
+      // The link brings friends to this page with the streak and first name,
+      // so signed-out visitors see who shared it and can join from there.
+      function prepare(n, topic) {
+        var u = S.user();
+        var url = SITE + '/games/daily?s=' + n + (u && u.shortName ? '&by=' + encodeURIComponent(u.shortName) : '');
+        var p = { text: t('dShareText', { n: n, topic: topic }), url: url, file: null };
+        card(n, topic).toBlob(function (blob) { if (blob) p.file = new File([blob], 'speak-up-streak.png', { type: 'image/png' }); }, 'image/png');
+        return p;
+      }
+      function share(p, msgEl) {
         var say = function (m) { if (msgEl) { msgEl.hidden = false; msgEl.textContent = m; } else S.toast(m); };
-        card(n, topic).toBlob(function (blob) {
-          var file = blob && new File([blob], 'speak-up-streak.png', { type: 'image/png' });
-          if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-            navigator.share({ files: [file], text: text + ' ' + url }).catch(function () {});
-          } else if (navigator.share) {
-            navigator.share({ text: text, url: url }).catch(function () {});
-          } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(text + ' ' + url).then(function () { say(t('dShared')); });
-            if (blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'speak-up-streak.png'; a.click(); say(t('dSaved') + ' ' + t('dShared')); }
-          }
-        }, 'image/png');
+        if (p.file && navigator.canShare && navigator.canShare({ files: [p.file] })) {
+          navigator.share({ files: [p.file], text: p.text + ' ' + p.url }).catch(function () {});
+        } else if (navigator.share) {
+          navigator.share({ text: p.text, url: p.url }).catch(function () {});
+        } else {
+          if (navigator.clipboard) navigator.clipboard.writeText(p.text + ' ' + p.url).catch(function () {});
+          if (p.file) { var a = document.createElement('a'); a.href = URL.createObjectURL(p.file); a.download = 'speak-up-streak.png'; a.click(); say(t('dSaved') + ' ' + t('dShared')); }
+          else say(t('dShared'));
+        }
       }
     })();
   </script>
