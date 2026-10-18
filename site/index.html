@@ -112,7 +112,7 @@
 
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 8px); -webkit-text-size-adjust: 100%; }
-    body { margin: 0; background: var(--page); color: var(--text); font: 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    body { margin: 0; background: var(--page); color: var(--text); font: 16px/1.6 var(--body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
     img { max-width: 100%; display: block; }
     a { color: inherit; }
     button { font: inherit; color: inherit; }
@@ -357,7 +357,7 @@
     footer .copy { border-top: 1px solid rgba(255,255,255,.14); margin-top: 44px; padding-top: 24px; font-size: 15px; }
 
     /* Sticky phone CTA */
-    .sticky-cta { position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 40; display: none;
+    .sticky-cta { position: fixed; left: 12px; right: 12px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 40; display: none; transform-origin: bottom; will-change: transform;
       align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-radius: 999px;
       background: var(--glass); border: 1px solid var(--glass-border);
       -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
