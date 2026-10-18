@@ -526,7 +526,7 @@
       $('missing').hidden = true; void $('missing').offsetWidth;
       updateMissing();
       track('booking_incomplete', { missing: missingItems().length });
-      var first = need.length ? need[0][0] : document.querySelector('.field.bad input');
+      var first = need.length ? need[0][0] : document.querySelector('.field.bad input, .field.bad textarea');
       if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
       if (!need.length && first && first.focus) first.focus({ preventScroll: true });
       return;
@@ -633,6 +633,11 @@
   }
 
   $('stepSession').classList.add('done');
+
+  // The reason box grows with what's typed.
+  function grow() { var el = $('fReason'); el.style.height = 'auto'; el.style.height = el.scrollHeight + 2 + 'px'; }
+  $('fReason').addEventListener('input', grow);
+  window.addEventListener('resize', grow);
 
   $('moreBtn').addEventListener('click', function () {
     $('descField').hidden = false;
