@@ -34,7 +34,12 @@
       joinB1: 'All 4 speaking games, free forever', joinB2: 'Watch your progress and streaks grow', joinB3: 'Practice alone first, no audience needed',
       joinCta: 'Create my free account', joinHave: 'Already have an account?', joinSignIn: 'Sign in', joinFine: 'Takes 30 seconds. No card, no spam.',
       verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
-      minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s'
+      minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s',
+      guestBar: "You're playing as a guest. Make a free account to save your progress.", guestBarCta: 'Save my progress',
+      saveTitle: 'Save this round and start your streak', saveCta: 'Save my progress, free',
+      saveBody: 'Make a free account to keep your practice history and watch it grow. Every round you played here comes with you.',
+      saveShort1: '1 round played as a guest. Save it to your account', saveShortN: '{n} rounds played as a guest. Save them to your account', saveShort2: '2 rounds played as a guest. Save them to your account',
+      savedToast1: 'Welcome! Your guest round is now saved to your account.', savedToastN: 'Welcome! Your {n} guest rounds are now saved to your account.', savedToast2: 'Welcome! Your 2 guest rounds are now saved to your account.'
     },
     ar: {
       home: 'العودة إلى الموقع', signIn: 'تسجيل الدخول', account: 'حسابك', light: 'المظهر الفاتح', dark: 'المظهر الداكن', langName: 'English', langShort: 'EN',
@@ -49,7 +54,12 @@
       joinB1: 'ألعاب التحدث الأربع، مجانًا للأبد', joinB2: 'شاهد تقدّمك وسلسلة أيامك تكبر', joinB3: 'تدرّب وحدك أولًا، بلا جمهور',
       joinCta: 'أنشئ حسابي المجاني', joinHave: 'لديك حساب؟', joinSignIn: 'سجّل الدخول', joinFine: 'يستغرق 30 ثانية. بلا بطاقة وبلا رسائل مزعجة.',
       verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
-      minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث'
+      minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث',
+      guestBar: 'أنت تلعب كضيف. أنشئ حسابًا مجانيًا لتحفظ تقدّمك.', guestBarCta: 'احفظ تقدّمي',
+      saveTitle: 'احفظ هذه الجولة وابدأ سلسلتك', saveCta: 'احفظ تقدّمي مجانًا',
+      saveBody: 'أنشئ حسابًا مجانيًا لتحتفظ بسجل تدريبك وتشاهده يكبر. كل جولة لعبتها هنا تنتقل معك.',
+      saveShort1: 'لعبت جولة واحدة كضيف. احفظها في حسابك', saveShortN: 'لعبت {n} جولات كضيف. احفظها في حسابك', saveShort2: 'لعبت جولتين كضيف. احفظهما في حسابك',
+      savedToast1: 'أهلًا بك! جولتك كضيف محفوظة الآن في حسابك.', savedToastN: 'أهلًا بك! جولاتك الـ{n} كضيف محفوظة الآن في حسابك.', savedToast2: 'أهلًا بك! جولتاك كضيف محفوظتان الآن في حسابك.'
     }
   };
   function t(key, vars) {
@@ -226,7 +236,9 @@
   }
 
   // ------------------------------------------------------------ game history
-  function historyKey() { var u = user(); return 'speakupfearless.history.' + (u ? u.uid : 'guest'); }
+  var GUEST_HISTORY = 'speakupfearless.history.guest';
+  function historyKey() { var u = user(); return u ? 'speakupfearless.history.' + u.uid : GUEST_HISTORY; }
+  function readList(key) { try { return JSON.parse(store(key) || '[]') || []; } catch (_) { return []; } }
   function localHistory() {
     try { return JSON.parse(store(historyKey()) || '[]'); } catch (_) { return []; }
   }
@@ -251,7 +263,8 @@
           Math.abs(new Date(a.playedAt) - new Date(b.playedAt)) <= 120000;
       };
       remote.forEach(function (s) {
-        var item = { gameId: s.gameId, playedAt: s.playedAt, spokenSeconds: s.durationSeconds, topic: s.details && s.details.topic };
+        // Rounds played as a guest keep the time they were really played.
+        var item = { gameId: s.gameId, playedAt: (s.details && s.details.playedAt) || s.playedAt, spokenSeconds: s.durationSeconds, topic: s.details && s.details.topic };
         if (!local.some(function (l) { return same(l, item); })) local.push(item);
       });
       return local.sort(function (a, b) { return new Date(b.playedAt) - new Date(a.playedAt); });
@@ -442,17 +455,80 @@
   }
 
   // ------------------------------------------------------------ members only
-  // Shows a sign-up card (signed out) or a "confirm your email" card
-  // (unconfirmed) inside [el]; otherwise calls onAllowed.
   var LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg>';
   var MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>';
   var TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>';
   var HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
-  function gate(el, onAllowed) {
+  // ------------------------------------------------------------ guests
+  // People can play before they have an account. Their rounds stay on this
+  // device under "guest" and move into the account when they sign up or in.
+  function guestId() {
+    var g = store('speakupfearless.guestId');
+    if (!g) { g = 'guest-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); store('speakupfearless.guestId', g); }
+    return g;
+  }
+  function signUpHref() { return '/login?mode=signup&next=' + encodeURIComponent(location.pathname); }
+  // Moves this device's guest rounds into the signed-in account, then sends
+  // them to the backend (kept in a queue until each one is saved).
+  function adoptGuest() {
     var u = user();
+    if (!u) return;
+    var pendingKey = 'speakupfearless.guestPending.' + u.uid;
+    var guest = readList(GUEST_HISTORY);
+    if (guest.length) {
+      var mine = guest.concat(localHistory()).sort(function (a, b) { return new Date(b.playedAt) - new Date(a.playedAt); });
+      store(historyKey(), JSON.stringify(mine.slice(0, 200)));
+      var send = guest.filter(function (r) { return r.gameId !== 'speech-coach'; });
+      store(pendingKey, JSON.stringify(readList(pendingKey).concat(send).slice(0, 200)));
+      store(GUEST_HISTORY, null);
+      // Today's daily topic stays the same after signing up.
+      var gid = store('speakupfearless.guestId');
+      var topic = gid && store('speakupfearless.dailyTopic.' + gid);
+      if (topic && !store('speakupfearless.dailyTopic.' + u.uid)) store('speakupfearless.dailyTopic.' + u.uid, topic);
+      var n = guest.length;
+      var say = function () { setTimeout(function () { toast(n === 1 ? t('savedToast1') : n === 2 ? t('savedToast2') : t('savedToastN', { n: n })); }, 400); };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', say); else say();
+    }
+    var queue = readList(pendingKey);
+    var next = function () {
+      var r = queue[0];
+      if (!r) return;
+      var details = { playedAt: r.playedAt, guest: true };
+      if (r.topic) details.topic = r.topic;
+      api('/v1/games/sessions', { method: 'POST', body: { gameId: r.gameId, durationSeconds: r.spokenSeconds || 0, details: details } }).then(function (res) {
+        // Try again next visit if the backend can't be reached; drop rounds it refuses.
+        if (!res || res.status >= 500) return;
+        queue.shift();
+        store(pendingKey, queue.length ? JSON.stringify(queue) : null);
+        next();
+      });
+    };
+    next();
+  }
+  // The "save your progress" box on a guest's end-of-round card: the full
+  // pitch after their first round, then one short line.
+  function guestSave() {
+    if (user()) return '';
+    var n = readList(GUEST_HISTORY).length;
+    if (n <= 1) {
+      return '<div class="gsave"><span class="gsave-ic">' + TROPHY + '</span><b>' + esc(t('saveTitle')) + '</b><p>' + esc(t('saveBody')) + '</p>' +
+        '<a class="btn btn-primary" href="' + signUpHref() + '">' + esc(t('saveCta')) + '</a>' +
+        '<p class="gsave-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(location.pathname) + '">' + esc(t('joinSignIn')) + '</a></p></div>';
+    }
+    return '<a class="gsave-line" href="' + signUpHref() + '">' + TROPHY + '<span>' + esc(n === 2 ? t('saveShort2') : t('saveShortN', { n: n })) + '</span></a>';
+  }
+  // A slim strip for pages guests browse (the games list).
+  function guestBar() {
+    if (user()) return '';
+    return '<div class="guest-bar"><span>' + esc(t('guestBar')) + '</span><a class="btn btn-primary" href="' + signUpHref() + '">' + esc(t('guestBarCta')) + '</a></div>';
+  }
+
+  // The free sign-up card. o.title / o.body replace the usual wording; o.extra
+  // adds HTML under the main button.
+  function joinCard(el, o) {
+    o = o || {};
     var here = location.pathname;
-    if (!u) {
-      return loadGames().then(function (games) {
+    return loadGames().then(function (games) {
         var id = (here.match(/^\/games\/([\w-]+)/) || [])[1];
         var g = id === 'daily' ? { title: t('dailyName'), tagline: t('dailyTag') } : id && games[id];
         var name = g ? g.title : t('joinAll');
@@ -461,13 +537,19 @@
           '<div class="join-top ' + (g ? 'g-' + id : 'g-all') + '"><span class="join-badge">' + esc(t('joinKicker')) + '</span>' +
           '<div class="join-game"><span class="join-ic">' + (g ? ICONS[id] : LOCK) + '</span><span><b>' + esc(name) + '</b>' +
           (g ? '<small>' + esc(g.tagline || '') + '</small>' : '') + '</span></div></div>' +
-          '<div class="join-body"><h3>' + esc(t('joinTitle')) + '</h3><p>' + esc(g ? t('joinBody').replace('{game}', name) : t('joinBodyAll')) + '</p>' +
+          '<div class="join-body"><h3>' + esc(o.title || t('joinTitle')) + '</h3><p>' + esc(o.body || (g ? t('joinBody').replace('{game}', name) : t('joinBodyAll'))) + '</p>' +
           '<ul class="join-list">' + tick(ICONS['triple-step'], 'joinB1') + tick(TROPHY, 'joinB2') + tick(HEART, 'joinB3') + '</ul>' +
-          '<a class="btn btn-primary join-cta" href="/login?mode=signup&next=' + encodeURIComponent(here) + '">' + esc(t('joinCta')) + '</a>' +
+          '<a class="btn btn-primary join-cta" href="/login?mode=signup&next=' + encodeURIComponent(here) + '">' + esc(t('joinCta')) + '</a>' + (o.extra || '') +
           '<p class="join-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('joinSignIn')) + '</a></p>' +
           '<p class="join-fine">' + esc(t('joinFine')) + '</p></div></div>';
-      });
-    }
+    });
+  }
+  // Guests play straight away; a signed-in player whose email isn't
+  // confirmed yet sees a "confirm your email" card instead.
+  function gate(el, onAllowed) {
+    var u = user();
+    var here = location.pathname;
+    if (!u) return Promise.resolve(onAllowed());
     return checkVerified().then(function (ok) {
       if (ok) return onAllowed();
       el.innerHTML = '<div class="card center"><div class="ic round">' + MAIL + '</div>' +
@@ -486,8 +568,10 @@
     if (tz) api('/v1/me', { method: 'PATCH', body: { timeZone: tz } });
   })();
 
+  adoptGuest();
+
   window.SUF = {
-    gate: gate,
+    gate: gate, joinCard: joinCard, guestId: guestId, guestSave: guestSave, guestBar: guestBar, signUpHref: signUpHref,
     lang: lang, t: t, addStrings: addStrings, esc: esc, store: store,
     user: user, signIn: signIn, signOut: signOut, api: api, upload: upload, idToken: idToken,
     cachedAvatar: cachedAvatar, refreshAvatar: refreshAvatar, saveAvatar: saveAvatar, onAvatar: onAvatar, avatarStyle: avatarStyle, pickPhoto: pickPhoto,

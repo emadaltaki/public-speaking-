@@ -273,10 +273,6 @@
   function renderAccount() {
     var user = signedInUser();
     prefillBooking();
-    all('a.game').forEach(function (a) {
-      var game = a.dataset.game || (a.dataset.game = a.getAttribute('href'));
-      a.href = user ? game : '/login?mode=signup&next=' + encodeURIComponent(game);
-    });
     $('signOutBtn').hidden = !user;
     var link = $('acct');
     var label = link.querySelector('.acct-label');
@@ -454,34 +450,6 @@
     touchX = null;
   });
 
-  // ---------------------------------------------------------------- game sign-up prompt
-  // Signed-out visitors who pick a game see what they get and sign up from here.
-  var join = $('join');
-  var joinFrom = null;
-  function openJoin(a) {
-    var game = a.dataset.game || a.getAttribute('href');
-    var name = a.querySelector('b').textContent;
-    var tint = [].filter.call(a.classList, function (c) { return /^g\d$/.test(c); })[0] || 'g1';
-    $('joinTop').className = 'join-top ' + tint;
-    $('joinIcon').innerHTML = a.querySelector('.g-ic').innerHTML;
-    $('joinName').textContent = name;
-    $('joinTag').textContent = a.querySelector('small').textContent;
-    $('joinBody').textContent = t('joinBody').replace('{game}', name);
-    $('joinUp').href = '/login?mode=signup&next=' + encodeURIComponent(game);
-    $('joinIn').href = '/login?next=' + encodeURIComponent(game);
-    joinFrom = a;
-    join.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    $('joinUp').focus({ preventScroll: true });
-    track('join_prompt', { game: game });
-  }
-  function closeJoin() {
-    if (!join.classList.contains('open')) return;
-    join.classList.remove('open');
-    document.body.style.overflow = '';
-    if (joinFrom) joinFrom.focus({ preventScroll: true });
-  }
-
   // A little bounce, shine and ripple when a game is tapped, then carry on.
   function gameTap(card, e, then) {
     var r = card.getBoundingClientRect();
@@ -499,14 +467,11 @@
     var a = e.target.closest && e.target.closest('a.game');
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
     e.preventDefault();
+    // Everyone plays straight away; guests are asked to sign up after a round.
     gameTap(a, e, function () {
-      if (signedInUser()) location.href = a.dataset.game || a.getAttribute('href');
-      else openJoin(a);
+      location.href = a.getAttribute('href');
     });
   });
-  $('joinClose').addEventListener('click', closeJoin);
-  join.addEventListener('click', function (e) { if (e.target === join) closeJoin(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeJoin(); });
 
   // ---------------------------------------------------------------- privacy
   var privacy = $('privacy');
