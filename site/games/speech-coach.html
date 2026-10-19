@@ -38,12 +38,42 @@
     .result-bar .btn svg { width: 19px; height: 19px; }
     .result-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0 14px; }
     .result-head h1 { font-size: 24px; margin: 0; }
-    .result-head a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .result-head a { flex: none; color: var(--accent); font-weight: 700; font-size: 14px; text-decoration: none; white-space: nowrap; }
+    .result-head a::before { content: "✓ "; }
     .join-sample { display: flex; width: 100%; min-height: 50px; margin-top: 10px; }
     .sample { margin-top: 26px; scroll-margin-top: 96px; }
     .sample .result-head { margin-bottom: 4px; }
     .sample-tag { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--soft); color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
     .sample > .help { margin: 0 0 14px; color: var(--muted); }
+    /* Topic picker */
+    .tp-card { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 14px 14px 14px 18px; border-radius: 18px; background: linear-gradient(135deg, #E3F1EC, #F3ECE0); border: 1px solid var(--border); }
+    :root[data-theme="dark"] .tp-card { background: linear-gradient(135deg, #1D2E29, #2A231C); }
+    .tp-card b { flex: 1; font-family: var(--head); font-size: 18px; line-height: 1.3; color: var(--ink); }
+    .tp-card b.pop { animation: tpPop .35s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes tpPop { from { transform: scale(.9); opacity: 0; } }
+    .tp-card.off { opacity: .45; }
+    .tp-shuffle { flex: none; width: 44px; height: 44px; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: #2F7A67; cursor: pointer; box-shadow: 0 4px 10px -6px rgba(0,0,0,.3); }
+    .tp-shuffle svg { width: 19px; height: 19px; }
+    .tp-own { width: 100%; height: 48px; margin-top: 10px; padding: 0 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--field); color: var(--ink); font: inherit; font-size: 16px; }
+    /* What we check */
+    .checks5 { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px auto 0; max-width: 440px; padding: 0; list-style: none; }
+    .checks5 li { padding: 5px 11px; border-radius: 999px; background: color-mix(in srgb, #3E8E7A 14%, transparent); color: #2F7A67; font-size: 13px; font-weight: 700; }
+    :root[data-theme="dark"] .checks5 li { color: #8FD3BF; }
+    /* Recording: ring and live tips */
+    .rec-ring { position: relative; width: 170px; height: 170px; margin: 0 auto; }
+    .rec-ring .pie { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .rec-ring .pie .bar { stroke: #3E8E7A; }
+    .rec-ring .mic { position: absolute; inset: 0; margin: auto; width: 112px; height: 112px; }
+    .rec-ring .mic svg { width: 50px; height: 50px; }
+    .live-tip { min-height: 46px; max-width: 420px; margin: 14px auto 0; padding: 10px 14px; border-radius: 14px; background: var(--tint); border: 1px solid var(--border); color: var(--ink); font-weight: 600; font-size: 15px; transition: opacity .3s; }
+    .live-tip::before { content: "💡 "; }
+    /* Waiting for the score */
+    .wave { display: flex; align-items: center; justify-content: center; gap: 5px; height: 60px; margin: 6px 0 10px; }
+    .wave i { width: 7px; height: 14px; border-radius: 4px; background: #3E8E7A; animation: wave 1.1s ease-in-out infinite; }
+    .wave i:nth-child(2) { animation-delay: .1s; } .wave i:nth-child(3) { animation-delay: .2s; } .wave i:nth-child(4) { animation-delay: .3s; }
+    .wave i:nth-child(5) { animation-delay: .4s; } .wave i:nth-child(6) { animation-delay: .5s; } .wave i:nth-child(7) { animation-delay: .6s; }
+    @keyframes wave { 50% { height: 54px; opacity: .7; } }
+    @media (prefers-reduced-motion: reduce) { .wave i { animation: none; } }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
 </head>
@@ -74,7 +104,10 @@
         cRetrySend: 'Try scoring again', cResult: 'Your feedback', cAgain: 'Try the same topic', cNext: 'New topic', cSettings: 'Settings', cAll: 'All games',
         cSavedNote: 'Saved to your account.',
         cGuestTitle: 'Get your talk scored by AI', cGuestBody: 'Every recording is scored by AI, so Speech Coach needs a free account. Below is a sample of the report you get back.',
-        cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.'
+        cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.',
+        cTopic: 'Your topic', cAnother: 'Another topic', cOwn: 'Or type your own topic', cWeCheck: 'Speak naturally. We check your',
+        cTips: ['Breathe, then slow down a little.', 'Pause instead of saying “um”.', 'Tell a quick story or example.', 'Look up and smile, even alone.', 'Say why it matters to you.', 'Finish with one strong sentence.'],
+        cWait: 'Usually ready in under a minute.'
       }, {
         cLength: 'مدة الحديث', cStart: 'التالي',
         cReadyHint: 'عندما تضغط ابدأ، سيطلب المتصفح استخدام الميكروفون. تحدث حتى ينتهي الوقت، أو اضغط إنهاء.',
@@ -92,7 +125,10 @@
         cRetrySend: 'أعد محاولة التقييم', cResult: 'ملاحظاتك', cAgain: 'الموضوع نفسه', cNext: 'موضوع جديد', cSettings: 'الإعدادات', cAll: 'كل الألعاب',
         cSavedNote: 'حُفظ في حسابك.',
         cGuestTitle: 'احصل على تقييم لحديثك بالذكاء الاصطناعي', cGuestBody: 'كل تسجيل يقيّمه الذكاء الاصطناعي، لذا يحتاج مدرب الإلقاء إلى حساب مجاني. في الأسفل مثال على التقرير الذي ستحصل عليه.',
-        cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.'
+        cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.',
+        cTopic: 'موضوعك', cAnother: 'موضوع آخر', cOwn: 'أو اكتب موضوعك الخاص', cWeCheck: 'تحدّث بشكل طبيعي. نفحص',
+        cTips: ['تنفّس، ثم أبطئ قليلًا.', 'توقّف بدل أن تقول «اممم».', 'احكِ قصة أو مثالًا قصيرًا.', 'ارفع رأسك وابتسم، حتى لو كنت وحدك.', 'قل لماذا يهمّك الموضوع.', 'اختم بجملة واحدة قوية.'],
+        cWait: 'يجهز عادةً في أقل من دقيقة.'
       });
 
       // A made-up report so guests can see what Speech Coach gives back.
@@ -150,7 +186,9 @@
           strengths: d.strengths, nextStep: d.nextStep, transcript: words
         };
       }
-      var settings = { seconds: 120, suggest: true, set: 'General' };
+      var settings = { seconds: 120, own: '', set: 'General' };
+      var shownTopic = '';
+      var SHUFFLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>';
 
       // The best format this browser records in (Safari: mp4, others: webm/opus).
       function pickType() {
@@ -169,7 +207,24 @@
             render: function (rows) {
               rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('cLength'), min: 30, max: 120, step: 30, value: settings.seconds,
                 format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
-              rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
+              // A ready topic, a shuffle button, or their own.
+              var tp = document.createElement('div');
+              tp.innerHTML = '<span class="row-head">' + G.ICON.list + '<span>' + esc(t('cTopic')) + '</span></span>' +
+                '<div class="tp-card"><b></b><button class="tp-shuffle" type="button" aria-label="' + esc(t('cAnother')) + '">' + SHUFFLE + '</button></div>' +
+                '<input class="tp-own" type="text" maxlength="120" autocomplete="off" placeholder="' + esc(t('cOwn')) + '">';
+              var tpText = tp.querySelector('b'), tpOwn = tp.querySelector('.tp-own'), tpCard = tp.querySelector('.tp-card');
+              if (!shownTopic) shownTopic = G.pickTopic(true, settings.set);
+              tpText.textContent = shownTopic;
+              tpOwn.value = settings.own;
+              tpCard.classList.toggle('off', !!settings.own.trim());
+              tp.querySelector('.tp-shuffle').addEventListener('click', function () {
+                tpOwn.value = ''; settings.own = ''; tpCard.classList.remove('off');
+                shownTopic = G.pickTopic(true, settings.set);
+                tpText.textContent = shownTopic;
+                tpText.classList.remove('pop'); void tpText.offsetWidth; tpText.classList.add('pop');
+              });
+              tpOwn.addEventListener('input', function () { settings.own = tpOwn.value; tpCard.classList.toggle('off', !!tpOwn.value.trim()); });
+              rows.appendChild(tp);
               rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
             },
             onStart: function () { play(); }
@@ -177,8 +232,9 @@
         }
 
         function play(keepTopic) {
-          var topic = keepTopic || G.pickTopic(settings.suggest, settings.set);
-          var own = !settings.suggest;
+          var mine = settings.own.trim();
+          var topic = keepTopic || mine || shownTopic || G.pickTopic(true, settings.set);
+          var own = !keepTopic && !!mine;
           var st = G.stage({ onLeave: stopAll });
           var stream = null, rec = null, chunks = [], ctx = null, elapsed = 0, type = pickType();
 
@@ -193,13 +249,14 @@
           function readyScreen(msg) {
             st.body.innerHTML = '<div class="mic">' + S.ICONS[ID] + '</div>' +
               '<div><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic">' + esc(topic) + '</div></div>' +
+              '<p class="note" style="margin-top:16px">' + esc(t('cWeCheck')) + '</p><ul class="checks5">' + window.Coach.CATS.map(function (k) { return '<li>' + esc(t('scCats')[k]) + '</li>'; }).join('') + '</ul>' +
               (msg ? '<p class="note err">' + esc(msg) + '</p>' : '<p class="hint">' + esc(t('cReadyHint')) + '</p>') +
               '<div class="controls"><button class="btn btn-primary" type="button" id="go">' + G.ICON.play + esc(t('cStartRec')) + '</button></div>' +
               (own ? '' : '<button class="small-link" type="button" id="swap">' + G.ICON.repeat + esc(t('cNewTopic')) + '</button>') +
               '<p class="note">' + esc(t('cPrivacy')) + '</p>';
             st.body.querySelector('#go').addEventListener('click', askMic);
             var sw = st.body.querySelector('#swap');
-            if (sw) sw.addEventListener('click', function () { topic = G.pickTopic(true, settings.set); readyScreen(); });
+            if (sw) sw.addEventListener('click', function () { topic = shownTopic = G.pickTopic(true, settings.set); readyScreen(); });
           }
 
           function askMic() {
@@ -233,10 +290,10 @@
             rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
             rec.onstop = function () { done(); };
             rec.start(1000);
-            st.body.innerHTML = '<div class="mic" id="mic">' + S.ICONS[ID] + '</div><div class="rec">' + esc(t('cRecording')) + '</div>' +
+            st.body.innerHTML = '<div class="rec-ring">' + G.pie(1) + '<div class="mic" id="mic">' + S.ICONS[ID] + '</div></div><div class="rec" style="margin-top:12px">' + esc(t('cRecording')) + '</div>' +
               '<div class="meter" aria-hidden="true">' + Array.apply(null, Array(16)).map(function () { return '<i></i>'; }).join('') + '</div>' +
               '<div class="tp"><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic">' + esc(topic) + '</div></div>' +
-              '<div class="clock"></div><p class="note" id="msg"></p>' +
+              '<div class="clock"></div><p class="live-tip" id="tip"></p><p class="note" id="msg"></p>' +
               '<div class="controls"><button class="btn btn-ghost" type="button" id="cancel">' + G.ICON.repeat + esc(t('cCancel')) + '</button>' +
               '<button class="btn btn-primary" type="button" id="stop">' + G.ICON.flag + esc(t('cFinish')) + '</button></div>';
             var bars = st.body.querySelectorAll('.meter i'), mic = st.body.querySelector('#mic');
@@ -256,11 +313,16 @@
               finish();
             });
             var total = settings.seconds * 1000;
+            var tips = t('cTips'), tipEl = st.body.querySelector('#tip'), tipAt = -1;
             elapsed = 0;
             G.loop(function (d) {
               elapsed += d;
               if (elapsed >= total) { elapsed = total; return finish(); }
               st.body.querySelector('.clock').textContent = G.clock(total - elapsed);
+              G.setPie(st.body, 1 - elapsed / total);
+              // A new gentle tip every 12 seconds.
+              var ti = Math.floor(elapsed / 12000) % tips.length;
+              if (ti !== tipAt && tipEl) { tipAt = ti; tipEl.textContent = tips[ti]; }
               if (analyser) {
                 analyser.getByteTimeDomainData(buf);
                 var peak = 0;
@@ -292,7 +354,8 @@
           }
 
           function send(blob, seconds) {
-            st.body.innerHTML = '<div class="cue" style="font-size:clamp(30px,8vw,50px)">' + esc(t('cThinking')) + '</div>' +
+            st.body.innerHTML = '<div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' +
+              '<div class="cue" style="font-size:clamp(30px,8vw,50px)">' + esc(t('cThinking')) + '</div><p class="note">' + esc(t('cWait')) + '</p>' +
               '<ul class="think">' + ['cStep1', 'cStep2', 'cStep3', 'cStep4'].map(function (k) { return '<li>' + esc(t(k)) + '</li>'; }).join('') + '</ul>';
             var steps = st.body.querySelectorAll('.think li'), at = 0;
             var paint = function () { steps.forEach(function (li, i) { li.className = i < at ? 'done' : i === at ? 'on' : ''; }); };
@@ -334,7 +397,7 @@
               '<div class="result-bar"><button class="btn btn-primary" type="button" id="same">' + G.ICON.repeat + esc(t('cAgain')) + '</button>' +
               (own ? '' : '<button class="btn btn-ghost" type="button" id="next">' + G.ICON.next + esc(t('cNext')) + '</button>') +
               '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div>';
-            window.Coach.render(main.querySelector('#report'), report, { audio: url });
+            window.Coach.render(main.querySelector('#report'), report, { audio: url, celebrate: true });
             window.scrollTo(0, 0);
             var leave = function () { URL.revokeObjectURL(url); };
             main.querySelector('#same').addEventListener('click', function () { leave(); showSetup(); play(topic); });
