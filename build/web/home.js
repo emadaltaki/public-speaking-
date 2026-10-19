@@ -966,8 +966,11 @@
     var bookIn = false;
     var footIn = false;
     var priceIn = false;
-    // Hidden near the form, the footer, and the free-call card (which has its own button).
-    var update = function () { sticky.classList.toggle('show', heroOut && !bookIn && !footIn && !priceIn); };
+    var gamesIn = false;
+    // Hidden near the form, the footer, the free-call card (which has its own
+    // button) and the games, so it never covers the daily challenge card.
+    var update = function () { sticky.classList.toggle('show', heroOut && !bookIn && !footIn && !priceIn && !gamesIn); };
+    new IntersectionObserver(function (es) { gamesIn = es[0].isIntersecting; update(); }, { rootMargin: '0px 0px -12% 0px' }).observe($('games'));
     var free = document.querySelector('.free');
     if (free) new IntersectionObserver(function (es) { priceIn = es[0].isIntersecting; update(); }).observe(free);
     new IntersectionObserver(function (es) { heroOut = !es[0].isIntersecting; update(); }).observe($('top'));
