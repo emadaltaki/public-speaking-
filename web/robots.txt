@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://public-speaking-lemon.vercel.app/sitemap.xml
+Sitemap: https://speakup-ca500.web.app/sitemap.xml

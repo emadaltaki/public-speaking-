@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-# Builds the site into build/web (committed; Vercel serves it as-is).
+# Builds the site into build/web (committed). Firebase Hosting serves it
+# (firebase.json): npx firebase-tools deploy --only hosting
 # The home page is plain HTML from site/ so it loads and scrolls fast on every
 # phone; the Flutter app (games, account) is served from app.html.
 # Offline caching is off: it served stale versions after deploys. The
