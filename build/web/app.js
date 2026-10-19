@@ -443,6 +443,16 @@
     });
   }
 
+  // Once per visit, tell the account which time zone this device is in, so
+  // streak reminders arrive in the player's own evening.
+  (function () {
+    if (!user()) return;
+    try { if (sessionStorage.getItem('speakupfearless.tzSent')) return; sessionStorage.setItem('speakupfearless.tzSent', '1'); } catch (_) {}
+    var tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (_) {}
+    if (tz) api('/v1/me', { method: 'PATCH', body: { timeZone: tz } });
+  })();
+
   window.SUF = {
     gate: gate,
     lang: lang, t: t, addStrings: addStrings, esc: esc, store: store,

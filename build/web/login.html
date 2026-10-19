@@ -580,14 +580,11 @@
         const token = await user.getIdToken();
         const ctl = new AbortController();
         const timer = setTimeout(() => ctl.abort(), 6000);
-        const headers = { Authorization: 'Bearer ' + token };
-        if (name) {
-          headers['Content-Type'] = 'application/json';
-          await fetch(API_BASE + '/v1/me', { method: 'PATCH', headers, signal: ctl.signal,
-            body: JSON.stringify({ displayName: name, language: lang }) });
-        } else {
-          await fetch(API_BASE + '/v1/me', { headers, signal: ctl.signal });
-        }
+        const headers = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+        // The time zone lets streak reminders arrive in the player's own evening.
+        const body = { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || '' };
+        if (name) { body.displayName = name; body.language = lang; }
+        await fetch(API_BASE + '/v1/me', { method: 'PATCH', headers, signal: ctl.signal, body: JSON.stringify(body) });
         clearTimeout(timer);
       } catch (_) {}
     }
