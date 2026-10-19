@@ -820,8 +820,36 @@
           await signInWithRedirect(auth, new GoogleAuthProvider());
           return;
         }
-        const cred = await signInWithPopup(auth, new GoogleAuthProvider());
-        await googleDone(cred);
+        // Firebase only notices a closed Google window after several seconds.
+        // When the page gets focus back and no answer arrives shortly after,
+        // free the page straight away. A late success still signs them in.
+        let settled = false, released = false, timer = null;
+        const back = () => {
+          if (settled || document.visibilityState === 'hidden') return;
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            if (settled) return;
+            released = true;
+            setBusy(false);
+            show(ui().errors['auth/popup-closed-by-user'], 'error');
+          }, 1200);
+        };
+        window.addEventListener('focus', back);
+        document.addEventListener('visibilitychange', back);
+        try {
+          const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+          settled = true;
+          setBusy(true);
+          show('');
+          await googleDone(cred);
+        } catch (e) {
+          settled = true;
+          if (!(released && e && (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'))) fail(e);
+        } finally {
+          clearTimeout(timer);
+          window.removeEventListener('focus', back);
+          document.removeEventListener('visibilitychange', back);
+        }
       } catch (e) { fail(e); }
     });
 
