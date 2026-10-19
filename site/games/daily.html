@@ -71,6 +71,18 @@
     .h-day small { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--accent); }
     .h-topic { flex: 1; min-width: 0; font-family: var(--head); font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.3; }
     .h-more { margin-top: 6px; }
+    .about { margin-top: 16px; overflow: hidden; }
+    .about .pics { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 6px; margin: -6px -6px 16px; }
+    .about .pics img { width: 100%; height: 108px; object-fit: cover; border-radius: 14px; }
+    .about .pics img:first-child { border-radius: 18px 14px 14px 14px; }
+    .about .kick { display: block; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .about h3 { font-size: 19px; margin: 6px 0 0; line-height: 1.25; }
+    .about p { margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
+    .about-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .about-btns .btn { min-height: 46px; padding: 0 12px; font-size: 14.5px; }
+    .home-link { display: block; margin-top: 12px; text-align: center; color: var(--accent); font-weight: 700; font-size: 14.5px; text-decoration: none; }
+    @media (max-width: 440px) { .about-btns { grid-template-columns: 1fr; } }
+    .about-btns .btn { white-space: nowrap; }
     .why { margin-top: 16px; }
     .why ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
     .why li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
@@ -148,6 +160,11 @@
         dHow3: 'Talk about the topic out loud until the timer ends. Stories, opinions and examples all count.',
         dHow4: 'Make it to the end of the minute to earn the day and grow your streak 🔥',
         dHowTip: 'Stuck? Ask yourself why, how, or tell a quick story about it. Nobody is listening, so just keep going.',
+        dAboutKick: 'Who we are', dAboutTitle: 'A friendly public speaking group in Mississauga',
+        dAboutBody: 'Small groups, fun speaking games and kind feedback, online or in person around the GTA. The daily challenge is how we warm up.',
+        dLiveTitle: 'Want to practice with real people?', dLiveBody: 'Join a small, friendly group session. Your first call is free.',
+        dSeeSessions: 'See our sessions', dSeeCommunity: 'Meet the community', dVisitHome: 'Visit our home page',
+        dPic1: 'A host leading a workshop', dPic2: 'Members around the table during a session', dPic3: 'A member speaking to the room',
         dHistory: 'Your challenge history', dDayN: 'Day {n}', dShowAll: 'Show all days',
         dTheirTopic: "{name}'s topic today", dFriendTopic: "Your friend's topic today", dSampleTopic: 'A taste of the topics',
         dOwnTopic: 'Join free and you get your own new topic every day, never the same twice. Speak for one minute and build your streak.',
@@ -174,6 +191,11 @@
         dHow3: 'تحدّث عن الموضوع بصوت عالٍ حتى ينتهي المؤقت. القصص والآراء والأمثلة كلها تُحتسب.',
         dHow4: 'أكمل الدقيقة حتى نهايتها لتكسب يومك وتكبر سلسلتك 🔥',
         dHowTip: 'توقفت؟ اسأل نفسك لماذا وكيف، أو احكِ قصة قصيرة عنه. لا أحد يسمعك، فقط تابع.',
+        dAboutKick: 'من نحن', dAboutTitle: 'مجموعة ودودة للتحدث أمام الناس في ميسيساغا',
+        dAboutBody: 'مجموعات صغيرة وألعاب تحدّث ممتعة وملاحظات لطيفة، عبر الإنترنت أو حضوريًا في منطقة تورونتو. التحدي اليومي هو طريقتنا في الإحماء.',
+        dLiveTitle: 'تريد التدرّب مع أشخاص حقيقيين؟', dLiveBody: 'انضم إلى جلسة جماعية صغيرة وودودة. مكالمتك الأولى مجانية.',
+        dSeeSessions: 'اطّلع على جلساتنا', dSeeCommunity: 'تعرّف على مجتمعنا', dVisitHome: 'زُر صفحتنا الرئيسية',
+        dPic1: 'مضيف يقود ورشة', dPic2: 'أعضاء حول الطاولة خلال جلسة', dPic3: 'عضو يتحدث أمام القاعة',
         dHistory: 'سجلّ تحدياتك', dDayN: 'اليوم {n}', dShowAll: 'اعرض كل الأيام',
         dTheirTopic: 'موضوع {name} اليوم', dFriendTopic: 'موضوع صديقك اليوم', dSampleTopic: 'مثال على المواضيع',
         dOwnTopic: 'انضم مجانًا وستحصل على موضوع جديد خاص بك كل يوم، لا يتكرر أبدًا. تحدّث دقيقة وابنِ سلسلتك.',
@@ -282,7 +304,19 @@
           '<p class="d-rule">' + esc(t('dOwnTopic')) + '</p>' +
           '<a class="btn d-go" href="/login?mode=signup&next=' + back + '">' + G.ICON.play + esc(t('dJoinCta')) + '</a></section>' +
           '<section class="card d-join"><h3 style="font-size:17px;margin:0">' + esc(t('dJoinTitle')) + '</h3><ul><li>' + esc(t('dJoinB1')) + '</li><li>' + esc(t('dJoinB2')) + '</li><li>' + esc(t('dJoinB3')) + '</li></ul>' +
-          '<p class="alt">' + esc(t('dJoinHave')) + ' <a href="/login?next=' + back + '">' + esc(t('dJoinIn')) + '</a></p></section></div>';
+          '<p class="alt">' + esc(t('dJoinHave')) + ' <a href="/login?next=' + back + '">' + esc(t('dJoinIn')) + '</a></p></section>' +
+          aboutUs() + '</div>';
+      }
+
+      // Who we are: shared links bring new people here, so show them the
+      // community and the live sessions on the home page too.
+      function aboutUs(short) {
+        var img = function (f, alt) { return '<img src="/assets/assets/images/' + f + '" alt="' + esc(alt) + '" loading="lazy" decoding="async">'; };
+        return '<section class="card about' + (short ? ' short' : '') + '">' +
+          (short ? '' : '<div class="pics">' + img('explaining-pic.jpeg', t('dPic1')) + img('directing-participants-pic.jpeg', t('dPic2')) + img('participant-podcast-pic.jpeg', t('dPic3')) + '</div>') +
+          '<span class="kick">' + esc(t('dAboutKick')) + '</span><h3>' + esc(t(short ? 'dLiveTitle' : 'dAboutTitle')) + '</h3><p>' + esc(t(short ? 'dLiveBody' : 'dAboutBody')) + '</p>' +
+          '<div class="about-btns"><a class="btn btn-primary" href="/#pricing">' + esc(t('dSeeSessions')) + '</a><a class="btn btn-ghost" href="/#community">' + esc(t('dSeeCommunity')) + '</a></div>' +
+          '<a class="home-link" href="/">' + esc(t('dVisitHome')) + ' →</a></section>';
       }
 
       // Every day they earned, newest first: date, topic, and where it sat in its streak.
@@ -336,6 +370,7 @@
           '<section class="card week"><h3>' + esc(t('dWeek')) + '</h3><div class="days">' + week + '</div>' +
           '<div class="best"><span>' + esc(t('dBest')) + ': <b>' + st.best + '</b></span><span>' + esc(t('dTotal')) + ': <b>' + st.total + '</b></span></div></section>' +
           historyHtml() +
+          aboutUs(true) +
           '<section class="card why"><h3 style="font-size:15px;margin:0">' + esc(t('dWhy')) + '</h3><ul><li>' + esc(t('dWhy1')) + '</li><li>' + esc(t('dWhy2')) + '</li><li>' + esc(t('dWhy3')) + '</li></ul></section>' +
           '</div>';
         var go = main.querySelector('#go') || main.querySelector('#again');
