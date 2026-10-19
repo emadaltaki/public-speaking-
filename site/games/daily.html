@@ -119,6 +119,16 @@
     .de-body h2 { font-size: 26px; }
     .de-topic { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 14px; border-radius: 999px; background: var(--soft); color: var(--accent); font-weight: 700; font-size: 14px; }
     .de-body p { margin: 10px 0 0; color: var(--muted); }
+    .d-end .card { max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow: auto; }
+    .de-more { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 16px; padding: 12px 14px; border: 0; border-radius: 18px; background: var(--soft); color: var(--ink); font: inherit; font-weight: 700; font-size: 14.5px; line-height: 1.35; text-align: start; cursor: pointer; }
+    .de-more .icons { display: flex; flex: none; }
+    .de-more .icons i { width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; color: #fff; box-shadow: 0 0 0 2px var(--surface); }
+    .de-more .icons i + i { margin-inline-start: -8px; }
+    .de-more .icons svg { width: 16px; height: 16px; }
+    .more-games { margin-top: 16px; scroll-margin-top: 90px; }
+    .more-games h3 { margin: 0; font-size: 17px; }
+    .more-games > p { margin: 6px 0 4px; color: var(--muted); font-size: 14.5px; }
+    .more-games .btn { width: 100%; margin-top: 12px; }
     .d-end .de-top.calm ~ .de-body .btn-primary { background: var(--primary); }
     .d-end .btn-primary { width: 100%; margin-top: 18px; min-height: 54px; font-size: 17px; background: linear-gradient(135deg, #E0703E, #A23B1E); }
     .d-end .btn-primary svg { width: 20px; height: 20px; }
@@ -274,8 +284,10 @@
 
       // ------------------------------------------------------------ page
       var main = document.getElementById('main');
+      var GAMES = null;
       Promise.all([S.loadGames(), G.loadWords()]).then(function (res) {
         var words = res[1];
+        GAMES = res[0];
         // The daily challenge's own "How it works" steps.
         res[0].daily = { title: t('dTitle'), steps: [t('dHow1'), t('dHow2'), t('dHow3'), t('dHow4')], tip: t('dHowTip') };
         S.gate(main, function () {
@@ -301,6 +313,27 @@
         return '<section class="card d-join"><h3 style="font-size:17px;margin:0">' + esc(t('dGuestTitle')) + '</h3><p class="help" style="margin:6px 0 0">' + esc(t('dGuestBody')) + '</p>' +
           '<a class="btn btn-primary" style="width:100%;margin-top:14px" href="' + S.signUpHref() + '">' + esc(t('dSaveStreak')) + '</a>' +
           '<p class="alt">' + esc(t('dJoinHave')) + ' <a href="/login?next=' + encodeURIComponent('/games/daily') + '">' + esc(t('dJoinIn')) + '</a></p></section>';
+      }
+
+      // Guests: every game an account unlocks, and what each one helps with.
+      function moreGames() {
+        if (S.user()) return '';
+        return '<section class="card more-games" id="more"><h3>' + esc(t('moreTitle', { n: S.ORDER.length })) + '</h3><p>' + esc(t('moreBody')) + '</p>' +
+          S.lockedList(GAMES) + '<a class="btn btn-primary" href="' + S.signUpHref() + '">' + esc(t('guestBarCta')) + '</a></section>';
+      }
+      // The same, squeezed into one line for the end-of-minute card.
+      function moreStrip() {
+        if (S.user()) return '';
+        return '<button class="de-more" type="button"><span class="icons">' + S.ORDER.map(function (id) { return '<i class="g-' + id + '">' + S.ICONS[id] + '</i>'; }).join('') + '</span>' +
+          '<span>' + esc(t('moreLine', { n: S.ORDER.length })) + '</span></button>';
+      }
+      function onMore(el, close) {
+        var b = el.querySelector('.de-more');
+        if (b) b.addEventListener('click', function () {
+          el.remove(); close();
+          var m = document.getElementById('more');
+          if (m) m.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
       }
 
       // Who we are: shared links bring new people here, so show them the
@@ -364,6 +397,7 @@
           '<button class="d-how" type="button">' + G.ICON.bulb + esc(t('howTo')) + '</button>' +
           '</section>' +
           guestCard() +
+          moreGames() +
           '<section class="card week"><h3>' + esc(t('dWeek')) + '</h3><div class="days">' + week + '</div>' +
           '<div class="best"><span>' + esc(t('dBest')) + ': <b>' + st.best + '</b></span><span>' + esc(t('dTotal')) + ': <b>' + st.total + '</b></span></div></section>' +
           historyHtml() +
@@ -427,11 +461,13 @@
           if (counts && !S.user()) {
             // 1a. A guest's full minute: celebrate, then the moment to save the streak.
             var ready0 = prepare(n, topic);
-            endCard({
+            var el0 = endCard({
               tone: 'fire', icon: '🔥', big: n, count: true, label: t('dEndStreak'), week: weekDots(after, true), embers: true,
-              title: t('dWinTitle'), topic: topic, body: t('dWinGuest'),
+              title: t('dWinTitle'), topic: topic, body: t('dWinGuest'), extra: moreStrip(),
               primary: esc(t('dSaveStreak')), secondary: [[t('dShare'), function () { close(); share(ready0); }], [t('close'), close]]
-            }).querySelector('.de-primary').addEventListener('click', function () { location.href = S.signUpHref(); });
+            });
+            el0.querySelector('.de-primary').addEventListener('click', function () { location.href = S.signUpHref(); });
+            onMore(el0, close);
             if (navigator.vibrate) navigator.vibrate([30, 40, 60]);
           } else if (counts) {
             // 1. First full minute today: celebrate and offer to share.
@@ -447,11 +483,12 @@
             // 2. Practice after today is already earned: show the time, keep the streak.
             var el2 = endCard({
               tone: 'calm', icon: '🎤', big: G.clock(elapsed).replace(/^00:/, '0:'), label: t('dSpoken'),
-              title: t('dPracTitle'), body: n === 1 ? t('dPracBody1') : t('dPracBody', { n: n }),
+              title: t('dPracTitle'), body: n === 1 ? t('dPracBody1') : t('dPracBody', { n: n }), extra: moreStrip(),
               primary: SHARE + esc(n === 1 ? t('dShare') : t('dShareN', { n: n })), secondary: [[t('dAgain'), function () { el2.remove(); stg.close(); play(topic, stats(known)); }], [t('close'), close]]
             });
             var ready2 = prepare(n, topic);
             el2.querySelector('.de-primary').addEventListener('click', function () { share(ready2, el2.querySelector('.shared')); });
+            onMore(el2, close);
           }
         }
       }
@@ -478,7 +515,7 @@
           (o.week ? '<div class="de-week">' + o.week + '</div>' : '') + '</div>' +
           '<div class="de-body"><h2>' + esc(o.title) + '</h2>' +
           (o.topic ? '<div class="de-topic">💬 ' + esc(o.topic) + '</div>' : '') +
-          '<p>' + esc(o.body) + '</p>' +
+          '<p>' + esc(o.body) + '</p>' + (o.extra || '') +
           '<button class="btn btn-primary de-primary" type="button">' + o.primary + '</button>' +
           '<div class="shared" hidden></div>' +
           '<div class="more">' + (o.secondary || []).map(function (x, i) { return '<button type="button" data-i="' + i + '">' + esc(x[0]) + '</button>'; }).join('') + '</div></div></div>';

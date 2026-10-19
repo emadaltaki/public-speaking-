@@ -172,28 +172,7 @@
               rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
               rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
             },
-            onStart: function () { if (!S.user()) return guestView(); play(); }
-          });
-        }
-
-        // Scoring costs money per recording, so guests get the sign-up card
-        // and a sample report instead of the microphone.
-        function guestView() {
-          S.joinCard(main, {
-            title: t('cGuestTitle'), body: t('cGuestBody'),
-            extra: '<button class="btn btn-ghost join-sample" type="button">' + esc(t('cSeeSample')) + '</button>'
-          }).then(function () {
-            var box = document.createElement('section');
-            box.className = 'sample';
-            box.innerHTML = '<div class="result-head"><h1>' + esc(t('cSample')) + '</h1><span class="sample-tag">' + esc(t('cSampleTag')) + '</span></div>' +
-              '<p class="help">' + esc(t('cSampleNote')) + '</p><div id="report"></div>' +
-              '<div class="result-bar"><a class="btn btn-primary" href="' + S.signUpHref() + '">' + esc(t('joinCta')) + '</a>' +
-              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div>';
-            main.appendChild(box);
-            window.Coach.render(box.querySelector('#report'), sampleReport());
-            main.querySelector('.join-sample').addEventListener('click', function () { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-            box.querySelector('#set').addEventListener('click', function () { showSetup(); window.scrollTo(0, 0); });
-            window.scrollTo(0, 0);
+            onStart: function () { play(); }
           });
         }
 
@@ -368,6 +347,21 @@
         }
 
         showSetup();
+      }, {
+        // Guests see what they'd get: a sample report under the sign-up card.
+        extra: '<button class="btn btn-ghost join-sample" type="button">' + esc(t('cSeeSample')) + '</button>',
+        onLocked: function () {
+          var main = document.getElementById('main');
+          var box = document.createElement('section');
+          box.className = 'sample';
+          box.innerHTML = '<div class="result-head"><h1>' + esc(t('cSample')) + '</h1><span class="sample-tag">' + esc(t('cSampleTag')) + '</span></div>' +
+            '<p class="help">' + esc(t('cSampleNote')) + '</p><div id="report"></div>' +
+            '<div class="result-bar"><a class="btn btn-primary" href="' + S.signUpHref() + '">' + esc(t('joinCta')) + '</a></div>';
+          var more = main.querySelector('.lock-more');
+          main.querySelector('.locked').insertBefore(box, more);
+          window.Coach.render(box.querySelector('#report'), sampleReport());
+          main.querySelector('.join-sample').addEventListener('click', function () { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+        }
       });
     })();
   </script>

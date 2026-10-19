@@ -35,10 +35,13 @@
       joinCta: 'Create my free account', joinHave: 'Already have an account?', joinSignIn: 'Sign in', joinFine: 'Takes 30 seconds. No card, no spam.',
       verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
       minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s',
-      guestBar: "You're playing as a guest. Make a free account to save your progress.", guestBarCta: 'Save my progress',
-      saveTitle: 'Save this round and start your streak', saveCta: 'Save my progress, free',
-      saveBody: 'Make a free account to keep your practice history and watch it grow. Every round you played here comes with you.',
-      saveShort1: '1 round played as a guest. Save it to your account', saveShortN: '{n} rounds played as a guest. Save them to your account', saveShort2: '2 rounds played as a guest. Save them to your account',
+      guestBar: "Today's challenge is free to play. Make a free account to unlock all {n} speaking games.", guestBarCta: 'Unlock all games',
+      lockBadge: 'Free with an account', unlock: 'Unlock free', freeNow: 'Free to play now',
+      lockTitle: 'Unlock {game} for free', lockAll: 'One free account unlocks all of these',
+      lockB1: 'Every game, free forever', lockB2: 'Your streak and progress saved on every device', lockB3: 'Takes 30 seconds, no card needed',
+      freeNowTitle: "Not ready yet? Today's challenge is free", freeNowBody: 'Speak for one minute on a new topic and start your streak. No account needed.',
+      moreTitle: '{n} more games are waiting for you', moreBody: 'Each one trains a different speaking skill. Make a free account to play them all.',
+      moreLine: 'Your free account also unlocks {n} more speaking games',
       savedToast1: 'Welcome! Your guest round is now saved to your account.', savedToastN: 'Welcome! Your {n} guest rounds are now saved to your account.', savedToast2: 'Welcome! Your 2 guest rounds are now saved to your account.'
     },
     ar: {
@@ -55,10 +58,13 @@
       joinCta: 'أنشئ حسابي المجاني', joinHave: 'لديك حساب؟', joinSignIn: 'سجّل الدخول', joinFine: 'يستغرق 30 ثانية. بلا بطاقة وبلا رسائل مزعجة.',
       verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
       minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث',
-      guestBar: 'أنت تلعب كضيف. أنشئ حسابًا مجانيًا لتحفظ تقدّمك.', guestBarCta: 'احفظ تقدّمي',
-      saveTitle: 'احفظ هذه الجولة وابدأ سلسلتك', saveCta: 'احفظ تقدّمي مجانًا',
-      saveBody: 'أنشئ حسابًا مجانيًا لتحتفظ بسجل تدريبك وتشاهده يكبر. كل جولة لعبتها هنا تنتقل معك.',
-      saveShort1: 'لعبت جولة واحدة كضيف. احفظها في حسابك', saveShortN: 'لعبت {n} جولات كضيف. احفظها في حسابك', saveShort2: 'لعبت جولتين كضيف. احفظهما في حسابك',
+      guestBar: 'تحدي اليوم مجاني للعب. أنشئ حسابًا مجانيًا لتفتح ألعاب التحدث الـ{n} كلها.', guestBarCta: 'افتح كل الألعاب',
+      lockBadge: 'مجانًا مع حساب', unlock: 'افتحها مجانًا', freeNow: 'مجاني الآن',
+      lockTitle: 'افتح {game} مجانًا', lockAll: 'حساب مجاني واحد يفتح كل هذه الألعاب',
+      lockB1: 'كل الألعاب، مجانًا للأبد', lockB2: 'سلسلتك وتقدّمك محفوظان على كل أجهزتك', lockB3: 'يستغرق 30 ثانية، بلا بطاقة',
+      freeNowTitle: 'لست مستعدًا بعد؟ تحدي اليوم مجاني', freeNowBody: 'تحدّث دقيقة عن موضوع جديد وابدأ سلسلتك. بلا حساب.',
+      moreTitle: '{n} ألعاب أخرى بانتظارك', moreBody: 'كل لعبة تدرّب مهارة مختلفة في التحدث. أنشئ حسابًا مجانيًا لتلعبها كلها.',
+      moreLine: 'حسابك المجاني يفتح لك أيضًا {n} ألعاب تحدّث أخرى',
       savedToast1: 'أهلًا بك! جولتك كضيف محفوظة الآن في حسابك.', savedToastN: 'أهلًا بك! جولاتك الـ{n} كضيف محفوظة الآن في حسابك.', savedToast2: 'أهلًا بك! جولتاك كضيف محفوظتان الآن في حسابك.'
     }
   };
@@ -318,6 +324,28 @@
         'يستمع الذكاء الاصطناعي ويقيّم سرعتك ووقفاتك وكلمات الحشو والوضوح والترابط من 1 إلى 10.', 'شاهد اللحظات التي تعثرت فيها مع طريقة لتحسين كل منها، ثم حاول مرة أخرى.'],
       tip: 'نستخدم تسجيلك لتقييمك فقط. نحتفظ بالدرجات والنص المكتوب، وليس بالصوت.' }
   };
+  // What each members' game helps with, for people who haven't joined yet.
+  var PITCH = {
+    en: {
+      'speech-coach': 'AI shows you exactly where you said "um", rushed or lost the thread, and how to fix it.',
+      'triple-step': 'Stay calm and keep talking when something throws you off mid-sentence.',
+      conductor: 'Find a voice with energy that makes people want to listen.',
+      podcast: 'Answer any question on the spot, without freezing up.',
+      autocomplete: 'Think on your feet so you never run out of words.'
+    },
+    ar: {
+      'speech-coach': 'يريك الذكاء الاصطناعي أين قلت «اممم» أو أسرعت أو فقدت الفكرة، وكيف تصلح ذلك.',
+      'triple-step': 'ابقَ هادئًا وتابع الكلام عندما يشتّتك شيء في منتصف الجملة.',
+      conductor: 'اكتشف صوتًا مليئًا بالحيوية يجعل الناس يرغبون في الاستماع.',
+      podcast: 'أجب عن أي سؤال فورًا، دون أن تتجمد.',
+      autocomplete: 'فكّر بسرعة حتى لا تنفد كلماتك أبدًا.'
+    }
+  };
+  function pitch(id) { return (PITCH[lang] || PITCH.en)[id] || ''; }
+  // Without an account only the daily challenge is open.
+  var FREE_GAME = 'daily';
+  function locked(id) { return !user() && !!id && id !== FREE_GAME; }
+
   function loadGames() {
     if (GAMES) return Promise.resolve(GAMES);
     return fetch('/data/games.json').then(function (r) { return r.json(); }).then(function (d) {
@@ -337,7 +365,8 @@
   // ------------------------------------------------------------ How to play
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
   var howOpen = false;
-  function howToPlay(id, onPlay) {
+  // lastLabel: the last button's wording ("Let's play!" by default).
+  function howToPlay(id, onPlay, lastLabel) {
     // Seen once, from anywhere: the game page won't open it again by itself.
     store('speakupfearless.howto.' + id, '1');
     if (howOpen) return Promise.resolve();
@@ -371,7 +400,7 @@
         wrap.querySelectorAll('.dots i').forEach(function (d, i) { d.classList.toggle('on', i === page); });
         wrap.querySelector('.back').hidden = page === 0;
         var last = page === n - 1;
-        wrap.querySelector('.go').textContent = last ? t('letsPlay') : t('next');
+        wrap.querySelector('.go').textContent = last ? (lastLabel || t('letsPlay')) : t('next');
         var tip = wrap.querySelector('.tip');
         if (tip) tip.hidden = !last;
       };
@@ -505,51 +534,58 @@
     };
     next();
   }
-  // The "save your progress" box on a guest's end-of-round card: the full
-  // pitch after their first round, then one short line.
-  function guestSave() {
-    if (user()) return '';
-    var n = readList(GUEST_HISTORY).length;
-    if (n <= 1) {
-      return '<div class="gsave"><span class="gsave-ic">' + TROPHY + '</span><b>' + esc(t('saveTitle')) + '</b><p>' + esc(t('saveBody')) + '</p>' +
-        '<a class="btn btn-primary" href="' + signUpHref() + '">' + esc(t('saveCta')) + '</a>' +
-        '<p class="gsave-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(location.pathname) + '">' + esc(t('joinSignIn')) + '</a></p></div>';
-    }
-    return '<a class="gsave-line" href="' + signUpHref() + '">' + TROPHY + '<span>' + esc(n === 2 ? t('saveShort2') : t('saveShortN', { n: n })) + '</span></a>';
-  }
   // A slim strip for pages guests browse (the games list).
   function guestBar() {
     if (user()) return '';
-    return '<div class="guest-bar"><span>' + esc(t('guestBar')) + '</span><a class="btn btn-primary" href="' + signUpHref() + '">' + esc(t('guestBarCta')) + '</a></div>';
+    return '<div class="guest-bar"><span>' + esc(t('guestBar', { n: ORDER.length })) + '</span><a class="btn btn-primary" href="' + signUpHref() + '">' + esc(t('guestBarCta')) + '</a></div>';
   }
 
-  // The free sign-up card. o.title / o.body replace the usual wording; o.extra
-  // adds HTML under the main button.
-  function joinCard(el, o) {
+  // The members' games as rows (icon, name, what it helps with), each one
+  // opening its game page. except: a game id to leave out.
+  function lockedList(games, except) {
+    return '<ul class="lock-list">' + ORDER.filter(function (id) { return id !== except; }).map(function (id) {
+      return '<li><a href="/games/' + id + '"><span class="lock-ic g-' + id + '">' + ICONS[id] + '</span>' +
+        '<span class="lock-txt"><b>' + esc(games[id].title) + '</b><small>' + esc(pitch(id)) + '</small></span>' +
+        '<span class="lock-pad" aria-label="' + esc(t('lockBadge')) + '">' + LOCK + '</span></a></li>';
+    }).join('') + '</ul>';
+  }
+  // A guest on a members' game: what this game does for them, every other
+  // game they'd unlock, and today's free challenge as the way to try first.
+  // o.extra: HTML under the main button.
+  function lockedCard(el, o) {
     o = o || {};
     var here = location.pathname;
+    var id = (here.match(/^\/games\/([\w-]+)/) || [])[1];
     return loadGames().then(function (games) {
-        var id = (here.match(/^\/games\/([\w-]+)/) || [])[1];
-        var g = id === 'daily' ? { title: t('dailyName'), tagline: t('dailyTag') } : id && games[id];
-        var name = g ? g.title : t('joinAll');
-        var tick = function (icon, key) { return '<li><span class="tick">' + icon + '</span><span>' + esc(t(key)) + '</span></li>'; };
-        el.innerHTML = '<div class="join join-inline">' +
-          '<div class="join-top ' + (g ? 'g-' + id : 'g-all') + '"><span class="join-badge">' + esc(t('joinKicker')) + '</span>' +
-          '<div class="join-game"><span class="join-ic">' + (g ? ICONS[id] : LOCK) + '</span><span><b>' + esc(name) + '</b>' +
-          (g ? '<small>' + esc(g.tagline || '') + '</small>' : '') + '</span></div></div>' +
-          '<div class="join-body"><h3>' + esc(o.title || t('joinTitle')) + '</h3><p>' + esc(o.body || (g ? t('joinBody').replace('{game}', name) : t('joinBodyAll'))) + '</p>' +
-          '<ul class="join-list">' + tick(ICONS['triple-step'], 'joinB1') + tick(TROPHY, 'joinB2') + tick(HEART, 'joinB3') + '</ul>' +
-          '<a class="btn btn-primary join-cta" href="/login?mode=signup&next=' + encodeURIComponent(here) + '">' + esc(t('joinCta')) + '</a>' + (o.extra || '') +
-          '<p class="join-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('joinSignIn')) + '</a></p>' +
-          '<p class="join-fine">' + esc(t('joinFine')) + '</p></div></div>';
+      var g = games[id];
+      var tick = function (icon, key) { return '<li><span class="tick">' + icon + '</span><span>' + esc(t(key)) + '</span></li>'; };
+      el.innerHTML = '<div class="locked"><div class="join join-inline">' +
+        '<div class="join-top g-' + id + '"><span class="join-badge">' + LOCK + esc(t('lockBadge')) + '</span>' +
+        '<div class="join-game"><span class="join-ic">' + ICONS[id] + '</span><span><b>' + esc(g.title) + '</b><small>' + esc(g.tagline || '') + '</small></span></div>' +
+        '<p class="join-pitch">' + esc(pitch(id)) + '</p>' +
+        (g.skills ? '<ul class="join-skills">' + g.skills.map(function (k) { return '<li>' + esc(k) + '</li>'; }).join('') + '</ul>' : '') + '</div>' +
+        '<div class="join-body"><h3>' + esc(t('lockTitle', { game: g.title })) + '</h3>' +
+        '<ul class="join-list">' + tick(ICONS['triple-step'], 'lockB1') + tick(TROPHY, 'lockB2') + tick(HEART, 'lockB3') + '</ul>' +
+        '<a class="btn btn-primary join-cta" href="' + signUpHref() + '">' + esc(t('joinCta')) + '</a>' + (o.extra || '') +
+        '<p class="join-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('joinSignIn')) + '</a></p></div></div>' +
+        '<section class="card lock-more"><h3>' + esc(t('lockAll')) + '</h3>' + lockedList(games, id) + '</section>' +
+        '<a class="free-now g-daily" href="/games/daily"><span class="g-ic">' + ICONS.daily + '</span><span class="txt"><small>' + esc(t('freeNow')) + '</small>' +
+        '<b>' + esc(t('freeNowTitle')) + '</b><span>' + esc(t('freeNowBody')) + '</span></span></a></div>';
+      return games;
     });
   }
-  // Guests play straight away; a signed-in player whose email isn't
-  // confirmed yet sees a "confirm your email" card instead.
-  function gate(el, onAllowed) {
+  // Guests play the free game straight away and see what a members' game
+  // offers on the others (opts.onLocked runs after that card, opts.extra goes
+  // in it). A signed-in player whose email isn't confirmed yet sees a
+  // "confirm your email" card instead.
+  function gate(el, onAllowed, opts) {
+    opts = opts || {};
     var u = user();
     var here = location.pathname;
-    if (!u) return Promise.resolve(onAllowed());
+    if (!u) {
+      if (!locked((here.match(/^\/games\/([\w-]+)/) || [])[1])) return Promise.resolve(onAllowed());
+      return lockedCard(el, opts).then(function (games) { if (opts.onLocked) opts.onLocked(games); });
+    }
     return checkVerified().then(function (ok) {
       if (ok) return onAllowed();
       el.innerHTML = '<div class="card center"><div class="ic round">' + MAIL + '</div>' +
@@ -571,7 +607,7 @@
   adoptGuest();
 
   window.SUF = {
-    gate: gate, joinCard: joinCard, guestId: guestId, guestSave: guestSave, guestBar: guestBar, signUpHref: signUpHref,
+    gate: gate, guestId: guestId, guestBar: guestBar, signUpHref: signUpHref, locked: locked, lockedList: lockedList, pitch: pitch, LOCK: LOCK,
     lang: lang, t: t, addStrings: addStrings, esc: esc, store: store,
     user: user, signIn: signIn, signOut: signOut, api: api, upload: upload, idToken: idToken,
     cachedAvatar: cachedAvatar, refreshAvatar: refreshAvatar, saveAvatar: saveAvatar, onAvatar: onAvatar, avatarStyle: avatarStyle, pickPhoto: pickPhoto,
