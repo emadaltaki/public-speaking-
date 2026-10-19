@@ -145,7 +145,13 @@
             ['she', false, 'pauses', 'She listened and then... she told me', 'A 3-second pause while you looked for the next part.', 'If you lose your place, repeat your last point in a few words to buy time.'],
             ['yeah,', false, 'flow', "So yeah, that's it.", 'The ending fades out instead of landing.', 'Finish with one sentence on what the advice changed for you.']],
           strengths: ['A real story made it easy to listen to', 'A good, steady pace', 'Clear and simple words'],
-          nextStep: 'Practise your first and last sentence until you can say them with no fillers.'
+          nextStep: 'Practise your first and last sentence until you can say them with no fillers.',
+          pace: [138, 151, 176, 129], fillerCounts: { um: 2, like: 1 },
+          story: { outline: ['Nervous before a first job interview', 'Grandma\'s advice: be curious, not perfect', 'Asked questions and enjoyed it', 'Still uses it before big talks'],
+            opening: { rating: 'ok', note: 'A clear topic, but two fillers made the first line sound unsure.' },
+            middle: { rating: 'strong', note: 'A real story told in order, easy to follow and picture.' },
+            ending: { rating: 'weak', note: '"So yeah, that\'s it" trails off instead of landing your point.' },
+            connection: 'The story flows naturally from the problem to the advice to the result. The jump from getting the job to every big talk needs one linking sentence.' }
         },
         ar: {
           topic: 'أفضل نصيحة سمعتها', overall: 7, wpm: 118,
@@ -159,7 +165,13 @@
             ['قالت', false, 'pauses', 'استمعت إليّ ثم... قالت لي', 'وقفة 3 ثوانٍ وأنت تبحث عن الجزء التالي.', 'إن فقدت فكرتك، أعد آخر نقطة بكلمات قليلة لتكسب وقتًا.'],
             ['يعني،', true, 'flow', 'يعني، هذا كل شيء.', 'النهاية تتلاشى بدل أن تصل بقوة.', 'اختم بجملة واحدة عمّا غيّرته النصيحة فيك.']],
           strengths: ['قصة حقيقية جعلت الاستماع سهلًا', 'سرعة جيدة وثابتة', 'كلمات واضحة وبسيطة'],
-          nextStep: 'تدرّب على جملتك الأولى والأخيرة حتى تقولهما بلا كلمات حشو.'
+          nextStep: 'تدرّب على جملتك الأولى والأخيرة حتى تقولهما بلا كلمات حشو.',
+          pace: [112, 124, 141, 109], fillerCounts: { 'يعني': 2, 'اممم': 2 },
+          story: { outline: ['التوتر قبل أول مقابلة عمل', 'نصيحة الجدة: كن فضوليًا لا مثاليًا', 'طرح الأسئلة والاستمتاع', 'استخدامها قبل كل حديث مهم'],
+            opening: { rating: 'ok', note: 'الموضوع واضح، لكن كلمتي الحشو جعلتا البداية مترددة.' },
+            middle: { rating: 'strong', note: 'قصة حقيقية مرتبة وسهلة المتابعة.' },
+            ending: { rating: 'weak', note: '«يعني، هذا كل شيء» تتلاشى بدل أن توصل فكرتك.' },
+            connection: 'القصة تنتقل بسلاسة من المشكلة إلى النصيحة إلى النتيجة. الانتقال من الوظيفة إلى كل حديث مهم يحتاج جملة ربط واحدة.' }
         }
       };
       // Turns the sample into the same shape the backend sends.
@@ -180,10 +192,11 @@
         Object.keys(d.scores).forEach(function (k) { scores[k] = { score: d.scores[k][0], summary: d.scores[k][1] }; });
         return {
           topic: d.topic, overall: d.overall, durationSeconds: Math.round(at),
-          metrics: { wordsPerMinute: d.wpm, fillerCount: words.filter(function (w) { return w.f; }).length, longPauses: 1 },
+          metrics: { wordsPerMinute: d.wpm, fillerCount: words.filter(function (w) { return w.f; }).length, longPauses: 1,
+            paceTimeline: d.pace, fillers: d.fillerCounts },
           scores: scores,
           moments: d.moments.map(function (m) { return { at: words[find(m[0], m[1])].s, category: m[2], quote: m[3], issue: m[4], fix: m[5] }; }),
-          strengths: d.strengths, nextStep: d.nextStep, transcript: words
+          strengths: d.strengths, nextStep: d.nextStep, transcript: words, story: d.story
         };
       }
       var settings = { seconds: 120, own: '', set: 'General' };

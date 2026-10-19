@@ -15,7 +15,11 @@
     scLegend: 'Filler words are highlighted. Long pauses are marked.', scShowAll: 'Show the full transcript',
     scNoAudio: 'The recording isn\'t kept, so playback only works right after you record.',
     scV10: 'Outstanding!', scV8: 'Great talk!', scV6: 'Solid work, keep going', scV4: 'A good start', scV1: 'Every talk makes the next one easier',
-    scBest: 'Your strongest: {c}', scFocus: 'Focus next: {c}'
+    scBest: 'Your strongest: {c}', scFocus: 'Focus next: {c}',
+    scStory: 'Your story', scOutline: 'Your main points', scOpening: 'Opening', scMiddle: 'Middle', scEnding: 'Ending',
+    scRate: { strong: 'Strong', ok: 'Okay', weak: 'Needs work' }, scConnect: 'How your ideas connect',
+    scPace: 'Your pace', scPaceAvg: 'Average {n} words a minute', scPaceZone: 'Comfortable zone: 130 to 160',
+    scPaceFast: 'You sped up around {t} ({n} a minute).', scPaceSlow: 'You slowed right down around {t} ({n} a minute).', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words'
   }, {
     scOverall: 'الإجمالي', scOutOf: 'من 10', scTopicOwn: 'موضوعك الخاص',
     scCats: { pace: 'السرعة', pauses: 'الوقفات', fillers: 'كلمات الحشو', clarity: 'الوضوح', flow: 'ترابط الأفكار' },
@@ -26,7 +30,11 @@
     scLegend: 'كلمات الحشو مظللة، والوقفات الطويلة معلّمة.', scShowAll: 'اعرض النص كاملًا',
     scNoAudio: 'لا نحتفظ بالتسجيل، لذا يعمل التشغيل بعد التسجيل مباشرة فقط.',
     scV10: 'رائع جدًا!', scV8: 'حديث رائع!', scV6: 'عمل جيد، استمر', scV4: 'بداية جيدة', scV1: 'كل حديث يجعل التالي أسهل',
-    scBest: 'أقوى نقطة: {c}', scFocus: 'ركّز على: {c}'
+    scBest: 'أقوى نقطة: {c}', scFocus: 'ركّز على: {c}',
+    scStory: 'قصتك', scOutline: 'نقاطك الرئيسية', scOpening: 'البداية', scMiddle: 'الوسط', scEnding: 'النهاية',
+    scRate: { strong: 'قوية', ok: 'مقبولة', weak: 'تحتاج تحسينًا' }, scConnect: 'كيف ترتبط أفكارك',
+    scPace: 'سرعتك', scPaceAvg: 'المتوسط {n} كلمة في الدقيقة', scPaceZone: 'المنطقة المريحة: من 130 إلى 160',
+    scPaceFast: 'أسرعت عند {t} ({n} كلمة في الدقيقة).', scPaceSlow: 'أبطأت كثيرًا عند {t} ({n} كلمة في الدقيقة).', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك'
   });
 
   var CATS = ['pace', 'pauses', 'fillers', 'clarity', 'flow'];
@@ -67,6 +75,59 @@
     return '<div class="sc-bf"><span class="up">▲ ' + esc(t('scBest', { c: t('scCats')[best] })) + '</span><span class="dn">● ' + esc(t('scFocus', { c: t('scCats')[low] })) + '</span></div>';
   }
 
+  // How the talk hangs together: main points, opening/middle/ending, links.
+  function storyCard(st) {
+    if (!st || !(st.outline || st.opening)) return '';
+    var part = function (key, p) {
+      p = p || {};
+      var rate = p.rating === 'strong' || p.rating === 'weak' ? p.rating : 'ok';
+      return '<li class="st-' + rate + '"><span class="st-dot"></span><div><b>' + esc(t(key)) + ' <em>' + esc(t('scRate')[rate]) + '</em></b>' +
+        (p.note ? '<p dir="auto">' + esc(p.note) + '</p>' : '') + '</div></li>';
+    };
+    return '<div class="card sc-story"><h2>' + esc(t('scStory')) + '</h2>' +
+      (st.outline && st.outline.length ? '<p class="sc-sub">' + esc(t('scOutline')) + '</p><ol class="sc-outline">' +
+        st.outline.map(function (o) { return '<li dir="auto">' + esc(o) + '</li>'; }).join('') + '</ol>' : '') +
+      '<ul class="sc-arc">' + part('scOpening', st.opening) + part('scMiddle', st.middle) + part('scEnding', st.ending) + '</ul>' +
+      (st.connection ? '<div class="sc-connect"><b>' + esc(t('scConnect')) + '</b><p dir="auto">' + esc(st.connection) + '</p></div>' : '') +
+      '</div>';
+  }
+
+  // Words per minute every 15 seconds, against the comfortable zone.
+  function paceCard(m) {
+    var p = m.paceTimeline || [];
+    if (p.length < 2) return '';
+    var top = Math.max(200, Math.max.apply(null, p) + 10);
+    var y = function (v) { return (100 - v / top * 100).toFixed(1); };
+    var bars = p.map(function (v, i) {
+      var zone = v > 170 ? 'fast' : v < 115 ? 'slow' : 'ok';
+      return '<div class="pc-col"><div class="pc-bar ' + zone + '" style="height:' + Math.max(4, v / top * 100).toFixed(1) + '%"><span>' + v + '</span></div>' +
+        '<small dir="ltr">' + mmss(i * 15) + '</small></div>';
+    }).join('');
+    return '<div class="card sc-pace"><h2>' + esc(t('scPace')) + '</h2><p class="sc-sub">' + esc(t('scPaceAvg', { n: m.wordsPerMinute || 0 })) + '</p>' +
+      '<div class="pc-chart"><div class="pc-zone" style="top:' + y(160) + '%;bottom:' + (100 - y(130)) + '%"></div>' + bars + '</div>' +
+      '<p class="pc-legend"><span class="z"></span>' + esc(t('scPaceZone')) + '</p>' + paceNote(p) + '</div>';
+  }
+
+  // One line on where they rushed or dragged, if anywhere.
+  function paceNote(p) {
+    var hi = 0, lo = 0;
+    p.forEach(function (v, i) { if (v > p[hi]) hi = i; if (v < p[lo]) lo = i; });
+    var bits = [];
+    if (p[hi] > 170) bits.push(t('scPaceFast', { t: mmss(hi * 15), n: p[hi] }));
+    if (p[lo] < 115) bits.push(t('scPaceSlow', { t: mmss(lo * 15), n: p[lo] }));
+    if (!bits.length) bits.push(t('scPaceSteady'));
+    return '<p class="pc-note">' + esc(bits.join(' ')) + '</p>';
+  }
+
+  // Each filler word and how many times it came up.
+  function fillerCard(m) {
+    var f = m.fillers || {};
+    var keys = Object.keys(f).sort(function (a, b) { return f[b] - f[a]; });
+    if (!keys.length) return '';
+    return '<div class="card sc-fill"><h2>' + esc(t('scFillerList')) + '</h2><ul class="fl-list">' +
+      keys.map(function (k) { return '<li><b dir="auto">' + esc(k) + '</b><span>×' + f[k] + '</span></li>'; }).join('') + '</ul></div>';
+  }
+
   // Draws a report into el. opts.audio: an object URL for playback (fresh recordings only).
   function render(el, r, opts) {
     opts = opts || {};
@@ -90,7 +151,7 @@
         return '<div class="sc-row"><div class="sc-row-h"><b>' + esc(t('scCats')[k]) + '</b><span class="sc-n ' + band(n) + '">' + n + '/10</span></div>' +
           '<div class="sc-bar"><i class="' + band(n) + '" style="width:' + (n * 10) + '%"></i></div>' +
           (s.summary ? '<p dir="auto">' + esc(s.summary) + '</p>' : '') + '</div>';
-      }).join('') + '</div>';
+      }).join('') + '</div>' + storyCard(r.story) + paceCard(m) + fillerCard(m);
     if (moments.length) {
       html += '<div class="card sc-moments"><h2>' + esc(t('scMoments')) + '</h2><ol>' + moments.map(function (mo, i) {
         var cat = t('scCats')[mo.category] || '';
