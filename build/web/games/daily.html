@@ -131,7 +131,7 @@
         dWhy: 'Why one minute a day works', dWhy1: 'Short and easy, so it fits any day', dWhy2: 'Speaking often is what makes the nerves fade', dWhy3: 'Your streak shows how far you have come',
         dEndTitle: 'You did it!', dEndBody: 'One minute about "{topic}". See you tomorrow for a new one.',
         dEndStreak: 'day streak', dEndPractice: 'Nice practice! Your streak already counts today.',
-        dShared: 'Copied! Paste it anywhere to share.', dSaved: 'Saved your streak card.', dShareText: "I've spoken every day for {n} days on Speak Up Fearless. Today's topic: \"{topic}\". Try today's challenge:",
+        dShared: 'Copied! Paste it anywhere to share.', dLinkCopied: 'Link copied! Paste it in any chat to share.', dShareText1: "I just did today's 1-minute speaking challenge on Speak Up Fearless. My topic: \"{topic}\". Your turn:", dSaved: 'Saved your streak card.', dShareText: "I've spoken every day for {n} days on Speak Up Fearless. Today's topic: \"{topic}\". Try today's challenge:",
         dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
         dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
         dJoinTitle: 'Take today\'s challenge too', dJoinB1: 'A new one-minute topic every day', dJoinB2: 'Build your own streak and share it', dJoinB3: 'Plus 4 more speaking games, all free',
@@ -157,7 +157,7 @@
         dWhy: 'لماذا تنجح دقيقة يوميًا', dWhy1: 'قصيرة وسهلة فتناسب أي يوم', dWhy2: 'التحدث كثيرًا هو ما يُذهب التوتر', dWhy3: 'سلسلتك تُظهر كم تقدّمت',
         dEndTitle: 'أحسنت!', dEndBody: 'دقيقة عن «{topic}». نراك غدًا مع موضوع جديد.',
         dEndStreak: 'أيام متتالية', dEndPractice: 'تدريب رائع! يومك محسوب بالفعل في سلسلتك.',
-        dShared: 'تم النسخ! الصقه في أي مكان للمشاركة.', dSaved: 'حفظنا بطاقة سلسلتك.', dShareText: 'تحدّثت كل يوم لمدة {n} أيام على Speak Up Fearless. موضوع اليوم: «{topic}». جرّب تحدي اليوم:',
+        dShared: 'تم النسخ! الصقه في أي مكان للمشاركة.', dLinkCopied: 'تم نسخ الرابط! الصقه في أي محادثة للمشاركة.', dShareText1: 'أنهيت للتو تحدي الدقيقة لليوم على Speak Up Fearless. موضوعي: «{topic}». دورك:', dSaved: 'حفظنا بطاقة سلسلتك.', dShareText: 'تحدّثت كل يوم لمدة {n} أيام على Speak Up Fearless. موضوع اليوم: «{topic}». جرّب تحدي اليوم:',
         dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
         dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
         dJoinTitle: 'خُض تحدي اليوم أنت أيضًا', dJoinB1: 'موضوع جديد لدقيقة واحدة كل يوم', dJoinB2: 'ابنِ سلسلتك وشاركها', dJoinB3: 'و4 ألعاب تحدّث أخرى، كلها مجانية',
@@ -481,22 +481,22 @@
       function prepare(n, topic) {
         var u = S.user();
         var url = SITE + '/games/daily?s=' + n + (u && u.shortName ? '&by=' + encodeURIComponent(u.shortName) : '') + '&t=' + encodeURIComponent(topic);
-        var p = { text: t('dShareText', { n: n, topic: topic }), url: url, file: null };
-        card(n, topic).toBlob(function (blob) { if (blob) p.file = new File([blob], 'speak-up-streak.png', { type: 'image/png' }); }, 'image/png');
+        var p = { text: n > 1 ? t('dShareText', { n: n, topic: topic }) : t('dShareText1', { topic: topic }), url: url };
         return p;
       }
+      // Share a link (not a picture) so friends land on the challenge page.
+      // The chat app shows the page's own preview title and photo.
       function share(p, msgEl) {
         var say = function (m) { if (msgEl) { msgEl.hidden = false; msgEl.textContent = m; } else S.toast(m); };
-        if (p.file && navigator.canShare && navigator.canShare({ files: [p.file] })) {
-          navigator.share({ files: [p.file], text: p.text + ' ' + p.url }).catch(function () {});
-        } else if (navigator.share) {
-          navigator.share({ text: p.text, url: p.url }).catch(function () {});
-        } else {
-          if (navigator.clipboard) navigator.clipboard.writeText(p.text + ' ' + p.url).catch(function () {});
-          if (p.file) { var a = document.createElement('a'); a.href = URL.createObjectURL(p.file); a.download = 'speak-up-streak.png'; a.click(); say(t('dSaved') + ' ' + t('dShared')); }
-          else say(t('dShared'));
+        if (navigator.share) {
+          navigator.share({ title: t('dTitle'), text: p.text, url: p.url }).catch(function () {});
+          return;
         }
+        var copied = function () { say(t('dLinkCopied')); };
+        if (navigator.clipboard) navigator.clipboard.writeText(p.text + ' ' + p.url).then(copied, function () { window.prompt('', p.url); });
+        else window.prompt('', p.url);
       }
+
     })();
   </script>
 </body>
