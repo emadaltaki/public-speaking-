@@ -58,6 +58,9 @@
 
   var AR = {
     dailyPill: 'جديد: تحدي تحدّث لدقيقة واحدة كل يوم',
+    freeTag: 'مجاني، بلا تسجيل', freeTagLong: 'مجاني للعب، بلا تسجيل', dailyTitle: 'تحدي التحدّث لدقيقة واحدة لليوم',
+    dailyBody: 'موضوع جديد كل يوم. تحدّث دقيقة واحدة وابدأ سلسلتك.', dailyGo: 'ابدأ الآن', lockChip: 'حساب مجاني', prevPhotos: 'الصور السابقة', morePhotos: 'المزيد من الصور', unlockFree: 'افتحها مجانًا',
+    gamesIntroGuest: 'ابدأ بتحدي الدقيقة لليوم، مجانًا وبلا تسجيل. الحساب المجاني يفتح لك بقية الألعاب.',
     skInSession: 'في الجلسة', skTip: 'اضغط على أي مهارة لترى كيف تبدو في الجلسة.',
     skD1: 'جولات قصيرة وسهلة تتحدث فيها من 30 إلى 60 ثانية، وبالسرعة التي تناسبك.',
     skD2: 'أسئلة وكلمات مفاجئة، كما في Triple Step، لتتعلّم الرد دون أن تتجمّد.',
@@ -162,7 +165,7 @@
     copyright: '© 2026 Speak Up Fearless. جميع الحقوق محفوظة.', close: 'إغلاق',
     stickyCta: 'احجز الآن', almostThere: 'اقتربت!', mLead: 'بقي فقط:', mDay: 'اختيار يوم', mTime: 'اختيار وقت',
     mName: 'كتابة اسمك', mContact: 'إضافة بريدك', mPhone: 'إضافة رقم هاتف', mReason: 'إخبارنا بما تريد المساعدة فيه',
-    dayMissing: 'اختر اليوم الأنسب لك.', timeMissing: 'صباحًا أم ظهرًا أم مساءً؟', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب لعبة سريعة أولًا',
+    dayMissing: 'اختر اليوم الأنسب لك.', timeMissing: 'صباحًا أم ظهرًا أم مساءً؟', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب تحدي الدقيقة لليوم',
     sentMail: 'أرسلنا نسخة إلى بريدك أيضًا.', afterTitle: 'وأنت تنتظر، جهّز صوتك بلعبة',
     afterSub: 'تحدي اليوم يستغرق دقيقة واحدة وهو مجاني.',
     cancelPolicy: 'الظروف تتغير، ونحن نتفهم ذلك. أخبرنا قبل الجلسة بـ24 ساعة على الأقل وسننقلها إلى يوم آخر مجانًا. لديك سؤال عن الاسترداد؟ اسألنا فقط.', stickyTitle: 'مكالمة تعريفية مجانية', stickySub: 'مكالمة 20 دقيقة عن أهدافك', prev: 'الصورة السابقة', next: 'الصورة التالية',
@@ -181,6 +184,7 @@
   all('[data-t]').forEach(function (el) { if (!(el.dataset.t in EN)) EN[el.dataset.t] = el.textContent; });
   all('[data-t-ph]').forEach(function (el) { EN[el.dataset.tPh] = el.getAttribute('placeholder'); });
   all('[data-t-alt]').forEach(function (el) { EN[el.dataset.tAlt] = el.getAttribute('alt'); });
+  all('[data-t-aria]').forEach(function (el) { EN[el.dataset.tAria] = el.getAttribute('aria-label'); });
   Object.keys(EXTRA_EN).forEach(function (k) { if (!EN[k]) EN[k] = EXTRA_EN[k]; });
 
   var lang = store(LANG_KEY) === 'ar' ? 'ar' : 'en';
@@ -192,6 +196,7 @@
     all('[data-t]').forEach(function (el) { var v = t(el.dataset.t); if (v != null) el.textContent = v; });
     all('[data-t-ph]').forEach(function (el) { el.setAttribute('placeholder', t(el.dataset.tPh)); el.setAttribute('aria-label', t(el.dataset.tPh)); });
     all('[data-t-alt]').forEach(function (el) { el.setAttribute('alt', t(el.dataset.tAlt)); });
+    all('[data-t-aria]').forEach(function (el) { el.setAttribute('aria-label', t(el.dataset.tAria)); });
     $('langBtn').setAttribute('aria-label', t('langLong'));
     $('lbPrev').setAttribute('aria-label', t('prev'));
     $('lbNext').setAttribute('aria-label', t('next'));
@@ -273,6 +278,8 @@
 
   function renderAccount() {
     var user = signedInUser();
+    // Guests see what's free (the daily challenge) and what needs an account.
+    document.documentElement.classList.toggle('signed-in', !!user);
     prefillBooking();
     $('signOutBtn').hidden = !user;
     var link = $('acct');
@@ -413,6 +420,57 @@
   });
 
   // ---------------------------------------------------------------- photos
+  // ---------------------------------------------------------------- drag to scroll
+  // Sideways rows (community photos, games) scroll with a mouse drag too,
+  // not only with a trackpad or a finger. A drag never counts as a tap.
+  function dragScroll(row) {
+    var down = false, moved = false, startX = 0, startLeft = 0;
+    row.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true; moved = false; startX = e.clientX; startLeft = row.scrollLeft;
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5) { moved = true; row.classList.add('dragging'); }
+      if (moved) { row.scrollLeft = startLeft - dx; e.preventDefault(); }
+    });
+    window.addEventListener('pointerup', function () {
+      if (!down) return;
+      down = false;
+      if (!moved) return;
+      // Let the row settle on the nearest photo again.
+      var left = row.scrollLeft;
+      row.classList.remove('dragging');
+      row.scrollLeft = left;
+    });
+    row.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    row.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  }
+  all('.strip, .game-row').forEach(dragScroll);
+  // Arrow buttons beside the community photos (mouse users).
+  (function () {
+    var strip = document.querySelector('.strip');
+    if (!strip) return;
+    var prev = document.querySelector('.strip-nav.prev'), next = document.querySelector('.strip-nav.next');
+    var rtl = function () { return document.documentElement.dir === 'rtl'; };
+    var step = function (dir) {
+      var card = strip.querySelector('button');
+      var w = card ? card.getBoundingClientRect().width + 12 : 300;
+      strip.scrollBy({ left: dir * (rtl() ? -1 : 1) * w * Math.max(1, Math.floor(strip.clientWidth / w) - 1), behavior: 'smooth' });
+    };
+    var paint = function () {
+      var max = strip.scrollWidth - strip.clientWidth, at = Math.abs(strip.scrollLeft);
+      prev.disabled = at < 4;
+      next.disabled = at > max - 4;
+    };
+    prev.addEventListener('click', function () { step(-1); });
+    next.addEventListener('click', function () { step(1); });
+    strip.addEventListener('scroll', paint, { passive: true });
+    window.addEventListener('resize', paint);
+    paint();
+  })();
+
   var photos = all('[data-photo]').map(function (btn) {
     var img = btn.querySelector('img');
     var cap = btn.querySelector('figcaption');

@@ -192,6 +192,8 @@
       .photo figcaption b { display: block; font-size: 12px; font-weight: 600; color: #E9C9B5; margin-top: 4px; }
       .card { padding: 10px 34px 34px; max-width: 460px; justify-self: end; width: 100%; }
     }
+    .try-free { grid-column: 1 / -1; justify-self: center; display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 999px; background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary); font-weight: 700; font-size: 15px; text-align: center; text-decoration: none; }
+    .try-free .fl { font-size: 18px; }
   </style>
 </head>
 <body>
@@ -300,6 +302,7 @@
       </div>
       <p class="trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span id="note"></span></p>
     </section>
+    <a class="try-free" href="/games/daily"><span class="fl">🔥</span><span id="tryFree"></span></a>
   </main>
 
   <script type="module">
@@ -337,7 +340,8 @@
         show: 'Show password', hide: 'Hide password',
         eyebrow: 'Members area', headline: 'Practice speaking.<br><em>Without the pressure.</em>',
         lead: 'Your free account unlocks every speaking game and keeps a record of how far you have come.',
-        perk1: '4 speaking games', perk2: 'Track your progress', perk3: 'Free forever',
+        perk1: '6 speaking games', perk2: 'Track your progress', perk3: 'Free forever',
+        tryFree: "Not ready to sign up? Try today's 1-minute challenge free",
         photoCaption: 'Real practice, in a room that has your back. Now meeting in Mississauga.',
         tabIn: 'Sign in', tabUp: 'Create account',
         signInTitle: 'Welcome back', signInSub: 'Good to see you again. Pick up where you left off.',
@@ -375,7 +379,8 @@
         show: 'إظهار كلمة المرور', hide: 'إخفاء كلمة المرور',
         eyebrow: 'منطقة الأعضاء', headline: 'تدرّب على التحدث.<br><em>بلا ضغط.</em>',
         lead: 'حسابك المجاني يفتح جميع ألعاب التحدث ويحفظ سجل تقدّمك.',
-        perk1: '4 ألعاب للتحدث', perk2: 'تابع تقدّمك', perk3: 'مجاني دائمًا',
+        perk1: '6 ألعاب للتحدث', perk2: 'تابع تقدّمك', perk3: 'مجاني دائمًا',
+        tryFree: 'لست مستعدًا للتسجيل؟ جرّب تحدي الدقيقة لليوم مجانًا',
         photoCaption: 'تدريب حقيقي في مكان يدعمك. نلتقي الآن في ميسيساغا.',
         tabIn: 'تسجيل الدخول', tabUp: 'إنشاء حساب',
         signInTitle: 'مرحبًا بعودتك', signInSub: 'سعداء برؤيتك مجددًا. تابع من حيث توقفت.',
@@ -432,7 +437,7 @@
     };
     const isDark = () => document.documentElement.dataset.theme === 'dark';
     const TEXT_IDS = { eyebrow: 'eyebrow', lead: 'lead', perk1: 'perk1', perk2: 'perk2', perk3: 'perk3', photoCaption: 'photoCaption',
-      tabIn: 'tabIn', tabUp: 'tabUp', googleLabel: 'google', or: 'or', nameLabel: 'name', emailLabel: 'email', forgot: 'forgot', note: 'note' };
+      tabIn: 'tabIn', tabUp: 'tabUp', googleLabel: 'google', or: 'or', nameLabel: 'name', emailLabel: 'email', forgot: 'forgot', note: 'note', tryFree: 'tryFree' };
 
     function render() {
       const t = T[lang];
