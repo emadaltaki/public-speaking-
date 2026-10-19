@@ -313,13 +313,13 @@
       updateProfile, sendPasswordResetEmail, signOut,
     } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-    // Google sign-in can run through our own domain (Firebase Hosting serves
-    // /__/auth itself), so phones and the home-screen app sign in in the same
-    // tab instead of opening another one. It needs
-    // https://speakup-ca500.web.app/__/auth/handler listed as a redirect URI
-    // on the Google OAuth client; until then, keep the popup.
-    const OWN_AUTH_DOMAIN = 'speakup-ca500.web.app';
-    const SAME_TAB_GOOGLE = false && location.hostname === OWN_AUTH_DOMAIN;
+    // On our Firebase Hosting addresses, Google sign-in runs through this same
+    // domain (Hosting serves /__/auth itself), so phones and the home-screen
+    // app sign in in the same tab instead of opening another one. Each address
+    // is listed as a redirect URI (/__/auth/handler) on the Google OAuth client.
+    const OWN_HOSTS = ['speakup-ca500.web.app', 'speakup-ca500.firebaseapp.com'];
+    const SAME_TAB_GOOGLE = OWN_HOSTS.indexOf(location.hostname) !== -1;
+    const OWN_AUTH_DOMAIN = SAME_TAB_GOOGLE ? location.hostname : 'speakup-ca500.firebaseapp.com';
     // Phones, tablets and the installed app: a popup there becomes a new tab.
     const POPUP_UNSAFE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true ||
       matchMedia('(pointer: coarse)').matches;
@@ -327,7 +327,7 @@
     // Public web config for the Speak Up Fearless Firebase project.
     const firebaseConfig = {
       apiKey: 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow',
-      authDomain: SAME_TAB_GOOGLE ? OWN_AUTH_DOMAIN : 'speakup-ca500.firebaseapp.com',
+      authDomain: OWN_AUTH_DOMAIN,
       projectId: 'speakup-ca500',
       storageBucket: 'speakup-ca500.firebasestorage.app',
       messagingSenderId: '228155483447',
