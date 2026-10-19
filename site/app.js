@@ -448,7 +448,7 @@
     lang: lang, t: t, addStrings: addStrings, esc: esc, store: store,
     user: user, signIn: signIn, signOut: signOut, api: api, idToken: idToken,
     cachedAvatar: cachedAvatar, refreshAvatar: refreshAvatar, saveAvatar: saveAvatar, onAvatar: onAvatar, avatarStyle: avatarStyle, pickPhoto: pickPhoto,
-    checkVerified: checkVerified, recordRound: recordRound, history: history,
+    setLang: setLang, checkVerified: checkVerified, recordRound: recordRound, history: history,
     loadGames: loadGames, ORDER: ORDER, ICONS: ICONS, howToPlay: howToPlay, howToPlayFirstTime: howToPlayFirstTime,
     renderHeader: renderHeader, toast: toast, localHistory: localHistory
   };
