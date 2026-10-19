@@ -140,6 +140,20 @@
     });
   }
 
+  // Sends a FormData (a recording) to the backend; same result shape as api().
+  function upload(path, form, timeout) {
+    return idToken().then(function (token) {
+      if (!token) return null;
+      var ctl = 'AbortController' in window ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, timeout || 90000);
+      return fetch(API + path, { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form, signal: ctl ? ctl.signal : undefined })
+        .then(function (r) {
+          clearTimeout(timer);
+          return r.json().catch(function () { return {}; }).then(function (b) { return { status: r.status, body: b }; });
+        }).catch(function () { clearTimeout(timer); return null; });
+    });
+  }
+
   // ------------------------------------------------------------ profile photo
   function avatarKey() { var u = user(); return u ? 'speakupfearless.avatar.' + u.uid : null; }
   function cachedAvatar() { var k = avatarKey(); var v = k && store(k); return v || null; }
@@ -216,12 +230,13 @@
   function localHistory() {
     try { return JSON.parse(store(historyKey()) || '[]'); } catch (_) { return []; }
   }
-  function recordRound(round) {
-    // round: {gameId, spokenSeconds, topic}
+  function recordRound(round, localOnly) {
+    // round: {gameId, spokenSeconds, topic}. localOnly when the backend saves it itself.
     var entry = { gameId: round.gameId, playedAt: new Date().toISOString(), spokenSeconds: Math.round(round.spokenSeconds || 0) };
     if (round.topic) entry.topic = round.topic;
     var all = [entry].concat(localHistory()).slice(0, 200);
     store(historyKey(), JSON.stringify(all));
+    if (localOnly) return Promise.resolve(null);
     var body = { gameId: entry.gameId, durationSeconds: entry.spokenSeconds };
     if (entry.topic) body.details = { topic: entry.topic };
     return api('/v1/games/sessions', { method: 'POST', body: body });
@@ -245,13 +260,14 @@
 
   // ------------------------------------------------------------ games
   var GAMES = null;
-  var ORDER = ['triple-step', 'conductor', 'podcast', 'autocomplete'];
+  var ORDER = ['speech-coach', 'triple-step', 'conductor', 'podcast', 'autocomplete'];
   var ICONS = {
     'triple-step': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
     conductor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 12h1M7 8v8M11 4v16M15 7v10M19 10v4"/></svg>',
     podcast: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="11" r="2.5"/><path d="M12 13.5V21M7.8 15.2a6 6 0 1 1 8.4 0M5 18a10 10 0 1 1 14 0"/></svg>',
     autocomplete: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></svg>',
-    daily: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2s1 3.3-1.5 6C9.1 10 7 11.6 7 14.8A5 5 0 0 0 12 20a5 5 0 0 0 5-5c0-1.8-.7-3.2-1.5-4.2 0 0-.1 1.9-1.8 2.4 0 0 1-4.8-1.2-11.2z"/></svg>'
+    daily: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2s1 3.3-1.5 6C9.1 10 7 11.6 7 14.8A5 5 0 0 0 12 20a5 5 0 0 0 5-5c0-1.8-.7-3.2-1.5-4.2 0 0-.1 1.9-1.8 2.4 0 0 1-4.8-1.2-11.2z"/></svg>',
+    'speech-coach': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="6" height="10" rx="3"/><path d="M2.5 9.5a5.5 5.5 0 0 0 11 0M8 15v3.5"/><path d="M15 14l2 2 4.5-4.5"/><path d="M16.5 5.5h4M16.5 9h3"/></svg>'
   };
   // Pictures for each "How to play" step.
   var STEP_ICONS = {
@@ -271,12 +287,29 @@
     conductor: ['topic', 'demo', 'demo', 'demo'],
     podcast: ['group', 'topic', 'mic', 'shuffle'],
     autocomplete: ['text', 'mic', 'timer', 'next'],
-    daily: ['topic', 'timer', 'mic', 'flag']
+    daily: ['topic', 'timer', 'mic', 'flag'],
+    'speech-coach': ['topic', 'mic', 'tune', 'flag']
+  };
+  // Speech Coach isn't one of the app's games, so its wording lives here.
+  var COACH = {
+    en: { title: 'Speech Coach', tagline: 'Talk for up to 2 minutes and get scored on how you sound.',
+      description: 'Record yourself on a topic. AI listens back and scores your pace, pauses, filler words, clarity and flow from 1 to 10, then shows the exact moments to work on.',
+      skills: ['AI feedback', 'Pace', 'Filler words', 'Flow'],
+      steps: ['Pick a topic, or bring your own, and choose how long to talk.', 'Allow the microphone, then talk until the time is up or you tap Finish.',
+        'AI listens back and scores your pace, pauses, filler words, clarity and flow from 1 to 10.', 'See the exact moments you slipped, with a fix for each, and try again.'],
+      tip: 'Your recording is only used to score you. We keep the scores and the transcript, not the audio.' },
+    ar: { title: 'مدرب الإلقاء', tagline: 'تحدث حتى دقيقتين واحصل على تقييم لطريقة كلامك.',
+      description: 'سجّل نفسك وأنت تتحدث عن موضوع. يستمع الذكاء الاصطناعي ويقيّم سرعتك ووقفاتك وكلمات الحشو والوضوح وترابط الأفكار من 1 إلى 10، ثم يريك اللحظات التي تحتاج إلى تحسين.',
+      skills: ['تقييم بالذكاء الاصطناعي', 'السرعة', 'كلمات الحشو', 'الترابط'],
+      steps: ['اختر موضوعًا أو موضوعك الخاص، وحدد مدة الحديث.', 'اسمح باستخدام الميكروفون، ثم تحدث حتى ينتهي الوقت أو تضغط إنهاء.',
+        'يستمع الذكاء الاصطناعي ويقيّم سرعتك ووقفاتك وكلمات الحشو والوضوح والترابط من 1 إلى 10.', 'شاهد اللحظات التي تعثرت فيها مع طريقة لتحسين كل منها، ثم حاول مرة أخرى.'],
+      tip: 'نستخدم تسجيلك لتقييمك فقط. نحتفظ بالدرجات والنص المكتوب، وليس بالصوت.' }
   };
   function loadGames() {
     if (GAMES) return Promise.resolve(GAMES);
     return fetch('/data/games.json').then(function (r) { return r.json(); }).then(function (d) {
       GAMES = d[lang] || d.en;
+      GAMES['speech-coach'] = COACH[lang] || COACH.en;
       // Game wording shared with the app ("9999" and "@@" mark where values go).
       var fix = function (o) {
         var out = {};
@@ -456,7 +489,7 @@
   window.SUF = {
     gate: gate,
     lang: lang, t: t, addStrings: addStrings, esc: esc, store: store,
-    user: user, signIn: signIn, signOut: signOut, api: api, idToken: idToken,
+    user: user, signIn: signIn, signOut: signOut, api: api, upload: upload, idToken: idToken,
     cachedAvatar: cachedAvatar, refreshAvatar: refreshAvatar, saveAvatar: saveAvatar, onAvatar: onAvatar, avatarStyle: avatarStyle, pickPhoto: pickPhoto,
     setLang: setLang, checkVerified: checkVerified, recordRound: recordRound, history: history,
     loadGames: loadGames, ORDER: ORDER, ICONS: ICONS, howToPlay: howToPlay, howToPlayFirstTime: howToPlayFirstTime,

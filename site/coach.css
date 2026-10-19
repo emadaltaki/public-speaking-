@@ -1,0 +1,49 @@
+/* Speech Coach report (game page and account page). */
+.sc { display: grid; gap: 16px; text-align: start; }
+.sc h2 { font-size: 19px; font-weight: 800; margin: 0 0 12px; }
+.sc .help { color: var(--muted); font-size: 14px; margin: -6px 0 12px; }
+.sc-top { display: flex; align-items: center; gap: 20px; }
+.sc-big { position: relative; flex: none; width: 116px; height: 116px; }
+.sc-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+.sc-ring circle { fill: none; stroke-width: 11; }
+.sc-ring .track { stroke: var(--border); }
+.sc-ring .bar { stroke-linecap: round; transition: stroke-dashoffset .8s ease; }
+.sc-ring.hi .bar, .sc-bar i.hi { stroke: var(--ok); background: var(--ok); }
+.sc-ring.mid .bar, .sc-bar i.mid { stroke: var(--warm); background: var(--warm); }
+.sc-ring.lo .bar, .sc-bar i.lo { stroke: var(--primary); background: var(--primary); }
+.sc-big .n { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.sc-big .n b { font-family: var(--head); font-size: 40px; font-weight: 900; line-height: 1; color: var(--ink); }
+.sc-big .n small { font-size: 12px; color: var(--muted); font-weight: 700; }
+.sc-head { min-width: 0; }
+.sc-head small { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.sc-head h2 { font-family: var(--head); font-size: clamp(20px, 5vw, 26px); line-height: 1.2; margin: 4px 0 0; }
+.sc-chips { justify-content: flex-start; margin: 12px 0 0; }
+.sc-chips li { font-size: 13.5px; }
+@media (max-width: 480px) { .sc-top { flex-direction: column; text-align: center; } .sc-chips { justify-content: center; } }
+.sc-scores { display: grid; gap: 16px; }
+.sc-row-h { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.sc-row-h b { font-size: 16px; color: var(--ink); }
+.sc-n { font-family: var(--head); font-weight: 800; font-variant-numeric: tabular-nums; }
+.sc-n.hi { color: var(--ok); } .sc-n.mid { color: var(--warm); } .sc-n.lo { color: var(--primary); }
+.sc-bar { height: 9px; border-radius: 99px; background: var(--border); margin-top: 6px; overflow: hidden; }
+.sc-bar i { display: block; height: 100%; border-radius: 99px; }
+.sc-row p { margin: 8px 0 0; color: var(--text); font-size: 15px; line-height: 1.5; }
+.sc-moments ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.sc-moments li { padding: 14px; border-radius: 16px; background: var(--tint); border: 1px solid var(--border); }
+.sc-m-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sc-time { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px; border: 0; background: var(--primary); color: var(--on-primary); font-weight: 800; font-size: 13.5px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.sc-time svg { width: 13px; height: 13px; }
+.sc-tag { font-size: 12.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sc-moments blockquote { margin: 10px 0 0; padding: 0 12px; border-inline-start: 3px solid var(--warm); font-style: italic; color: var(--ink); }
+.sc-moments p { margin: 8px 0 0; font-size: 15px; line-height: 1.5; }
+.sc-fix { color: var(--ok); }
+.sc-fix b { color: var(--ok); }
+.sc-two { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.sc-list { margin: 0; padding-inline-start: 20px; display: grid; gap: 6px; line-height: 1.5; }
+.sc-nextstep p { margin: 0; line-height: 1.5; font-weight: 600; color: var(--ink); }
+.sc-tr audio { width: 100%; margin-bottom: 12px; }
+.sc-text { line-height: 1.9; font-size: 16px; color: var(--text); max-height: 340px; overflow: auto; }
+.sc-w { border-radius: 4px; transition: background .2s; }
+.sc-w.f { background: color-mix(in srgb, var(--warm) 35%, transparent); padding: 0 2px; }
+.sc-w.hl { background: color-mix(in srgb, var(--primary) 30%, transparent); outline: 2px solid color-mix(in srgb, var(--primary) 50%, transparent); }
+.sc-gap { display: inline-block; font-size: 12px; font-weight: 700; color: var(--muted); padding: 0 7px; border-radius: 99px; border: 1px dashed var(--border); line-height: 1.6; }
