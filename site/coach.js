@@ -11,7 +11,7 @@
     scWpm: '{n} words a minute', scFillers0: 'No filler words', scFillers1: '1 filler word', scFillersN: '{n} filler words',
     scPauses0: 'No long pauses', scPauses1: '1 long pause', scPausesN: '{n} long pauses',
     scMoments: 'Moments to work on', scTry: 'Try this', scPlayHere: 'Play from {t}', scAt: 'At {t}',
-    scStrengths: 'What went well', scNext: 'Practise next', scTranscript: 'What you said', scPause: 'pause {n}s',
+    scStrengths: 'What went well', scNext: 'Practice next', scTranscript: 'What you said', scPause: 'pause {n}s',
     scLegend: 'Filler words are highlighted. Long pauses are marked.', scShowAll: 'Show the full transcript',
     scNoAudio: 'The recording isn\'t kept, so playback only works right after you record.'
   }, {
