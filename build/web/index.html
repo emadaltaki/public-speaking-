@@ -519,6 +519,17 @@
     @media (prefers-reduced-motion: reduce) { .skills li, .sk-more, .sk-chev { transition: none; } .skills li { opacity: 1; transform: none; } }
     .strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: max(24px, calc((100vw - 1112px) / 2 + 24px)); padding: 28px max(24px, calc((100vw - 1112px) / 2 + 24px)) 8px; scrollbar-width: none; }
     .strip::-webkit-scrollbar { display: none; }
+    .strip-wrap { position: relative; }
+    .strip-nav { position: absolute; top: calc(28px + 115px); z-index: 2; width: 48px; height: 48px; margin-top: -24px; border: 0; border-radius: 50%; display: none; place-items: center; background: var(--surface); color: var(--ink); box-shadow: 0 10px 24px -10px rgba(0,0,0,.45); cursor: pointer; transition: opacity .2s, transform .15s; }
+    .strip-nav:hover { transform: scale(1.06); }
+    .strip-nav svg { width: 22px; height: 22px; }
+    .strip-nav.prev { inset-inline-start: max(12px, calc((100vw - 1112px) / 2 - 12px)); }
+    .strip-nav.next { inset-inline-end: max(12px, calc((100vw - 1112px) / 2 - 12px)); }
+    :root[dir="rtl"] .strip-nav svg { transform: scaleX(-1); }
+    .strip-nav[disabled] { opacity: 0; pointer-events: none; }
+    @media (hover: hover) and (pointer: fine) { .strip-nav { display: grid; } .strip, .game-row { cursor: grab; } }
+    .dragging, .dragging * { cursor: grabbing !important; user-select: none; }
+    .dragging { scroll-snap-type: none !important; scroll-behavior: auto !important; }
     .strip button { position: relative; flex: none; width: min(360px, 78vw); height: 230px; padding: 0; border: 0; border-radius: 18px; overflow: hidden; cursor: zoom-in; background: var(--soft); scroll-snap-align: start; }
     .strip img { width: 100%; height: 100%; object-fit: cover; }
     .strip button::after { content: ""; position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, rgba(20,14,10,.62)); }
@@ -715,6 +726,27 @@
     .cta-note { display: flex; align-items: flex-start; gap: 8px; max-width: 520px; margin: 14px 0 0; font-size: 14px; color: var(--muted); }
     .cta-note svg { width: 18px; height: 18px; flex: none; margin-top: 2px; color: var(--primary); }
     @media (max-width: 640px) { .how3 { margin: -8px 0 22px; } .how3 { gap: 6px; } .how3 li { font-size: 13px; padding: 5px 11px 5px 5px; gap: 6px; } .how3 b { width: 21px; height: 21px; font-size: 12px; } }
+    .free-tag { display: inline-block; padding: 3px 9px; border-radius: 999px; background: var(--soft); color: var(--primary); font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+    .try-game { flex-wrap: wrap; }
+    .signed-in .guest-only, :root:not(.signed-in) .member-only { display: none !important; }
+    .daily-feature { display: flex; align-items: center; gap: 16px; max-width: 1064px; margin: 28px auto 0; padding: 20px 22px; border-radius: 24px; color: #fff; text-decoration: none; background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); box-shadow: 0 20px 36px -22px rgba(122,42,22,.8); position: relative; overflow: hidden; isolation: isolate; }
+    .daily-feature::after { content: ""; position: absolute; z-index: -1; right: -50px; top: -70px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.1); }
+    :root[dir="rtl"] .daily-feature::after { right: auto; left: -50px; }
+    .df-ic { width: 60px; height: 60px; flex: none; border-radius: 18px; display: grid; place-items: center; background: rgba(255,255,255,.18); font-size: 32px; }
+    .df-ic .fl { display: inline-block; animation: flick 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+    .df-txt { flex: 1; min-width: 0; }
+    .df-badge { display: inline-block; margin-bottom: 6px; padding: 4px 10px; border-radius: 999px; background: #fff; color: #A23B1E; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+    .df-txt b { display: block; font-family: var(--head); font-size: 20px; line-height: 1.25; }
+    .df-txt small { display: block; margin-top: 4px; color: rgba(255,255,255,.9); font-size: 14.5px; }
+    .df-go { flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 11px 18px; border-radius: 999px; background: #fff; color: #A23B1E; font-weight: 800; }
+    .df-go svg { width: 16px; height: 16px; }
+    :root[dir="rtl"] .df-go svg { transform: scaleX(-1); }
+    .g-lock { position: absolute; top: 16px; inset-inline-end: 16px; display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: 999px; background: rgba(0,0,0,.22); font-size: 12px; font-weight: 800; }
+    .g-lock svg { width: 12px; height: 12px; }
+    @media (max-width: 640px) {
+      .daily-feature { flex-wrap: wrap; margin: 20px 20px 0; padding: 18px; }
+      .df-go { width: 100%; justify-content: center; }
+    }
     .try-game { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; color: var(--primary); font-weight: 700; font-size: 15px; text-decoration: none; }
     .try-game svg { width: 14px; height: 14px; }
     .try-game:hover span { text-decoration: underline; text-underline-offset: 3px; }
@@ -934,7 +966,7 @@
             <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">See what we practice</a>
           </div>
           <p class="cta-note"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="ctaNote">Start with a free 20 minute video chat with a host about your goals. No speech needed.</span></p>
-          <a class="try-game" href="#games" data-track="try_game_hero"><svg aria-hidden="true"><use href="#i-play"/></svg><span data-t="tryGame">Not ready to talk yet? Try a quick game first</span></a>
+          <a class="try-game" href="/games/daily" data-track="try_game_hero"><svg aria-hidden="true"><use href="#i-play"/></svg><span data-t="tryGame">Not ready to talk yet? Try today's 1-minute challenge</span><span class="free-tag guest-only" data-t="freeTag">Free, no sign-up</span></a>
           <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A friendly room where nobody judges you and you go at your own pace.</span></p>
         </div>
         <figure class="hero-photo" style="margin:0">
@@ -984,36 +1016,49 @@
           <div>
             <span class="eyebrow" data-t="gamesEyebrow">Free speaking games</span>
             <h2 class="s-title" data-t="gamesHeadline">Warm up your voice in 2 minutes.</h2>
-            <p class="s-intro" data-t="gamesIntro">Quick games you can play alone or with friends. All you need is a free account.</p>
-            <a class="daily-pill" href="/games/daily"><span class="fl">🔥</span><span data-t="dailyPill">New: a 1-minute speaking challenge every day</span></a>
+            <p class="s-intro member-only" data-t="gamesIntro">Quick games you can play alone or with friends. All you need is a free account.</p>
+            <p class="s-intro guest-only" data-t="gamesIntroGuest">Start with today's 1-minute challenge, free with no sign-up. A free account unlocks the other games.</p>
           </div>
           <a class="btn btn-primary games-all" href="/games"><svg aria-hidden="true" class="i"><use href="#i-play"/></svg><span data-t="gamesCta">Play the games</span></a>
         </div>
       </div>
+      <div class="wrap">
+        <a class="daily-feature" href="/games/daily" data-track="daily_home">
+          <span class="df-ic"><span class="fl">🔥</span></span>
+          <span class="df-txt"><span class="df-badge guest-only" data-t="freeTagLong">Free to play, no sign-up</span>
+            <b data-t="dailyTitle">Today's 1-minute speaking challenge</b>
+            <small data-t="dailyBody">A new topic every day. Speak for one minute and start your streak.</small></span>
+          <span class="df-go"><span data-t="dailyGo">Start now</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+        </a>
+      </div>
       <div class="game-row">
         <a class="game g1" href="/games/triple-step">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
           <b data-t="gTriple">Triple Step</b>
           <small data-t="gTripleTag">Talk about a topic and work in the surprise words.</small>
-          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g2" href="/games/conductor">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-wave"/></svg></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
           <b data-t="gConductor">The Conductor</b>
           <small data-t="gConductorTag">Change your pitch from 1 (low) to 10 (high) as you talk.</small>
-          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g3" href="/games/podcast">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-pod"/></svg></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
           <b data-t="gPodcast">The Podcast Game</b>
           <small data-t="gPodcastTag">One topic, a few friends, and the mic keeps moving.</small>
-          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g4" href="/games/autocomplete">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
           <b data-t="gAuto">Autocomplete</b>
           <small data-t="gAutoTag">Finish each sentence out loud before time runs out.</small>
-          <span class="g-go"><span data-t="playNow">Play</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
       </div>
     </section>
@@ -1025,6 +1070,9 @@
         <h2 class="s-title" data-t="galleryHeadline">Our community</h2>
         <p class="s-intro" data-t="galleryIntro">Real people at our real sessions.</p>
       </div>
+      <div class="strip-wrap">
+      <button class="strip-nav prev" type="button" aria-label="Previous photos" data-t-aria="prevPhotos"><svg aria-hidden="true"><use href="#i-chev-l"/></svg></button>
+      <button class="strip-nav next" type="button" aria-label="More photos" data-t-aria="morePhotos"><svg aria-hidden="true"><use href="#i-chev-r"/></svg></button>
       <div class="strip" aria-label="Photos">
         <button type="button" data-photo="1"><img src="/assets/assets/images/directing-participants-pic.jpeg" alt="Members seated around a long table, watching a facilitator introduce a speaking exercise" data-t-alt="gAlt1" loading="lazy" decoding="async"><figcaption data-t="g1">Practicing together</figcaption></button>
         <button type="button" data-photo="2"><img src="/assets/assets/images/participant-podcast-pic.jpeg" alt="A member speaking to the room in front of a slide for the Podcast speaking game" data-t-alt="gAlt2" loading="lazy" decoding="async"><figcaption data-t="g2">Finding your voice</figcaption></button>
@@ -1032,6 +1080,7 @@
         <button type="button" data-photo="4"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host presenting the Let's Learn by Doing ground rules to the group" data-t-alt="gAlt4" loading="lazy" decoding="async"><figcaption data-t="g4">Learning by doing</figcaption></button>
         <button type="button" data-photo="5"><img src="/assets/assets/images/playing-a-game-pic.jpeg" alt="Three people at the front of the room during a speaking game, with the group watching" data-t-alt="gAlt5" loading="lazy" decoding="async"><figcaption data-t="g5">Workshops that feel human</figcaption></button>
         <button type="button" data-photo="6"><img src="/assets/assets/images/image-just-after-a-game-pic.jpeg" alt="A candid moment just after a speaking game, with the group still laughing along" data-t-alt="gAlt6" loading="lazy" decoding="async"><figcaption data-t="g6">Behind the scenes</figcaption></button>
+      </div>
       </div>
       <div class="wrap" id="hosts">
         <div class="card hosts-card">

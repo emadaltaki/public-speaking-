@@ -28,6 +28,7 @@
     .d-hero::before { width: 220px; height: 220px; right: -70px; top: -90px; }
     .d-hero::after { width: 140px; height: 140px; left: -50px; bottom: -80px; }
     .d-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .d-free { margin-inline-end: auto; margin-inline-start: 10px; padding: 3px 9px; border-radius: 999px; background: #fff; color: #A23B1E; font-size: 12px; font-weight: 800; white-space: nowrap; }
     .d-kick { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
     .d-date { margin-top: 4px; font-size: 13px; opacity: .85; }
     .d-lang { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 0; border-radius: 999px; background: rgba(255,255,255,.18); color: #fff; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
@@ -384,7 +385,7 @@
         }
         main.innerHTML = '<div class="daily">' +
           '<a class="back-games" href="/games">' + BACK + esc(t('dBackGames')) + '</a>' +
-          '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span><button class="d-lang" type="button" aria-label="' + esc(S.lang === 'ar' ? 'English' : 'العربية') + '">' + LANG + '<span>' + (S.lang === 'ar' ? 'English' : 'العربية') + '</span></button></div>' +
+          '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span>' + (S.user() ? '' : '<span class="d-free">' + esc(t('freeNow')) + '</span>') + '<button class="d-lang" type="button" aria-label="' + esc(S.lang === 'ar' ? 'English' : 'العربية') + '">' + LANG + '<span>' + (S.lang === 'ar' ? 'English' : 'العربية') + '</span></button></div>' +
           fromLine() +
           '<div class="d-date">' + esc(dateFmt.format(today)) + '</div>' +
           '<div class="d-row"><div class="streak' + (st.current ? '' : ' cold') + '"><span class="fire">🔥</span>' + esc(keepAlive ? t('dKeep', { n: st.current }) : streakLabel(st.current)) + '</div></div>' +
