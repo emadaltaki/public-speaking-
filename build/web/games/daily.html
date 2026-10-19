@@ -214,14 +214,14 @@
         var u = S.user(), key = 'speakupfearless.dailyTopic.' + u.uid;
         var done = rounds.filter(function (r) { return r.gameId === ID && r.topic && dayKey(new Date(r.playedAt)) === TODAY; })[0];
         if (done) return done.topic;
-        try { var saved = JSON.parse(localStorage.getItem(key) || 'null'); if (saved && saved.day === TODAY) return saved.topic; } catch (_) {}
+        try { var saved = JSON.parse(localStorage.getItem(key) || 'null'); if (saved && saved.day === TODAY && (saved.lang || 'en') === S.lang) return saved.topic; } catch (_) {}
         var used = {};
         rounds.forEach(function (r) { if (r.gameId === ID && r.topic) used[r.topic] = true; });
         avoided().forEach(function (x) { used[x] = true; });
         var pool = words.topics.filter(function (x) { return !used[x]; });
         if (!pool.length) pool = words.topics.slice();
         var pick = pool[hashOf(u.uid + '|' + TODAY) % pool.length];
-        try { localStorage.setItem(key, JSON.stringify({ day: TODAY, topic: pick })); } catch (_) {}
+        try { localStorage.setItem(key, JSON.stringify({ day: TODAY, lang: S.lang, topic: pick })); } catch (_) {}
         return pick;
       }
       // Every round we know about: this device's plus the ones saved to the account.
