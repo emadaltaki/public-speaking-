@@ -39,7 +39,7 @@
       lockBadge: 'Free with an account', unlock: 'Unlock free', freeNow: 'Free, no sign-up',
       lockTitle: 'Unlock {game} for free', lockAll: 'One free account unlocks all of these',
       lockB1: 'Every game, free forever', lockB2: 'Your streak and progress saved on every device', lockB3: 'Takes 30 seconds, no card needed',
-      freeNowTitle: "Not ready yet? Today's challenge is free", freeNowBody: 'Speak for one minute on a new topic and start your streak. No account needed.',
+      freeNowTitle: "Try today's 1-minute challenge first", freeNowGo: 'Start', freeNowBody: 'Speak for one minute on a new topic and start your streak. No account needed.',
       moreTitle: '{n} more games are waiting for you', moreBody: 'Each one trains a different speaking skill. Make a free account to play them all.',
       moreLine: 'Your free account also unlocks {n} more speaking games',
       savedToast1: 'Welcome! Your guest round is now saved to your account.', savedToastN: 'Welcome! Your {n} guest rounds are now saved to your account.', savedToast2: 'Welcome! Your 2 guest rounds are now saved to your account.'
@@ -62,7 +62,7 @@
       lockBadge: 'مجانًا مع حساب', unlock: 'افتحها مجانًا', freeNow: 'مجاني، بلا تسجيل',
       lockTitle: 'افتح {game} مجانًا', lockAll: 'حساب مجاني واحد يفتح كل هذه الألعاب',
       lockB1: 'كل الألعاب، مجانًا للأبد', lockB2: 'سلسلتك وتقدّمك محفوظان على كل أجهزتك', lockB3: 'يستغرق 30 ثانية، بلا بطاقة',
-      freeNowTitle: 'لست مستعدًا بعد؟ تحدي اليوم مجاني', freeNowBody: 'تحدّث دقيقة عن موضوع جديد وابدأ سلسلتك. بلا حساب.',
+      freeNowTitle: 'جرّب تحدي الدقيقة لليوم أولًا', freeNowGo: 'ابدأ', freeNowBody: 'تحدّث دقيقة عن موضوع جديد وابدأ سلسلتك. بلا حساب.',
       moreTitle: '{n} ألعاب أخرى بانتظارك', moreBody: 'كل لعبة تدرّب مهارة مختلفة في التحدث. أنشئ حسابًا مجانيًا لتلعبها كلها.',
       moreLine: 'حسابك المجاني يفتح لك أيضًا {n} ألعاب تحدّث أخرى',
       savedToast1: 'أهلًا بك! جولتك كضيف محفوظة الآن في حسابك.', savedToastN: 'أهلًا بك! جولاتك الـ{n} كضيف محفوظة الآن في حسابك.', savedToast2: 'أهلًا بك! جولتاك كضيف محفوظتان الآن في حسابك.'
@@ -559,7 +559,12 @@
     return loadGames().then(function (games) {
       var g = games[id];
       var tick = function (icon, key) { return '<li><span class="tick">' + icon + '</span><span>' + esc(t(key)) + '</span></li>'; };
-      el.innerHTML = '<div class="locked"><div class="join join-inline">' +
+      // The free daily challenge goes first: it's the one thing they can do
+      // right now without an account.
+      el.innerHTML = '<div class="locked">' +
+        '<a class="free-now g-daily" href="/games/daily"><span class="g-ic">' + ICONS.daily + '</span><span class="txt"><small>' + esc(t('freeNow')) + '</small>' +
+        '<b>' + esc(t('freeNowTitle')) + '</b><span>' + esc(t('freeNowBody')) + '</span></span><span class="go">' + esc(t('freeNowGo')) + ' →</span></a>' +
+        '<div class="join join-inline">' +
         '<div class="join-top g-' + id + '"><span class="join-badge">' + LOCK + esc(t('lockBadge')) + '</span>' +
         '<div class="join-game"><span class="join-ic">' + ICONS[id] + '</span><span><b>' + esc(g.title) + '</b><small>' + esc(g.tagline || '') + '</small></span></div>' +
         '<p class="join-pitch">' + esc(pitch(id)) + '</p>' +
@@ -569,8 +574,7 @@
         '<a class="btn btn-primary join-cta" href="' + signUpHref() + '">' + esc(t('joinCta')) + '</a>' + (o.extra || '') +
         '<p class="join-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('joinSignIn')) + '</a></p></div></div>' +
         '<section class="card lock-more"><h3>' + esc(t('lockAll')) + '</h3>' + lockedList(games, id) + '</section>' +
-        '<a class="free-now g-daily" href="/games/daily"><span class="g-ic">' + ICONS.daily + '</span><span class="txt"><small>' + esc(t('freeNow')) + '</small>' +
-        '<b>' + esc(t('freeNowTitle')) + '</b><span>' + esc(t('freeNowBody')) + '</span></span></a></div>';
+        '</div>';
       return games;
     });
   }
