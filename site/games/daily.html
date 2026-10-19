@@ -11,7 +11,10 @@
   <meta property="og:title" content="Take today's 1-minute speaking challenge">
   <meta property="og:description" content="A new speaking topic every day. Speak for one minute, build your streak, and get comfortable talking.">
   <meta property="og:url" content="https://public-speaking-lemon.vercel.app/games/daily">
-  <meta property="og:image" content="https://public-speaking-lemon.vercel.app/assets/assets/images/playing-a-game-pic.jpeg">
+  <meta property="og:image" content="https://public-speaking-lemon.vercel.app/og/daily-streak.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A glowing fire with the words: Daily speaking streak, take today's 1-minute challenge">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png">
@@ -27,9 +30,12 @@
     .d-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .d-kick { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
     .d-date { font-size: 13px; opacity: .85; }
-    .d-how { display: inline-flex; align-items: center; gap: 6px; margin: 12px 8px 0 0; padding: 6px 12px; border: 0; border-radius: 999px; background: rgba(255,255,255,.18); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; vertical-align: middle; }
+    .d-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+    .d-row .streak { margin-top: 0; }
+    .d-how { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 12px; padding: 6px; border: 0; background: none; color: #fff; font-weight: 700; font-size: 14.5px; cursor: pointer; opacity: .92; }
+    .d-how:hover { opacity: 1; text-decoration: underline; }
     .d-how svg { width: 16px; height: 16px; }
-    .streak { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 14px 6px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-weight: 800; font-size: 15px; }
+    .streak { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; min-height: 38px; padding: 4px 14px 4px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-weight: 800; font-size: 15px; }
     .streak .fire { font-size: 20px; line-height: 1; display: inline-block; animation: flick 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
     .streak.cold .fire { filter: grayscale(1); opacity: .7; animation: none; }
     @keyframes flick { 25% { transform: scale(1.12) rotate(-6deg); } 50% { transform: scale(.96) rotate(4deg); } 75% { transform: scale(1.08) rotate(-2deg); } }
@@ -250,8 +256,6 @@
           S.history().then(function (rounds) {
             known = rounds;
             render(stats(known), myTopic(words, known));
-            // First visit: walk them through it; "Let's play" starts the minute.
-            S.howToPlayFirstTime(ID, function () { var b = main.querySelector('#go'); if (b) b.click(); });
           });
         });
       });
@@ -314,14 +318,14 @@
         main.innerHTML = '<div class="daily">' +
           '<a class="back-games" href="/games">' + BACK + esc(t('dBackGames')) + '</a>' +
           '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span><span class="d-date">' + esc(dateFmt.format(today)) + '</span></div>' +
-          '<button class="d-how" type="button">' + G.ICON.bulb + esc(t('howTo')) + '</button>' +
-          '<div class="streak' + (st.current ? '' : ' cold') + '"><span class="fire">🔥</span>' + esc(keepAlive ? t('dKeep', { n: st.current }) : streakLabel(st.current)) + '</div>' +
+          '<div class="d-row"><div class="streak' + (st.current ? '' : ' cold') + '"><span class="fire">🔥</span>' + esc(keepAlive ? t('dKeep', { n: st.current }) : streakLabel(st.current)) + '</div></div>' +
           '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
           (st.doneToday
             ? '<div class="d-done"><b>✓</b><span>' + esc(t('dDoneToday')) + '</span></div>' +
               '<div class="d-actions"><button class="btn d-go" style="margin:0" type="button" id="share">' + SHARE + esc(t('dShare')) + '</button>' +
               '<button class="btn d-ghost" type="button" id="again">' + esc(t('dAgain')) + '</button></div>'
             : '<p class="d-rule">' + esc(t('dRule')) + '</p><button class="btn d-go" type="button" id="go">' + G.ICON.play + esc(t('dStart')) + '</button>') +
+          '<button class="d-how" type="button">' + G.ICON.bulb + esc(t('howTo')) + '</button>' +
           '</section>' +
           '<section class="card week"><h3>' + esc(t('dWeek')) + '</h3><div class="days">' + week + '</div>' +
           '<div class="best"><span>' + esc(t('dBest')) + ': <b>' + st.best + '</b></span><span>' + esc(t('dTotal')) + ': <b>' + st.total + '</b></span></div></section>' +
@@ -329,8 +333,12 @@
           '<section class="card why"><h3 style="font-size:15px;margin:0">' + esc(t('dWhy')) + '</h3><ul><li>' + esc(t('dWhy1')) + '</li><li>' + esc(t('dWhy2')) + '</li><li>' + esc(t('dWhy3')) + '</li></ul></section>' +
           '</div>';
         var go = main.querySelector('#go') || main.querySelector('#again');
-        go.addEventListener('click', function () { play(topic, st); });
-        main.querySelector('.d-how').addEventListener('click', function () { S.howToPlay(ID, function () { var b = main.querySelector('#go'); if (b) b.click(); }); });
+        // No streak yet: explain it first, and "Let's play" starts the minute.
+        go.addEventListener('click', function () {
+          if (go.id === 'go' && st.current === 0) S.howToPlay(ID, function () { play(topic, st); });
+          else play(topic, st);
+        });
+        main.querySelector('.d-how').addEventListener('click', function () { S.howToPlay(ID, st.doneToday ? null : function () { play(topic, st); }); });
         var hm = main.querySelector('.h-more');
         if (hm) hm.addEventListener('click', function () { main.querySelectorAll('.hist .more-row').forEach(function (r) { r.hidden = false; }); hm.remove(); });
         var sh = main.querySelector('#share');
