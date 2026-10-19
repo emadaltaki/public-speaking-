@@ -147,6 +147,7 @@
           strengths: ['A real story made it easy to listen to', 'A good, steady pace', 'Clear and simple words'],
           nextStep: 'Practise your first and last sentence until you can say them with no fillers.',
           pace: [138, 151, 176, 129], fillerCounts: { um: 2, like: 1 },
+          practice: { game: 'autocomplete', reason: 'Your fillers came when starting new ideas. Autocomplete trains you to start sentences quickly and confidently.' },
           story: { outline: ['Nervous before a first job interview', 'Grandma\'s advice: be curious, not perfect', 'Asked questions and enjoyed it', 'Still uses it before big talks'],
             opening: { rating: 'ok', note: 'A clear topic, but two fillers made the first line sound unsure.' },
             middle: { rating: 'strong', note: 'A real story told in order, easy to follow and picture.' },
@@ -167,6 +168,7 @@
           strengths: ['قصة حقيقية جعلت الاستماع سهلًا', 'سرعة جيدة وثابتة', 'كلمات واضحة وبسيطة'],
           nextStep: 'تدرّب على جملتك الأولى والأخيرة حتى تقولهما بلا كلمات حشو.',
           pace: [112, 124, 141, 109], fillerCounts: { 'يعني': 2, 'اممم': 2 },
+          practice: { game: 'autocomplete', reason: 'ظهرت كلمات الحشو عند بداية الأفكار الجديدة. لعبة الإكمال التلقائي تدرّبك على بدء الجمل بسرعة وثقة.' },
           story: { outline: ['التوتر قبل أول مقابلة عمل', 'نصيحة الجدة: كن فضوليًا لا مثاليًا', 'طرح الأسئلة والاستمتاع', 'استخدامها قبل كل حديث مهم'],
             opening: { rating: 'ok', note: 'الموضوع واضح، لكن كلمتي الحشو جعلتا البداية مترددة.' },
             middle: { rating: 'strong', note: 'قصة حقيقية مرتبة وسهلة المتابعة.' },
@@ -196,10 +198,10 @@
             paceTimeline: d.pace, fillers: d.fillerCounts },
           scores: scores,
           moments: d.moments.map(function (m) { return { at: words[find(m[0], m[1])].s, category: m[2], quote: m[3], issue: m[4], fix: m[5] }; }),
-          strengths: d.strengths, nextStep: d.nextStep, transcript: words, story: d.story
+          strengths: d.strengths, nextStep: d.nextStep, transcript: words, story: d.story, practice: d.practice
         };
       }
-      var settings = { seconds: 120, own: '', set: 'General' };
+      var settings = { seconds: 60, own: '', set: 'General' };  // every talk is one minute
       var shownTopic = '';
       var SHUFFLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>';
 
@@ -218,8 +220,6 @@
           G.setup({
             id: ID, games: games, startLabel: t('cStart'), startIcon: G.ICON.arrow,
             render: function (rows) {
-              rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('cLength'), min: 30, max: 120, step: 30, value: settings.seconds,
-                format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
               // A ready topic, a shuffle button, or their own.
               var tp = document.createElement('div');
               tp.innerHTML = '<span class="row-head">' + G.ICON.list + '<span>' + esc(t('cTopic')) + '</span></span>' +
@@ -411,6 +411,13 @@
               (own ? '' : '<button class="btn btn-ghost" type="button" id="next">' + G.ICON.next + esc(t('cNext')) + '</button>') +
               '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div>';
             window.Coach.render(main.querySelector('#report'), report, { audio: url, celebrate: true });
+            // Compare with their previous talk.
+            S.api('/v1/speech/reports?limit=5').then(function (r) {
+              var list = (r && r.status === 200 && r.body && (r.body.reports || r.body)) || [];
+              if (!Array.isArray(list)) return;
+              var prev = list.filter(function (x) { return x && String(x.id) !== String(report.id); })[0];
+              if (prev) window.Coach.progress(main.querySelector('#report'), report.overall, prev.overall);
+            });
             window.scrollTo(0, 0);
             var leave = function () { URL.revokeObjectURL(url); };
             main.querySelector('#same').addEventListener('click', function () { leave(); showSetup(); play(topic); });

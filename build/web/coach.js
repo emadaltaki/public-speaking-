@@ -19,7 +19,10 @@
     scStory: 'Your story', scOutline: 'Your main points', scOpening: 'Opening', scMiddle: 'Middle', scEnding: 'Ending',
     scRate: { strong: 'Strong', ok: 'Okay', weak: 'Needs work' }, scConnect: 'How your ideas connect',
     scPace: 'Your pace', scPaceAvg: 'Average {n} words a minute', scPaceZone: 'Comfortable zone: 130 to 160',
-    scPaceFast: 'You sped up around {t} ({n} a minute).', scPaceSlow: 'You slowed right down around {t} ({n} a minute).', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words'
+    scPaceFast: 'You sped up around {t} ({n} a minute).', scPaceSlow: 'You slowed right down around {t} ({n} a minute).', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words',
+    scPractice: 'Practice this next', scPlayGame: 'Play {g}', scComeBack: 'Play it a few times, then come back to Speech Coach and record again to see how much you improve.',
+    scG: { autocomplete: 'Autocomplete', 'triple-step': 'Triple Step', conductor: 'The Conductor', podcast: 'The Podcast Game', daily: 'Daily Challenge' },
+    scUp: '▲ Up {n} from your last talk', scDown: '▼ {n} lower than last time. Keep practicing!', scSame: 'Same score as last time. Keep going!'
   }, {
     scOverall: 'الإجمالي', scOutOf: 'من 10', scTopicOwn: 'موضوعك الخاص',
     scCats: { pace: 'السرعة', pauses: 'الوقفات', fillers: 'كلمات الحشو', clarity: 'الوضوح', flow: 'ترابط الأفكار' },
@@ -34,7 +37,10 @@
     scStory: 'قصتك', scOutline: 'نقاطك الرئيسية', scOpening: 'البداية', scMiddle: 'الوسط', scEnding: 'النهاية',
     scRate: { strong: 'قوية', ok: 'مقبولة', weak: 'تحتاج تحسينًا' }, scConnect: 'كيف ترتبط أفكارك',
     scPace: 'سرعتك', scPaceAvg: 'المتوسط {n} كلمة في الدقيقة', scPaceZone: 'المنطقة المريحة: من 130 إلى 160',
-    scPaceFast: 'أسرعت عند {t} ({n} كلمة في الدقيقة).', scPaceSlow: 'أبطأت كثيرًا عند {t} ({n} كلمة في الدقيقة).', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك'
+    scPaceFast: 'أسرعت عند {t} ({n} كلمة في الدقيقة).', scPaceSlow: 'أبطأت كثيرًا عند {t} ({n} كلمة في الدقيقة).', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك',
+    scPractice: 'تدرّب على هذه اللعبة', scPlayGame: 'العب {g}', scComeBack: 'العبها بضع مرات، ثم عد إلى مدرب الإلقاء وسجّل مجددًا لترى كم تحسّنت.',
+    scG: { autocomplete: 'الإكمال التلقائي', 'triple-step': 'الخطوة الثلاثية', conductor: 'قائد الأوركسترا', podcast: 'لعبة البودكاست', daily: 'التحدي اليومي' },
+    scUp: '▲ أعلى بـ {n} من حديثك السابق', scDown: '▼ أقل بـ {n} من المرة السابقة. واصل التدرّب!', scSame: 'الدرجة نفسها مثل المرة السابقة. استمر!'
   });
 
   var CATS = ['pace', 'pauses', 'fillers', 'clarity', 'flow'];
@@ -119,6 +125,28 @@
     return '<p class="pc-note">' + esc(bits.join(' ')) + '</p>';
   }
 
+  // The game to practise next, then come back and compare.
+  function practiceCard(p) {
+    if (!p || !p.game || !t('scG')[p.game]) return '';
+    var name = t('scG')[p.game];
+    return '<div class="card sc-practice g-' + p.game + '"><div class="sp-top"><span class="g-ic">' + (S.ICONS[p.game] || '') + '</span>' +
+      '<span><small>' + esc(t('scPractice')) + '</small><b>' + esc(name) + '</b></span></div>' +
+      (p.reason ? '<p dir="auto">' + esc(p.reason) + '</p>' : '') +
+      '<a class="sp-go" href="/games/' + encodeURIComponent(p.game) + '">' + esc(t('scPlayGame', { g: name })) + ' →</a>' +
+      '<p class="sp-back">🔁 ' + esc(t('scComeBack')) + '</p></div>';
+  }
+
+  // A small badge comparing this talk with the one before.
+  function progress(el, now, before) {
+    var head = el && el.querySelector('.sc-head');
+    if (!head || before == null) return;
+    var d = clamp(now) - clamp(before);
+    var b = document.createElement('p');
+    b.className = 'sc-prog ' + (d > 0 ? 'up' : d < 0 ? 'down' : 'same');
+    b.textContent = d > 0 ? t('scUp', { n: d }) : d < 0 ? t('scDown', { n: -d }) : t('scSame');
+    head.insertBefore(b, head.querySelector('h2'));
+  }
+
   // Each filler word and how many times it came up.
   function fillerCard(m) {
     var f = m.fillers || {};
@@ -144,7 +172,7 @@
         '<li>' + esc(plural(m.fillerCount || 0, 'scFillers0', 'scFillers1', 'scFillersN')) + '</li>' +
         '<li>' + esc(plural(m.longPauses || 0, 'scPauses0', 'scPauses1', 'scPausesN')) + '</li>' +
         (r.durationSeconds ? '<li dir="ltr">' + mmss(r.durationSeconds) + '</li>' : '') +
-      '</ul></div></div>' +
+      '</ul></div></div>' + practiceCard(r.practice) +
       '<div class="card sc-scores">' + CATS.map(function (k) {
         var s = sc[k] || {};
         var n = clamp(s.score);
@@ -238,5 +266,5 @@
     }
   }
 
-  window.Coach = { render: render, mmss: mmss, clamp: clamp, band: band, CATS: CATS };
+  window.Coach = { render: render, progress: progress, mmss: mmss, clamp: clamp, band: band, CATS: CATS };
 })();

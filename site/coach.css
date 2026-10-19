@@ -37,6 +37,22 @@
 .sc-bar { height: 9px; border-radius: 99px; background: var(--border); margin-top: 6px; overflow: hidden; }
 .sc-bar i { display: block; height: 100%; border-radius: 99px; }
 .sc-row p { margin: 8px 0 0; color: var(--text); font-size: 15px; line-height: 1.5; }
+/* Practice this next */
+.sc-practice { color: #fff; border: 0; overflow: hidden; position: relative; isolation: isolate; }
+.sc-practice::after { content: ""; position: absolute; z-index: -1; right: -50px; top: -60px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,.12); }
+.sc-practice.g-daily { background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); }
+.sp-top { display: flex; align-items: center; gap: 14px; }
+.sp-top .g-ic { width: 52px; height: 52px; flex: none; border-radius: 16px; display: grid; place-items: center; background: rgba(255,255,255,.2); }
+.sp-top .g-ic svg { width: 26px; height: 26px; color: #fff; }
+.sp-top small { display: block; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+.sp-top b { display: block; font-family: var(--head); font-size: 21px; line-height: 1.2; }
+.sc-practice > p { margin: 12px 0 0; color: rgba(255,255,255,.92); line-height: 1.5; font-size: 15px; }
+.sp-go { display: flex; justify-content: center; margin-top: 14px; padding: 12px; border-radius: 999px; background: #fff; color: #2B2118; font-weight: 800; text-decoration: none; }
+.sc-practice .sp-back { margin-top: 12px; font-size: 14px; color: rgba(255,255,255,.88); }
+.sc-prog { display: inline-block; margin: 6px 0 0; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; }
+.sc-prog.up { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.sc-prog.down { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+.sc-prog.same { background: var(--tint); color: var(--muted); }
 /* Story map */
 .sc-sub { margin: -6px 0 10px; color: var(--muted); font-size: 14px; font-weight: 700; }
 .sc-outline { margin: 0 0 16px; padding: 0; list-style: none; counter-reset: o; display: grid; gap: 8px; }
