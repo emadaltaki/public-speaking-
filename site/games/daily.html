@@ -27,6 +27,8 @@
     .d-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .d-kick { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
     .d-date { font-size: 13px; opacity: .85; }
+    .d-how { display: inline-flex; align-items: center; gap: 6px; margin: 12px 8px 0 0; padding: 6px 12px; border: 0; border-radius: 999px; background: rgba(255,255,255,.18); color: #fff; font-weight: 700; font-size: 14px; cursor: pointer; vertical-align: middle; }
+    .d-how svg { width: 16px; height: 16px; }
     .streak { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; padding: 6px 14px 6px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-weight: 800; font-size: 15px; }
     .streak .fire { font-size: 20px; line-height: 1; display: inline-block; animation: flick 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
     .streak.cold .fire { filter: grayscale(1); opacity: .7; animation: none; }
@@ -133,6 +135,11 @@
         dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
         dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
         dJoinTitle: 'Take today\'s challenge too', dJoinB1: 'A new one-minute topic every day', dJoinB2: 'Build your own streak and share it', dJoinB3: 'Plus 4 more speaking games, all free',
+        dHow1: 'Every day you get your own new topic, right here at the top.',
+        dHow2: 'Tap Start my minute. After Ready, Set, Go, the one-minute timer begins.',
+        dHow3: 'Talk about the topic out loud until the timer ends. Stories, opinions and examples all count.',
+        dHow4: 'Make it to the end of the minute to earn the day and grow your streak 🔥',
+        dHowTip: 'Stuck? Ask yourself why, how, or tell a quick story about it. Nobody is listening, so just keep going.',
         dHistory: 'Your challenge history', dDayN: 'Day {n}', dShowAll: 'Show all days',
         dTheirTopic: "{name}'s topic today", dFriendTopic: "Your friend's topic today", dSampleTopic: 'A taste of the topics',
         dOwnTopic: 'Join free and you get your own new topic every day, never the same twice. Speak for one minute and build your streak.',
@@ -154,6 +161,11 @@
         dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
         dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
         dJoinTitle: 'خُض تحدي اليوم أنت أيضًا', dJoinB1: 'موضوع جديد لدقيقة واحدة كل يوم', dJoinB2: 'ابنِ سلسلتك وشاركها', dJoinB3: 'و4 ألعاب تحدّث أخرى، كلها مجانية',
+        dHow1: 'كل يوم تحصل على موضوع جديد خاص بك، هنا في الأعلى.',
+        dHow2: 'اضغط «ابدأ دقيقتي». بعد استعد، انطلق، يبدأ مؤقت الدقيقة.',
+        dHow3: 'تحدّث عن الموضوع بصوت عالٍ حتى ينتهي المؤقت. القصص والآراء والأمثلة كلها تُحتسب.',
+        dHow4: 'أكمل الدقيقة حتى نهايتها لتكسب يومك وتكبر سلسلتك 🔥',
+        dHowTip: 'توقفت؟ اسأل نفسك لماذا وكيف، أو احكِ قصة قصيرة عنه. لا أحد يسمعك، فقط تابع.',
         dHistory: 'سجلّ تحدياتك', dDayN: 'اليوم {n}', dShowAll: 'اعرض كل الأيام',
         dTheirTopic: 'موضوع {name} اليوم', dFriendTopic: 'موضوع صديقك اليوم', dSampleTopic: 'مثال على المواضيع',
         dOwnTopic: 'انضم مجانًا وستحصل على موضوع جديد خاص بك كل يوم، لا يتكرر أبدًا. تحدّث دقيقة وابنِ سلسلتك.',
@@ -231,11 +243,15 @@
       Promise.all([S.loadGames(), G.loadWords()]).then(function (res) {
         var words = res[1];
         if (!S.user()) return teaser(words);
+        // The daily challenge's own "How it works" steps.
+        res[0].daily = { title: t('dTitle'), steps: [t('dHow1'), t('dHow2'), t('dHow3'), t('dHow4')], tip: t('dHowTip') };
         S.gate(main, function () {
           // Wait for the account's rounds so today's topic is never one used on another device.
           S.history().then(function (rounds) {
             known = rounds;
             render(stats(known), myTopic(words, known));
+            // First visit: walk them through it; "Let's play" starts the minute.
+            S.howToPlayFirstTime(ID, function () { var b = main.querySelector('#go'); if (b) b.click(); });
           });
         });
       });
@@ -298,6 +314,7 @@
         main.innerHTML = '<div class="daily">' +
           '<a class="back-games" href="/games">' + BACK + esc(t('dBackGames')) + '</a>' +
           '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span><span class="d-date">' + esc(dateFmt.format(today)) + '</span></div>' +
+          '<button class="d-how" type="button">' + G.ICON.bulb + esc(t('howTo')) + '</button>' +
           '<div class="streak' + (st.current ? '' : ' cold') + '"><span class="fire">🔥</span>' + esc(keepAlive ? t('dKeep', { n: st.current }) : streakLabel(st.current)) + '</div>' +
           '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
           (st.doneToday
@@ -313,6 +330,7 @@
           '</div>';
         var go = main.querySelector('#go') || main.querySelector('#again');
         go.addEventListener('click', function () { play(topic, st); });
+        main.querySelector('.d-how').addEventListener('click', function () { S.howToPlay(ID, function () { var b = main.querySelector('#go'); if (b) b.click(); }); });
         var hm = main.querySelector('.h-more');
         if (hm) hm.addEventListener('click', function () { main.querySelectorAll('.hist .more-row').forEach(function (r) { r.hidden = false; }); hm.remove(); });
         var sh = main.querySelector('#share');
