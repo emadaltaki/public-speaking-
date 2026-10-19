@@ -37,6 +37,41 @@
 .sc-bar { height: 9px; border-radius: 99px; background: var(--border); margin-top: 6px; overflow: hidden; }
 .sc-bar i { display: block; height: 100%; border-radius: 99px; }
 .sc-row p { margin: 8px 0 0; color: var(--text); font-size: 15px; line-height: 1.5; }
+/* Story map */
+.sc-sub { margin: -6px 0 10px; color: var(--muted); font-size: 14px; font-weight: 700; }
+.sc-outline { margin: 0 0 16px; padding: 0; list-style: none; counter-reset: o; display: grid; gap: 8px; }
+.sc-outline li { counter-increment: o; display: flex; gap: 10px; align-items: flex-start; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.sc-outline li::before { content: counter(o); flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 800; }
+.sc-arc { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 14px; }
+.sc-arc::before { content: ""; position: absolute; top: 12px; bottom: 12px; inset-inline-start: 8px; width: 2px; background: var(--border); }
+.sc-arc li { position: relative; display: flex; gap: 14px; }
+.st-dot { position: relative; z-index: 1; flex: none; width: 18px; height: 18px; margin-top: 2px; border-radius: 50%; border: 3px solid var(--surface); box-shadow: 0 0 0 2px var(--border); }
+.st-strong .st-dot { background: var(--ok); } .st-ok .st-dot { background: var(--warm); } .st-weak .st-dot { background: var(--primary); }
+.sc-arc b { display: block; color: var(--ink); font-size: 15.5px; }
+.sc-arc em { font-style: normal; margin-inline-start: 6px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+.st-strong em { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+.st-ok em { background: color-mix(in srgb, var(--warm) 20%, transparent); color: var(--ink); }
+.st-weak em { background: color-mix(in srgb, var(--primary) 15%, transparent); color: var(--primary); }
+.sc-arc p { margin: 4px 0 0; font-size: 15px; line-height: 1.5; color: var(--text); }
+.sc-connect { margin-top: 16px; padding: 12px 14px; border-radius: 14px; background: var(--tint); border: 1px solid var(--border); }
+.sc-connect b { display: block; color: var(--ink); font-size: 14px; }
+.sc-connect p { margin: 4px 0 0; line-height: 1.5; font-size: 15px; }
+/* Pace chart */
+.pc-chart { position: relative; display: flex; align-items: flex-end; gap: 6px; height: 150px; padding-top: 18px; }
+.pc-zone { position: absolute; inset-inline: 0; background: color-mix(in srgb, var(--ok) 12%, transparent); border-block: 1px dashed color-mix(in srgb, var(--ok) 45%, transparent); }
+.pc-col { position: relative; flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; min-width: 0; }
+.pc-bar { position: relative; width: 100%; max-width: 38px; border-radius: 8px 8px 3px 3px; }
+.pc-bar.ok { background: var(--ok); } .pc-bar.fast { background: var(--primary); } .pc-bar.slow { background: var(--warm); }
+.pc-bar span { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 11.5px; font-weight: 800; color: var(--ink); }
+.pc-col small { margin-top: 4px; font-size: 11px; color: var(--muted); }
+.pc-legend { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+.pc-legend .z { width: 16px; height: 10px; border-radius: 3px; background: color-mix(in srgb, var(--ok) 25%, transparent); border: 1px dashed var(--ok); }
+.pc-note { margin: 8px 0 0; font-weight: 600; color: var(--ink); font-size: 14.5px; }
+/* Filler words */
+.fl-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.fl-list li { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: color-mix(in srgb, var(--warm) 22%, transparent); }
+.fl-list b { color: var(--ink); }
+.fl-list span { font-weight: 800; color: var(--accent); }
 .sc-moments ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .sc-moments li { padding: 14px; border-radius: 16px; background: var(--tint); border: 1px solid var(--border); }
 .sc-m-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
