@@ -66,10 +66,13 @@
     .hist ul { list-style: none; margin: 0; padding: 0; }
     .hist li { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--border); }
     .hist li:first-child { border-top: 0; }
-    .h-day { flex: none; width: 104px; }
-    .h-day b { display: block; font-size: 14px; color: var(--ink); }
-    .h-day small { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--accent); }
-    .h-topic { flex: 1; min-width: 0; font-family: var(--head); font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.3; }
+    /* One row per day: a streak badge, then the topic over the date. */
+    .h-badge { flex: none; width: 46px; height: 46px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(145deg, #E0703E, #A23B1E); color: #fff; line-height: 1; }
+    .h-badge b { font-family: var(--head); font-size: 18px; font-weight: 800; }
+    .h-badge small { margin-top: 3px; font-size: 9.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
+    .h-text { flex: 1; min-width: 0; }
+    .h-topic { display: block; font-family: var(--head); font-weight: 700; font-size: 15.5px; color: var(--ink); line-height: 1.3; }
+    .h-date { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); }
     .h-more { margin-top: 6px; }
     .about { margin-top: 16px; overflow: hidden; }
     .about .pics { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 6px; margin: -6px -6px 16px; }
@@ -164,7 +167,7 @@
         dLiveTitle: 'Want to practice with real people?', dLiveBody: 'Join a small, friendly group session. Your first call is free.',
         dSeeSessions: 'See our sessions', dSeeCommunity: 'Meet the community', dVisitHome: 'Visit our home page',
         dPic1: 'A host leading a workshop', dPic2: 'Members around the table during a session', dPic3: 'A member speaking to the room',
-        dHistory: 'Your challenge history', dDayN: 'Day {n}', dShowAll: 'Show all days',
+        dHistory: 'Your challenge history', dDayN: 'Day {n}', dDayWord: 'Day', dShowAll: 'Show all days',
         dNotYet: "This one won't count yet", dNotYetBody: 'Only a full minute counts toward your streak. Keep going to earn today, or leave and try again later.',
         dWinTitle: 'Day earned, well done!', dWinBody: 'You spoke for a full minute. Share your streak so friends can cheer you on.',
         dPracTitle: 'Nice practice!', dSpoken: 'spoken', dPracBody: "Today was already earned, so your {n}-day streak is safe. Want to show it off?",
@@ -194,7 +197,7 @@
         dLiveTitle: 'تريد التدرّب مع أشخاص حقيقيين؟', dLiveBody: 'انضم إلى جلسة جماعية صغيرة وودودة. مكالمتك الأولى مجانية.',
         dSeeSessions: 'اطّلع على جلساتنا', dSeeCommunity: 'تعرّف على مجتمعنا', dVisitHome: 'زُر صفحتنا الرئيسية',
         dPic1: 'مضيف يقود ورشة', dPic2: 'أعضاء حول الطاولة خلال جلسة', dPic3: 'عضو يتحدث أمام القاعة',
-        dHistory: 'سجلّ تحدياتك', dDayN: 'اليوم {n}', dShowAll: 'اعرض كل الأيام',
+        dHistory: 'سجلّ تحدياتك', dDayN: 'اليوم {n}', dDayWord: 'يوم', dShowAll: 'اعرض كل الأيام',
         dNotYet: 'هذه المحاولة لن تُحتسب بعد', dNotYetBody: 'الدقيقة الكاملة فقط تُحتسب في سلسلتك. تابع لتكسب يومك، أو غادر وحاول لاحقًا.',
         dWinTitle: 'كسبت يومك، أحسنت!', dWinBody: 'تحدّثت دقيقة كاملة. شارك سلسلتك ليشجّعك أصدقاؤك.',
         dPracTitle: 'تدريب رائع!', dSpoken: 'تحدّثت', dPracBody: 'يومك محسوب بالفعل، فسلسلة {n} أيام في أمان. هل تريد مشاركتها؟',
@@ -330,8 +333,8 @@
         var fmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
         var rows = keys.reverse().slice(0, 60).map(function (k, i) {
           var r = byDay[k];
-          return '<li' + (i >= 7 ? ' class="more-row" hidden' : '') + '><span class="h-day"><b>' + esc(fmt.format(new Date(k + 'T12:00:00'))) + '</b><small>🔥 ' + esc(t('dDayN', { n: pos[k] })) + '</small></span>' +
-            '<span class="h-topic">' + esc(r.topic || '') + '</span></li>';
+          return '<li' + (i >= 7 ? ' class="more-row" hidden' : '') + '><span class="h-badge" aria-label="' + esc(t('dDayN', { n: pos[k] })) + '"><b>' + pos[k] + '</b><small>' + esc(t('dDayWord')) + '</small></span>' +
+            '<span class="h-text"><span class="h-topic">' + esc(r.topic || '') + '</span><span class="h-date">🔥 ' + esc(fmt.format(new Date(k + 'T12:00:00'))) + '</span></span></li>';
         }).join('');
         return '<section class="card hist"><h3>' + esc(t('dHistory')) + '</h3><ul>' + rows + '</ul>' +
           (keys.length > 7 ? '<button class="link h-more" type="button">' + esc(t('dShowAll')) + '</button>' : '') + '</section>';
