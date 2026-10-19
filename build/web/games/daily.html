@@ -118,6 +118,8 @@
         dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
         dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
         dJoinTitle: 'Take today\'s challenge too', dJoinB1: 'A new one-minute topic every day', dJoinB2: 'Build your own streak and share it', dJoinB3: 'Plus 4 more speaking games, all free',
+        dNotYet: "This one won't count yet", dNotYetBody: 'Your streak needs the full minute. Keep going to finish and earn today, or leave and come back later.',
+        dLeft: '{n}s', dLeftLabel: 'left to go', dKeepGoing: 'Keep going', dLeave: "Leave, it won't count",
         dJoinCta: 'Join free and start', dJoinHave: 'Already have an account?', dJoinIn: 'Sign in', dPractice: 'Practice round. Today already counts.'
       }, {
         dTitle: 'التحدي اليومي', dKick: 'تحدي اليوم', dTopicLabel: 'موضوعك', dRule: 'تحدّث عنه لمدة دقيقة واحدة. بلا إعادة وبلا ضغط، فقط تكلّم.',
@@ -131,6 +133,8 @@
         dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
         dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
         dJoinTitle: 'خُض تحدي اليوم أنت أيضًا', dJoinB1: 'موضوع جديد لدقيقة واحدة كل يوم', dJoinB2: 'ابنِ سلسلتك وشاركها', dJoinB3: 'و4 ألعاب تحدّث أخرى، كلها مجانية',
+        dNotYet: 'هذه المحاولة لن تُحتسب بعد', dNotYetBody: 'سلسلتك تحتاج إلى الدقيقة كاملة. تابع لتُكملها وتكسب يومك، أو غادر وعد لاحقًا.',
+        dLeft: '{n} ث', dLeftLabel: 'متبقية', dKeepGoing: 'تابع', dLeave: 'غادر، لن تُحتسب',
         dJoinCta: 'انضم مجانًا وابدأ', dJoinHave: 'لديك حساب؟', dJoinIn: 'سجّل الدخول', dPractice: 'جولة تدريب. يومك محسوب بالفعل.'
       });
       var FIRE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2.5s.9 3.1-1.4 5.6C10.3 10 8 11.4 8 14.6A4.4 4.4 0 0 0 12.4 19a4.6 4.6 0 0 0 4.6-4.6c0-1.6-.6-2.9-1.3-3.9 0 0-.1 1.7-1.6 2.2 0 0 .9-4.4-.6-10.2zM6.6 9.4C5 11.2 4 13.3 4 15.4 4 19.6 7.6 23 12 23s8-3.4 8-7.6c0-1.2-.3-2.4-.8-3.5-.4 3.5-3.4 6.1-7 6.1A6.3 6.3 0 0 1 6 11.7c0-.8.2-1.6.6-2.3z"/></svg>';
@@ -241,7 +245,12 @@
           var paint = function () { stg.body.querySelector('#pause').innerHTML = (paused ? G.ICON.play : G.ICON.pause) + esc(paused ? t('tripleStepResume') : t('tripleStepPause')); };
           paint();
           stg.body.querySelector('#pause').addEventListener('click', function () { paused = !paused; paint(); });
-          stg.body.querySelector('#stop').addEventListener('click', function () { finish(); });
+          stg.body.querySelector('#stop').addEventListener('click', function () {
+            // Practice rounds can end any time; today's round needs the full minute.
+            if (before.doneToday || elapsed >= total) return finish();
+            paused = true; paint();
+            notYet(elapsed, function () { paused = false; paint(); }, function () { G.loopStop(); stg.close(); render(stats(known), topic); });
+          });
           G.loop(function (d) {
             if (paused) return;
             elapsed += d;
@@ -253,7 +262,7 @@
         function finish() {
           G.loopStop();
           var spoke = elapsed / 1000;
-          var counts = spoke >= 10;
+          var counts = elapsed >= total && !before.doneToday;
           if (counts) {
             S.recordRound({ gameId: ID, spokenSeconds: spoke, topic: topic });
             known = [{ gameId: ID, playedAt: new Date().toISOString(), spokenSeconds: Math.round(spoke), topic: topic }].concat(known);
@@ -290,6 +299,21 @@
           el.querySelector('#eDone').addEventListener('click', function () { location.href = '/games'; });
           el.querySelector('#eStay').addEventListener('click', function () { el.remove(); stg.close(); render(after, topic); });
         }
+      }
+
+      // "I'm done" early: it won't count, so keep going or leave.
+      function notYet(ms, onKeep, onLeave) {
+        var el = document.createElement('div');
+        el.className = 'end d-end';
+        var left = Math.max(1, Math.ceil((SECONDS * 1000 - ms) / 1000));
+        el.innerHTML = '<div class="card"><div class="de-top" style="padding:26px 20px 20px"><div class="de-flame" style="font-size:56px">⏳</div>' +
+          '<div class="de-count" style="font-size:44px">' + esc(t('dLeft', { n: left })) + '</div><div class="de-label">' + esc(t('dLeftLabel')) + '</div></div>' +
+          '<div class="de-body"><h2>' + esc(t('dNotYet')) + '</h2><p>' + esc(t('dNotYetBody')) + '</p>' +
+          '<button class="btn btn-primary" type="button" id="nKeep">' + G.ICON.play + esc(t('dKeepGoing')) + '</button>' +
+          '<div class="more"><button type="button" id="nLeave">' + esc(t('dLeave')) + '</button></div></div></div>';
+        document.body.appendChild(el);
+        el.querySelector('#nKeep').addEventListener('click', function () { el.remove(); onKeep(); });
+        el.querySelector('#nLeave').addEventListener('click', function () { el.remove(); onLeave(); });
       }
 
       // ------------------------------------------------------------ share card
