@@ -51,6 +51,16 @@
     .days span.today { border-color: var(--primary); color: var(--ink); }
     .best { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
     .best b { color: var(--ink); }
+    .hist { margin-top: 16px; }
+    .hist h3 { font-size: 15px; margin: 0 0 6px; }
+    .hist ul { list-style: none; margin: 0; padding: 0; }
+    .hist li { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--border); }
+    .hist li:first-child { border-top: 0; }
+    .h-day { flex: none; width: 104px; }
+    .h-day b { display: block; font-size: 14px; color: var(--ink); }
+    .h-day small { display: block; margin-top: 2px; font-size: 12px; font-weight: 700; color: var(--accent); }
+    .h-topic { flex: 1; min-width: 0; font-family: var(--head); font-weight: 700; font-size: 15px; color: var(--ink); line-height: 1.3; }
+    .h-more { margin-top: 6px; }
     .why { margin-top: 16px; }
     .why ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 8px; }
     .why li { display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
@@ -123,6 +133,9 @@
         dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
         dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
         dJoinTitle: 'Take today\'s challenge too', dJoinB1: 'A new one-minute topic every day', dJoinB2: 'Build your own streak and share it', dJoinB3: 'Plus 4 more speaking games, all free',
+        dHistory: 'Your challenge history', dDayN: 'Day {n}', dShowAll: 'Show all days',
+        dTheirTopic: "{name}'s topic today", dFriendTopic: "Your friend's topic today", dSampleTopic: 'A taste of the topics',
+        dOwnTopic: 'Join free and you get your own new topic every day, never the same twice. Speak for one minute and build your streak.',
         dNotYet: "This one won't count yet", dNotYetBody: 'Only a full minute counts toward your streak. Keep going to earn today, or leave and try again later.',
         dWinTitle: 'Day earned, well done!', dWinBody: 'You spoke for a full minute. Share your streak so friends can cheer you on.',
         dPracTitle: 'Nice practice!', dSpoken: 'spoken', dPracBody: "Today was already earned, so your {n}-day streak is safe. Want to show it off?",
@@ -141,6 +154,9 @@
         dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
         dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
         dJoinTitle: 'خُض تحدي اليوم أنت أيضًا', dJoinB1: 'موضوع جديد لدقيقة واحدة كل يوم', dJoinB2: 'ابنِ سلسلتك وشاركها', dJoinB3: 'و4 ألعاب تحدّث أخرى، كلها مجانية',
+        dHistory: 'سجلّ تحدياتك', dDayN: 'اليوم {n}', dShowAll: 'اعرض كل الأيام',
+        dTheirTopic: 'موضوع {name} اليوم', dFriendTopic: 'موضوع صديقك اليوم', dSampleTopic: 'مثال على المواضيع',
+        dOwnTopic: 'انضم مجانًا وستحصل على موضوع جديد خاص بك كل يوم، لا يتكرر أبدًا. تحدّث دقيقة وابنِ سلسلتك.',
         dNotYet: 'هذه المحاولة لن تُحتسب بعد', dNotYetBody: 'الدقيقة الكاملة فقط تُحتسب في سلسلتك. تابع لتكسب يومك، أو غادر وحاول لاحقًا.',
         dWinTitle: 'كسبت يومك، أحسنت!', dWinBody: 'تحدّثت دقيقة كاملة. شارك سلسلتك ليشجّعك أصدقاؤك.',
         dPracTitle: 'تدريب رائع!', dSpoken: 'تحدّثت', dPracBody: 'يومك محسوب بالفعل، فسلسلة {n} أيام في أمان. هل تريد مشاركتها؟',
@@ -158,11 +174,37 @@
       function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
       var today = new Date();
       var TODAY = dayKey(today);
-      // Same topic for everyone on the same day.
-      function topicFor(words, key) {
-        var list = words.topics, h = 0;
-        for (var i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
-        return list[h % list.length];
+      // Topic helpers.
+      function hashOf(str) {
+        var h = 0;
+        for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+        return h;
+      }
+      // Topics friends shared with this browser: never hand those out here.
+      var AVOID_KEY = 'speakupfearless.dailyAvoid';
+      function avoided() { try { return JSON.parse(localStorage.getItem(AVOID_KEY) || '[]'); } catch (_) { return []; } }
+      (function () {
+        var shared = new URLSearchParams(location.search).get('t');
+        if (!shared) return;
+        var list = avoided();
+        if (list.indexOf(shared) === -1) list.push(shared);
+        try { localStorage.setItem(AVOID_KEY, JSON.stringify(list.slice(-200))); } catch (_) {}
+      })();
+      // Each player gets their own topic each day, never one they've had before.
+      // Once picked, today's topic is remembered so it never changes mid-day.
+      function myTopic(words, rounds) {
+        var u = S.user(), key = 'speakupfearless.dailyTopic.' + u.uid;
+        var done = rounds.filter(function (r) { return r.gameId === ID && r.topic && dayKey(new Date(r.playedAt)) === TODAY; })[0];
+        if (done) return done.topic;
+        try { var saved = JSON.parse(localStorage.getItem(key) || 'null'); if (saved && saved.day === TODAY) return saved.topic; } catch (_) {}
+        var used = {};
+        rounds.forEach(function (r) { if (r.gameId === ID && r.topic) used[r.topic] = true; });
+        avoided().forEach(function (x) { used[x] = true; });
+        var pool = words.topics.filter(function (x) { return !used[x]; });
+        if (!pool.length) pool = words.topics.slice();
+        var pick = pool[hashOf(u.uid + '|' + TODAY) % pool.length];
+        try { localStorage.setItem(key, JSON.stringify({ day: TODAY, topic: pick })); } catch (_) {}
+        return pick;
       }
       // Every round we know about: this device's plus the ones saved to the account.
       var known = [];
@@ -188,30 +230,60 @@
       var main = document.getElementById('main');
       Promise.all([S.loadGames(), G.loadWords()]).then(function (res) {
         var words = res[1];
-        var topic = topicFor(words, TODAY);
-        if (!S.user()) return teaser(topic);
+        if (!S.user()) return teaser(words);
         S.gate(main, function () {
-          known = S.localHistory ? S.localHistory() : [];
-          render(stats(known), topic);
-          S.history().then(function (rounds) { known = rounds; render(stats(known), topic); });
+          // Wait for the account's rounds so today's topic is never one used on another device.
+          S.history().then(function (rounds) {
+            known = rounds;
+            render(stats(known), myTopic(words, known));
+          });
         });
       });
 
       // Signed out: show today's topic (and who shared it) with a free sign-up
       // that comes straight back here to play.
-      function teaser(topic) {
+      function teaser(words) {
         var q = new URLSearchParams(location.search);
         var n = parseInt(q.get('s'), 10) || 0, by = (q.get('by') || '').slice(0, 24);
+        var theirs = (q.get('t') || '').slice(0, 120);
+        var topic = theirs || words.topics[hashOf('sample|' + TODAY) % words.topics.length];
+        var label = theirs ? (by ? t('dTheirTopic', { name: by }) : t('dFriendTopic')) : t('dSampleTopic');
         var from = n ? (by ? (n === 1 ? t('dFrom1', { name: by }) : t('dFrom', { name: by, n: n })) : t('dFromAnon', { n: n })) : '';
         var back = encodeURIComponent('/games/daily');
         main.innerHTML = '<div class="daily">' +
           '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span></div>' +
           (from ? '<div class="d-from"><b>🔥</b><span>' + esc(from) + '</span></div>' : '') +
-          '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
-          '<p class="d-rule">' + esc(t('dRule')) + '</p>' +
+          '<div class="d-label">' + esc(label) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
+          '<p class="d-rule">' + esc(t('dOwnTopic')) + '</p>' +
           '<a class="btn d-go" href="/login?mode=signup&next=' + back + '">' + G.ICON.play + esc(t('dJoinCta')) + '</a></section>' +
           '<section class="card d-join"><h3 style="font-size:17px;margin:0">' + esc(t('dJoinTitle')) + '</h3><ul><li>' + esc(t('dJoinB1')) + '</li><li>' + esc(t('dJoinB2')) + '</li><li>' + esc(t('dJoinB3')) + '</li></ul>' +
           '<p class="alt">' + esc(t('dJoinHave')) + ' <a href="/login?next=' + back + '">' + esc(t('dJoinIn')) + '</a></p></section></div>';
+      }
+
+      // Every day they earned, newest first: date, topic, and where it sat in its streak.
+      function historyHtml() {
+        var byDay = {};
+        known.forEach(function (r) {
+          if (r.gameId !== ID) return;
+          var k = dayKey(new Date(r.playedAt));
+          if (!byDay[k] || new Date(r.playedAt) < new Date(byDay[k].playedAt)) byDay[k] = r;
+        });
+        var keys = Object.keys(byDay).sort();
+        if (!keys.length) return '';
+        var run = 0, prev = null, pos = {};
+        keys.forEach(function (k) {
+          var d = new Date(k + 'T12:00:00');
+          run = prev && Math.round((d - prev) / 86400000) === 1 ? run + 1 : 1;
+          pos[k] = run; prev = d;
+        });
+        var fmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
+        var rows = keys.reverse().slice(0, 60).map(function (k, i) {
+          var r = byDay[k];
+          return '<li' + (i >= 7 ? ' class="more-row" hidden' : '') + '><span class="h-day"><b>' + esc(fmt.format(new Date(k + 'T12:00:00'))) + '</b><small>🔥 ' + esc(t('dDayN', { n: pos[k] })) + '</small></span>' +
+            '<span class="h-topic">' + esc(r.topic || '') + '</span></li>';
+        }).join('');
+        return '<section class="card hist"><h3>' + esc(t('dHistory')) + '</h3><ul>' + rows + '</ul>' +
+          (keys.length > 7 ? '<button class="link h-more" type="button">' + esc(t('dShowAll')) + '</button>' : '') + '</section>';
       }
 
       function render(st, topic) {
@@ -236,10 +308,13 @@
           '</section>' +
           '<section class="card week"><h3>' + esc(t('dWeek')) + '</h3><div class="days">' + week + '</div>' +
           '<div class="best"><span>' + esc(t('dBest')) + ': <b>' + st.best + '</b></span><span>' + esc(t('dTotal')) + ': <b>' + st.total + '</b></span></div></section>' +
+          historyHtml() +
           '<section class="card why"><h3 style="font-size:15px;margin:0">' + esc(t('dWhy')) + '</h3><ul><li>' + esc(t('dWhy1')) + '</li><li>' + esc(t('dWhy2')) + '</li><li>' + esc(t('dWhy3')) + '</li></ul></section>' +
           '</div>';
         var go = main.querySelector('#go') || main.querySelector('#again');
         go.addEventListener('click', function () { play(topic, st); });
+        var hm = main.querySelector('.h-more');
+        if (hm) hm.addEventListener('click', function () { main.querySelectorAll('.hist .more-row').forEach(function (r) { r.hidden = false; }); hm.remove(); });
         var sh = main.querySelector('#share');
         if (sh) { var ready = prepare(st.current, topic); sh.addEventListener('click', function () { share(ready); }); }
       }
@@ -387,7 +462,7 @@
       // so signed-out visitors see who shared it and can join from there.
       function prepare(n, topic) {
         var u = S.user();
-        var url = SITE + '/games/daily?s=' + n + (u && u.shortName ? '&by=' + encodeURIComponent(u.shortName) : '');
+        var url = SITE + '/games/daily?s=' + n + (u && u.shortName ? '&by=' + encodeURIComponent(u.shortName) : '') + '&t=' + encodeURIComponent(topic);
         var p = { text: t('dShareText', { n: n, topic: topic }), url: url, file: null };
         card(n, topic).toBlob(function (blob) { if (blob) p.file = new File([blob], 'speak-up-streak.png', { type: 'image/png' }); }, 'image/png');
         return p;
