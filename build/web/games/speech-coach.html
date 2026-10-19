@@ -26,7 +26,25 @@
     .small-link svg { width: 17px; height: 17px; }
     .note { max-width: 460px; margin: 14px auto 0; color: var(--muted); font-size: 14.5px; }
     .err { color: var(--error); font-weight: 700; }
-    .think { display: grid; gap: 10px; margin: 22px auto 0; max-width: 340px; text-align: start; }
+    /* AI at work */
+    .ai-wait { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 420px; margin: 0 auto; }
+    .ai-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; background: color-mix(in srgb, #7A4E9A 14%, transparent); color: #6B3F8C; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    :root[data-theme="dark"] .ai-badge { color: #C9A6E6; }
+    .ai-badge::before { content: "✦"; }
+    .orb { position: relative; width: 150px; height: 150px; margin: 22px 0 6px; display: grid; place-items: center; }
+    .orb::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, #3E8E7A, #7A4E9A, #E0703E, #D49A4E, #3E8E7A); filter: blur(14px); opacity: .75; animation: orbSpin 3.2s linear infinite; }
+    .orb::after { content: ""; position: absolute; inset: 14px; border-radius: 50%; background: var(--page); box-shadow: inset 0 0 0 1px var(--border); }
+    .orb .core { position: relative; z-index: 1; width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, #3E8E7A, #1F5A4C); animation: orbPulse 1.6s ease-in-out infinite; }
+    .orb .core svg { width: 40px; height: 40px; }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+    @keyframes orbPulse { 50% { transform: scale(1.07); } }
+    .ai-title { margin: 14px 0 0; font-family: var(--head); font-weight: 800; font-size: clamp(24px, 6.4vw, 32px); line-height: 1.15; color: var(--ink); }
+    .ai-sub { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+    .ai-prog { width: 100%; height: 8px; margin-top: 20px; border-radius: 99px; background: var(--border); overflow: hidden; }
+    .ai-prog i { display: block; height: 100%; width: 3%; border-radius: 99px; background: linear-gradient(90deg, #3E8E7A, #7A4E9A, #E0703E); transition: width .8s ease; }
+    .ai-tip { margin: 16px 0 0; min-height: 44px; padding: 10px 14px; border-radius: 14px; background: var(--tint); border: 1px solid var(--border); font-size: 14.5px; color: var(--ink); transition: opacity .3s; }
+    @media (prefers-reduced-motion: reduce) { .orb::before, .orb .core { animation: none; } }
+    .think { display: grid; gap: 10px; margin: 18px auto 0; width: 100%; max-width: 340px; text-align: start; padding: 0; }
     .think li { list-style: none; display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 600; transition: color .3s; }
     .think li::before { content: ""; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--border); }
     .think li.on { color: var(--ink); }
@@ -36,8 +54,9 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .result-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 18px 0 4px; }
     .result-bar .btn svg { width: 19px; height: 19px; }
-    .result-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0 14px; }
-    .result-head h1 { font-size: 24px; margin: 0; }
+    .result-wrap { max-width: 760px; margin: 0 auto; }
+    .result-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 6px 0 14px; }
+    .result-head h1 { font-size: 24px; margin: 0; white-space: nowrap; }
     .result-head a { flex: none; color: var(--accent); font-weight: 700; font-size: 14px; text-decoration: none; white-space: nowrap; }
     .result-head a::before { content: "✓ "; }
     .join-sample { display: flex; width: 100%; min-height: 50px; margin-top: 10px; }
@@ -107,7 +126,9 @@
         cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.',
         cTopic: 'Your topic', cAnother: 'Another topic', cOwn: 'Or type your own topic', cWeCheck: 'Speak naturally. We check your',
         cTips: ['Breathe, then slow down a little.', 'Pause instead of saying “um”.', 'Tell a quick story or example.', 'Look up and smile, even alone.', 'Say why it matters to you.', 'Finish with one strong sentence.'],
-        cWait: 'Usually ready in under a minute.'
+        cWait: 'Usually ready in under a minute.',
+        cAiBadge: 'AI coach at work', cAiTitle: 'Our AI coach is reviewing your talk',
+        cAiTips: ['Every “um” and pause is being written down.', 'Checking where you sped up or slowed down.', 'Mapping how your ideas connect.', 'Picking the one game that will help you most.', 'Almost there. Good feedback takes a moment.']
       }, {
         cLength: 'مدة الحديث', cStart: 'التالي',
         cReadyHint: 'عندما تضغط ابدأ، سيطلب المتصفح استخدام الميكروفون. تحدث حتى ينتهي الوقت، أو اضغط إنهاء.',
@@ -128,7 +149,9 @@
         cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.',
         cTopic: 'موضوعك', cAnother: 'موضوع آخر', cOwn: 'أو اكتب موضوعك الخاص', cWeCheck: 'تحدّث بشكل طبيعي. نفحص',
         cTips: ['تنفّس، ثم أبطئ قليلًا.', 'توقّف بدل أن تقول «اممم».', 'احكِ قصة أو مثالًا قصيرًا.', 'ارفع رأسك وابتسم، حتى لو كنت وحدك.', 'قل لماذا يهمّك الموضوع.', 'اختم بجملة واحدة قوية.'],
-        cWait: 'يجهز عادةً في أقل من دقيقة.'
+        cWait: 'يجهز عادةً في أقل من دقيقة.',
+        cAiBadge: 'مدرب الذكاء الاصطناعي يعمل', cAiTitle: 'مدرب الذكاء الاصطناعي يراجع حديثك',
+        cAiTips: ['نكتب كل «اممم» وكل وقفة.', 'نفحص أين أسرعت وأين أبطأت.', 'نرسم كيف ترتبط أفكارك.', 'نختار اللعبة التي ستفيدك أكثر.', 'اقتربنا. الملاحظات الجيدة تحتاج لحظة.']
       });
 
       // A made-up report so guests can see what Speech Coach gives back.
@@ -367,13 +390,26 @@
           }
 
           function send(blob, seconds) {
-            st.body.innerHTML = '<div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>' +
-              '<div class="cue" style="font-size:clamp(30px,8vw,50px)">' + esc(t('cThinking')) + '</div><p class="note">' + esc(t('cWait')) + '</p>' +
-              '<ul class="think">' + ['cStep1', 'cStep2', 'cStep3', 'cStep4'].map(function (k) { return '<li>' + esc(t(k)) + '</li>'; }).join('') + '</ul>';
-            var steps = st.body.querySelectorAll('.think li'), at = 0;
+            st.body.innerHTML = '<div class="ai-wait"><span class="ai-badge">' + esc(t('cAiBadge')) + '</span>' +
+              '<div class="orb" aria-hidden="true"><span class="core">' + S.ICONS[ID] + '</span></div>' +
+              '<p class="ai-title">' + esc(t('cAiTitle')) + '</p><p class="ai-sub">' + esc(t('cWait')) + '</p>' +
+              '<div class="ai-prog" aria-hidden="true"><i></i></div>' +
+              '<ul class="think">' + ['cStep1', 'cStep2', 'cStep3', 'cStep4'].map(function (k) { return '<li>' + esc(t(k)) + '</li>'; }).join('') + '</ul>' +
+              '<p class="ai-tip"></p></div>';
+            var steps = st.body.querySelectorAll('.think li'), at = 0, started = Date.now();
+            var bar = st.body.querySelector('.ai-prog i'), tipEl = st.body.querySelector('.ai-tip'), tips = t('cAiTips'), tipAt = 0;
             var paint = function () { steps.forEach(function (li, i) { li.className = i < at ? 'done' : i === at ? 'on' : ''; }); };
             paint();
-            var ticker = setInterval(function () { if (at < steps.length - 1) { at++; paint(); } }, 4500);
+            tipEl.textContent = tips[0];
+            // Steps move on every few seconds; the bar creeps towards the end
+            // (but never reaches it) until the real answer arrives.
+            var ticker = setInterval(function () {
+              var s = (Date.now() - started) / 1000;
+              at = Math.min(steps.length - 1, Math.floor(s / 5));
+              paint();
+              bar.style.width = Math.min(92, 100 * (1 - Math.exp(-s / 18))).toFixed(1) + '%';
+              if (Math.floor(s / 6) !== tipAt) { tipAt = Math.floor(s / 6); tipEl.textContent = tips[tipAt % tips.length]; }
+            }, 700);
             var ext = /mp4/.test(blob.type) ? 'm4a' : /ogg/.test(blob.type) ? 'ogg' : 'webm';
             var form = new FormData();
             form.append('audio', blob, 'talk.' + ext);
@@ -405,11 +441,11 @@
           function showResult(report, blob) {
             st.close();
             var url = URL.createObjectURL(blob);
-            main.innerHTML = '<div class="result-head"><h1>' + esc(t('cResult')) + '</h1><a href="/account#speech">' + esc(t('cSavedNote')) + '</a></div>' +
+            main.innerHTML = '<div class="result-wrap"><div class="result-head"><h1>' + esc(t('cResult')) + '</h1><a href="/account#speech">' + esc(t('cSavedNote')) + '</a></div>' +
               '<div id="report"></div>' +
               '<div class="result-bar"><button class="btn btn-primary" type="button" id="same">' + G.ICON.repeat + esc(t('cAgain')) + '</button>' +
               (own ? '' : '<button class="btn btn-ghost" type="button" id="next">' + G.ICON.next + esc(t('cNext')) + '</button>') +
-              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div>';
+              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div></div>';
             window.Coach.render(main.querySelector('#report'), report, { audio: url, celebrate: true });
             // Compare with their previous talk.
             S.api('/v1/speech/reports?limit=5').then(function (r) {

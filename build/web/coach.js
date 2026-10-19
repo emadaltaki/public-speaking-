@@ -22,6 +22,9 @@
     scPaceFast: 'You sped up around {t} ({n} a minute).', scPaceSlow: 'You slowed right down around {t} ({n} a minute).', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words',
     scPractice: 'Practice this next', scPlayGame: 'Play {g}', scComeBack: 'Play it a few times, then come back to Speech Coach and record again to see how much you improve.',
     scG: { autocomplete: 'Autocomplete', 'triple-step': 'Triple Step', conductor: 'The Conductor', podcast: 'The Podcast Game', daily: 'Daily Challenge' },
+    scStatWpm: 'words / min', scStatFillers: 'filler words', scStatPauses: 'long pauses', scStatTime: 'length', scListen: 'Listen back',
+    scTabOverview: 'Overview', scTabStory: 'Story', scTabPace: 'Pace & fillers', scTabMoments: 'Moments', scTabWords: 'Transcript',
+    scLegendF: 'filler word', scLegendP: 'long pause',
     scUp: '▲ Up {n} from your last talk', scDown: '▼ {n} lower than last time. Keep practicing!', scSame: 'Same score as last time. Keep going!'
   }, {
     scOverall: 'الإجمالي', scOutOf: 'من 10', scTopicOwn: 'موضوعك الخاص',
@@ -40,6 +43,9 @@
     scPaceFast: 'أسرعت عند {t} ({n} كلمة في الدقيقة).', scPaceSlow: 'أبطأت كثيرًا عند {t} ({n} كلمة في الدقيقة).', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك',
     scPractice: 'تدرّب على هذه اللعبة', scPlayGame: 'العب {g}', scComeBack: 'العبها بضع مرات، ثم عد إلى مدرب الإلقاء وسجّل مجددًا لترى كم تحسّنت.',
     scG: { autocomplete: 'الإكمال التلقائي', 'triple-step': 'الخطوة الثلاثية', conductor: 'قائد الأوركسترا', podcast: 'لعبة البودكاست', daily: 'التحدي اليومي' },
+    scStatWpm: 'كلمة / دقيقة', scStatFillers: 'كلمات حشو', scStatPauses: 'وقفات طويلة', scStatTime: 'المدة', scListen: 'استمع لتسجيلك',
+    scTabOverview: 'نظرة عامة', scTabStory: 'القصة', scTabPace: 'السرعة والحشو', scTabMoments: 'اللحظات', scTabWords: 'النص',
+    scLegendF: 'كلمة حشو', scLegendP: 'وقفة طويلة',
     scUp: '▲ أعلى بـ {n} من حديثك السابق', scDown: '▼ أقل بـ {n} من المرة السابقة. واصل التدرّب!', scSame: 'الدرجة نفسها مثل المرة السابقة. استمر!'
   });
 
@@ -156,69 +162,135 @@
       keys.map(function (k) { return '<li><b dir="auto">' + esc(k) + '</b><span>×' + f[k] + '</span></li>'; }).join('') + '</ul></div>';
   }
 
-  // Draws a report into el. opts.audio: an object URL for playback (fresh recordings only).
+  // Draws a report into el: a summary card on top, then tabs for the details,
+  // so nothing is scattered down a long page. opts.audio: an object URL for
+  // playback (fresh recordings only); opts.celebrate: animate the reveal.
   function render(el, r, opts) {
     opts = opts || {};
     var m = r.metrics || {};
     var sc = r.scores || {};
     var moments = (r.moments || []).slice().sort(function (a, b) { return (a.at || 0) - (b.at || 0); });
     var words = r.transcript || [];
+    var stat = function (big, label) { return '<div class="sc-stat"><b dir="ltr">' + esc(String(big)) + '</b><span>' + esc(label) + '</span></div>'; };
+
+    // Summary: the score, the verdict, four numbers and the listen-back player.
     var html = '<div class="sc">' +
-      '<div class="card sc-top"><div class="sc-big">' + ring(r.overall) + '<div class="n"><b>' + clamp(r.overall) + '</b><small>' + esc(t('scOutOf')) + '</small></div></div>' +
-      '<div class="sc-head"><small>' + esc(t('scOverall')) + '</small><p class="sc-verdict">' + esc(verdict(r.overall)) + '</p><h2>' + esc(r.topic || t('scTopicOwn')) + '</h2>' +
-      bestAndFocus(sc) +
-      '<ul class="chips sc-chips">' +
-        (m.wordsPerMinute ? '<li>' + esc(t('scWpm', { n: Math.round(m.wordsPerMinute) })) + '</li>' : '') +
-        '<li>' + esc(plural(m.fillerCount || 0, 'scFillers0', 'scFillers1', 'scFillersN')) + '</li>' +
-        '<li>' + esc(plural(m.longPauses || 0, 'scPauses0', 'scPauses1', 'scPausesN')) + '</li>' +
-        (r.durationSeconds ? '<li dir="ltr">' + mmss(r.durationSeconds) + '</li>' : '') +
-      '</ul></div></div>' + practiceCard(r.practice) +
+      '<section class="card sc-hero"><div class="sc-top">' +
+        '<div class="sc-big">' + ring(r.overall) + '<div class="n"><b>' + clamp(r.overall) + '</b><small>' + esc(t('scOutOf')) + '</small></div></div>' +
+        '<div class="sc-head"><p class="sc-verdict">' + esc(verdict(r.overall)) + '</p><h2 dir="auto">' + esc(r.topic || t('scTopicOwn')) + '</h2>' + bestAndFocus(sc) + '</div>' +
+      '</div>' +
+      '<div class="sc-stats">' +
+        stat(m.wordsPerMinute ? Math.round(m.wordsPerMinute) : '–', t('scStatWpm')) +
+        stat(m.fillerCount || 0, t('scStatFillers')) +
+        stat(m.longPauses || 0, t('scStatPauses')) +
+        stat(r.durationSeconds ? mmss(r.durationSeconds) : '–', t('scStatTime')) +
+      '</div>' +
+      (opts.audio ? '<div class="sc-player"><button type="button" class="pl-btn" aria-label="' + esc(t('scListen')) + '">' + PLAY + '</button>' +
+        '<div class="pl-main"><span class="pl-label">' + esc(t('scListen')) + '</span><div class="pl-track"><i></i></div></div>' +
+        '<span class="pl-time" dir="ltr">0:00</span><audio preload="metadata" src="' + esc(opts.audio) + '"></audio></div>' : '') +
+      '</section>';
+
+    // Tabs
+    var tabs = [
+      ['overview', t('scTabOverview'), ''],
+      ['story', t('scTabStory'), ''],
+      ['pace', t('scTabPace'), ''],
+      ['moments', t('scTabMoments'), moments.length ? String(moments.length) : ''],
+      ['words', t('scTabWords'), '']
+    ].filter(function (x) { return x[0] !== 'story' || r.story; }).filter(function (x) { return x[0] !== 'moments' || moments.length; }).filter(function (x) { return x[0] !== 'words' || words.length; });
+    html += '<nav class="sc-tabs" role="tablist">' + tabs.map(function (x, i) {
+      return '<button type="button" role="tab" data-tab="' + x[0] + '" aria-selected="' + (i === 0) + '">' + esc(x[1]) + (x[2] ? '<em>' + x[2] + '</em>' : '') + '</button>';
+    }).join('') + '</nav>';
+
+    // Overview: the five scores, the game to practise, what went well and what next.
+    html += '<section class="sc-panel" data-panel="overview">' +
       '<div class="card sc-scores">' + CATS.map(function (k) {
         var s = sc[k] || {};
         var n = clamp(s.score);
-        return '<div class="sc-row"><div class="sc-row-h"><b>' + esc(t('scCats')[k]) + '</b><span class="sc-n ' + band(n) + '">' + n + '/10</span></div>' +
+        return '<div class="sc-row"><div class="sc-row-h"><b>' + esc(t('scCats')[k]) + '</b><span class="sc-n ' + band(n) + '">' + n + '<small>/10</small></span></div>' +
           '<div class="sc-bar"><i class="' + band(n) + '" style="width:' + (n * 10) + '%"></i></div>' +
           (s.summary ? '<p dir="auto">' + esc(s.summary) + '</p>' : '') + '</div>';
-      }).join('') + '</div>' + storyCard(r.story) + paceCard(m) + fillerCard(m);
+      }).join('') + '</div>' +
+      practiceCard(r.practice) +
+      ((r.strengths && r.strengths.length) || r.nextStep ? '<div class="sc-two">' +
+        (r.strengths && r.strengths.length ? '<div class="card sc-good"><h3>' + esc(t('scStrengths')) + '</h3><ul class="sc-list">' + r.strengths.map(function (s) { return '<li dir="auto">' + esc(s) + '</li>'; }).join('') + '</ul></div>' : '') +
+        (r.nextStep ? '<div class="card sc-nextstep"><h3>' + esc(t('scNext')) + '</h3><p dir="auto">' + esc(r.nextStep) + '</p></div>' : '') + '</div>' : '') +
+      '</section>';
+
+    if (r.story) html += '<section class="sc-panel" data-panel="story" hidden>' + storyCard(r.story) + '</section>';
+
+    html += '<section class="sc-panel" data-panel="pace" hidden>' + (paceCard(m) || '<div class="card"><p>' + esc(t('scWpm', { n: Math.round(m.wordsPerMinute || 0) })) + '</p></div>') + fillerCard(m) + '</section>';
+
     if (moments.length) {
-      html += '<div class="card sc-moments"><h2>' + esc(t('scMoments')) + '</h2><ol>' + moments.map(function (mo, i) {
+      html += '<section class="sc-panel" data-panel="moments" hidden><ol class="sc-mlist">' + moments.map(function (mo, i) {
         var cat = t('scCats')[mo.category] || '';
-        return '<li data-m="' + i + '"><div class="sc-m-h">' +
-          (opts.audio ? '<button type="button" class="sc-time" data-at="' + (+mo.at || 0) + '" aria-label="' + esc(t('scPlayHere', { t: mmss(mo.at) })) + '">' + PLAY + '<span dir="ltr">' + mmss(mo.at) + '</span></button>'
-                      : '<button type="button" class="sc-time" data-at="' + (+mo.at || 0) + '" aria-label="' + esc(t('scAt', { t: mmss(mo.at) })) + '"><span dir="ltr">' + mmss(mo.at) + '</span></button>') +
-          (cat ? '<span class="sc-tag">' + esc(cat) + '</span>' : '') + '</div>' +
+        return '<li class="card" data-m="' + i + '"><div class="sc-m-h">' +
+          '<button type="button" class="sc-time" data-at="' + (+mo.at || 0) + '" aria-label="' + esc(t(opts.audio ? 'scPlayHere' : 'scAt', { t: mmss(mo.at) })) + '">' + (opts.audio ? PLAY : '') + '<span dir="ltr">' + mmss(mo.at) + '</span></button>' +
+          (cat ? '<span class="sc-tag sc-tag-' + esc(mo.category) + '">' + esc(cat) + '</span>' : '') + '</div>' +
           (mo.quote ? '<blockquote dir="auto">“' + esc(mo.quote) + '”</blockquote>' : '') +
           (mo.issue ? '<p dir="auto">' + esc(mo.issue) + '</p>' : '') +
-          (mo.fix ? '<p class="sc-fix"><b>' + esc(t('scTry')) + ':</b> ' + esc(mo.fix) + '</p>' : '') + '</li>';
-      }).join('') + '</ol></div>';
+          (mo.fix ? '<p class="sc-fix" dir="auto"><b>' + esc(t('scTry')) + '</b> ' + esc(mo.fix) + '</p>' : '') + '</li>';
+      }).join('') + '</ol></section>';
     }
-    if ((r.strengths && r.strengths.length) || r.nextStep) {
-      html += '<div class="sc-two">' +
-        (r.strengths && r.strengths.length ? '<div class="card"><h2>' + esc(t('scStrengths')) + '</h2><ul class="sc-list">' + r.strengths.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>' : '') +
-        (r.nextStep ? '<div class="card sc-nextstep"><h2>' + esc(t('scNext')) + '</h2><p>' + esc(r.nextStep) + '</p></div>' : '') + '</div>';
-    }
+
     if (words.length) {
-      html += '<div class="card sc-tr"><h2>' + esc(t('scTranscript')) + '</h2><p class="help">' + esc(t('scLegend')) + '</p>' +
-        (opts.audio ? '<audio controls preload="metadata" src="' + esc(opts.audio) + '"></audio>' : '') +
-        '<div class="sc-text" dir="auto">' + transcript(words) + '</div></div>';
+      html += '<section class="sc-panel" data-panel="words" hidden><div class="card sc-tr"><p class="sc-legend"><span class="lg-f">um</span> ' + esc(t('scLegendF')) +
+        ' <span class="lg-p">' + esc(t('scPause', { n: '2.0' })) + '</span> ' + esc(t('scLegendP')) + '</p>' +
+        '<div class="sc-text" dir="auto">' + transcript(words) + '</div></div></section>';
     }
     html += '</div>';
     el.innerHTML = html;
 
+    // Tabs
+    var nav = el.querySelector('.sc-tabs');
+    function show(name) {
+      nav.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === name)); });
+      el.querySelectorAll('.sc-panel').forEach(function (p) { p.hidden = p.dataset.panel !== name; });
+    }
+    nav.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b) return;
+      show(b.dataset.tab);
+      try { b.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' }); } catch (_) {}
+      // Bring the tabs up so the chosen section is in view.
+      var top = nav.getBoundingClientRect().top + window.scrollY - 86;
+      if (Math.abs(window.scrollY - top) > 40) window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+
     if (opts.celebrate) reveal(el, clamp(r.overall));
 
-    var audio = el.querySelector('audio');
+    // Listen-back player
+    var audio = el.querySelector('.sc-player audio');
+    if (audio) {
+      var btn = el.querySelector('.pl-btn'), fill = el.querySelector('.pl-track i'), time = el.querySelector('.pl-time'), track = el.querySelector('.pl-track');
+      var PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
+      var paint = function () {
+        var d = isFinite(audio.duration) && audio.duration > 0 ? audio.duration : (r.durationSeconds || 0);
+        fill.style.width = d ? Math.min(100, audio.currentTime / d * 100) + '%' : '0%';
+        time.textContent = mmss(audio.currentTime) + ' / ' + mmss(d);
+      };
+      btn.addEventListener('click', function () { if (audio.paused) audio.play(); else audio.pause(); });
+      audio.addEventListener('play', function () { btn.innerHTML = PAUSE; el.querySelector('.sc-player').classList.add('on'); });
+      audio.addEventListener('pause', function () { btn.innerHTML = PLAY; el.querySelector('.sc-player').classList.remove('on'); });
+      audio.addEventListener('timeupdate', paint);
+      audio.addEventListener('loadedmetadata', paint);
+      track.addEventListener('click', function (e) {
+        var rc = track.getBoundingClientRect(), d = audio.duration || r.durationSeconds || 0;
+        var x = (e.clientX - rc.left) / rc.width;
+        if (document.documentElement.dir === 'rtl') x = 1 - x;
+        if (d) { try { audio.currentTime = Math.max(0, Math.min(d, x * d)); } catch (_) {} }
+      });
+      paint();
+    }
     var text = el.querySelector('.sc-text');
-    // Light up the words around a moment, and play from there when we can.
+    // A moment's time plays from there, and lights up those words in the transcript.
     function jump(at) {
       if (text) {
         text.querySelectorAll('.sc-w.hl').forEach(function (w) { w.classList.remove('hl'); });
-        var hit = null;
         text.querySelectorAll('.sc-w').forEach(function (w) {
           var s = +w.dataset.s;
-          if (s >= at - 0.4 && s <= at + 2.5) { w.classList.add('hl'); if (!hit) hit = w; }
+          if (s >= at - 0.4 && s <= at + 2.5) w.classList.add('hl');
         });
-        if (hit) hit.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       if (audio) { try { audio.currentTime = Math.max(0, at - 1); audio.play(); } catch (_) {} }
     }
@@ -227,6 +299,12 @@
       text.addEventListener('click', function (e) {
         var w = e.target.closest('.sc-w');
         if (w) { try { audio.currentTime = Math.max(0, +w.dataset.s - 0.2); audio.play(); } catch (_) {} }
+      });
+      // Follow along: the word being spoken is underlined.
+      var ws = text.querySelectorAll('.sc-w');
+      audio.addEventListener('timeupdate', function () {
+        var now = audio.currentTime;
+        ws.forEach(function (w) { w.classList.toggle('now', !audio.paused && +w.dataset.s <= now && now < +w.dataset.s + 0.6); });
       });
     }
   }
