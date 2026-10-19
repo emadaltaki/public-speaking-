@@ -311,16 +311,16 @@
   };
   // Speech Coach isn't one of the app's games, so its wording lives here.
   var COACH = {
-    en: { title: 'Speech Coach', tagline: 'Talk for up to 2 minutes and get scored on how you sound.',
+    en: { title: 'Speech Coach', tagline: 'Talk for one minute and get scored on how you sound.',
       description: 'Record yourself on a topic. AI listens back and scores your pace, pauses, filler words, clarity and flow from 1 to 10, then shows the exact moments to work on.',
       skills: ['AI feedback', 'Pace', 'Filler words', 'Flow'],
-      steps: ['Pick a topic, or bring your own, and choose how long to talk.', 'Allow the microphone, then talk until the time is up or you tap Finish.',
+      steps: ['Pick a topic, or bring your own. You get one minute.', 'Allow the microphone, then talk until the time is up or you tap Finish.',
         'AI listens back and scores your pace, pauses, filler words, clarity and flow from 1 to 10.', 'See the exact moments you slipped, with a fix for each, and try again.'],
       tip: 'Your recording is only used to score you. We keep the scores and the transcript, not the audio.' },
-    ar: { title: 'مدرب الإلقاء', tagline: 'تحدث حتى دقيقتين واحصل على تقييم لطريقة كلامك.',
+    ar: { title: 'مدرب الإلقاء', tagline: 'تحدث لمدة دقيقة واحصل على تقييم لطريقة كلامك.',
       description: 'سجّل نفسك وأنت تتحدث عن موضوع. يستمع الذكاء الاصطناعي ويقيّم سرعتك ووقفاتك وكلمات الحشو والوضوح وترابط الأفكار من 1 إلى 10، ثم يريك اللحظات التي تحتاج إلى تحسين.',
       skills: ['تقييم بالذكاء الاصطناعي', 'السرعة', 'كلمات الحشو', 'الترابط'],
-      steps: ['اختر موضوعًا أو موضوعك الخاص، وحدد مدة الحديث.', 'اسمح باستخدام الميكروفون، ثم تحدث حتى ينتهي الوقت أو تضغط إنهاء.',
+      steps: ['اختر موضوعًا أو موضوعك الخاص. لديك دقيقة واحدة.', 'اسمح باستخدام الميكروفون، ثم تحدث حتى ينتهي الوقت أو تضغط إنهاء.',
         'يستمع الذكاء الاصطناعي ويقيّم سرعتك ووقفاتك وكلمات الحشو والوضوح والترابط من 1 إلى 10.', 'شاهد اللحظات التي تعثرت فيها مع طريقة لتحسين كل منها، ثم حاول مرة أخرى.'],
       tip: 'نستخدم تسجيلك لتقييمك فقط. نحتفظ بالدرجات والنص المكتوب، وليس بالصوت.' }
   };
