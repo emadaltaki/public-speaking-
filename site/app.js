@@ -270,7 +270,8 @@
     'triple-step': ['tune', 'topic', 'bolt', 'flag'],
     conductor: ['topic', 'demo', 'demo', 'demo'],
     podcast: ['group', 'topic', 'mic', 'shuffle'],
-    autocomplete: ['text', 'mic', 'timer', 'next']
+    autocomplete: ['text', 'mic', 'timer', 'next'],
+    daily: ['topic', 'timer', 'mic', 'flag']
   };
   function loadGames() {
     if (GAMES) return Promise.resolve(GAMES);
