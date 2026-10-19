@@ -149,6 +149,8 @@
         for (var i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
         return list[h % list.length];
       }
+      // Every round we know about: this device's plus the ones saved to the account.
+      var known = [];
       function stats(rounds) {
         var days = {};
         rounds.forEach(function (r) { if (r.gameId === ID) days[dayKey(new Date(r.playedAt))] = true; });
@@ -174,9 +176,9 @@
         var topic = topicFor(words, TODAY);
         if (!S.user()) return teaser(topic);
         S.gate(main, function () {
-          var local = S.localHistory ? S.localHistory() : [];
-          render(stats(local), topic);
-          S.history().then(function (rounds) { render(stats(rounds), topic); });
+          known = S.localHistory ? S.localHistory() : [];
+          render(stats(known), topic);
+          S.history().then(function (rounds) { known = rounds; render(stats(known), topic); });
         });
       });
 
@@ -252,8 +254,11 @@
           G.loopStop();
           var spoke = elapsed / 1000;
           var counts = spoke >= 10;
-          if (counts) S.recordRound({ gameId: ID, spokenSeconds: spoke, topic: topic });
-          var after = stats(S.localHistory());
+          if (counts) {
+            S.recordRound({ gameId: ID, spokenSeconds: spoke, topic: topic });
+            known = [{ gameId: ID, playedAt: new Date().toISOString(), spokenSeconds: Math.round(spoke), topic: topic }].concat(known);
+          }
+          var after = stats(known);
           var wasDone = before.doneToday;
           var n = after.current;
           var dayFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'narrow' });
