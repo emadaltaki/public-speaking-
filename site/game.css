@@ -70,8 +70,6 @@ input[type=range] { width: 100%; margin: 10px 0 0; accent-color: var(--primary);
 .end h2 { font-size: 28px; font-weight: 800; }
 .end p { color: var(--muted); margin: 8px 0 0; }
 .end .party { font-size: 44px; line-height: 1; }
-.end .card { max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow: auto; }
-.end .btn-primary, .end .again { width: 100%; margin-top: 22px; }
-.end .gsave + .again { margin-top: 12px; }
+.end .btn-primary { width: 100%; margin-top: 22px; }
 .end .more { display: flex; justify-content: center; gap: 18px; margin-top: 12px; }
 .end .more button { background: none; border: 0; color: var(--accent); font-weight: 700; cursor: pointer; padding: 6px; }

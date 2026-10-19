@@ -21,6 +21,10 @@
     .game h2 { color: #fff; font-size: 22px; margin: 16px 0 6px; }
     .game p { margin: 0; color: rgba(255,255,255,.9); font-size: 15px; }
     .skills { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
+    .lockchip { position: absolute; top: 18px; inset-inline-end: 18px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px; background: rgba(0,0,0,.22); color: #fff; font-size: 12.5px; font-weight: 800; }
+    .lockchip svg { width: 13px; height: 13px; }
+    .game .helps { margin-top: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,.14); font-weight: 600; font-size: 14.5px; line-height: 1.4; }
+    .daily-card .free { display: inline-block; margin-inline-start: 6px; padding: 2px 8px; border-radius: 999px; background: #fff; color: #A23B1E; letter-spacing: .06em; }
     .skills li { padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: 12.5px; font-weight: 600; }
     .actions { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 18px; }
     .play { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 999px; background: #fff; color: #2B2118; font-weight: 800; text-decoration: none; }
@@ -109,18 +113,23 @@
         var d = new Date(), done = !!days[key(d)], n = 0;
         if (!done) d.setDate(d.getDate() - 1);
         while (days[key(d)]) { n++; d.setDate(d.getDate() - 1); }
-        return '<a class="daily-card g-daily" href="/games/daily"><span class="g-ic">' + S.ICONS.daily + '</span><span class="txt"><small>' + S.esc(S.t('dailyName')) + '</small>' +
+        var free = S.user() ? '' : '<span class="free">' + S.esc(S.t('freeNow')) + '</span>';
+        return '<a class="daily-card g-daily" href="/games/daily"><span class="g-ic">' + S.ICONS.daily + '</span><span class="txt"><small>' + S.esc(S.t('dailyName')) + free + '</small>' +
           '<b>' + S.esc(done ? S.t('dailyCardDone') : S.t('dailyCardTitle')) + '</b>' +
           (n ? '<span class="st">🔥 ' + n + '</span>' : '') + '</span><span class="go">' + S.esc(S.t('dailyCardGo')) + '</span></a>';
       }
       S.gate(content, function () {
         return S.loadGames().then(function (games) {
-          content.innerHTML = S.guestBar() + dailyCard() + '<div class="grid">' + S.ORDER.map(function (id) {
-            var g = games[id];
+          // Guests: every game but the daily challenge shows what it helps with
+          // and opens its "unlock free" page.
+          content.innerHTML = dailyCard() + S.guestBar() + '<div class="grid">' + S.ORDER.map(function (id) {
+            var g = games[id], lock = S.locked(id);
             return '<article class="game g-' + id + '"><span class="g-ic">' + S.ICONS[id] + '</span>' +
+              (lock ? '<span class="lockchip">' + S.LOCK + S.esc(S.t('lockBadge')) + '</span>' : '') +
               '<h2>' + S.esc(g.title) + '</h2><p>' + S.esc(g.tagline) + '</p>' +
+              (lock ? '<p class="helps">' + S.esc(S.pitch(id)) + '</p>' : '') +
               '<ul class="skills">' + g.skills.map(function (k) { return '<li>' + S.esc(k) + '</li>'; }).join('') + '</ul>' +
-              '<div class="actions"><a class="play" href="/games/' + id + '">' + S.esc(S.t('play')) + ARROW + '</a>' +
+              '<div class="actions"><a class="play" href="/games/' + id + '">' + (lock ? S.LOCK + S.esc(S.t('unlock')) : S.esc(S.t('play')) + ARROW) + '</a>' +
               '<button class="how" type="button" data-how="' + id + '">' + BULB + S.esc(S.t('howTo')) + '</button></div></article>';
           }).join('') + '</div>' +
           '<div class="soon"><span class="ic">' + BULB + '</span><span><b>' + S.esc(S.t('soonTitle')) + '</b>' + S.esc(S.t('soonBody')) + '</span></div>';
@@ -136,7 +145,7 @@
           content.querySelectorAll('[data-how]').forEach(function (b) {
             b.addEventListener('click', function () {
               var id = b.dataset.how;
-              S.howToPlay(id, function () { location.href = '/games/' + id; });
+              S.howToPlay(id, function () { location.href = '/games/' + id; }, S.locked(id) ? S.t('unlock') : null);
             });
           });
         });
