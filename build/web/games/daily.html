@@ -215,7 +215,8 @@
       // Once picked, today's topic is remembered so it never changes mid-day.
       function myTopic(words, rounds) {
         var u = S.user(), key = 'speakupfearless.dailyTopic.' + u.uid;
-        var done = rounds.filter(function (r) { return r.gameId === ID && r.topic && dayKey(new Date(r.playedAt)) === TODAY; })[0];
+        var done = rounds.filter(function (r) { return r.gameId === ID && r.topic && dayKey(new Date(r.playedAt)) === TODAY; })
+          .sort(function (x, y) { return new Date(x.playedAt) - new Date(y.playedAt); })[0];
         // Keep the earned topic only if it's in the language on screen.
         if (done && words.topics.indexOf(done.topic) !== -1) return done.topic;
         try { var saved = JSON.parse(localStorage.getItem(key) || 'null'); if (saved && saved.day === TODAY && (saved.lang || 'en') === S.lang) return saved.topic; } catch (_) {}
@@ -381,7 +382,9 @@
           G.loopStop();
           var spoke = elapsed / 1000;
           var counts = elapsed >= total && !before.doneToday;
-          if (counts) {
+          // The day's full minute, and practice rounds after it, go into the history
+          // (practice can't change the streak: that day already counts).
+          if (counts || (before.doneToday && spoke >= 5)) {
             S.recordRound({ gameId: ID, spokenSeconds: spoke, topic: topic });
             known = [{ gameId: ID, playedAt: new Date().toISOString(), spokenSeconds: Math.round(spoke), topic: topic }].concat(known);
           }

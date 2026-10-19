@@ -48,6 +48,30 @@
     .out button:hover { background: var(--soft); }
     .out svg { width: 18px; height: 18px; }
     h2 { font-size: 20px; }
+    /* Streak */
+    .streak-card { display: flex; align-items: center; gap: 16px; padding: 20px; border-radius: 26px; color: #fff; text-decoration: none; background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); box-shadow: 0 16px 30px -18px rgba(122,42,22,.7); }
+    .streak-card .fl { font-size: 46px; line-height: 1; }
+    .streak-card.cold .fl { filter: grayscale(1); opacity: .7; }
+    .streak-card .t { flex: 1; min-width: 0; }
+    .streak-card b { display: block; font-family: var(--head); font-size: 24px; line-height: 1.15; }
+    .streak-card small { display: block; margin-top: 4px; opacity: .9; font-size: 14px; }
+    .streak-card .go { flex: none; white-space: nowrap; padding: 9px 14px; border-radius: 999px; background: #fff; color: #A23B1E; font-weight: 800; font-size: 14px; }
+    @media (max-width: 520px) { .streak-card { flex-wrap: wrap; } .streak-card .go { flex-basis: 100%; text-align: center; padding: 11px; } }
+    /* Numbers */
+    .stats3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stats3 .stat { padding: 16px 8px; }
+    .stats3 .stat b { font-size: 24px; }
+    .stats3 .stat span { display: block; font-size: 12.5px; line-height: 1.3; margin-top: 2px; }
+    /* Games */
+    .games-list li .play { flex: none; padding: 7px 14px; border-radius: 999px; background: var(--soft); color: var(--accent); font-weight: 700; font-size: 13.5px; text-decoration: none; }
+    .games-list .t small { display: block; }
+    /* Activity */
+    .day-h { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .day-h:first-of-type { margin-top: 8px; padding-top: 0; border-top: 0; }
+    .act li { border-top: 0; padding: 8px 0; }
+    .act .t small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .more-act { margin-top: 8px; }
+    .g-daily { background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
 </head>
@@ -62,12 +86,24 @@
         title: 'Your account', outTitle: 'Save your progress', outBody: 'Sign in to play the games and keep a history of every round.',
         hello: 'Hi, {n} 👋', remove: 'Remove photo', add: 'Add a photo', saved: 'Your photo is saved.', local: "Saved on this device. We'll sync it to your account soon.",
         roundsLabel: 'Rounds played', time: 'Speaking time', byGame: 'By game', recent: 'Recent rounds',
+        aStreak: '{n}-day streak', aStreak1: '1-day streak', aStreak0: 'No streak yet',
+        aDoneToday: "Today's challenge is done. Best streak: {b}", aKeep: 'Do today\'s challenge to keep it going', aStart: 'Speak for one minute today to start one',
+        aGo: 'Today\'s challenge', aSpoke: 'Time spoken', aDays: 'Days practiced', aRounds: 'Rounds',
+        aGames: 'Your games', aNever: 'Not played yet', aLast: 'last {d}', aPlay: 'Play',
+        aActivity: 'Your activity', aToday: 'Today', aYesterday: 'Yesterday', aShowMore: 'Show older activity',
+        aRoundsN: '{n} rounds', aRound1: '1 round', aPractice: 'Practice round',
         first: 'Play your first game', none: 'Your rounds and speaking time will show up here.',
         bookTitle: 'Ready to practice live?', bookBody: 'Book a free 15 minute intro call.', book: 'Book', signOut: 'Sign out', create: 'Create account'
       }, {
         title: 'حسابك', outTitle: 'احفظ تقدّمك', outBody: 'سجّل الدخول لتلعب الألعاب وتحتفظ بسجل كل جولة.',
         hello: 'مرحبًا يا {n} 👋', remove: 'احذف الصورة', add: 'أضف صورة', saved: 'تم حفظ صورتك.', local: 'حُفظت على هذا الجهاز، وسنحفظها في حسابك قريبًا.',
         roundsLabel: 'الجولات', time: 'وقت الحديث', byGame: 'حسب اللعبة', recent: 'آخر الجولات',
+        aStreak: 'سلسلة {n} أيام', aStreak1: 'سلسلة يوم واحد', aStreak0: 'لا توجد سلسلة بعد',
+        aDoneToday: 'أنجزت تحدي اليوم. أفضل سلسلة: {b}', aKeep: 'أنجز تحدي اليوم لتستمر', aStart: 'تحدّث دقيقة اليوم لتبدأ سلسلة',
+        aGo: 'تحدي اليوم', aSpoke: 'وقت الحديث', aDays: 'أيام التدريب', aRounds: 'الجولات',
+        aGames: 'ألعابك', aNever: 'لم تلعبها بعد', aLast: 'آخر مرة {d}', aPlay: 'العب',
+        aActivity: 'نشاطك', aToday: 'اليوم', aYesterday: 'أمس', aShowMore: 'اعرض النشاط الأقدم',
+        aRoundsN: '{n} جولات', aRound1: 'جولة واحدة', aPractice: 'جولة تدريب',
         first: 'العب أول لعبة لك', none: 'ستظهر هنا جولاتك ووقت حديثك.',
         bookTitle: 'مستعد للتدرّب مباشرة؟', bookBody: 'احجز مكالمة تعريفية مجانية لمدة 15 دقيقة.', book: 'احجز', signOut: 'تسجيل الخروج', create: 'إنشاء حساب'
       });
@@ -120,37 +156,92 @@
       document.getElementById('remove').addEventListener('click', function () { save(null); });
       document.getElementById('signout').addEventListener('click', S.signOut);
 
-      // Rounds and speaking time.
+      // ------------------------------------------------------------ progress
+      // Streak first, then three honest totals, every game, and a day-by-day log.
       var box = document.getElementById('history');
-      function minutes(sec) { var m = Math.round(sec / 60); return S.t('minutes', { n: m < 1 && sec > 0 ? 1 : m }); }
+      var dayKey = function (d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+      var addDays = function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; };
+      var now = new Date(), TODAY = dayKey(now), YDAY = dayKey(addDays(now, -1));
+      // 45s, 2m 05s, 1h 12m
+      function dur(sec) {
+        sec = Math.round(sec || 0);
+        if (sec < 60) return sec + (S.lang === 'ar' ? ' ث' : 's');
+        var h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), x = sec % 60;
+        if (S.lang === 'ar') return h ? h + ' س ' + m + ' د' : m + ' د ' + (x ? x + ' ث' : '');
+        return h ? h + 'h ' + m + 'm' : m + 'm' + (x ? ' ' + String(x).padStart(2, '0') + 's' : '');
+      }
+      function streakOf(rounds) {
+        var days = {};
+        rounds.forEach(function (r) { if (r.gameId === 'daily') days[dayKey(new Date(r.playedAt))] = true; });
+        var start = days[TODAY] ? now : addDays(now, -1), cur = 0;
+        while (days[dayKey(addDays(start, -cur))]) cur++;
+        var keys = Object.keys(days).sort(), best = 0, run = 0, prev = null;
+        keys.forEach(function (k) { var d = new Date(k + 'T12:00:00'); run = prev && Math.round((d - prev) / 86400000) === 1 ? run + 1 : 1; best = Math.max(best, run); prev = d; });
+        return { cur: cur, best: best, today: !!days[TODAY] };
+      }
+      var FIRE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2s1 3.3-1.5 6C9.1 10 7 11.6 7 14.8A5 5 0 0 0 12 20a5 5 0 0 0 5-5c0-1.8-.7-3.2-1.5-4.2 0 0-.1 1.9-1.8 2.4 0 0 1-4.8-1.2-11.2z"/></svg>';
       Promise.all([S.loadGames(), S.history()]).then(function (res) {
         var games = res[0], rounds = res[1];
-        if (!rounds.length) {
-          box.innerHTML = '<div class="card"><h2>' + esc(S.t('first')) + '</h2><p class="lead" style="font-size:15px;margin-top:4px">' + esc(S.t('none')) + '</p>' +
-            '<div class="tiles">' + S.ORDER.map(function (id) {
-              return '<a class="tile g-' + id + '" href="/games/' + id + '"><span class="g-ic">' + S.ICONS[id] + '</span><span>' + esc(games[id].title) + '</span></a>';
-            }).join('') + '</div></div>';
-          return;
-        }
+        var ids = ['daily'].concat(S.ORDER);
+        var title = function (id) { return id === 'daily' ? S.t('dailyName') : games[id] ? games[id].title : id; };
+        var icon = function (id) { return id === 'daily' ? FIRE : (S.ICONS[id] || ''); };
+        var gi = function (id) { return '<span class="gi g-' + id + '">' + icon(id) + '</span>'; };
+        var dateFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
+        var timeFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { hour: 'numeric', minute: '2-digit' });
+        var dayName = function (k) { return k === TODAY ? S.t('aToday') : k === YDAY ? S.t('aYesterday') : dateFmt.format(new Date(k + 'T12:00:00')); };
+
+        // Streak card
+        var st = streakOf(rounds);
+        var head = st.cur === 0 ? S.t('aStreak0') : st.cur === 1 ? S.t('aStreak1') : S.t('aStreak', { n: st.cur });
+        var sub = st.today ? S.t('aDoneToday', { b: st.best }) : st.cur ? S.t('aKeep') : S.t('aStart');
+        var html = '<a class="streak-card' + (st.cur ? '' : ' cold') + '" href="/games/daily"><span class="fl">🔥</span><span class="t"><b>' + esc(head) + '</b><small>' + esc(sub) + '</small></span>' +
+          (st.today ? '' : '<span class="go">' + esc(S.t('aGo')) + '</span>') + '</a>';
+
+        // Totals
         var total = rounds.reduce(function (s, r) { return s + (r.spokenSeconds || 0); }, 0);
-        var by = {};
-        rounds.forEach(function (r) { (by[r.gameId] = by[r.gameId] || []).push(r); });
-        var fmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
-        var gi = function (id) { return '<span class="gi g-' + id + '">' + (S.ICONS[id] || '') + '</span>'; };
-        var title = function (id) { return games[id] ? games[id].title : id === 'daily' ? S.t('dailyName') : id; };
-        box.innerHTML =
-          '<div class="stats"><div class="card stat"><b>' + rounds.length + '</b><span>' + esc(S.t('roundsLabel')) + '</span></div>' +
-          '<div class="card stat"><b>' + esc(minutes(total)) + '</b><span>' + esc(S.t('time')) + '</span></div></div>' +
-          '<div class="card" style="margin-top:16px"><h2>' + esc(S.t('byGame')) + '</h2><ul class="list">' + Object.keys(by).map(function (id) {
-            var list = by[id];
-            var n = list.length;
-            return '<li>' + gi(id) + '<span class="t"><b>' + esc(title(id)) + '</b></span><span class="r">' +
-              esc(n === 1 ? S.t('round1') : S.t('rounds', { n: n })) + ' · ' + esc(minutes(list.reduce(function (s, r) { return s + r.spokenSeconds; }, 0))) + '</span></li>';
-          }).join('') + '</ul></div>' +
-          '<div class="card" style="margin-top:16px"><h2>' + esc(S.t('recent')) + '</h2><ul class="list">' + rounds.slice(0, 10).map(function (r) {
-            return '<li>' + gi(r.gameId) + '<span class="t"><b>' + esc(r.topic || title(r.gameId)) + '</b><small>' + esc(title(r.gameId)) + ' · ' + esc(fmt.format(new Date(r.playedAt))) + '</small></span>' +
-              '<span class="r">' + esc(minutes(r.spokenSeconds)) + '</span></li>';
-          }).join('') + '</ul></div>';
+        var days = {};
+        rounds.forEach(function (r) { days[dayKey(new Date(r.playedAt))] = true; });
+        html += '<div class="stats3" style="margin-top:16px"><div class="card stat"><b>' + esc(dur(total)) + '</b><span>' + esc(S.t('aSpoke')) + '</span></div>' +
+          '<div class="card stat"><b>' + Object.keys(days).length + '</b><span>' + esc(S.t('aDays')) + '</span></div>' +
+          '<div class="card stat"><b>' + rounds.length + '</b><span>' + esc(S.t('aRounds')) + '</span></div></div>';
+
+        // Every game, played or not
+        html += '<div class="card" style="margin-top:16px"><h2>' + esc(S.t('aGames')) + '</h2><ul class="list games-list">' + ids.map(function (id) {
+          var list = rounds.filter(function (r) { return r.gameId === id; });
+          var info;
+          if (!list.length) info = S.t('aNever');
+          else {
+            var secs = list.reduce(function (s, r) { return s + (r.spokenSeconds || 0); }, 0);
+            var last = dayName(dayKey(new Date(list[0].playedAt)));
+            info = (list.length === 1 ? S.t('aRound1') : S.t('aRoundsN', { n: list.length })) + ' · ' + dur(secs) + ' · ' + S.t('aLast', { d: last.toLowerCase ? (last === S.t('aToday') || last === S.t('aYesterday') ? last.toLowerCase() : last) : last });
+          }
+          return '<li>' + gi(id) + '<span class="t"><b>' + esc(title(id)) + '</b><small>' + esc(info) + '</small></span>' +
+            '<a class="play" href="/games/' + id + '">' + esc(S.t('aPlay')) + '</a></li>';
+        }).join('') + '</ul></div>';
+
+        // Activity, grouped by day
+        if (rounds.length) {
+          var groups = [], seen = {};
+          rounds.forEach(function (r) {
+            var k = dayKey(new Date(r.playedAt));
+            if (!seen[k]) { seen[k] = { key: k, items: [] }; groups.push(seen[k]); }
+            seen[k].items.push(r);
+          });
+          // The first full daily round of a day earned it; later ones were practice.
+          var firstDaily = {};
+          rounds.slice().reverse().forEach(function (r) { var k = dayKey(new Date(r.playedAt)); if (r.gameId === 'daily' && !firstDaily[k]) firstDaily[k] = r; });
+          html += '<div class="card act" style="margin-top:16px"><h2>' + esc(S.t('aActivity')) + '</h2>' + groups.map(function (g, gi2) {
+            return '<div class="day-group"' + (gi2 >= 5 ? ' hidden' : '') + '><div class="day-h">' + esc(dayName(g.key)) + ' · ' + esc(dur(g.items.reduce(function (s, r) { return s + (r.spokenSeconds || 0); }, 0))) + '</div><ul class="list">' +
+              g.items.map(function (r) {
+                var extra = r.gameId === 'daily' && firstDaily[g.key] !== r ? S.t('aPractice') : '';
+                var line = [timeFmt.format(new Date(r.playedAt)), r.topic || '', extra].filter(Boolean).join(' · ');
+                return '<li>' + gi(r.gameId) + '<span class="t"><b>' + esc(title(r.gameId)) + '</b><small>' + esc(line) + '</small></span><span class="r">' + esc(dur(r.spokenSeconds)) + '</span></li>';
+              }).join('') + '</ul></div>';
+          }).join('') + (groups.length > 5 ? '<button class="link more-act" type="button">' + esc(S.t('aShowMore')) + '</button>' : '') + '</div>';
+        }
+        box.innerHTML = html;
+        var more = box.querySelector('.more-act');
+        if (more) more.addEventListener('click', function () { box.querySelectorAll('.day-group[hidden]').forEach(function (d) { d.hidden = false; }); more.remove(); });
       });
     })();
   </script>
