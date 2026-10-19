@@ -330,6 +330,22 @@
     .form-err.show { display: block; margin: 10px 0 0; }
     .book-card .btn-primary { margin-top: 18px; min-height: 52px; }
     .note { color: var(--muted); font-size: 14.5px; margin: 12px 0 0; }
+    /* Reassurance around the booking form */
+    .next-steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0 0; padding: 0; }
+    .next-steps li { display: flex; align-items: flex-start; gap: 10px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
+    .next-steps b { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: var(--on-primary); font-size: 13px; }
+    .next-steps strong { display: block; color: var(--ink); font-size: 15px; line-height: 1.3; }
+    .next-steps small { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .hosts-promise { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; padding: 12px 14px; border-radius: 16px; background: var(--warm-soft); }
+    .hosts-promise .faces { display: flex; flex: none; }
+    .hosts-promise img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid var(--surface); }
+    .hosts-promise img + img { margin-inline-start: -12px; }
+    .hosts-promise b { display: block; color: var(--ink); font-size: 14.5px; line-height: 1.3; }
+    .hosts-promise small { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .quick-alt { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; color: var(--muted); font-size: 14.5px; }
+    .quick-alt a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--border); color: var(--ink); font-weight: 700; text-decoration: none; }
+    .quick-alt svg { width: 16px; height: 16px; color: var(--primary); }
+    @media (max-width: 640px) { .next-steps { grid-template-columns: 1fr; gap: 8px; margin-top: 16px; } .next-steps li { padding: 10px 12px; align-items: center; } }
     .sent { text-align: center; padding: 24px 8px; }
     .sent .ic { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 16px; background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
     .sent .ic svg { width: 30px; height: 30px; }
@@ -1150,9 +1166,18 @@
         <span class="eyebrow" data-t="eyebrowContact">Get in touch</span>
         <h2 class="s-title" data-t="bookHeadline">Book your free intro call</h2>
         <p class="s-intro" data-t="bookIntro">A free 20 minute video chat about your speaking goals. Pick a time that works for you and we'll get back to you to confirm.</p>
+        <ol class="next-steps">
+          <li><b>1</b><span><strong data-t="ns1t">You send this</strong><small data-t="ns1b">About a minute, no payment</small></span></li>
+          <li><b>2</b><span><strong data-t="ns2t">We reply within 24 hours</strong><small data-t="ns2b">By email or text, from a real person</small></span></li>
+          <li><b>3</b><span><strong data-t="ns3t">Your free 20 minute call</strong><small data-t="ns3b">At the time you picked</small></span></li>
+        </ol>
         <div class="book-grid">
           <div class="card book-card" id="bookCard">
             <form id="bookForm" novalidate>
+              <div class="hosts-promise">
+                <span class="faces"><img src="/assets/assets/images/emad_pic.jpg" alt="Emad" width="44" height="44"><img src="/assets/assets/images/Elias-image.jpeg" alt="Elias" width="44" height="44"></span>
+                <span><b data-t="promiseTitle">Emad or Elias will reply to you personally</b><small data-t="promiseSub">Usually the same day, always within 24 hours.</small></span>
+              </div>
               <h3 data-t="bookFormTitle">Request a session</h3>
               <p class="sub" data-t="bookFormSub">It only takes a minute.</p>
               <div class="step" id="stepSession"><b>1</b><span data-t="pickSession">What would you like?</span></div>
@@ -1189,7 +1214,11 @@
               </div>
               <button class="btn btn-primary btn-block" type="submit" id="sendBtn" data-t="send">Send request</button>
               <p class="form-err" id="sendErr" data-t="sendFailed">We couldn't send it from here, so we opened an email with your request instead.</p>
-              <p class="note" data-t="bookNote">This goes straight to us. We'll reply soon to confirm.</p>
+              <p class="note" data-t="bookNote">This goes straight to our inbox. No spam, and nothing to pay.</p>
+              <div class="quick-alt">
+                <span data-t="quickAlt">Rather not fill a form?</span>
+                <a href="sms:+14169955347?&body=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20intro%20call." data-cta="text-us"><svg aria-hidden="true"><use href="#i-phone"/></svg><span data-t="textUs">Text us</span></a>
+              </div>
             </form>
             <div class="sent" id="sent" hidden>
               <span class="ic"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
