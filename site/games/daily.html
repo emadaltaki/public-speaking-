@@ -10,8 +10,8 @@
   <meta property="og:site_name" content="Speak Up Fearless">
   <meta property="og:title" content="Take today's 1-minute speaking challenge">
   <meta property="og:description" content="A new speaking topic every day. Speak for one minute, build your streak, and get comfortable talking.">
-  <meta property="og:url" content="https://public-speaking-lemon.vercel.app/games/daily">
-  <meta property="og:image" content="https://public-speaking-lemon.vercel.app/og/daily-streak.png">
+  <meta property="og:url" content="https://speakup-ca500.web.app/games/daily">
+  <meta property="og:image" content="https://speakup-ca500.web.app/og/daily-streak.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="A glowing fire with the words: Daily speaking streak, take today's 1-minute challenge">
@@ -145,7 +145,7 @@
       var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
       var ID = 'daily';
       var SECONDS = 60;
-      var SITE = 'https://public-speaking-lemon.vercel.app';
+      var SITE = location.origin;  // links point back to wherever the site is hosted
       S.addStrings({
         dTitle: 'Daily Challenge', dKick: "Today's challenge", dTopicLabel: 'Your topic', dRule: 'Speak about it for one minute. No retakes, no pressure, just talk.',
         dStart: 'Start my minute', dDoneToday: 'Done for today. New topic tomorrow!', dAgain: 'Practice again', dShare: 'Share my streak',

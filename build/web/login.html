@@ -310,12 +310,12 @@
       updateProfile, sendPasswordResetEmail, signOut,
     } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-    // Google sign-in runs through our own domain (/__/auth is passed on to
-    // Firebase by vercel.json), so phones and the home-screen app can sign in
-    // in the same tab instead of opening another one. It needs
-    // https://public-speaking-lemon.vercel.app/__/auth/handler listed as a
-    // redirect URI on the Google OAuth client; until then, keep the popup.
-    const OWN_AUTH_DOMAIN = 'public-speaking-lemon.vercel.app';
+    // Google sign-in can run through our own domain (Firebase Hosting serves
+    // /__/auth itself), so phones and the home-screen app sign in in the same
+    // tab instead of opening another one. It needs
+    // https://speakup-ca500.web.app/__/auth/handler listed as a redirect URI
+    // on the Google OAuth client; until then, keep the popup.
+    const OWN_AUTH_DOMAIN = 'speakup-ca500.web.app';
     const SAME_TAB_GOOGLE = false && location.hostname === OWN_AUTH_DOMAIN;
     // Phones, tablets and the installed app: a popup there becomes a new tab.
     const POPUP_UNSAFE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true ||
