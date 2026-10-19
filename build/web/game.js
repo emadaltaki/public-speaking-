@@ -58,6 +58,7 @@
   }
   function timerLabel(sec) {
     var m = Math.floor(sec / 60), s = sec % 60;
+    if (!m) return S.lang === 'ar' ? s + ' ثانية' : s + ' seconds';
     if (s) return S.lang === 'ar' ? m + ':' + String(s).padStart(2, '0') + ' د' : m + ':' + String(s).padStart(2, '0') + ' min';
     if (S.lang === 'ar') return m === 1 ? 'دقيقة واحدة' : (m === 2 ? 'دقيقتان' : m + ' دقائق');
     return m === 1 ? '1 minute' : m + ' minutes';

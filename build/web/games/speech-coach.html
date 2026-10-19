@@ -224,7 +224,7 @@
           strengths: d.strengths, nextStep: d.nextStep, transcript: words, story: d.story, practice: d.practice
         };
       }
-      var settings = { seconds: 60, own: '', set: 'General' };  // every talk is one minute
+      var settings = { seconds: 60, own: '', set: 'General' };  // 30 seconds to 1 minute
       var shownTopic = '';
       var SHUFFLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>';
 
@@ -243,6 +243,8 @@
           G.setup({
             id: ID, games: games, startLabel: t('cStart'), startIcon: G.ICON.arrow,
             render: function (rows) {
+              rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('cLength'), min: 30, max: 60, step: 15, value: settings.seconds,
+                format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
               // A ready topic, a shuffle button, or their own.
               var tp = document.createElement('div');
               tp.innerHTML = '<span class="row-head">' + G.ICON.list + '<span>' + esc(t('cTopic')) + '</span></span>' +
