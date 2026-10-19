@@ -19,7 +19,7 @@
     scStory: 'Your story', scOutline: 'Your main points', scOpening: 'Opening', scMiddle: 'Middle', scEnding: 'Ending',
     scRate: { strong: 'Strong', ok: 'Okay', weak: 'Needs work' }, scConnect: 'How your ideas connect',
     scPace: 'Your pace', scPaceAvg: 'Average {n} words a minute', scPaceZone: 'Comfortable zone: 130 to 160',
-    scPaceFast: 'You sped up around {t} ({n} a minute).', scPaceSlow: 'You slowed right down around {t} ({n} a minute).', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words',
+    scPaceUnit: 'words a minute on average', scPaceFeel: { ok: 'comfortable', fast: 'too fast', slow: 'too slow' }, scSec: 's', scPaceHow: 'Each bar is how fast you spoke during that part of your talk, in words a minute.', scAllFast: 'Your whole talk was fast ({n} words a minute). Slow down and aim for 130 to 160 so people can keep up.', scAllSlow: 'Your whole talk was slow ({n} words a minute). Aim for 130 to 160 to keep people engaged.', scPartFast: 'You were fastest {w} ({n} words a minute).', scPartSlow: 'You slowed right down {w} ({n} words a minute).', scAtStart: 'at the start', scAtEnd: 'near the end', scInPart: 'between {r}', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words',
     scPractice: 'Practice this next', scPlayGame: 'Play {g}', scComeBack: 'Play it a few times, then come back to Speech Coach and record again to see how much you improve.',
     scG: { autocomplete: 'Autocomplete', 'triple-step': 'Triple Step', conductor: 'The Conductor', podcast: 'The Podcast Game', daily: 'Daily Challenge' },
     scStatWpm: 'words / min', scStatFillers: 'filler words', scStatPauses: 'long pauses', scStatTime: 'length', scListen: 'Listen back',
@@ -40,7 +40,7 @@
     scStory: 'قصتك', scOutline: 'نقاطك الرئيسية', scOpening: 'البداية', scMiddle: 'الوسط', scEnding: 'النهاية',
     scRate: { strong: 'قوية', ok: 'مقبولة', weak: 'تحتاج تحسينًا' }, scConnect: 'كيف ترتبط أفكارك',
     scPace: 'سرعتك', scPaceAvg: 'المتوسط {n} كلمة في الدقيقة', scPaceZone: 'المنطقة المريحة: من 130 إلى 160',
-    scPaceFast: 'أسرعت عند {t} ({n} كلمة في الدقيقة).', scPaceSlow: 'أبطأت كثيرًا عند {t} ({n} كلمة في الدقيقة).', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك',
+    scPaceUnit: 'كلمة في الدقيقة في المتوسط', scPaceFeel: { ok: 'مريحة', fast: 'سريعة جدًا', slow: 'بطيئة جدًا' }, scSec: ' ث', scPaceHow: 'كل عمود يبيّن سرعة كلامك في ذلك الجزء من حديثك، بالكلمات في الدقيقة.', scAllFast: 'كان حديثك كله سريعًا ({n} كلمة في الدقيقة). أبطئ واستهدف من 130 إلى 160 ليتمكن الناس من المتابعة.', scAllSlow: 'كان حديثك كله بطيئًا ({n} كلمة في الدقيقة). استهدف من 130 إلى 160 لتحافظ على انتباه الناس.', scPartFast: 'كنت أسرع {w} ({n} كلمة في الدقيقة).', scPartSlow: 'أبطأت كثيرًا {w} ({n} كلمة في الدقيقة).', scAtStart: 'في البداية', scAtEnd: 'قرب النهاية', scInPart: 'بين {r}', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك',
     scPractice: 'تدرّب على هذه اللعبة', scPlayGame: 'العب {g}', scComeBack: 'العبها بضع مرات، ثم عد إلى مدرب الإلقاء وسجّل مجددًا لترى كم تحسّنت.',
     scG: { autocomplete: 'الإكمال التلقائي', 'triple-step': 'الخطوة الثلاثية', conductor: 'قائد الأوركسترا', podcast: 'لعبة البودكاست', daily: 'التحدي اليومي' },
     scStatWpm: 'كلمة / دقيقة', scStatFillers: 'كلمات حشو', scStatPauses: 'وقفات طويلة', scStatTime: 'المدة', scListen: 'استمع لتسجيلك',
@@ -108,25 +108,36 @@
   function paceCard(m) {
     var p = m.paceTimeline || [];
     if (p.length < 2) return '';
-    var top = Math.max(200, Math.max.apply(null, p) + 10);
+    var dur = +m.durationSeconds || 0;
+    var top = Math.max(200, Math.max.apply(null, p) + 20);
     var y = function (v) { return (100 - v / top * 100).toFixed(1); };
+    var range = function (i) { return (i * 15) + '–' + (i === p.length - 1 && dur ? Math.round(dur) : (i + 1) * 15) + t('scSec'); };
     var bars = p.map(function (v, i) {
       var zone = v > 170 ? 'fast' : v < 115 ? 'slow' : 'ok';
       return '<div class="pc-col"><div class="pc-bar ' + zone + '" style="height:' + Math.max(4, v / top * 100).toFixed(1) + '%"><span>' + v + '</span></div>' +
-        '<small dir="ltr">' + mmss(i * 15) + '</small></div>';
+        '<small dir="ltr">' + range(i) + '</small></div>';
     }).join('');
-    return '<div class="card sc-pace"><h2>' + esc(t('scPace')) + '</h2><p class="sc-sub">' + esc(t('scPaceAvg', { n: m.wordsPerMinute || 0 })) + '</p>' +
+    var avg = m.wordsPerMinute || 0;
+    var feel = avg > 170 ? 'fast' : avg < 115 ? 'slow' : 'ok';
+    return '<div class="card sc-pace"><h2>' + esc(t('scPace')) + '</h2>' +
+      '<div class="pc-avg ' + feel + '"><b>' + avg + '</b><span>' + esc(t('scPaceUnit')) + '<em>' + esc(t('scPaceFeel')[feel]) + '</em></span></div>' +
+      '<p class="pc-how">' + esc(t('scPaceHow')) + '</p>' +
       '<div class="pc-chart"><div class="pc-zone" style="top:' + y(160) + '%;bottom:' + (100 - y(130)) + '%"></div>' + bars + '</div>' +
-      '<p class="pc-legend"><span class="z"></span>' + esc(t('scPaceZone')) + '</p>' + paceNote(p) + '</div>';
+      '<div class="pc-legend"><span><i class="z"></i>' + esc(t('scPaceZone')) + '</span><span><i class="k ok"></i>' + esc(t('scPaceFeel').ok) + '</span>' +
+        '<span><i class="k fast"></i>' + esc(t('scPaceFeel').fast) + '</span><span><i class="k slow"></i>' + esc(t('scPaceFeel').slow) + '</span></div>' +
+      paceNote(p, avg, range) + '</div>';
   }
 
-  // One line on where they rushed or dragged, if anywhere.
-  function paceNote(p) {
+  // Plain words on what the chart shows: the whole talk first, then any part that stood out.
+  function paceNote(p, avg, range) {
     var hi = 0, lo = 0;
     p.forEach(function (v, i) { if (v > p[hi]) hi = i; if (v < p[lo]) lo = i; });
+    var where = function (i) { return i === 0 ? t('scAtStart') : i === p.length - 1 ? t('scAtEnd') : t('scInPart', { r: range(i) }); };
     var bits = [];
-    if (p[hi] > 170) bits.push(t('scPaceFast', { t: mmss(hi * 15), n: p[hi] }));
-    if (p[lo] < 115) bits.push(t('scPaceSlow', { t: mmss(lo * 15), n: p[lo] }));
+    if (avg > 170) bits.push(t('scAllFast', { n: avg }));
+    else if (avg < 115) bits.push(t('scAllSlow', { n: avg }));
+    if (p[hi] > 170 && !(avg > 170 && p[hi] - avg < 25)) bits.push(t('scPartFast', { w: where(hi), n: p[hi] }));
+    if (p[lo] < 115 && !(avg < 115 && avg - p[lo] < 25)) bits.push(t('scPartSlow', { w: where(lo), n: p[lo] }));
     if (!bits.length) bits.push(t('scPaceSteady'));
     return '<p class="pc-note">' + esc(bits.join(' ')) + '</p>';
   }
@@ -219,7 +230,7 @@
 
     if (r.story) html += '<section class="sc-panel" data-panel="story" hidden>' + storyCard(r.story) + '</section>';
 
-    html += '<section class="sc-panel" data-panel="pace" hidden>' + (paceCard(m) || '<div class="card"><p>' + esc(t('scWpm', { n: Math.round(m.wordsPerMinute || 0) })) + '</p></div>') + fillerCard(m) + '</section>';
+    html += '<section class="sc-panel" data-panel="pace" hidden>' + (paceCard(Object.assign({ durationSeconds: r.durationSeconds }, m)) || '<div class="card"><p>' + esc(t('scWpm', { n: Math.round(m.wordsPerMinute || 0) })) + '</p></div>') + fillerCard(m) + '</section>';
 
     if (moments.length) {
       html += '<section class="sc-panel" data-panel="moments" hidden><ol class="sc-mlist">' + moments.map(function (mo, i) {
