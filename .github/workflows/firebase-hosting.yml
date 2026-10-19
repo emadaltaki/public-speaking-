@@ -1,0 +1,26 @@
+# Publishes the website (build/web, already built and committed) to Firebase
+# Hosting: live on every push to main, and a preview link on every pull request.
+# Needs the repository secret FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 (a service
+# account key for the speakup-ca500 project).
+name: Firebase Hosting
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 }}
+          projectId: speakup-ca500
+          channelId: ${{ github.event_name == 'push' && 'live' || '' }}
