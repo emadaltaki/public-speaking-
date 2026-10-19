@@ -29,7 +29,9 @@
     .d-hero::after { width: 140px; height: 140px; left: -50px; bottom: -80px; }
     .d-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .d-kick { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .9; }
-    .d-date { font-size: 13px; opacity: .85; }
+    .d-date { margin-top: 4px; font-size: 13px; opacity: .85; }
+    .d-lang { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 0; border-radius: 999px; background: rgba(255,255,255,.18); color: #fff; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .d-lang svg { width: 17px; height: 17px; }
     .d-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
     .d-row .streak { margin-top: 0; }
     .d-how { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 12px; padding: 6px; border: 0; background: none; color: #fff; font-weight: 700; font-size: 14.5px; cursor: pointer; opacity: .92; }
@@ -184,6 +186,7 @@
       });
       var FIRE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2.5s.9 3.1-1.4 5.6C10.3 10 8 11.4 8 14.6A4.4 4.4 0 0 0 12.4 19a4.6 4.6 0 0 0 4.6-4.6c0-1.6-.6-2.9-1.3-3.9 0 0-.1 1.7-1.6 2.2 0 0 .9-4.4-.6-10.2zM6.6 9.4C5 11.2 4 13.3 4 15.4 4 19.6 7.6 23 12 23s8-3.4 8-7.6c0-1.2-.3-2.4-.8-3.5-.4 3.5-3.4 6.1-7 6.1A6.3 6.3 0 0 1 6 11.7c0-.8.2-1.6.6-2.3z"/></svg>';
       var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>';
+      var LANG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h9M8.5 3v2M6 5c.5 3.5 2.6 6.3 5.5 8M11 5c-.8 3.6-3 6.6-7 8.5"/><path d="m12 21 4.5-10 4.5 10M13.6 17.5h5.8"/></svg>';
       var BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>';
       document.title = t('dTitle') + ' | Speak Up Fearless';
 
@@ -213,7 +216,8 @@
       function myTopic(words, rounds) {
         var u = S.user(), key = 'speakupfearless.dailyTopic.' + u.uid;
         var done = rounds.filter(function (r) { return r.gameId === ID && r.topic && dayKey(new Date(r.playedAt)) === TODAY; })[0];
-        if (done) return done.topic;
+        // Keep the earned topic only if it's in the language on screen.
+        if (done && words.topics.indexOf(done.topic) !== -1) return done.topic;
         try { var saved = JSON.parse(localStorage.getItem(key) || 'null'); if (saved && saved.day === TODAY && (saved.lang || 'en') === S.lang) return saved.topic; } catch (_) {}
         var used = {};
         rounds.forEach(function (r) { if (r.gameId === ID && r.topic) used[r.topic] = true; });
@@ -317,7 +321,8 @@
         }
         main.innerHTML = '<div class="daily">' +
           '<a class="back-games" href="/games">' + BACK + esc(t('dBackGames')) + '</a>' +
-          '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span><span class="d-date">' + esc(dateFmt.format(today)) + '</span></div>' +
+          '<section class="d-hero"><div class="d-top"><span class="d-kick">' + esc(t('dKick')) + '</span><button class="d-lang" type="button" aria-label="' + esc(S.lang === 'ar' ? 'English' : 'العربية') + '">' + LANG + '<span>' + (S.lang === 'ar' ? 'English' : 'العربية') + '</span></button></div>' +
+          '<div class="d-date">' + esc(dateFmt.format(today)) + '</div>' +
           '<div class="d-row"><div class="streak' + (st.current ? '' : ' cold') + '"><span class="fire">🔥</span>' + esc(keepAlive ? t('dKeep', { n: st.current }) : streakLabel(st.current)) + '</div></div>' +
           '<div class="d-label">' + esc(t('dTopicLabel')) + '</div><h1 class="d-topic">' + esc(topic) + '</h1>' +
           (st.doneToday
@@ -338,6 +343,7 @@
           if (go.id === 'go' && st.current === 0) S.howToPlay(ID, function () { play(topic, st); });
           else play(topic, st);
         });
+        main.querySelector('.d-lang').addEventListener('click', function () { S.setLang(S.lang === 'ar' ? 'en' : 'ar'); });
         main.querySelector('.d-how').addEventListener('click', function () { S.howToPlay(ID, st.doneToday ? null : function () { play(topic, st); }); });
         var hm = main.querySelector('.h-more');
         if (hm) hm.addEventListener('click', function () { main.querySelectorAll('.hist .more-row').forEach(function (r) { r.hidden = false; }); hm.remove(); });
