@@ -39,6 +39,11 @@
     .result-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0 14px; }
     .result-head h1 { font-size: 24px; margin: 0; }
     .result-head a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .join-sample { display: flex; width: 100%; min-height: 50px; margin-top: 10px; }
+    .sample { margin-top: 26px; scroll-margin-top: 96px; }
+    .sample .result-head { margin-bottom: 4px; }
+    .sample-tag { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--soft); color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .sample > .help { margin: 0 0 14px; color: var(--muted); }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
 </head>
@@ -67,7 +72,9 @@
         cErrLimit: 'You\'ve used today\'s scored recordings. Come back tomorrow for more.',
         cErrOther: 'Something went wrong while scoring. Your recording is still here, so try again.',
         cRetrySend: 'Try scoring again', cResult: 'Your feedback', cAgain: 'Try the same topic', cNext: 'New topic', cSettings: 'Settings', cAll: 'All games',
-        cSavedNote: 'Saved to your account.'
+        cSavedNote: 'Saved to your account.',
+        cGuestTitle: 'Get your talk scored by AI', cGuestBody: 'Every recording is scored by AI, so Speech Coach needs a free account. Below is a sample of the report you get back.',
+        cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.'
       }, {
         cLength: 'مدة الحديث', cStart: 'التالي',
         cReadyHint: 'عندما تضغط ابدأ، سيطلب المتصفح استخدام الميكروفون. تحدث حتى ينتهي الوقت، أو اضغط إنهاء.',
@@ -83,8 +90,66 @@
         cErrLimit: 'استخدمت تسجيلات اليوم المقيّمة. عد غدًا للمزيد.',
         cErrOther: 'حدث خطأ أثناء التقييم. تسجيلك ما زال هنا، فحاول مرة أخرى.',
         cRetrySend: 'أعد محاولة التقييم', cResult: 'ملاحظاتك', cAgain: 'الموضوع نفسه', cNext: 'موضوع جديد', cSettings: 'الإعدادات', cAll: 'كل الألعاب',
-        cSavedNote: 'حُفظ في حسابك.'
+        cSavedNote: 'حُفظ في حسابك.',
+        cGuestTitle: 'احصل على تقييم لحديثك بالذكاء الاصطناعي', cGuestBody: 'كل تسجيل يقيّمه الذكاء الاصطناعي، لذا يحتاج مدرب الإلقاء إلى حساب مجاني. في الأسفل مثال على التقرير الذي ستحصل عليه.',
+        cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.'
       });
+
+      // A made-up report so guests can see what Speech Coach gives back.
+      var SAMPLE = {
+        en: {
+          topic: 'The best advice you ever got', overall: 7, wpm: 148,
+          text: 'Um, so the best advice, like, I ever got came from my grandmother. I was nervous before my first job interview and I called her. She listened and then ... she told me to stop trying to sound perfect and just be curious about the people in the room. I went in, asked them questions, and um, I actually enjoyed it. I got the job. Now I use that advice before every big talk. So yeah, that\'s it.',
+          fillers: ['um,', 'like,'],
+          scores: { pace: [8, 'A steady, easy pace, close to natural conversation.'], pauses: [6, 'One long pause in the middle broke the flow. Short pauses elsewhere worked well.'],
+            fillers: [5, '"Um" and "like" came up 3 times, mostly when starting a new idea.'], clarity: [8, 'Clear words and a simple message anyone can follow.'],
+            flow: [7, 'A good story, but the ending came suddenly. Tie it back to the advice.'] },
+          moments: [
+            ['Um,', false, 'fillers', 'Um, so the best advice, like, I ever got', 'Two fillers in your first line make the start sound unsure.', 'Take a breath, then say your first line without them: "The best advice I ever got..."'],
+            ['she', false, 'pauses', 'She listened and then... she told me', 'A 3-second pause while you looked for the next part.', 'If you lose your place, repeat your last point in a few words to buy time.'],
+            ['yeah,', false, 'flow', "So yeah, that's it.", 'The ending fades out instead of landing.', 'Finish with one sentence on what the advice changed for you.']],
+          strengths: ['A real story made it easy to listen to', 'A good, steady pace', 'Clear and simple words'],
+          nextStep: 'Practise your first and last sentence until you can say them with no fillers.'
+        },
+        ar: {
+          topic: 'أفضل نصيحة سمعتها', overall: 7, wpm: 118,
+          text: 'يعني، أفضل نصيحة، اممم، سمعتها كانت من جدتي. كنت متوترًا قبل أول مقابلة عمل فاتصلت بها. استمعت إليّ ثم ... قالت لي توقف عن محاولة أن تبدو مثاليًا وكن فضوليًا تجاه الناس في الغرفة. دخلت وسألتهم أسئلة، و اممم، استمتعت فعلًا. وحصلت على الوظيفة. والآن أستخدم هذه النصيحة قبل كل حديث مهم. يعني، هذا كل شيء.',
+          fillers: ['يعني،', 'اممم،'],
+          scores: { pace: [8, 'سرعة ثابتة ومريحة، قريبة من الحديث الطبيعي.'], pauses: [6, 'وقفة طويلة واحدة في المنتصف قطعت الحديث. الوقفات القصيرة في المواضع الأخرى كانت جيدة.'],
+            fillers: [5, 'تكررت «يعني» و«اممم» 4 مرات، غالبًا عند بداية فكرة جديدة.'], clarity: [8, 'كلمات واضحة ورسالة بسيطة يفهمها أي أحد.'],
+            flow: [7, 'قصة جميلة، لكن النهاية جاءت فجأة. اربطها بالنصيحة.'] },
+          moments: [
+            ['يعني،', false, 'fillers', 'يعني، أفضل نصيحة، اممم، سمعتها', 'كلمتا حشو في جملتك الأولى تجعلان البداية مترددة.', 'خذ نفسًا، ثم قل جملتك الأولى بدونهما: «أفضل نصيحة سمعتها...»'],
+            ['قالت', false, 'pauses', 'استمعت إليّ ثم... قالت لي', 'وقفة 3 ثوانٍ وأنت تبحث عن الجزء التالي.', 'إن فقدت فكرتك، أعد آخر نقطة بكلمات قليلة لتكسب وقتًا.'],
+            ['يعني،', true, 'flow', 'يعني، هذا كل شيء.', 'النهاية تتلاشى بدل أن تصل بقوة.', 'اختم بجملة واحدة عمّا غيّرته النصيحة فيك.']],
+          strengths: ['قصة حقيقية جعلت الاستماع سهلًا', 'سرعة جيدة وثابتة', 'كلمات واضحة وبسيطة'],
+          nextStep: 'تدرّب على جملتك الأولى والأخيرة حتى تقولهما بلا كلمات حشو.'
+        }
+      };
+      // Turns the sample into the same shape the backend sends.
+      function sampleReport() {
+        var d = SAMPLE[S.lang] || SAMPLE.en;
+        var step = 60 / d.wpm, at = 0.4, words = [];
+        d.text.split(/\s+/).forEach(function (w) {
+          if (w === '...') { at += 3.1; return; }
+          words.push({ w: w, s: +at.toFixed(2), e: +(at + step * 0.85).toFixed(2), f: d.fillers.indexOf(w.toLowerCase()) !== -1 });
+          at += step;
+        });
+        var find = function (w, last) {
+          var i = -1;
+          words.forEach(function (x, k) { if (x.w === w && (last || i === -1)) i = k; });
+          return Math.max(0, i);
+        };
+        var scores = {};
+        Object.keys(d.scores).forEach(function (k) { scores[k] = { score: d.scores[k][0], summary: d.scores[k][1] }; });
+        return {
+          topic: d.topic, overall: d.overall, durationSeconds: Math.round(at),
+          metrics: { wordsPerMinute: d.wpm, fillerCount: words.filter(function (w) { return w.f; }).length, longPauses: 1 },
+          scores: scores,
+          moments: d.moments.map(function (m) { return { at: words[find(m[0], m[1])].s, category: m[2], quote: m[3], issue: m[4], fix: m[5] }; }),
+          strengths: d.strengths, nextStep: d.nextStep, transcript: words
+        };
+      }
       var settings = { seconds: 120, suggest: true, set: 'General' };
 
       // The best format this browser records in (Safari: mp4, others: webm/opus).
@@ -107,7 +172,28 @@
               rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
               rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
             },
-            onStart: function () { play(); }
+            onStart: function () { if (!S.user()) return guestView(); play(); }
+          });
+        }
+
+        // Scoring costs money per recording, so guests get the sign-up card
+        // and a sample report instead of the microphone.
+        function guestView() {
+          S.joinCard(main, {
+            title: t('cGuestTitle'), body: t('cGuestBody'),
+            extra: '<button class="btn btn-ghost join-sample" type="button">' + esc(t('cSeeSample')) + '</button>'
+          }).then(function () {
+            var box = document.createElement('section');
+            box.className = 'sample';
+            box.innerHTML = '<div class="result-head"><h1>' + esc(t('cSample')) + '</h1><span class="sample-tag">' + esc(t('cSampleTag')) + '</span></div>' +
+              '<p class="help">' + esc(t('cSampleNote')) + '</p><div id="report"></div>' +
+              '<div class="result-bar"><a class="btn btn-primary" href="' + S.signUpHref() + '">' + esc(t('joinCta')) + '</a>' +
+              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div>';
+            main.appendChild(box);
+            window.Coach.render(box.querySelector('#report'), sampleReport());
+            main.querySelector('.join-sample').addEventListener('click', function () { box.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+            box.querySelector('#set').addEventListener('click', function () { showSetup(); window.scrollTo(0, 0); });
+            window.scrollTo(0, 0);
           });
         }
 

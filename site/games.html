@@ -115,7 +115,7 @@
       }
       S.gate(content, function () {
         return S.loadGames().then(function (games) {
-          content.innerHTML = dailyCard() + '<div class="grid">' + S.ORDER.map(function (id) {
+          content.innerHTML = S.guestBar() + dailyCard() + '<div class="grid">' + S.ORDER.map(function (id) {
             var g = games[id];
             return '<article class="game g-' + id + '"><span class="g-ic">' + S.ICONS[id] + '</span>' +
               '<h2>' + S.esc(g.title) + '</h2><p>' + S.esc(g.tagline) + '</p>' +

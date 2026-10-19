@@ -236,13 +236,15 @@
   function end(o) {
     var el = document.createElement('div');
     el.className = 'end';
+    // Guests get a "save your progress" box, which takes over the main button.
+    var save = S.guestSave();
     el.innerHTML = '<div class="card"><div class="party">🎉</div><h2>' + esc(o.title) + '</h2>' + (o.message ? '<p>' + esc(o.message) + '</p>' : '') + (o.extra || '') +
-      '<button class="btn btn-primary" type="button">' + esc(o.primary) + '</button>' +
+      save + '<button class="btn ' + (/gsave"/.test(save) ? 'btn-ghost' : 'btn-primary') + ' again" type="button">' + esc(o.primary) + '</button>' +
       '<div class="more">' + (o.onRetry ? '<button type="button" class="r">' + esc(o.retryLabel || t('tripleStepRetry')) + '</button>' : '') +
       '<button type="button" class="s">' + esc(t('tripleStepSettings')) + '</button></div></div>';
     document.body.appendChild(el);
     var close = function () { el.remove(); };
-    el.querySelector('.btn-primary').addEventListener('click', function () { close(); o.onPrimary(); });
+    el.querySelector('.again').addEventListener('click', function () { close(); o.onPrimary(); });
     var r = el.querySelector('.r'); if (r) r.addEventListener('click', function () { close(); o.onRetry(); });
     el.querySelector('.s').addEventListener('click', function () { close(); o.onSettings(); });
     return el;
