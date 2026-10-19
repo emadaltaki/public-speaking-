@@ -71,6 +71,19 @@
     .act li { border-top: 0; padding: 8px 0; }
     .act .t small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .more-act { margin-top: 8px; }
+    /* Emails */
+    .mail-card { display: flex; align-items: center; gap: 14px; }
+    .mail-card .t { flex: 1; min-width: 0; }
+    .mail-card b { display: block; color: var(--ink); }
+    .mail-card small { color: var(--muted); font-size: 13.5px; }
+    .sw { position: relative; width: 52px; height: 30px; flex: none; }
+    .sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+    .sw span { position: absolute; inset: 0; border-radius: 99px; background: var(--border); transition: background .2s; pointer-events: none; }
+    .sw span::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: transform .2s; }
+    .sw input:checked + span { background: var(--primary); }
+    .sw input:checked + span::after { transform: translateX(22px); }
+    :root[dir="rtl"] .sw input:checked + span::after { transform: translateX(-22px); }
+    .note { padding: 14px 16px; border-radius: 18px; background: var(--warm-soft); color: var(--ink); font-size: 14.5px; }
     .g-daily { background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); }
   </style>
   <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
@@ -91,6 +104,9 @@
         aGo: 'Today\'s challenge', aSpoke: 'Time spoken', aDays: 'Days practiced', aRounds: 'Rounds',
         aGames: 'Your games', aNever: 'Not played yet', aLast: 'last {d}', aPlay: 'Play',
         aActivity: 'Your activity', aToday: 'Today', aYesterday: 'Yesterday', aShowMore: 'Show older activity',
+        aMailTitle: 'Streak reminder emails', aMailBody: 'A note when you start a streak, and a reminder at 7pm if today is not done yet.',
+        aMailOn: "Streak emails are on.", aMailOff: "Streak emails are off.", aMailFail: "Couldn't save that. Please try again.",
+        aUnsubbed: "You won't get streak emails anymore. You can turn them back on below.", aUnsubBad: "That unsubscribe link didn't work. You can turn streak emails off below.",
         aRoundsN: '{n} rounds', aRound1: '1 round', aPractice: 'Practice round',
         first: 'Play your first game', none: 'Your rounds and speaking time will show up here.',
         bookTitle: 'Ready to practice live?', bookBody: 'Book a free 15 minute intro call.', book: 'Book', signOut: 'Sign out', create: 'Create account'
@@ -103,6 +119,9 @@
         aGo: 'تحدي اليوم', aSpoke: 'وقت الحديث', aDays: 'أيام التدريب', aRounds: 'الجولات',
         aGames: 'ألعابك', aNever: 'لم تلعبها بعد', aLast: 'آخر مرة {d}', aPlay: 'العب',
         aActivity: 'نشاطك', aToday: 'اليوم', aYesterday: 'أمس', aShowMore: 'اعرض النشاط الأقدم',
+        aMailTitle: 'رسائل تذكير السلسلة', aMailBody: 'رسالة عندما تبدأ سلسلة، وتذكير في السابعة مساءً إن لم تُنجز تحدي اليوم.',
+        aMailOn: 'رسائل السلسلة مفعّلة.', aMailOff: 'رسائل السلسلة متوقفة.', aMailFail: 'تعذّر الحفظ. حاول مجددًا.',
+        aUnsubbed: 'لن تصلك رسائل السلسلة بعد الآن. يمكنك تفعيلها مجددًا من الأسفل.', aUnsubBad: 'لم يعمل رابط إلغاء الاشتراك. يمكنك إيقاف رسائل السلسلة من الأسفل.',
         aRoundsN: '{n} جولات', aRound1: 'جولة واحدة', aPractice: 'جولة تدريب',
         first: 'العب أول لعبة لك', none: 'ستظهر هنا جولاتك ووقت حديثك.',
         bookTitle: 'مستعد للتدرّب مباشرة؟', bookBody: 'احجز مكالمة تعريفية مجانية لمدة 15 دقيقة.', book: 'احجز', signOut: 'تسجيل الخروج', create: 'إنشاء حساب'
@@ -116,8 +135,15 @@
       var CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/></svg>';
       var OUT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M15 8l4 4-4 4M19 12H9"/></svg>';
 
+      // Back from an unsubscribe link in an email.
+      function notice() {
+        var v = new URLSearchParams(location.search).get('emails');
+        if (v === 'off') return '<div class="note">✓ ' + esc(S.t('aUnsubbed')) + '</div>';
+        if (v === 'invalid') return '<div class="note">' + esc(S.t('aUnsubBad')) + '</div>';
+        return '';
+      }
       if (!u) {
-        main.innerHTML = '<div class="card center"><div class="ic round">' + INSIGHT + '</div><h2>' + esc(S.t('outTitle')) + '</h2>' +
+        main.innerHTML = notice() + '<div class="card center"><div class="ic round">' + INSIGHT + '</div><h2>' + esc(S.t('outTitle')) + '</h2>' +
           '<p class="lead" style="margin:8px auto 0">' + esc(S.t('outBody')) + '</p>' +
           '<div class="btn-row" style="margin-top:20px"><a class="btn btn-primary" href="/login?next=%2Faccount">' + esc(S.t('signIn')) + '</a>' +
           '<a class="btn btn-ghost" href="/login?mode=signup&next=%2Faccount">' + esc(S.t('create')) + '</a></div></div>';
@@ -128,10 +154,24 @@
         '<section class="banner"><button class="photo" type="button" id="photo" aria-label="' + esc(S.t('add')) + '"><span class="av"></span><span class="cam">' + CAM + '</span></button>' +
         '<div style="min-width:0"><h1>' + esc(S.t('hello', { n: u.shortName })) + '</h1><div class="mail">' + esc(u.email) + '</div>' +
         '<button class="rm" type="button" id="remove" hidden>' + esc(S.t('remove')) + '</button></div></section>' +
+        notice() +
         '<div id="history"></div>' +
+        '<div class="card mail-card"><span class="t"><b>' + esc(S.t('aMailTitle')) + '</b><small>' + esc(S.t('aMailBody')) + '</small></span>' +
+        '<label class="sw"><input type="checkbox" id="mails" checked aria-label="' + esc(S.t('aMailTitle')) + '"><span></span></label></div>' +
         '<div class="card book"><span class="ic">' + CAL + '</span><span class="t"><b>' + esc(S.t('bookTitle')) + '</b><small>' + esc(S.t('bookBody')) + '</small></span>' +
         '<a class="btn btn-primary" href="/#book">' + esc(S.t('book')) + '</a></div>' +
         '<div class="out"><button type="button" id="signout">' + OUT + esc(S.t('signOut')) + '</button></div>';
+
+      // Streak emails: read the setting, save changes straight away.
+      var mails = document.getElementById('mails');
+      S.api('/v1/me').then(function (r) { if (r && r.status === 200 && 'streakEmails' in r.body) mails.checked = r.body.streakEmails !== false; });
+      mails.addEventListener('change', function () {
+        var on = mails.checked;
+        S.api('/v1/me', { method: 'PATCH', body: { streakEmails: on } }).then(function (r) {
+          if (r && r.status === 200) S.toast(on ? S.t('aMailOn') : S.t('aMailOff'));
+          else { mails.checked = !on; S.toast(S.t('aMailFail')); }
+        });
+      });
 
       // Profile photo: tapping it opens the phone's own picker straight away.
       var photoBtn = document.getElementById('photo');
