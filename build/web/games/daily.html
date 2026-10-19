@@ -70,6 +70,10 @@
     @keyframes grow { from { transform: scale(.2); opacity: 0; } }
     .de-count { font-family: var(--head); font-weight: 900; font-size: 64px; line-height: 1; margin-top: 4px; text-shadow: 0 6px 18px rgba(0,0,0,.25); }
     .de-label { font-size: 12.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; opacity: .9; }
+    .de-top.calm { background: linear-gradient(160deg, #3A2A22, #241A15); }
+    .de-top.calm::before { background: radial-gradient(closest-side, rgba(240,138,75,.35), transparent); animation: none; }
+    .de-top.calm .de-flame { font-size: 56px; animation: grow .6s cubic-bezier(.3,1.6,.5,1); }
+    .de-top.calm .de-count { font-size: 48px; }
     .de-week { display: flex; justify-content: center; gap: 7px; margin-top: 16px; }
     .de-week span { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; opacity: .85; }
     .de-week i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 13px; background: rgba(255,255,255,.14); border: 1.5px dashed rgba(255,255,255,.4); }
@@ -80,6 +84,7 @@
     .de-body h2 { font-size: 26px; }
     .de-topic { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 14px; border-radius: 999px; background: var(--soft); color: var(--accent); font-weight: 700; font-size: 14px; }
     .de-body p { margin: 10px 0 0; color: var(--muted); }
+    .d-end .de-top.calm ~ .de-body .btn-primary { background: var(--primary); }
     .d-end .btn-primary { width: 100%; margin-top: 18px; min-height: 54px; font-size: 17px; background: linear-gradient(135deg, #E0703E, #A23B1E); }
     .d-end .btn-primary svg { width: 20px; height: 20px; }
     /* Signed-out visitors (often from a shared streak) */
@@ -118,7 +123,10 @@
         dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
         dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
         dJoinTitle: 'Take today\'s challenge too', dJoinB1: 'A new one-minute topic every day', dJoinB2: 'Build your own streak and share it', dJoinB3: 'Plus 4 more speaking games, all free',
-        dNotYet: "This one won't count yet", dNotYetBody: 'Your streak needs the full minute. Keep going to finish and earn today, or leave and come back later.',
+        dNotYet: "This one won't count yet", dNotYetBody: 'Only a full minute counts toward your streak. Keep going to earn today, or leave and try again later.',
+        dWinTitle: 'Day earned, well done!', dWinBody: 'You spoke for a full minute. Share your streak so friends can cheer you on.',
+        dPracTitle: 'Nice practice!', dSpoken: 'spoken', dPracBody: "Today was already earned, so your {n}-day streak is safe. Want to show it off?",
+        dPracBody1: 'Today was already earned, so your streak is safe. Want to show it off?', dShareN: 'Share my {n}-day streak',
         dLeft: '{n}s', dLeftLabel: 'left to go', dKeepGoing: 'Keep going', dLeave: "Leave, it won't count",
         dJoinCta: 'Join free and start', dJoinHave: 'Already have an account?', dJoinIn: 'Sign in', dPractice: 'Practice round. Today already counts.'
       }, {
@@ -133,7 +141,10 @@
         dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
         dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
         dJoinTitle: 'خُض تحدي اليوم أنت أيضًا', dJoinB1: 'موضوع جديد لدقيقة واحدة كل يوم', dJoinB2: 'ابنِ سلسلتك وشاركها', dJoinB3: 'و4 ألعاب تحدّث أخرى، كلها مجانية',
-        dNotYet: 'هذه المحاولة لن تُحتسب بعد', dNotYetBody: 'سلسلتك تحتاج إلى الدقيقة كاملة. تابع لتُكملها وتكسب يومك، أو غادر وعد لاحقًا.',
+        dNotYet: 'هذه المحاولة لن تُحتسب بعد', dNotYetBody: 'الدقيقة الكاملة فقط تُحتسب في سلسلتك. تابع لتكسب يومك، أو غادر وحاول لاحقًا.',
+        dWinTitle: 'كسبت يومك، أحسنت!', dWinBody: 'تحدّثت دقيقة كاملة. شارك سلسلتك ليشجّعك أصدقاؤك.',
+        dPracTitle: 'تدريب رائع!', dSpoken: 'تحدّثت', dPracBody: 'يومك محسوب بالفعل، فسلسلة {n} أيام في أمان. هل تريد مشاركتها؟',
+        dPracBody1: 'يومك محسوب بالفعل، فسلسلتك في أمان. هل تريد مشاركتها؟', dShareN: 'شارك سلسلة {n} أيام',
         dLeft: '{n} ث', dLeftLabel: 'متبقية', dKeepGoing: 'تابع', dLeave: 'غادر، لن تُحتسب',
         dJoinCta: 'انضم مجانًا وابدأ', dJoinHave: 'لديك حساب؟', dJoinIn: 'سجّل الدخول', dPractice: 'جولة تدريب. يومك محسوب بالفعل.'
       });
@@ -270,50 +281,77 @@
           var after = stats(known);
           var wasDone = before.doneToday;
           var n = after.current;
-          var dayFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'narrow' });
-          var week = '';
-          for (var i = 6; i >= 0; i--) {
-            var d = addDays(today, -i), k = dayKey(d), on = !!after.days[k];
-            week += '<span class="' + (on ? 'on' : '') + (k === TODAY && on && !wasDone ? ' now' : '') + '"><i>' + (on ? '🔥' : '') + '</i>' + esc(dayFmt.format(d)) + '</span>';
+          var close = function () { stg.close(); render(after, topic); };
+          if (counts) {
+            // 1. First full minute today: celebrate and offer to share.
+            var el = endCard({
+              tone: 'fire', icon: '🔥', big: n, count: true, label: t('dEndStreak'), week: weekDots(after, true), embers: true,
+              title: t('dWinTitle'), topic: topic, body: t('dWinBody'),
+              primary: SHARE + esc(t('dShare')), secondary: [[t('dBackGames'), function () { location.href = '/games'; }], [t('close'), close]]
+            });
+            var ready = prepare(n, topic);
+            el.querySelector('.de-primary').addEventListener('click', function () { share(ready, el.querySelector('.shared')); });
+            if (navigator.vibrate) navigator.vibrate([30, 40, 60]);
+          } else {
+            // 2. Practice after today is already earned: show the time, keep the streak.
+            var el2 = endCard({
+              tone: 'calm', icon: '🎤', big: G.clock(elapsed).replace(/^00:/, '0:'), label: t('dSpoken'),
+              title: t('dPracTitle'), body: n === 1 ? t('dPracBody1') : t('dPracBody', { n: n }),
+              primary: SHARE + esc(n === 1 ? t('dShare') : t('dShareN', { n: n })), secondary: [[t('dAgain'), function () { el2.remove(); stg.close(); play(topic, stats(known)); }], [t('close'), close]]
+            });
+            var ready2 = prepare(n, topic);
+            el2.querySelector('.de-primary').addEventListener('click', function () { share(ready2, el2.querySelector('.shared')); });
           }
-          var embers = '';
-          for (var e = 0; e < 14; e++) embers += '<span class="ember" style="left:' + (8 + Math.random() * 84).toFixed(1) + '%;animation-delay:' + (Math.random() * 2.8).toFixed(2) + 's;animation-duration:' + (2.2 + Math.random() * 1.6).toFixed(2) + 's"></span>';
-          var el = document.createElement('div');
-          el.className = 'end d-end';
-          el.innerHTML = '<div class="card"><div class="de-top">' + embers + '<div class="de-flame">🔥</div><div class="de-count">0</div><div class="de-label">' + esc(t('dEndStreak')) + '</div>' +
-            '<div class="de-week">' + week + '</div></div>' +
-            '<div class="de-body"><h2>' + esc(t('dEndTitle')) + '</h2>' +
-            '<div class="de-topic">💬 ' + esc(topic) + '</div>' +
-            '<p>' + esc(wasDone ? t('dPractice') : t('dEndBody', { topic: topic }).replace(/^.*?\. /, '')) + '</p>' +
-            '<button class="btn btn-primary" type="button" id="eShare">' + SHARE + esc(t('dShare')) + '</button>' +
-            '<div class="shared" id="eMsg" hidden></div>' +
-            '<div class="more"><button type="button" id="eDone">' + esc(t('dBackGames')) + '</button><button type="button" id="eStay">' + esc(t('close')) + '</button></div></div></div>';
-          document.body.appendChild(el);
-          // Count up to the streak.
-          var cnt = el.querySelector('.de-count'), step = 0, steps = Math.min(n, 20);
-          var tick = setInterval(function () { step++; cnt.textContent = Math.round(n * step / Math.max(steps, 1)); if (step >= steps) { clearInterval(tick); cnt.textContent = n; } }, 45);
-          if (!steps) cnt.textContent = n;
-          if (navigator.vibrate) navigator.vibrate([30, 40, 60]);
-          var ready = prepare(n, topic);
-          el.querySelector('#eShare').addEventListener('click', function () { share(ready, el.querySelector('#eMsg')); });
-          el.querySelector('#eDone').addEventListener('click', function () { location.href = '/games'; });
-          el.querySelector('#eStay').addEventListener('click', function () { el.remove(); stg.close(); render(after, topic); });
         }
       }
 
-      // "I'm done" early: it won't count, so keep going or leave.
-      function notYet(ms, onKeep, onLeave) {
+      function weekDots(st, lightToday) {
+        var dayFmt = new Intl.DateTimeFormat(S.lang === 'ar' ? 'ar' : 'en-CA', { weekday: 'narrow' });
+        var week = '';
+        for (var i = 6; i >= 0; i--) {
+          var d = addDays(today, -i), k = dayKey(d), on = !!st.days[k];
+          week += '<span class="' + (on ? 'on' : '') + (k === TODAY && on && lightToday ? ' now' : '') + '"><i>' + (on ? '🔥' : '') + '</i>' + esc(dayFmt.format(d)) + '</span>';
+        }
+        return week;
+      }
+
+      // One clean card for every ending: a coloured top with one big number,
+      // a short message, one main button and up to two small links.
+      function endCard(o) {
+        var embers = '';
+        if (o.embers) for (var e = 0; e < 14; e++) embers += '<span class="ember" style="left:' + (8 + Math.random() * 84).toFixed(1) + '%;animation-delay:' + (Math.random() * 2.8).toFixed(2) + 's;animation-duration:' + (2.2 + Math.random() * 1.6).toFixed(2) + 's"></span>';
         var el = document.createElement('div');
         el.className = 'end d-end';
-        var left = Math.max(1, Math.ceil((SECONDS * 1000 - ms) / 1000));
-        el.innerHTML = '<div class="card"><div class="de-top" style="padding:26px 20px 20px"><div class="de-flame" style="font-size:56px">⏳</div>' +
-          '<div class="de-count" style="font-size:44px">' + esc(t('dLeft', { n: left })) + '</div><div class="de-label">' + esc(t('dLeftLabel')) + '</div></div>' +
-          '<div class="de-body"><h2>' + esc(t('dNotYet')) + '</h2><p>' + esc(t('dNotYetBody')) + '</p>' +
-          '<button class="btn btn-primary" type="button" id="nKeep">' + G.ICON.play + esc(t('dKeepGoing')) + '</button>' +
-          '<div class="more"><button type="button" id="nLeave">' + esc(t('dLeave')) + '</button></div></div></div>';
+        el.innerHTML = '<div class="card"><div class="de-top ' + o.tone + '">' + embers + '<div class="de-flame">' + o.icon + '</div>' +
+          '<div class="de-count">' + (o.count ? '0' : esc(String(o.big))) + '</div><div class="de-label">' + esc(o.label) + '</div>' +
+          (o.week ? '<div class="de-week">' + o.week + '</div>' : '') + '</div>' +
+          '<div class="de-body"><h2>' + esc(o.title) + '</h2>' +
+          (o.topic ? '<div class="de-topic">💬 ' + esc(o.topic) + '</div>' : '') +
+          '<p>' + esc(o.body) + '</p>' +
+          '<button class="btn btn-primary de-primary" type="button">' + o.primary + '</button>' +
+          '<div class="shared" hidden></div>' +
+          '<div class="more">' + (o.secondary || []).map(function (x, i) { return '<button type="button" data-i="' + i + '">' + esc(x[0]) + '</button>'; }).join('') + '</div></div></div>';
         document.body.appendChild(el);
-        el.querySelector('#nKeep').addEventListener('click', function () { el.remove(); onKeep(); });
-        el.querySelector('#nLeave').addEventListener('click', function () { el.remove(); onLeave(); });
+        el.querySelectorAll('.more button').forEach(function (btn) {
+          btn.addEventListener('click', function () { el.remove(); o.secondary[+btn.dataset.i][1](); });
+        });
+        if (o.count) {
+          var cnt = el.querySelector('.de-count'), n = +o.big, step = 0, steps = Math.min(n, 20);
+          if (!steps) cnt.textContent = n;
+          else var tk = setInterval(function () { step++; cnt.textContent = Math.round(n * step / steps); if (step >= steps) { clearInterval(tk); cnt.textContent = n; } }, 45);
+        }
+        return el;
+      }
+
+      // 3. "I'm done" before the first full minute today: it won't count yet.
+      function notYet(ms, onKeep, onLeave) {
+        var left = Math.max(1, Math.ceil((SECONDS * 1000 - ms) / 1000));
+        var el = endCard({
+          tone: 'calm', icon: '⏳', big: t('dLeft', { n: left }), label: t('dLeftLabel'),
+          title: t('dNotYet'), body: t('dNotYetBody'),
+          primary: G.ICON.play + esc(t('dKeepGoing')), secondary: [[t('dLeave'), onLeave]]
+        });
+        el.querySelector('.de-primary').addEventListener('click', function () { el.remove(); onKeep(); });
       }
 
       // ------------------------------------------------------------ share card
