@@ -16,6 +16,15 @@
 .sc-big .n small { font-size: 12px; color: var(--muted); font-weight: 700; }
 .sc-head { min-width: 0; }
 .sc-head small { font-size: 12.5px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.sc-verdict { margin: 2px 0 0; font-family: var(--head); font-size: 15px; font-weight: 800; color: var(--accent); }
+.sc-bf { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.sc-bf span { padding: 4px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 700; }
+.sc-bf .up { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+.sc-bf .dn { background: color-mix(in srgb, var(--warm) 18%, transparent); color: var(--ink); }
+@media (max-width: 480px) { .sc-bf { justify-content: center; } }
+.sc-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.sc-confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; animation: scFall linear forwards; }
+@keyframes scFall { to { top: 105%; transform: rotate(720deg); opacity: .6; } }
 .sc-head h2 { font-family: var(--head); font-size: clamp(20px, 5vw, 26px); line-height: 1.2; margin: 4px 0 0; }
 .sc-chips { justify-content: flex-start; margin: 12px 0 0; }
 .sc-chips li { font-size: 13.5px; }

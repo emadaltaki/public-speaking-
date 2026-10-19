@@ -13,7 +13,9 @@
     scMoments: 'Moments to work on', scTry: 'Try this', scPlayHere: 'Play from {t}', scAt: 'At {t}',
     scStrengths: 'What went well', scNext: 'Practice next', scTranscript: 'What you said', scPause: 'pause {n}s',
     scLegend: 'Filler words are highlighted. Long pauses are marked.', scShowAll: 'Show the full transcript',
-    scNoAudio: 'The recording isn\'t kept, so playback only works right after you record.'
+    scNoAudio: 'The recording isn\'t kept, so playback only works right after you record.',
+    scV10: 'Outstanding!', scV8: 'Great talk!', scV6: 'Solid work, keep going', scV4: 'A good start', scV1: 'Every talk makes the next one easier',
+    scBest: 'Your strongest: {c}', scFocus: 'Focus next: {c}'
   }, {
     scOverall: 'الإجمالي', scOutOf: 'من 10', scTopicOwn: 'موضوعك الخاص',
     scCats: { pace: 'السرعة', pauses: 'الوقفات', fillers: 'كلمات الحشو', clarity: 'الوضوح', flow: 'ترابط الأفكار' },
@@ -22,7 +24,9 @@
     scMoments: 'لحظات تحتاج إلى تحسين', scTry: 'جرّب هذا', scPlayHere: 'شغّل من {t}', scAt: 'عند {t}',
     scStrengths: 'ما أحسنت فيه', scNext: 'تدرّب على هذا لاحقًا', scTranscript: 'ما قلته', scPause: 'وقفة {n} ث',
     scLegend: 'كلمات الحشو مظللة، والوقفات الطويلة معلّمة.', scShowAll: 'اعرض النص كاملًا',
-    scNoAudio: 'لا نحتفظ بالتسجيل، لذا يعمل التشغيل بعد التسجيل مباشرة فقط.'
+    scNoAudio: 'لا نحتفظ بالتسجيل، لذا يعمل التشغيل بعد التسجيل مباشرة فقط.',
+    scV10: 'رائع جدًا!', scV8: 'حديث رائع!', scV6: 'عمل جيد، استمر', scV4: 'بداية جيدة', scV1: 'كل حديث يجعل التالي أسهل',
+    scBest: 'أقوى نقطة: {c}', scFocus: 'ركّز على: {c}'
   });
 
   var CATS = ['pace', 'pauses', 'fillers', 'clarity', 'flow'];
@@ -34,6 +38,7 @@
   }
   function clamp(n) { n = Math.round(+n || 0); return Math.max(1, Math.min(10, n)); }
   function band(n) { return n >= 8 ? 'hi' : n >= 5 ? 'mid' : 'lo'; }
+  function verdict(n) { n = clamp(n); return t(n >= 9 ? 'scV10' : n >= 8 ? 'scV8' : n >= 6 ? 'scV6' : n >= 4 ? 'scV4' : 'scV1'); }
   function plural(n, zero, one, many) { return n === 0 ? t(zero) : n === 1 ? t(one) : t(many, { n: n }); }
 
   function ring(score) {
@@ -53,6 +58,15 @@
     return out.join('');
   }
 
+  // The highest and lowest scoring areas, as two small badges.
+  function bestAndFocus(sc) {
+    var ranked = CATS.filter(function (k) { return sc[k]; }).sort(function (a, b) { return clamp(sc[b].score) - clamp(sc[a].score); });
+    if (ranked.length < 2) return '';
+    var best = ranked[0], low = ranked[ranked.length - 1];
+    if (clamp(sc[best].score) === clamp(sc[low].score)) return '';
+    return '<div class="sc-bf"><span class="up">▲ ' + esc(t('scBest', { c: t('scCats')[best] })) + '</span><span class="dn">● ' + esc(t('scFocus', { c: t('scCats')[low] })) + '</span></div>';
+  }
+
   // Draws a report into el. opts.audio: an object URL for playback (fresh recordings only).
   function render(el, r, opts) {
     opts = opts || {};
@@ -62,7 +76,8 @@
     var words = r.transcript || [];
     var html = '<div class="sc">' +
       '<div class="card sc-top"><div class="sc-big">' + ring(r.overall) + '<div class="n"><b>' + clamp(r.overall) + '</b><small>' + esc(t('scOutOf')) + '</small></div></div>' +
-      '<div class="sc-head"><small>' + esc(t('scOverall')) + '</small><h2>' + esc(r.topic || t('scTopicOwn')) + '</h2>' +
+      '<div class="sc-head"><small>' + esc(t('scOverall')) + '</small><p class="sc-verdict">' + esc(verdict(r.overall)) + '</p><h2>' + esc(r.topic || t('scTopicOwn')) + '</h2>' +
+      bestAndFocus(sc) +
       '<ul class="chips sc-chips">' +
         (m.wordsPerMinute ? '<li>' + esc(t('scWpm', { n: Math.round(m.wordsPerMinute) })) + '</li>' : '') +
         '<li>' + esc(plural(m.fillerCount || 0, 'scFillers0', 'scFillers1', 'scFillersN')) + '</li>' +
@@ -101,6 +116,8 @@
     html += '</div>';
     el.innerHTML = html;
 
+    if (opts.celebrate) reveal(el, clamp(r.overall));
+
     var audio = el.querySelector('audio');
     var text = el.querySelector('.sc-text');
     // Light up the words around a moment, and play from there when we can.
@@ -122,6 +139,41 @@
         var w = e.target.closest('.sc-w');
         if (w) { try { audio.currentTime = Math.max(0, +w.dataset.s - 0.2); audio.play(); } catch (_) {} }
       });
+    }
+  }
+
+  // Fresh results: the ring fills, the number counts up, the bars grow, and a
+  // great score gets a little burst of confetti.
+  function reveal(el, n) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var bar = el.querySelector('.sc-ring .bar'), num = el.querySelector('.sc-big .n b');
+    var full = bar ? bar.getAttribute('stroke-dashoffset') : null;
+    if (bar) { bar.style.transition = 'none'; bar.setAttribute('stroke-dashoffset', bar.getAttribute('stroke-dasharray')); }
+    var fills = el.querySelectorAll('.sc-bar i');
+    fills.forEach(function (i) { i.dataset.w = i.style.width; i.style.width = '0%'; });
+    if (num) num.textContent = '0';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        if (bar) { bar.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)'; bar.setAttribute('stroke-dashoffset', full); }
+        fills.forEach(function (i, k) { i.style.transition = 'width .9s cubic-bezier(.2,.8,.2,1) ' + (0.3 + k * 0.12) + 's'; i.style.width = i.dataset.w; });
+      });
+    });
+    var k = 0, tick = setInterval(function () { k++; if (num) num.textContent = String(Math.min(n, k)); if (k >= n) clearInterval(tick); }, 1100 / Math.max(n, 1));
+    if (n >= 8) {
+      var box = document.createElement('div');
+      box.className = 'sc-confetti';
+      var colors = ['#E0703E', '#D49A4E', '#3E8E7A', '#7A4E9A', '#3F6F8E'];
+      for (var c = 0; c < 36; c++) {
+        var p = document.createElement('i');
+        p.style.left = (Math.random() * 100) + '%';
+        p.style.background = colors[c % colors.length];
+        p.style.animationDelay = (Math.random() * 0.5) + 's';
+        p.style.animationDuration = (1.6 + Math.random() * 1.2) + 's';
+        p.style.transform = 'rotate(' + Math.round(Math.random() * 360) + 'deg)';
+        box.appendChild(p);
+      }
+      document.body.appendChild(box);
+      setTimeout(function () { box.remove(); }, 3500);
     }
   }
 
