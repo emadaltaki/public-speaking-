@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F1DDBC">
+  <title>Speech Coach | Speak Up Fearless</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/game.css">
+  <link rel="stylesheet" href="/coach.css">
+  <style>
+    .rec { font-size: 13px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #E5484D; display: inline-flex; align-items: center; gap: 8px; }
+    .rec::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: #E5484D; animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: .3; } }
+    .mic { width: 110px; height: 110px; margin: 0 auto 18px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, #3E8E7A, #1F5A4C); box-shadow: 0 0 0 12px color-mix(in srgb, #3E8E7A 18%, transparent); transition: box-shadow .08s; }
+    .mic svg { width: 54px; height: 54px; }
+    .meter { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 44px; margin-top: 16px; }
+    .meter i { width: 6px; border-radius: 3px; background: var(--border); height: 8px; transition: height .08s, background .08s; }
+    .meter i.on { background: #3E8E7A; }
+    .tp { margin-top: 20px; }
+    .tp .topic { font-size: clamp(20px, 5.5vw, 30px); }
+    .small-link { background: none; border: 0; color: var(--accent); font-weight: 700; cursor: pointer; padding: 8px; font-size: 15px; display: inline-flex; align-items: center; gap: 6px; }
+    .small-link svg { width: 17px; height: 17px; }
+    .note { max-width: 460px; margin: 14px auto 0; color: var(--muted); font-size: 14.5px; }
+    .err { color: var(--error); font-weight: 700; }
+    .think { display: grid; gap: 10px; margin: 22px auto 0; max-width: 340px; text-align: start; }
+    .think li { list-style: none; display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 600; transition: color .3s; }
+    .think li::before { content: ""; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--border); }
+    .think li.on { color: var(--ink); }
+    .think li.on::before { border-color: #3E8E7A; border-top-color: transparent; animation: spin .8s linear infinite; }
+    .think li.done { color: var(--ink); }
+    .think li.done::before { content: "✓"; display: grid; place-items: center; font-size: 12px; font-weight: 900; color: #fff; background: #3E8E7A; border-color: #3E8E7A; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .result-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 18px 0 4px; }
+    .result-bar .btn svg { width: 19px; height: 19px; }
+    .result-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 6px 0 14px; }
+    .result-head h1 { font-size: 24px; margin: 0; }
+    .result-head a { color: var(--accent); font-weight: 700; text-decoration: none; }
+  </style>
+  <script>try { if (localStorage.getItem('speakupfearless.theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (_) {}</script>
+</head>
+<body>
+  <main class="wrap" id="main"></main>
+  <script src="/app.js"></script>
+  <script src="/game.js"></script>
+  <script src="/coach.js"></script>
+  <script>
+    (function () {
+      var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
+      var ID = 'speech-coach';
+      var MIN_SECONDS = 10;
+      S.addStrings({
+        cLength: 'How long to talk', cStart: 'Next',
+        cReadyHint: 'When you tap Start, your browser asks to use the microphone. Talk until the time runs out, or tap Finish.',
+        cStartRec: 'Start recording', cNewTopic: 'Different topic', cRecording: 'Recording', cFinish: 'Finish', cCancel: 'Start over',
+        cTooShort: 'Talk for at least {n} seconds so there is enough to score.',
+        cNoMic: 'We couldn\'t use your microphone. Allow it for this site in your browser settings, then try again.',
+        cNoRecorder: 'This browser can\'t record audio. Try the latest Chrome, Safari or Edge.',
+        cThinking: 'Scoring your talk', cStep1: 'Sending your recording', cStep2: 'Writing down every word', cStep3: 'Checking pace, pauses and filler words', cStep4: 'Writing your feedback',
+        cPrivacy: 'Your recording is only used to score you. We keep the scores and transcript, not the audio.',
+        cErrNet: 'We couldn\'t reach the scoring service. Check your connection and try again.',
+        cErrSetup: 'Scoring isn\'t switched on yet. Your recording is still here, so try again in a little while.',
+        cErrSpeech: 'We couldn\'t hear enough speech to score. Move closer to the microphone and try again.',
+        cErrLimit: 'You\'ve used today\'s scored recordings. Come back tomorrow for more.',
+        cErrOther: 'Something went wrong while scoring. Your recording is still here, so try again.',
+        cRetrySend: 'Try scoring again', cResult: 'Your feedback', cAgain: 'Try the same topic', cNext: 'New topic', cSettings: 'Settings', cAll: 'All games',
+        cSavedNote: 'Saved to your account.'
+      }, {
+        cLength: 'مدة الحديث', cStart: 'التالي',
+        cReadyHint: 'عندما تضغط ابدأ، سيطلب المتصفح استخدام الميكروفون. تحدث حتى ينتهي الوقت، أو اضغط إنهاء.',
+        cStartRec: 'ابدأ التسجيل', cNewTopic: 'موضوع آخر', cRecording: 'جارٍ التسجيل', cFinish: 'إنهاء', cCancel: 'ابدأ من جديد',
+        cTooShort: 'تحدث {n} ثوانٍ على الأقل ليكون هناك ما يكفي للتقييم.',
+        cNoMic: 'لم نتمكن من استخدام الميكروفون. اسمح به لهذا الموقع في إعدادات المتصفح، ثم حاول مرة أخرى.',
+        cNoRecorder: 'هذا المتصفح لا يستطيع تسجيل الصوت. جرّب أحدث إصدار من كروم أو سفاري أو إيدج.',
+        cThinking: 'نقيّم حديثك', cStep1: 'نرسل تسجيلك', cStep2: 'نكتب كل كلمة قلتها', cStep3: 'نفحص السرعة والوقفات وكلمات الحشو', cStep4: 'نكتب ملاحظاتك',
+        cPrivacy: 'نستخدم تسجيلك لتقييمك فقط. نحتفظ بالدرجات والنص، وليس بالصوت.',
+        cErrNet: 'لم نتمكن من الوصول إلى خدمة التقييم. تحقق من اتصالك وحاول مرة أخرى.',
+        cErrSetup: 'التقييم لم يُفعَّل بعد. تسجيلك ما زال هنا، فحاول مرة أخرى بعد قليل.',
+        cErrSpeech: 'لم نسمع كلامًا كافيًا للتقييم. اقترب من الميكروفون وحاول مرة أخرى.',
+        cErrLimit: 'استخدمت تسجيلات اليوم المقيّمة. عد غدًا للمزيد.',
+        cErrOther: 'حدث خطأ أثناء التقييم. تسجيلك ما زال هنا، فحاول مرة أخرى.',
+        cRetrySend: 'أعد محاولة التقييم', cResult: 'ملاحظاتك', cAgain: 'الموضوع نفسه', cNext: 'موضوع جديد', cSettings: 'الإعدادات', cAll: 'كل الألعاب',
+        cSavedNote: 'حُفظ في حسابك.'
+      });
+      var settings = { seconds: 120, suggest: true, set: 'General' };
+
+      // The best format this browser records in (Safari: mp4, others: webm/opus).
+      function pickType() {
+        if (!window.MediaRecorder) return null;
+        var types = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm', 'audio/ogg;codecs=opus'];
+        for (var i = 0; i < types.length; i++) { try { if (MediaRecorder.isTypeSupported(types[i])) return types[i]; } catch (_) {} }
+        return '';
+      }
+
+      G.boot(ID, function (games, words) {
+        var main = document.getElementById('main');
+
+        function showSetup() {
+          G.setup({
+            id: ID, games: games, startLabel: t('cStart'), startIcon: G.ICON.arrow,
+            render: function (rows) {
+              rows.appendChild(G.slider({ icon: G.ICON.clock, label: t('cLength'), min: 30, max: 120, step: 30, value: settings.seconds,
+                format: G.timerLabel, onChange: function (v) { settings.seconds = v; } }));
+              rows.appendChild(G.toggle({ label: t('tripleStepSuggestTitle'), help: t('tripleStepSuggestTitleHelp'), value: settings.suggest, onChange: function (v) { settings.suggest = v; } }));
+              rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
+            },
+            onStart: function () { play(); }
+          });
+        }
+
+        function play(keepTopic) {
+          var topic = keepTopic || G.pickTopic(settings.suggest, settings.set);
+          var own = !settings.suggest;
+          var st = G.stage({ onLeave: stopAll });
+          var stream = null, rec = null, chunks = [], ctx = null, elapsed = 0, type = pickType();
+
+          function stopAll() {
+            G.loopStop();
+            try { if (rec && rec.state !== 'inactive') { rec.onstop = null; rec.stop(); } } catch (_) {}
+            if (stream) stream.getTracks().forEach(function (tr) { tr.stop(); });
+            if (ctx) { try { ctx.close(); } catch (_) {} }
+            stream = null; ctx = null;
+          }
+
+          function readyScreen(msg) {
+            st.body.innerHTML = '<div class="mic">' + S.ICONS[ID] + '</div>' +
+              '<div><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic">' + esc(topic) + '</div></div>' +
+              (msg ? '<p class="note err">' + esc(msg) + '</p>' : '<p class="hint">' + esc(t('cReadyHint')) + '</p>') +
+              '<div class="controls"><button class="btn btn-primary" type="button" id="go">' + G.ICON.play + esc(t('cStartRec')) + '</button></div>' +
+              (own ? '' : '<button class="small-link" type="button" id="swap">' + G.ICON.repeat + esc(t('cNewTopic')) + '</button>') +
+              '<p class="note">' + esc(t('cPrivacy')) + '</p>';
+            st.body.querySelector('#go').addEventListener('click', askMic);
+            var sw = st.body.querySelector('#swap');
+            if (sw) sw.addEventListener('click', function () { topic = G.pickTopic(true, settings.set); readyScreen(); });
+          }
+
+          function askMic() {
+            if (type === null || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return readyScreen(t('cNoRecorder'));
+            var btn = st.body.querySelector('#go');
+            btn.disabled = true;
+            // Created inside the tap so iPhone lets it run.
+            try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) { ctx = null; }
+            navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }).then(function (s) {
+              stream = s;
+              countdown();
+            }).catch(function () { stopAll(); readyScreen(t('cNoMic')); });
+          }
+
+          function countdown() {
+            var cues = [t('gamesCueReady'), t('gamesCueSet'), t('gamesCueGo')], i = 0;
+            st.body.innerHTML = '<div class="cue">' + esc(cues[0]) + '</div>';
+            var id = setInterval(function () {
+              i++;
+              if (!stream) return clearInterval(id);
+              if (i < 3) { st.body.querySelector('.cue').textContent = cues[i]; return; }
+              clearInterval(id);
+              record();
+            }, 1000);
+          }
+
+          function record() {
+            chunks = [];
+            try { rec = type ? new MediaRecorder(stream, { mimeType: type, audioBitsPerSecond: 48000 }) : new MediaRecorder(stream); }
+            catch (_) { try { rec = new MediaRecorder(stream); } catch (e) { stopAll(); return readyScreen(t('cNoRecorder')); } }
+            rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+            rec.onstop = function () { done(); };
+            rec.start(1000);
+            st.body.innerHTML = '<div class="mic" id="mic">' + S.ICONS[ID] + '</div><div class="rec">' + esc(t('cRecording')) + '</div>' +
+              '<div class="meter" aria-hidden="true">' + Array.apply(null, Array(16)).map(function () { return '<i></i>'; }).join('') + '</div>' +
+              '<div class="tp"><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic">' + esc(topic) + '</div></div>' +
+              '<div class="clock"></div><p class="note" id="msg"></p>' +
+              '<div class="controls"><button class="btn btn-ghost" type="button" id="cancel">' + G.ICON.repeat + esc(t('cCancel')) + '</button>' +
+              '<button class="btn btn-primary" type="button" id="stop">' + G.ICON.flag + esc(t('cFinish')) + '</button></div>';
+            var bars = st.body.querySelectorAll('.meter i'), mic = st.body.querySelector('#mic');
+            var analyser = null, buf = null;
+            if (ctx) {
+              try {
+                if (ctx.state === 'suspended') ctx.resume();
+                analyser = ctx.createAnalyser();
+                analyser.fftSize = 512;
+                ctx.createMediaStreamSource(stream).connect(analyser);
+                buf = new Uint8Array(analyser.fftSize);
+              } catch (_) { analyser = null; }
+            }
+            st.body.querySelector('#cancel').addEventListener('click', function () { stopAll(); elapsed = 0; readyScreen(); });
+            st.body.querySelector('#stop').addEventListener('click', function () {
+              if (elapsed < MIN_SECONDS * 1000) { st.body.querySelector('#msg').textContent = t('cTooShort', { n: MIN_SECONDS }); return; }
+              finish();
+            });
+            var total = settings.seconds * 1000;
+            elapsed = 0;
+            G.loop(function (d) {
+              elapsed += d;
+              if (elapsed >= total) { elapsed = total; return finish(); }
+              st.body.querySelector('.clock').textContent = G.clock(total - elapsed);
+              if (analyser) {
+                analyser.getByteTimeDomainData(buf);
+                var peak = 0;
+                for (var k = 0; k < buf.length; k++) peak = Math.max(peak, Math.abs(buf[k] - 128));
+                var level = Math.min(1, peak / 70);
+                bars.forEach(function (b, j) {
+                  var mid = Math.abs(j - 7.5) / 8;
+                  var h = 8 + Math.max(0, level - mid * 0.5) * 36;
+                  b.style.height = h.toFixed(0) + 'px';
+                  b.classList.toggle('on', h > 12);
+                });
+                mic.style.boxShadow = '0 0 0 ' + (12 + level * 16).toFixed(0) + 'px color-mix(in srgb, #3E8E7A 22%, transparent)';
+              }
+            });
+          }
+
+          function finish() {
+            G.loopStop();
+            if (rec && rec.state !== 'inactive') rec.stop(); else done();
+          }
+
+          function done() {
+            var seconds = elapsed / 1000;
+            if (stream) stream.getTracks().forEach(function (tr) { tr.stop(); });
+            if (ctx) { try { ctx.close(); } catch (_) {} }
+            stream = null; ctx = null;
+            var blob = new Blob(chunks, { type: (rec && rec.mimeType) || type || 'audio/webm' });
+            send(blob, seconds);
+          }
+
+          function send(blob, seconds) {
+            st.body.innerHTML = '<div class="cue" style="font-size:clamp(30px,8vw,50px)">' + esc(t('cThinking')) + '</div>' +
+              '<ul class="think">' + ['cStep1', 'cStep2', 'cStep3', 'cStep4'].map(function (k) { return '<li>' + esc(t(k)) + '</li>'; }).join('') + '</ul>';
+            var steps = st.body.querySelectorAll('.think li'), at = 0;
+            var paint = function () { steps.forEach(function (li, i) { li.className = i < at ? 'done' : i === at ? 'on' : ''; }); };
+            paint();
+            var ticker = setInterval(function () { if (at < steps.length - 1) { at++; paint(); } }, 4500);
+            var ext = /mp4/.test(blob.type) ? 'm4a' : /ogg/.test(blob.type) ? 'ogg' : 'webm';
+            var form = new FormData();
+            form.append('audio', blob, 'talk.' + ext);
+            form.append('topic', own ? '' : topic);
+            form.append('lang', S.lang);
+            form.append('durationSeconds', seconds.toFixed(1));
+            S.upload('/v1/speech/analyze', form, 120000).then(function (r) {
+              clearInterval(ticker);
+              if (r && r.status === 200 && r.body && r.body.scores) {
+                S.recordRound({ gameId: ID, spokenSeconds: seconds, topic: own ? null : topic }, true);
+                return showResult(r.body, blob);
+              }
+              var code = r && r.body && r.body.code;
+              var msg = !r ? t('cErrNet')
+                : (r.status === 404 || r.status === 503 || code === 'not_configured') ? t('cErrSetup')
+                : code === 'no_speech' ? t('cErrSpeech')
+                : r.status === 429 ? t('cErrLimit') : t('cErrOther');
+              var canResend = !(code === 'no_speech' || r && r.status === 429);
+              st.body.innerHTML = '<div class="mic">' + S.ICONS[ID] + '</div><p class="note err" style="font-size:16px">' + esc(msg) + '</p>' +
+                '<div class="controls">' + (canResend ? '<button class="btn btn-primary" type="button" id="resend">' + G.ICON.repeat + esc(t('cRetrySend')) + '</button>' : '') +
+                '<button class="btn btn-ghost" type="button" id="again">' + esc(t('cCancel')) + '</button></div>';
+              var rs = st.body.querySelector('#resend');
+              if (rs) rs.addEventListener('click', function () { send(blob, seconds); });
+              st.body.querySelector('#again').addEventListener('click', function () { readyScreen(); });
+            });
+          }
+
+          // The report is long, so it goes on the page rather than the full-screen stage.
+          function showResult(report, blob) {
+            st.close();
+            var url = URL.createObjectURL(blob);
+            main.innerHTML = '<div class="result-head"><h1>' + esc(t('cResult')) + '</h1><a href="/account#speech">' + esc(t('cSavedNote')) + '</a></div>' +
+              '<div id="report"></div>' +
+              '<div class="result-bar"><button class="btn btn-primary" type="button" id="same">' + G.ICON.repeat + esc(t('cAgain')) + '</button>' +
+              (own ? '' : '<button class="btn btn-ghost" type="button" id="next">' + G.ICON.next + esc(t('cNext')) + '</button>') +
+              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div>';
+            window.Coach.render(main.querySelector('#report'), report, { audio: url });
+            window.scrollTo(0, 0);
+            var leave = function () { URL.revokeObjectURL(url); };
+            main.querySelector('#same').addEventListener('click', function () { leave(); showSetup(); play(topic); });
+            var nx = main.querySelector('#next');
+            if (nx) nx.addEventListener('click', function () { leave(); showSetup(); play(); });
+            main.querySelector('#set').addEventListener('click', function () { leave(); showSetup(); });
+          }
+
+          readyScreen();
+        }
+
+        showSetup();
+      });
+    })();
+  </script>
+</body>
+</html>
