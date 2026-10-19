@@ -328,6 +328,19 @@
     closePrivacy();
   });
 
+  // ---------------------------------------------------------------- page edges
+  // iPhones bounce past the ends of the page and show what's behind it.
+  // Colour that area like the nearest edge: the hero at the top, the dark
+  // footer at the bottom, so no white gap shows up.
+  var edgeColour = '';
+  function paintEdges() {
+    var nearBottom = window.scrollY > (root.scrollHeight - window.innerHeight) / 2;
+    var colour = nearBottom ? 'var(--footer)' : 'var(--band)';
+    if (colour !== edgeColour) { root.style.backgroundColor = colour; edgeColour = colour; }
+  }
+  window.addEventListener('scroll', paintEdges, { passive: true });
+  paintEdges();
+
   // ---------------------------------------------------------------- feelings
   // Cards slide in once, and flip to show how the sessions help.
   var feelCards = all('.feelings li');
