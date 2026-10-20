@@ -1,7 +1,7 @@
 # Publishes the website (build/web, already built and committed) to Firebase
 # Hosting. Two Firebase projects, picked by branch:
 #   main -> prod (speakup-ca500, speakunshaken.com)
-#   dev  -> dev  (speakup-dev, dev.speakunshaken.com)
+#   dev  -> dev  (speakup-dev-fbb4b, dev.speakunshaken.com)
 # Every pull request also gets a preview link on prod.
 # Needs the repository secrets FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 and
 # FIREBASE_SERVICE_ACCOUNT_SPEAKUP_DEV (service account keys for each project).
@@ -25,5 +25,5 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ github.event_name == 'push' && github.ref_name == 'dev' && secrets.FIREBASE_SERVICE_ACCOUNT_SPEAKUP_DEV || secrets.FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 }}
-          projectId: ${{ github.event_name == 'push' && github.ref_name == 'dev' && 'speakup-dev' || 'speakup-ca500' }}
+          projectId: ${{ github.event_name == 'push' && github.ref_name == 'dev' && 'speakup-dev-fbb4b' || 'speakup-ca500' }}
           channelId: ${{ github.event_name == 'push' && 'live' || '' }}

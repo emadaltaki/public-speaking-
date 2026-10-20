@@ -317,15 +317,26 @@
     // domain (Hosting serves /__/auth itself), so phones and the home-screen
     // app sign in in the same tab instead of opening another one. Each address
     // is listed as a redirect URI (/__/auth/handler) on the Google OAuth client.
-    const OWN_HOSTS = ['speakup-ca500.web.app', 'speakup-ca500.firebaseapp.com'];
+    // The dev site (dev.speakunshaken.com, speakup-dev-fbb4b.web.app) signs in
+    // to its own Firebase project, so test accounts never touch real ones.
+    const IS_DEV = /^dev\.|^speakup-dev-fbb4b\./.test(location.hostname);
+    const OWN_HOSTS = IS_DEV ? ['speakup-dev-fbb4b.web.app', 'speakup-dev-fbb4b.firebaseapp.com']
+      : ['speakup-ca500.web.app', 'speakup-ca500.firebaseapp.com'];
     const SAME_TAB_GOOGLE = OWN_HOSTS.indexOf(location.hostname) !== -1;
-    const OWN_AUTH_DOMAIN = SAME_TAB_GOOGLE ? location.hostname : 'speakup-ca500.firebaseapp.com';
+    const OWN_AUTH_DOMAIN = SAME_TAB_GOOGLE ? location.hostname : OWN_HOSTS[1];
     // Phones, tablets and the installed app: a popup there becomes a new tab.
     const POPUP_UNSAFE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true ||
       matchMedia('(pointer: coarse)').matches;
 
     // Public web config for the speakUnshaken Firebase project.
-    const firebaseConfig = {
+    const firebaseConfig = IS_DEV ? {
+      apiKey: 'AIzaSyAb3AF_ECZ84HSQd0gdta9U93UF62K9Fdk',
+      authDomain: OWN_AUTH_DOMAIN,
+      projectId: 'speakup-dev-fbb4b',
+      storageBucket: 'speakup-dev-fbb4b.firebasestorage.app',
+      messagingSenderId: '300954633371',
+      appId: '1:300954633371:web:21a2f4ddc92416db08b23e',
+    } : {
       apiKey: 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow',
       authDomain: OWN_AUTH_DOMAIN,
       projectId: 'speakup-ca500',
@@ -576,7 +587,8 @@
     // profile exists before they play. Never blocks sign-in for long: if the
     // API is slow or down, the site carries on and the account is created on
     // the next API call instead.
-    const API_BASE = 'https://public-speaking-backend.vercel.app';
+    // Until the dev backend has its own address, dev uses the real one.
+    const API_BASE = IS_DEV ? 'https://public-speaking-backend.vercel.app' : 'https://public-speaking-backend.vercel.app';
     function syncAccount(user, name) {
       return Promise.race([syncAccountNow(user, name), new Promise((r) => setTimeout(r, 5000))]);
     }

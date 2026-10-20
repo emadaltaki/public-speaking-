@@ -1,6 +1,6 @@
 {
   "projects": {
     "default": "speakup-ca500",
-    "dev": "speakup-dev"
+    "dev": "speakup-dev-fbb4b"
   }
 }

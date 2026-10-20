@@ -5,15 +5,20 @@
 
   var LANG_KEY = 'speakupfearless.language';
   var THEME_KEY = 'speakupfearless.theme';
-  var AUTH_KEY = 'firebase:authUser:AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow:[DEFAULT]';
+  // The dev site (dev.speakunshaken.com, speakup-dev-fbb4b.web.app) has its
+  // own Firebase project and backend, so test accounts never touch real ones.
+  var IS_DEV = /^dev\.|^speakup-dev-fbb4b\./.test(location.hostname);
+  var PROD_API = 'https://public-speaking-backend.vercel.app';
+  // Until the dev backend has its own address, dev uses PROD_API.
+  var DEV_API = PROD_API;
+  var AUTH_KEY = 'firebase:authUser:' + (IS_DEV ? 'AIzaSyAb3AF_ECZ84HSQd0gdta9U93UF62K9Fdk' : 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow') + ':[DEFAULT]';
   var BOOKING_ENDPOINT = 'https://formsubmit.co/ajax/speakupunshaken@gmail.com';
   // Our own backend keeps a copy of each request; the email above stays the
   // way requests reach the inbox.
-  var API_BASE = 'https://public-speaking-backend.vercel.app';
+  var API_BASE = IS_DEV ? DEV_API : PROD_API;
 
-  // Dev site (dev.speakunshaken.com or speakunshaken-dev.web.app): a small badge
-  // so nobody mistakes it for the real site.
-  if (/^dev\.|-dev\.web\.app$|-dev\.firebaseapp\.com$/.test(location.hostname)) {
+  // Dev site: a small badge so nobody mistakes it for the real site.
+  if (IS_DEV) {
     var devTag = document.createElement('div');
     devTag.textContent = 'DEV';
     devTag.setAttribute('aria-hidden', 'true');
