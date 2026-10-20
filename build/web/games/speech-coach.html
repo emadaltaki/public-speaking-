@@ -109,6 +109,7 @@
   <script src="/app.js"></script>
   <script src="/game.js"></script>
   <script src="/coach.js"></script>
+  <script src="/fixit.js"></script>
   <script>
     (function () {
       var S = window.SUF, G = window.G, t = S.t, esc = S.esc;
@@ -476,6 +477,14 @@
               (own ? '' : '<button class="btn btn-ghost" type="button" id="next">' + G.ICON.next + esc(t('cNext')) + '</button>') +
               '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div></div>';
             window.Coach.render(main.querySelector('#report'), report, { audio: url, celebrate: true });
+            // Fix-it mode: a game made of this talk's slips.
+            var fixCard = function () {
+              var old = main.querySelector('.fx-cta');
+              if (old) old.remove();
+              var c = window.Fixit.cta(report, function () { window.Fixit.start({ report: report, audio: url, onClose: fixCard }); });
+              if (c) main.querySelector('#report').insertAdjacentElement('beforebegin', c);
+            };
+            fixCard();
             // Compare with their previous talk.
             S.api('/v1/speech/reports?limit=5').then(function (r) {
               var list = (r && r.status === 200 && r.body && (r.body.reports || r.body)) || [];
