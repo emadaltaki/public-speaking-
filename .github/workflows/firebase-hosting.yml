@@ -1,10 +1,10 @@
 # Publishes the website (build/web, already built and committed) to Firebase
-# Hosting. Two sites, picked by branch:
-#   main -> prod site (speakup-ca500, speakunshaken.com)
-#   dev  -> dev site  (speakunshaken-dev, dev.speakunshaken.com)
-# Every pull request also gets a preview link on the prod site.
-# Needs the repository secret FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 (a service
-# account key for the speakup-ca500 project).
+# Hosting. Two Firebase projects, picked by branch:
+#   main -> prod (speakup-ca500, speakunshaken.com)
+#   dev  -> dev  (speakup-dev, dev.speakunshaken.com)
+# Every pull request also gets a preview link on prod.
+# Needs the repository secrets FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 and
+# FIREBASE_SERVICE_ACCOUNT_SPEAKUP_DEV (service account keys for each project).
 name: Firebase Hosting
 
 on:
@@ -24,7 +24,6 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 }}
-          projectId: speakup-ca500
+          firebaseServiceAccount: ${{ github.event_name == 'push' && github.ref_name == 'dev' && secrets.FIREBASE_SERVICE_ACCOUNT_SPEAKUP_DEV || secrets.FIREBASE_SERVICE_ACCOUNT_SPEAKUP_CA500 }}
+          projectId: ${{ github.event_name == 'push' && github.ref_name == 'dev' && 'speakup-dev' || 'speakup-ca500' }}
           channelId: ${{ github.event_name == 'push' && 'live' || '' }}
-          target: ${{ github.event_name == 'push' && github.ref_name == 'dev' && 'dev' || 'prod' }}
