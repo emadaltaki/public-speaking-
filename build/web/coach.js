@@ -22,6 +22,7 @@
     scPaceUnit: 'words a minute on average', scPaceFeel: { ok: 'comfortable', fast: 'too fast', slow: 'too slow' }, scSec: 's', scPaceHow: 'Each bar is how fast you spoke during that part of your talk, in words a minute.', scAllFast: 'Your whole talk was fast ({n} words a minute). Slow down and aim for 130 to 160 so people can keep up.', scAllSlow: 'Your whole talk was slow ({n} words a minute). Aim for 130 to 160 to keep people engaged.', scPartFast: 'You were fastest {w} ({n} words a minute).', scPartSlow: 'You slowed right down {w} ({n} words a minute).', scAtStart: 'at the start', scAtEnd: 'near the end', scInPart: 'between {r}', scPaceSteady: 'Nice and steady the whole way through.', scFillerList: 'Your filler words',
     scPractice: 'Practice this next', scPlayGame: 'Play {g}', scComeBack: 'Play it a few times, then come back to Speech Coach and record again to see how much you improve.',
     scG: { autocomplete: 'Autocomplete', 'triple-step': 'Triple Step', conductor: 'The Conductor', podcast: 'The Podcast Game', daily: 'Daily Challenge' },
+    scStyles: { serious: '🎯 Serious', funny: '😄 Funny', inspiring: '✨ Inspiring', persuasive: '📣 Persuasive', story: '📖 Story' },
     scStatWpm: 'words / min', scStatFillers: 'filler words', scStatPauses: 'long pauses', scStatTime: 'length', scListen: 'Listen back',
     scTabOverview: 'Overview', scTabStory: 'Story', scTabPace: 'Pace & fillers', scTabMoments: 'Moments', scTabWords: 'Transcript',
     scLegendF: 'filler word', scLegendP: 'long pause',
@@ -43,6 +44,7 @@
     scPaceUnit: 'كلمة في الدقيقة في المتوسط', scPaceFeel: { ok: 'مريحة', fast: 'سريعة جدًا', slow: 'بطيئة جدًا' }, scSec: ' ث', scPaceHow: 'كل عمود يبيّن سرعة كلامك في ذلك الجزء من حديثك، بالكلمات في الدقيقة.', scAllFast: 'كان حديثك كله سريعًا ({n} كلمة في الدقيقة). أبطئ واستهدف من 130 إلى 160 ليتمكن الناس من المتابعة.', scAllSlow: 'كان حديثك كله بطيئًا ({n} كلمة في الدقيقة). استهدف من 130 إلى 160 لتحافظ على انتباه الناس.', scPartFast: 'كنت أسرع {w} ({n} كلمة في الدقيقة).', scPartSlow: 'أبطأت كثيرًا {w} ({n} كلمة في الدقيقة).', scAtStart: 'في البداية', scAtEnd: 'قرب النهاية', scInPart: 'بين {r}', scPaceSteady: 'سرعة ثابتة ومريحة طوال الحديث.', scFillerList: 'كلمات الحشو لديك',
     scPractice: 'تدرّب على هذه اللعبة', scPlayGame: 'العب {g}', scComeBack: 'العبها بضع مرات، ثم عد إلى مدرب الإلقاء وسجّل مجددًا لترى كم تحسّنت.',
     scG: { autocomplete: 'الإكمال التلقائي', 'triple-step': 'الخطوة الثلاثية', conductor: 'قائد الأوركسترا', podcast: 'لعبة البودكاست', daily: 'التحدي اليومي' },
+    scStyles: { serious: '🎯 جاد', funny: '😄 مضحك', inspiring: '✨ ملهم', persuasive: '📣 مقنع', story: '📖 قصة' },
     scStatWpm: 'كلمة / دقيقة', scStatFillers: 'كلمات حشو', scStatPauses: 'وقفات طويلة', scStatTime: 'المدة', scListen: 'استمع لتسجيلك',
     scTabOverview: 'نظرة عامة', scTabStory: 'القصة', scTabPace: 'السرعة والحشو', scTabMoments: 'اللحظات', scTabWords: 'النص',
     scLegendF: 'كلمة حشو', scLegendP: 'وقفة طويلة',
@@ -107,11 +109,11 @@
   // Words per minute every 15 seconds, against the comfortable zone.
   function paceCard(m) {
     var p = m.paceTimeline || [];
-    if (p.length < 2) return '';
+    if (!p.length) return '';
     var dur = +m.durationSeconds || 0;
     var top = Math.max(200, Math.max.apply(null, p) + 20);
     var y = function (v) { return (100 - v / top * 100).toFixed(1); };
-    var range = function (i) { return (i * 15) + '–' + (i === p.length - 1 && dur ? Math.round(dur) : (i + 1) * 15) + t('scSec'); };
+    var range = function (i) { return (i * 30) + '–' + (i === p.length - 1 && dur ? Math.round(dur) : (i + 1) * 30) + t('scSec'); };
     var bars = p.map(function (v, i) {
       var zone = v > 170 ? 'fast' : v < 115 ? 'slow' : 'ok';
       return '<div class="pc-col"><div class="pc-bar ' + zone + '" style="height:' + Math.max(4, v / top * 100).toFixed(1) + '%"><span>' + v + '</span></div>' +
@@ -125,7 +127,7 @@
       '<div class="pc-chart"><div class="pc-zone" style="top:' + y(160) + '%;bottom:' + (100 - y(130)) + '%"></div>' + bars + '</div>' +
       '<div class="pc-legend"><span><i class="z"></i>' + esc(t('scPaceZone')) + '</span><span><i class="k ok"></i>' + esc(t('scPaceFeel').ok) + '</span>' +
         '<span><i class="k fast"></i>' + esc(t('scPaceFeel').fast) + '</span><span><i class="k slow"></i>' + esc(t('scPaceFeel').slow) + '</span></div>' +
-      paceNote(p, avg, range) + '</div>';
+      (p.length > 1 ? paceNote(p, avg, range) : paceNote([avg], avg, range)) + '</div>';
   }
 
   // Plain words on what the chart shows: the whole talk first, then any part that stood out.
@@ -188,7 +190,8 @@
     var html = '<div class="sc">' +
       '<section class="card sc-hero"><div class="sc-top">' +
         '<div class="sc-big">' + ring(r.overall) + '<div class="n"><b>' + clamp(r.overall) + '</b><small>' + esc(t('scOutOf')) + '</small></div></div>' +
-        '<div class="sc-head"><p class="sc-verdict">' + esc(verdict(r.overall)) + '</p><h2 dir="auto">' + esc(r.topic || t('scTopicOwn')) + '</h2>' + bestAndFocus(sc) + '</div>' +
+        '<div class="sc-head"><p class="sc-verdict">' + esc(verdict(r.overall)) + '</p><h2 dir="auto">' + esc(r.topic || t('scTopicOwn')) + '</h2>' +
+          (r.style && t('scStyles')[r.style] ? '<span class="sc-style">' + esc(t('scStyles')[r.style]) + '</span>' : '') + bestAndFocus(sc) + '</div>' +
       '</div>' +
       '<div class="sc-stats">' +
         stat(m.wordsPerMinute ? Math.round(m.wordsPerMinute) : '–', t('scStatWpm')) +
@@ -197,7 +200,7 @@
         stat(r.durationSeconds ? mmss(r.durationSeconds) : '–', t('scStatTime')) +
       '</div>' +
       (opts.audio ? '<div class="sc-player"><button type="button" class="pl-btn" aria-label="' + esc(t('scListen')) + '">' + PLAY + '</button>' +
-        '<div class="pl-main"><span class="pl-label">' + esc(t('scListen')) + '</span><div class="pl-track"><i></i></div></div>' +
+        '<div class="pl-main"><span class="pl-label">' + esc(t('scListen')) + '</span><div class="pl-track" role="slider" tabindex="0" aria-label="' + esc(t('scListen')) + '"><i></i><span class="pl-knob"></span></div></div>' +
         '<span class="pl-time" dir="ltr">0:00</span><audio preload="metadata" src="' + esc(opts.audio) + '"></audio></div>' : '') +
       '</section>';
 
@@ -273,25 +276,57 @@
     // Listen-back player
     var audio = el.querySelector('.sc-player audio');
     if (audio) {
-      var btn = el.querySelector('.pl-btn'), fill = el.querySelector('.pl-track i'), time = el.querySelector('.pl-time'), track = el.querySelector('.pl-track');
+      var player = el.querySelector('.sc-player'), btn = el.querySelector('.pl-btn'), fill = el.querySelector('.pl-track i');
+      var knob = el.querySelector('.pl-knob'), time = el.querySelector('.pl-time'), track = el.querySelector('.pl-track');
       var PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
-      var paint = function () {
-        var d = isFinite(audio.duration) && audio.duration > 0 ? audio.duration : (r.durationSeconds || 0);
-        fill.style.width = d ? Math.min(100, audio.currentTime / d * 100) + '%' : '0%';
-        time.textContent = mmss(audio.currentTime) + ' / ' + mmss(d);
+      var dragging = false, raf = 0;
+      var total = function () { return isFinite(audio.duration) && audio.duration > 0 ? audio.duration : (r.durationSeconds || 0); };
+      var draw = function (at) {
+        var d = total(), f = d ? Math.max(0, Math.min(1, at / d)) : 0;
+        fill.style.width = (f * 100) + '%';
+        knob.style.insetInlineStart = (f * 100) + '%';
+        time.textContent = mmss(at) + ' / ' + mmss(d);
       };
+      // Redraw every frame while playing, so the bar moves smoothly.
+      var loop = function () { if (!dragging) draw(audio.currentTime); if (!audio.paused) raf = requestAnimationFrame(loop); };
       btn.addEventListener('click', function () { if (audio.paused) audio.play(); else audio.pause(); });
-      audio.addEventListener('play', function () { btn.innerHTML = PAUSE; el.querySelector('.sc-player').classList.add('on'); });
-      audio.addEventListener('pause', function () { btn.innerHTML = PLAY; el.querySelector('.sc-player').classList.remove('on'); });
-      audio.addEventListener('timeupdate', paint);
-      audio.addEventListener('loadedmetadata', paint);
-      track.addEventListener('click', function (e) {
-        var rc = track.getBoundingClientRect(), d = audio.duration || r.durationSeconds || 0;
+      audio.addEventListener('play', function () { btn.innerHTML = PAUSE; player.classList.add('on'); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); });
+      audio.addEventListener('pause', function () { btn.innerHTML = PLAY; player.classList.remove('on'); draw(audio.currentTime); });
+      audio.addEventListener('ended', function () { draw(total()); });
+      audio.addEventListener('loadedmetadata', function () { draw(audio.currentTime); });
+      audio.addEventListener('seeked', function () { if (!dragging) draw(audio.currentTime); });
+      // Tap or drag anywhere on the bar.
+      var at = function (e) {
+        var rc = track.getBoundingClientRect();
         var x = (e.clientX - rc.left) / rc.width;
-        if (document.documentElement.dir === 'rtl') x = 1 - x;
-        if (d) { try { audio.currentTime = Math.max(0, Math.min(d, x * d)); } catch (_) {} }
+        if (getComputedStyle(track).direction === 'rtl') x = 1 - x;
+        return Math.max(0, Math.min(1, x)) * total();
+      };
+      track.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        try { track.setPointerCapture(e.pointerId); } catch (_) {}
+        player.classList.add('drag');
+        draw(at(e));
       });
-      paint();
+      track.addEventListener('pointermove', function (e) { if (dragging) draw(at(e)); });
+      var drop = function (e) {
+        if (!dragging) return;
+        dragging = false;
+        player.classList.remove('drag');
+        var to = at(e);
+        try { audio.currentTime = to; } catch (_) {}
+        draw(to);
+      };
+      track.addEventListener('pointerup', drop);
+      track.addEventListener('pointercancel', function () { dragging = false; player.classList.remove('drag'); });
+      // Arrow keys move 5 seconds.
+      track.addEventListener('keydown', function (e) {
+        var step = e.key === 'ArrowRight' ? 5 : e.key === 'ArrowLeft' ? -5 : 0;
+        if (!step) return;
+        e.preventDefault();
+        try { audio.currentTime = Math.max(0, Math.min(total(), audio.currentTime + step)); } catch (_) {}
+      });
+      draw(0);
     }
     var text = el.querySelector('.sc-text');
     // A moment's time plays from there, and lights up those words in the transcript.

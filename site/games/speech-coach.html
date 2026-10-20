@@ -74,6 +74,12 @@
     .tp-shuffle { flex: none; width: 44px; height: 44px; border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: #2F7A67; cursor: pointer; box-shadow: 0 4px 10px -6px rgba(0,0,0,.3); }
     .tp-shuffle svg { width: 19px; height: 19px; }
     .tp-own { width: 100%; height: 48px; margin-top: 10px; padding: 0 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--field); color: var(--ink); font: inherit; font-size: 16px; }
+    /* Style of talk */
+    .row-head .opt { margin-inline-start: auto; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .style-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .style-chips button { height: 38px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--border); background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .style-chips button[aria-checked="true"] { border-color: #3E8E7A; background: color-mix(in srgb, #3E8E7A 14%, var(--surface)); color: #2F7A67; }
+    :root[data-theme="dark"] .style-chips button[aria-checked="true"] { color: #8FD3BF; }
     /* What we check */
     .checks5 { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 16px auto 0; max-width: 440px; padding: 0; list-style: none; }
     .checks5 li { padding: 5px 11px; border-radius: 999px; background: color-mix(in srgb, #3E8E7A 14%, transparent); color: #2F7A67; font-size: 13px; font-weight: 700; }
@@ -124,6 +130,8 @@
         cSavedNote: 'Saved to your account.',
         cGuestTitle: 'Get your talk scored by AI', cGuestBody: 'Every recording is scored by AI, so Speech Coach needs a free account. Below is a sample of the report you get back.',
         cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.',
+        cStyle: 'Style of talk', cOptional: 'Optional', cStyleHelp: 'The coach judges your talk against the style you pick.',
+        cStyles: { default: 'Default', serious: '🎯 Serious', funny: '😄 Funny', inspiring: '✨ Inspiring', persuasive: '📣 Persuasive', story: '📖 Story' },
         cTopic: 'Your topic', cAnother: 'Another topic', cOwn: 'Or type your own topic', cWeCheck: 'Speak naturally. We check your',
         cTips: ['Breathe, then slow down a little.', 'Pause instead of saying “um”.', 'Tell a quick story or example.', 'Look up and smile, even alone.', 'Say why it matters to you.', 'Finish with one strong sentence.'],
         cWait: 'Usually ready in under a minute.',
@@ -147,6 +155,8 @@
         cSavedNote: 'حُفظ في حسابك.',
         cGuestTitle: 'احصل على تقييم لحديثك بالذكاء الاصطناعي', cGuestBody: 'كل تسجيل يقيّمه الذكاء الاصطناعي، لذا يحتاج مدرب الإلقاء إلى حساب مجاني. في الأسفل مثال على التقرير الذي ستحصل عليه.',
         cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.',
+        cStyle: 'أسلوب الحديث', cOptional: 'اختياري', cStyleHelp: 'يقيّم المدرب حديثك حسب الأسلوب الذي تختاره.',
+        cStyles: { default: 'افتراضي', serious: '🎯 جاد', funny: '😄 مضحك', inspiring: '✨ ملهم', persuasive: '📣 مقنع', story: '📖 قصة' },
         cTopic: 'موضوعك', cAnother: 'موضوع آخر', cOwn: 'أو اكتب موضوعك الخاص', cWeCheck: 'تحدّث بشكل طبيعي. نفحص',
         cTips: ['تنفّس، ثم أبطئ قليلًا.', 'توقّف بدل أن تقول «اممم».', 'احكِ قصة أو مثالًا قصيرًا.', 'ارفع رأسك وابتسم، حتى لو كنت وحدك.', 'قل لماذا يهمّك الموضوع.', 'اختم بجملة واحدة قوية.'],
         cWait: 'يجهز عادةً في أقل من دقيقة.',
@@ -224,7 +234,7 @@
           strengths: d.strengths, nextStep: d.nextStep, transcript: words, story: d.story, practice: d.practice
         };
       }
-      var settings = { seconds: 60, own: '', set: 'General' };  // 30 seconds to 1 minute
+      var settings = { seconds: 60, own: '', set: 'General', style: 'default' };  // 30 seconds to 1 minute
       var shownTopic = '';
       var SHUFFLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>';
 
@@ -263,6 +273,19 @@
               });
               tpOwn.addEventListener('input', function () { settings.own = tpOwn.value; tpCard.classList.toggle('off', !!tpOwn.value.trim()); });
               rows.appendChild(tp);
+              // Optional: what kind of talk they're going for. Default unless they pick one.
+              var sty = document.createElement('div');
+              sty.innerHTML = '<span class="row-head"><span>' + esc(t('cStyle')) + '</span><span class="opt">' + esc(t('cOptional')) + '</span></span>' +
+                '<div class="style-chips" role="radiogroup">' + ['default', 'serious', 'funny', 'inspiring', 'persuasive', 'story'].map(function (k) {
+                  return '<button type="button" role="radio" data-style="' + k + '" aria-checked="' + (settings.style === k) + '">' + esc(t('cStyles')[k]) + '</button>';
+                }).join('') + '</div><p class="help">' + esc(t('cStyleHelp')) + '</p>';
+              sty.querySelectorAll('[data-style]').forEach(function (b) {
+                b.addEventListener('click', function () {
+                  settings.style = b.dataset.style;
+                  sty.querySelectorAll('[data-style]').forEach(function (o) { o.setAttribute('aria-checked', String(o === b)); });
+                });
+              });
+              rows.appendChild(sty);
               rows.appendChild(G.select({ label: t('tripleStepWordSet'), value: settings.set, options: Object.keys(words.wordSets), onChange: function (v) { settings.set = v; } }));
             },
             onStart: function () { play(); }
@@ -417,6 +440,7 @@
             form.append('audio', blob, 'talk.' + ext);
             form.append('topic', own ? '' : topic);
             form.append('lang', S.lang);
+            if (settings.style !== 'default') form.append('style', settings.style);
             form.append('durationSeconds', seconds.toFixed(1));
             S.upload('/v1/speech/analyze', form, 120000).then(function (r) {
               clearInterval(ticker);

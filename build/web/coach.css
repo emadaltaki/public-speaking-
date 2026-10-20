@@ -48,8 +48,13 @@
 .pl-btn svg { width: 18px; height: 18px; }
 .pl-main { flex: 1; min-width: 0; }
 .pl-label { display: block; font-size: 12.5px; font-weight: 800; color: var(--ink); }
-.pl-track { position: relative; height: 8px; margin-top: 5px; border-radius: 99px; background: color-mix(in srgb, var(--primary) 18%, transparent); cursor: pointer; overflow: hidden; }
-.pl-track i { position: absolute; inset-block: 0; inset-inline-start: 0; width: 0; border-radius: 99px; background: var(--primary); }
+.pl-track { position: relative; height: 24px; margin-top: 2px; cursor: pointer; touch-action: none; }
+.pl-track::before { content: ""; position: absolute; inset-inline: 0; top: 9px; height: 6px; border-radius: 99px; background: color-mix(in srgb, var(--primary) 20%, transparent); }
+.pl-track i { position: absolute; top: 9px; height: 6px; inset-inline-start: 0; width: 0; border-radius: 99px; background: var(--primary); }
+.pl-knob { position: absolute; top: 12px; inset-inline-start: 0; width: 16px; height: 16px; margin-top: -8px; margin-inline-start: -8px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 3px var(--surface), 0 2px 6px rgba(0,0,0,.25); transition: transform .15s; }
+.sc-player.drag .pl-knob, .pl-track:hover .pl-knob { transform: scale(1.25); }
+.pl-track:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 8px; }
+.sc-style { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 999px; background: var(--tint); border: 1px solid var(--border); font-size: 12.5px; font-weight: 700; color: var(--ink); }
 .pl-time { flex: none; font-size: 12.5px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 /* Tabs */
