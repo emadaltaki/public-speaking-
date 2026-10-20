@@ -644,68 +644,110 @@
 
     @media (max-width: 1400px) { .nav a { padding: 8px 7px; font-size: 14.5px; } .hbtn { padding: 0 8px; } .site-header .cta { padding: 0 16px; margin-inline-start: 4px; } .brand span { font-size: 18px; } }
     /* AI Speech Coach showcase */
-    .hero-coach { display: inline-flex; align-items: center; gap: 8px; margin-inline-start: 8px; padding: 6px 12px 6px 6px; border-radius: 999px; background: linear-gradient(135deg, #2F7A67, #5B3C86); color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 14px -8px rgba(47,122,103,.9); vertical-align: middle; }
-    .hero-coach b { display: grid; place-items: center; height: 20px; padding: 0 8px; border-radius: 999px; background: rgba(255,255,255,.22); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; }
-    .hero-coach:hover { filter: brightness(1.08); }
-    .coach-band { position: relative; padding: 84px 0; overflow: hidden; color: #EEF5F2; background: radial-gradient(900px 420px at 90% 0%, rgba(122,78,154,.55), transparent 60%), radial-gradient(800px 400px at 0% 100%, rgba(62,142,122,.55), transparent 60%), #15201D; }
-    .coach-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
-    .coach-new { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); font-size: 13px; font-weight: 800; letter-spacing: .04em; color: #CFEDE4; }
-    .coach-new .spark { display: inline-block; color: #F2C66D; animation: sparkle 2.4s ease-in-out infinite; }
-    @keyframes sparkle { 50% { transform: scale(1.35) rotate(20deg); } }
-    .coach-band .s-title { color: #fff; margin-top: 18px; }
-    .coach-lead { margin: 14px 0 0; max-width: 560px; color: #C3D6D0; font-size: 18px; }
-    .coach-feats { list-style: none; padding: 0; margin: 26px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .coach-feats li { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
-    .cf-ic { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: rgba(255,255,255,.1); font-size: 19px; }
-    .coach-feats b { display: block; color: #fff; font-size: 15.5px; }
-    .coach-feats small { display: block; margin-top: 2px; color: #AFC6BF; font-size: 13.5px; line-height: 1.4; }
+    .hero-coach { display: inline-flex; align-items: center; gap: 8px; margin-inline-start: 8px; padding: 5px 14px 5px 5px; border-radius: 999px; background: var(--surface); border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--border)); color: var(--ink); font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 16px -10px var(--primary); vertical-align: middle; transition: transform .15s, box-shadow .2s; }
+    .hero-coach b { display: grid; place-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: var(--primary); color: var(--on-primary); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; }
+    .hero-coach::after { content: "→"; color: var(--primary); font-weight: 800; transition: transform .2s; }
+    :root[dir="rtl"] .hero-coach::after { content: "←"; }
+    .hero-coach:hover { transform: translateY(-1px); box-shadow: 0 10px 22px -10px var(--primary); }
+    .hero-coach:hover::after { transform: translateX(3px); }
+    :root[dir="rtl"] .hero-coach:hover::after { transform: translateX(-3px); }
+
+    .coach-band { position: relative; padding: 96px 0; overflow: hidden; background: radial-gradient(700px 420px at 92% 18%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 65%), radial-gradient(600px 380px at 4% 92%, color-mix(in srgb, var(--warm) 22%, transparent), transparent 65%), var(--alt); border-block: 1px solid var(--border); }
+    .coach-grid { display: grid; grid-template-columns: 1.08fr 1fr; gap: 64px; align-items: center; }
+    .coach-new { display: inline-flex; align-items: center; gap: 10px; padding: 7px 16px 7px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); font-size: 13px; font-weight: 800; letter-spacing: .04em; color: var(--primary); }
+    .coach-new .live { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
+    .coach-new .live::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--primary); animation: livePing 1.8s ease-out infinite; }
+    @keyframes livePing { to { transform: scale(2.8); opacity: 0; } }
+    .coach-title { margin: 20px 0 0; font-family: var(--head); font-weight: 800; font-size: 46px; line-height: 1.12; letter-spacing: -.02em; color: var(--ink); max-width: 620px; }
+    .coach-title mark { color: var(--primary); background: linear-gradient(transparent 62%, color-mix(in srgb, var(--warm) 45%, transparent) 62%, color-mix(in srgb, var(--warm) 45%, transparent) 92%, transparent 92%); padding: 0 2px; }
+    .coach-lead { margin: 16px 0 0; max-width: 560px; color: var(--muted); font-size: 18.5px; line-height: 1.55; }
+    .coach-steps { list-style: none; padding: 0; margin: 24px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; counter-reset: cs; }
+    .coach-steps li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: 14.5px; font-weight: 700; color: var(--ink); }
+    .coach-steps li + li::before { content: ""; order: -1; width: 14px; height: 2px; margin-inline: -16px 2px; background: var(--border); }
+    .cs-ic { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--primary); font-size: 13px; font-weight: 900; }
+    .cs-ic svg { width: 15px; height: 15px; }
+    .coach-feats { list-style: none; padding: 0; margin: 22px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .coach-feats li { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 18px; background: var(--surface); border: 1px solid var(--border); transition: transform .2s, box-shadow .2s; }
+    .coach-feats li:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .cf-ic { flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: var(--warm-soft); font-size: 19px; }
+    .coach-feats li:nth-child(2n) .cf-ic { background: var(--soft); }
+    .coach-feats b { display: block; color: var(--ink); font-size: 15.5px; }
+    .coach-feats small { display: block; margin-top: 2px; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
     .coach-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 28px; }
-    .btn-coach { background: linear-gradient(135deg, #3E8E7A, #6B4A9A); color: #fff; min-height: 56px; font-size: 18px; box-shadow: 0 14px 28px -12px rgba(62,142,122,.9); }
-    .btn-coach svg { width: 22px; height: 22px; }
-    .btn-coach:hover { filter: brightness(1.08); transform: translateY(-1px); }
-    .coach-note { color: #AFC6BF; font-size: 13.5px; font-weight: 600; }
-    .coach-demo { display: block; position: relative; padding: 22px; border-radius: 26px; background: #FBF8F4; color: #2B2118; text-decoration: none; box-shadow: 0 40px 70px -30px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.08); transform: rotate(1.5deg); transition: transform .3s; }
-    :root[dir="rtl"] .coach-demo { transform: rotate(-1.5deg); }
-    .coach-demo:hover { transform: rotate(0) translateY(-4px); }
+    .btn-coach { min-height: 58px; padding: 0 30px 0 10px; font-size: 18px; gap: 12px; box-shadow: 0 16px 30px -14px var(--primary); }
+    .btn-coach .mic { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.2); }
+    .btn-coach .mic::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,.55); animation: micRing 2s ease-out infinite; }
+    @keyframes micRing { to { transform: scale(1.6); opacity: 0; } }
+    .btn-coach svg { width: 21px; height: 21px; }
+    .btn-coach:hover { transform: translateY(-1px); }
+    .coach-note { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+    .coach-note svg { flex: none; width: 16px; height: 16px; color: var(--ok); }
+
+    .coach-stage { position: relative; padding: 34px 26px; }
+    .coach-stage::before { content: ""; position: absolute; inset: 0; border-radius: 40px; background: linear-gradient(150deg, var(--primary), var(--warm)); transform: rotate(-3deg); opacity: .9; }
+    :root[dir="rtl"] .coach-stage::before { transform: rotate(3deg); }
+    .coach-demo { display: block; position: relative; z-index: 1; padding: 22px; border-radius: 26px; background: var(--surface); color: var(--ink); text-decoration: none; box-shadow: 0 30px 60px -28px rgba(43,33,24,.55); transition: transform .3s; }
+    .coach-demo:hover { transform: translateY(-4px); }
+    .cd-label { position: absolute; top: -12px; inset-inline-end: 20px; padding: 4px 12px; border-radius: 999px; background: var(--ink); color: var(--page); font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
     .cd-top { display: flex; align-items: center; gap: 16px; }
     .cd-ring { position: relative; flex: none; width: 92px; height: 92px; display: grid; place-content: center; text-align: center; }
     .cd-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
     .cd-ring circle { fill: none; stroke-width: 10; }
-    .cd-ring .bg { stroke: #E6EFEC; }
-    .cd-ring .fg { stroke: #3E8E7A; stroke-linecap: round; stroke-dasharray: 327; stroke-dashoffset: 327; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1) .2s; }
+    .cd-ring .bg { stroke: var(--soft); }
+    .cd-ring .fg { stroke: var(--primary); stroke-linecap: round; stroke-dasharray: 327; stroke-dashoffset: 327; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1) .2s; }
     .coach-demo.in .cd-ring .fg { stroke-dashoffset: 59; }
     .cd-ring b { font-family: var(--head); font-size: 26px; font-weight: 900; line-height: 1; }
-    .cd-ring small { font-size: 11px; color: #7A6A5C; font-weight: 700; }
-    .cd-head small { color: #2F7A67; font-weight: 800; font-size: 13px; }
+    .cd-ring small { font-size: 11px; color: var(--muted); font-weight: 700; }
+    .cd-head small { color: var(--ok); font-weight: 800; font-size: 13px; }
     .cd-head b { display: block; font-family: var(--head); font-size: 20px; line-height: 1.2; }
-    .cd-tag { display: inline-block; margin-top: 6px; padding: 2px 10px; border-radius: 999px; background: #F1ECE6; font-size: 12px; font-weight: 700; }
+    .cd-tag { display: inline-block; margin-top: 6px; padding: 2px 10px; border-radius: 999px; background: var(--warm-soft); font-size: 12px; font-weight: 700; }
     .cd-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
-    .cd-stats span { padding: 10px 6px; border-radius: 14px; background: #F3EEE8; text-align: center; }
+    .cd-stats span { padding: 10px 6px; border-radius: 14px; background: var(--tint); border: 1px solid var(--border); text-align: center; }
     .cd-stats b { display: block; font-family: var(--head); font-size: 20px; }
-    .cd-stats small { font-size: 11.5px; color: #7A6A5C; font-weight: 600; }
+    .cd-stats small { font-size: 11.5px; color: var(--muted); font-weight: 600; }
     .cd-pace { margin-top: 26px; display: flex; align-items: flex-end; gap: 14px; }
-    .cd-pace > small { font-size: 12px; font-weight: 800; color: #7A6A5C; text-transform: uppercase; letter-spacing: .08em; }
-    .cd-bars { flex: 1; height: 62px; display: flex; align-items: flex-end; gap: 10px; }
-    .cd-bars i { position: relative; flex: 1; height: 4%; border-radius: 8px 8px 3px 3px; background: #3F7D4E; transition: height 1s cubic-bezier(.2,.8,.2,1) .5s; }
-    .cd-bars i.hot { background: #B4583A; }
+    .cd-pace > small { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .cd-bars { flex: 1; height: 58px; display: flex; align-items: flex-end; gap: 10px; }
+    .cd-bars i { position: relative; flex: 1; height: 6%; border-radius: 8px 8px 3px 3px; background: var(--ok); transition: height 1s cubic-bezier(.2,.8,.2,1) .5s; }
+    .cd-bars i.hot { background: var(--primary); }
     .coach-demo.in .cd-bars i { height: var(--h); }
     .cd-bars em { position: absolute; top: -17px; left: 50%; transform: translateX(-50%); font-style: normal; font-size: 11px; font-weight: 800; }
-    .cd-words { margin: 18px 0 0; padding: 10px 12px; border-radius: 12px; background: #fff; border: 1px solid #ECE3D9; font-size: 14px; color: #5A4A3D; }
-    .cd-words mark { padding: 0 4px; border-radius: 5px; background: #FBE3D6; color: #B4583A; font-weight: 800; }
-    .cd-next { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding: 10px 12px; border-radius: 14px; background: linear-gradient(135deg, #E6F2EE, #EFE7F6); }
-    .cd-next small { display: block; font-size: 11.5px; font-weight: 800; color: #2F7A67; text-transform: uppercase; letter-spacing: .06em; }
+    .cd-words { margin: 16px 0 0; padding: 10px 12px; border-radius: 12px; background: var(--tint); border: 1px solid var(--border); font-size: 14px; color: var(--text); }
+    .cd-words mark { padding: 0 4px; border-radius: 5px; background: var(--soft); color: var(--primary); font-weight: 800; }
+    .cd-next { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding: 10px 12px; border-radius: 14px; background: var(--warm-soft); }
+    .cd-next-ic { width: 34px; height: 34px; flex: none; border-radius: 10px; display: grid; place-items: center; background: var(--surface); }
+    .cd-next small { display: block; font-size: 11.5px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: .06em; }
     .cd-next b { font-size: 14px; }
-    @media (prefers-reduced-motion: reduce) { .coach-new .spark { animation: none; } .cd-ring .fg, .cd-bars i { transition: none; } }
-    @media (max-width: 1023px) { .coach-grid { grid-template-columns: 1fr; gap: 40px; } .coach-demo { max-width: 460px; } }
+    .float { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 5px; padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); font-size: 13.5px; font-weight: 700; color: var(--ink); white-space: nowrap; animation: floaty 5s ease-in-out infinite; }
+    .float b { color: var(--primary); }
+    .f1 { top: 6px; inset-inline-start: -14px; }
+    .f2 { top: 42%; inset-inline-end: -18px; animation-delay: -1.6s; }
+    .f3 { bottom: 4px; inset-inline-start: 8%; animation-delay: -3.2s; }
+    @keyframes floaty { 50% { transform: translateY(-7px); } }
+    @media (prefers-reduced-motion: reduce) { .coach-new .live::after, .btn-coach .mic::before, .float { animation: none; } .cd-ring .fg, .cd-bars i { transition: none; } }
+    @media (max-width: 1023px) { .coach-grid { grid-template-columns: 1fr; gap: 36px; } .coach-stage { max-width: 500px; margin-inline: auto; width: 100%; } }
     @media (max-width: 640px) {
-      .coach-band { padding: 52px 0; }
-      .coach-lead { font-size: 16px; }
-      .coach-feats { grid-template-columns: 1fr; gap: 8px; }
-      .coach-feats li { padding: 10px 12px; }
-      .coach-ctas .btn-coach { width: 100%; }
-      .coach-note { width: 100%; text-align: center; }
-      .coach-demo { padding: 16px; transform: none; }
-      :root[dir="rtl"] .coach-demo { transform: none; }
+      .coach-band { padding: 56px 0 48px; }
+      .coach-title { font-size: clamp(30px, 8.6vw, 36px); margin-top: 16px; }
+      .coach-lead { font-size: 16px; margin-top: 12px; }
+      .coach-steps { gap: 6px; margin-top: 18px; }
+      .coach-steps li { font-size: 13px; padding: 5px 11px 5px 5px; gap: 6px; }
+      .coach-steps li + li::before { display: none; }
+      .cs-ic { width: 22px; height: 22px; }
+      .coach-feats { display: none; }
+      .coach-feats li { flex-direction: column; gap: 8px; padding: 12px; }
+      .coach-feats small { font-size: 12.5px; }
+      .cf-ic { width: 34px; height: 34px; font-size: 17px; }
+      .coach-ctas { margin-top: 22px; }
+      .coach-ctas .btn-coach { width: 100%; justify-content: center; padding: 0 22px 0 10px; }
+      .coach-note { width: 100%; justify-content: center; text-align: center; }
+      .coach-stage { padding: 30px 12px 34px; }
+      .coach-stage::before { border-radius: 30px; }
+      .coach-demo { padding: 16px; }
+      .float { font-size: 12px; padding: 6px 11px; }
+      .f1 { inset-inline-start: 0; top: 2px; }
+      .f2 { inset-inline-end: 4px; top: auto; bottom: 6px; }
+      .f3 { bottom: 6px; inset-inline-start: 4px; }
       .hero-coach { margin: 10px 0 0; }
     }
     /* Games showcase */
@@ -1072,9 +1114,14 @@
     <section class="coach-band" id="coach">
       <div class="wrap coach-grid">
         <div class="coach-copy">
-          <span class="coach-new"><span class="spark" aria-hidden="true">✦</span><span data-t="coachNew">New · Free AI Speech Coach</span></span>
-          <h2 class="s-title" data-t="coachTitle">Talk for one minute. Get a coach's report in seconds.</h2>
+          <span class="coach-new"><span class="live" aria-hidden="true"></span><span data-t="coachNew">New · Free AI Speech Coach</span></span>
+          <h2 class="coach-title"><span data-t="coachTitleA">Talk for</span> <mark data-t="coachTitleHl">one minute.</mark> <span data-t="coachTitleB">Get a coach's report in seconds.</span></h2>
           <p class="coach-lead" data-t="coachLead">Record yourself on any topic, right in your browser. Our AI coach listens and shows you exactly what to work on next.</p>
+          <ol class="coach-steps">
+            <li><span class="cs-ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><span data-t="coachS1">Speak for a minute</span></li>
+            <li><span class="cs-ic">✦</span><span data-t="coachS2">AI listens</span></li>
+            <li><span class="cs-ic"><svg aria-hidden="true"><use href="#i-check"/></svg></span><span data-t="coachS3">Get your report</span></li>
+          </ol>
           <ul class="coach-feats">
             <li><span class="cf-ic">⏱️</span><span><b data-t="coachF1t">Your pace</b><small data-t="coachF1b">See where you sped up or slowed down.</small></span></li>
             <li><span class="cf-ic">💬</span><span><b data-t="coachF2t">Every “um” and “uh”</b><small data-t="coachF2b">Filler words, counted and shown in your words.</small></span></li>
@@ -1082,24 +1129,30 @@
             <li><span class="cf-ic">🎯</span><span><b data-t="coachF4t">What to practise</b><small data-t="coachF4b">A game picked for you, then try again and see your progress.</small></span></li>
           </ul>
           <div class="coach-ctas">
-            <a class="btn btn-coach" href="/games/speech-coach" data-track="coach_home"><svg aria-hidden="true"><use href="#i-mic"/></svg><span data-t="coachCta">Try the AI coach free</span></a>
-            <span class="coach-note" data-t="coachNote">Free account · Works on your phone · English or Arabic</span>
+            <a class="btn btn-primary btn-coach" href="/games/speech-coach" data-track="coach_home"><span class="mic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span><span data-t="coachCta">Try the AI coach free</span></a>
+            <span class="coach-note"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="coachNote">Free account · Works on your phone · English or Arabic</span></span>
           </div>
         </div>
-        <a class="coach-demo" href="/games/speech-coach" aria-label="Speech Coach sample report" data-t-aria="coachDemoAria" tabindex="-1">
-          <div class="cd-top">
-            <div class="cd-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg"/></svg><b>8.2</b><small>/10</small></div>
-            <div class="cd-head"><small data-t="coachDemoVerdict">Great talk!</small><b data-t="coachDemoTopic">My first job</b><span class="cd-tag" data-t="coachDemoStyle">📖 Story</span></div>
-          </div>
-          <div class="cd-stats">
-            <span><b>148</b><small data-t="coachDemoWpm">words / min</small></span>
-            <span><b>3</b><small data-t="coachDemoFill">fillers</small></span>
-            <span><b>1</b><small data-t="coachDemoPause">long pause</small></span>
-          </div>
-          <div class="cd-pace"><small data-t="coachDemoPace">Pace</small><div class="cd-bars"><i style="--h:62%"><em>138</em></i><i class="hot" style="--h:84%"><em>172</em></i></div></div>
-          <p class="cd-words" dir="ltr">So my first job was… <mark>um</mark> at a bakery, and <mark>like</mark> the owner…</p>
-          <div class="cd-next"><span>🎯</span><span><small data-t="coachDemoNextL">Practise next</small><b data-t="coachDemoNext">Triple Step, for smoother transitions</b></span></div>
-        </a>
+        <div class="coach-stage">
+          <span class="float f1" aria-hidden="true">💬 <b>um</b> ×2</span>
+          <span class="float f2" aria-hidden="true">⏱️ <b>148</b> <span data-t="coachDemoWpmShort">wpm</span></span>
+          <span class="float f3" aria-hidden="true">✨ <span data-t="coachDemoGood">Strong opening</span></span>
+          <a class="coach-demo" href="/games/speech-coach" aria-label="Speech Coach sample report" data-t-aria="coachDemoAria" tabindex="-1">
+            <span class="cd-label" data-t="coachDemoLabel">Sample report</span>
+            <div class="cd-top">
+              <div class="cd-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg"/></svg><b>8.2</b><small>/10</small></div>
+              <div class="cd-head"><small data-t="coachDemoVerdict">Great talk!</small><b data-t="coachDemoTopic">My first job</b><span class="cd-tag" data-t="coachDemoStyle">📖 Story</span></div>
+            </div>
+            <div class="cd-stats">
+              <span><b>148</b><small data-t="coachDemoWpm">words / min</small></span>
+              <span><b>3</b><small data-t="coachDemoFill">fillers</small></span>
+              <span><b>1</b><small data-t="coachDemoPause">long pause</small></span>
+            </div>
+            <div class="cd-pace"><small data-t="coachDemoPace">Pace</small><div class="cd-bars"><i style="--h:62%"><em>138</em></i><i class="hot" style="--h:84%"><em>172</em></i></div></div>
+            <p class="cd-words" dir="ltr">So my first job was… <mark>um</mark> at a bakery, and <mark>like</mark> the owner…</p>
+            <div class="cd-next"><span class="cd-next-ic">🎯</span><span><small data-t="coachDemoNextL">Practise next</small><b data-t="coachDemoNext">Triple Step, for smoother transitions</b></span></div>
+          </a>
+        </div>
       </div>
     </section>
 
