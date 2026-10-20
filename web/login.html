@@ -321,7 +321,7 @@
     // to its own Firebase project, so test accounts never touch real ones.
     const IS_DEV = /^dev\.|^speakup-dev-fbb4b\./.test(location.hostname);
     const OWN_HOSTS = IS_DEV ? ['speakup-dev-fbb4b.web.app', 'speakup-dev-fbb4b.firebaseapp.com', 'dev.speakunshaken.com']
-      : ['speakup-ca500.web.app', 'speakup-ca500.firebaseapp.com'];
+      : ['speakup-ca500.web.app', 'speakup-ca500.firebaseapp.com', 'speakunshaken.com', 'www.speakunshaken.com'];
     const SAME_TAB_GOOGLE = OWN_HOSTS.indexOf(location.hostname) !== -1;
     const OWN_AUTH_DOMAIN = SAME_TAB_GOOGLE ? location.hostname : OWN_HOSTS[1];
     // Phones, tablets and the installed app: a popup there becomes a new tab.
