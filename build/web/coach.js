@@ -201,7 +201,7 @@
       '</div>' +
       (opts.audio ? '<div class="sc-player"><button type="button" class="pl-btn" aria-label="' + esc(t('scListen')) + '">' + PLAY + '</button>' +
         '<div class="pl-main"><span class="pl-label">' + esc(t('scListen')) + '</span><div class="pl-track" role="slider" tabindex="0" aria-label="' + esc(t('scListen')) + '"><i></i><span class="pl-knob"></span></div></div>' +
-        '<span class="pl-time" dir="ltr">0:00</span><audio preload="metadata" src="' + esc(opts.audio) + '"></audio></div>' : '') +
+        '<span class="pl-time" dir="ltr">0:00</span><audio preload="auto" src="' + esc(opts.audio) + '"></audio></div>' : '') +
       '</section>';
 
     // Tabs
@@ -287,13 +287,45 @@
         knob.style.insetInlineStart = (f * 100) + '%';
         time.textContent = mmss(at) + ' / ' + mmss(d);
       };
+      // Phone recordings come out without a proper length (Chrome's WebM says
+      // "Infinity", Safari's MP4 is stitched from pieces), and they then play
+      // silently until something seeks. So once the file loads we find its real
+      // length by jumping to the end, and every first play starts with a seek.
+      var primed = false, want = null;
+      function prime() {
+        if (primed) return;
+        var done = function () {
+          primed = true;
+          var to = want == null ? 0 : want;
+          want = null;
+          try { audio.currentTime = Math.max(0.01, to); } catch (_) {}
+          draw(audio.currentTime);
+        };
+        if (isFinite(audio.duration) && audio.duration > 0) return done();
+        var onLen = function () {
+          if (!isFinite(audio.duration) || !(audio.duration > 0)) return;
+          audio.removeEventListener('durationchange', onLen);
+          done();
+        };
+        audio.addEventListener('durationchange', onLen);
+        try { audio.currentTime = 1e101; } catch (_) { audio.removeEventListener('durationchange', onLen); done(); }
+      }
+      // Play (from a time, or from where it is). play() stays inside the tap so
+      // iPhone allows it; the seek happens now or as soon as the file is ready.
+      function playAt(to) {
+        if (primed) { if (to != null) { try { audio.currentTime = Math.max(0.01, to); } catch (_) {} } }
+        else want = to == null ? (want == null ? 0 : want) : to;
+        var p = audio.play();
+        if (p && p.catch) p.catch(function () {});
+      }
       // Redraw every frame while playing, so the bar moves smoothly.
       var loop = function () { if (!dragging) draw(audio.currentTime); if (!audio.paused) raf = requestAnimationFrame(loop); };
-      btn.addEventListener('click', function () { if (audio.paused) audio.play(); else audio.pause(); });
+      btn.addEventListener('click', function () { if (audio.paused) playAt(null); else audio.pause(); });
       audio.addEventListener('play', function () { btn.innerHTML = PAUSE; player.classList.add('on'); cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); });
       audio.addEventListener('pause', function () { btn.innerHTML = PLAY; player.classList.remove('on'); draw(audio.currentTime); });
       audio.addEventListener('ended', function () { draw(total()); });
-      audio.addEventListener('loadedmetadata', function () { draw(audio.currentTime); });
+      audio.addEventListener('loadedmetadata', function () { draw(audio.currentTime); prime(); });
+      if (audio.readyState >= 1) prime();
       audio.addEventListener('seeked', function () { if (!dragging) draw(audio.currentTime); });
       // Tap or drag anywhere on the bar.
       var at = function (e) {
@@ -314,7 +346,7 @@
         dragging = false;
         player.classList.remove('drag');
         var to = at(e);
-        try { audio.currentTime = to; } catch (_) {}
+        if (primed) { try { audio.currentTime = to; } catch (_) {} } else want = to;
         draw(to);
       };
       track.addEventListener('pointerup', drop);
@@ -326,6 +358,7 @@
         e.preventDefault();
         try { audio.currentTime = Math.max(0, Math.min(total(), audio.currentTime + step)); } catch (_) {}
       });
+      audio.playAt = playAt;
       draw(0);
     }
     var text = el.querySelector('.sc-text');
@@ -338,13 +371,13 @@
           if (s >= at - 0.4 && s <= at + 2.5) w.classList.add('hl');
         });
       }
-      if (audio) { try { audio.currentTime = Math.max(0, at - 1); audio.play(); } catch (_) {} }
+      if (audio && audio.playAt) audio.playAt(Math.max(0, at - 1));
     }
     el.querySelectorAll('.sc-time').forEach(function (b) { b.addEventListener('click', function () { jump(+b.dataset.at); }); });
     if (text && audio) {
       text.addEventListener('click', function (e) {
         var w = e.target.closest('.sc-w');
-        if (w) { try { audio.currentTime = Math.max(0, +w.dataset.s - 0.2); audio.play(); } catch (_) {} }
+        if (w && audio.playAt) audio.playAt(Math.max(0, +w.dataset.s - 0.2));
       });
       // Follow along: the word being spoken is underlined.
       var ws = text.querySelectorAll('.sc-w');
