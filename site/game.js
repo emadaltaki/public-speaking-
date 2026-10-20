@@ -254,7 +254,7 @@
   function boot(id, start, lockedOpts) {
     var main = document.getElementById('main');
     Promise.all([S.loadGames(), loadWords()]).then(function (res) {
-      document.title = res[0][id].title + ' | Speak Up Fearless';
+      document.title = res[0][id].title + ' | speakUnshaken';
       S.gate(main, function () { start(res[0], res[1]); }, lockedOpts);
     });
   }
