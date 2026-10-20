@@ -13,7 +13,7 @@
     fxStart: "Let's fix them", fxLevel: 'Slip {n} of {t}', fxYouSaid: 'You said', fxHear: 'Hear it', fxWhat: 'What happened', fxFix: 'The fix',
     fxAsk: 'Now say that part again, using the fix.', fxSay: 'Say it again', fxSkip: 'Skip', fxDone: 'Done',
     fxListening: 'Say it again', fxShort: 'Keep going a little longer.', fxChecking: 'Checking your retry',
-    fxPassed: ['Nice fix!', 'Much better!', 'Nailed it!'], fxNotYet: 'Almost there', fxEarned: '+{n} stars', fxEarned1: '+1 star',
+    fxPassed: ['Getting better!', 'Fixed it!', 'Nailed it!'], fxNotYet: 'Almost there', fxEarned: '+{n} stars', fxEarned1: '+1 star',
     fxNext: 'Next slip', fxFinish: 'See my stars', fxRetry: 'Try again', fxFor3: 'Go for 3 stars', fxHeard: 'We heard',
     fxSelf: "We can't check this one automatically right now. How did it go?", fxSelfYes: 'I nailed it', fxSelfNo: 'Try again',
     fxErr: "We couldn't check that. Try again.", fxNoSpeech: "We didn't hear that. Move closer to the microphone and try again.",
@@ -27,7 +27,7 @@
     fxStart: 'لنصحّحها', fxLevel: 'التعثّر {n} من {t}', fxYouSaid: 'قلت', fxHear: 'استمع', fxWhat: 'ما الذي حدث', fxFix: 'طريقة التحسين',
     fxAsk: 'الآن قل ذلك الجزء من جديد باستخدام طريقة التحسين.', fxSay: 'قلها من جديد', fxSkip: 'تخطَّ', fxDone: 'تم',
     fxListening: 'قلها من جديد', fxShort: 'استمر قليلًا بعد.', fxChecking: 'نتحقق من إعادتك',
-    fxPassed: ['تصحيح جميل!', 'أفضل بكثير!', 'أتقنتها!'], fxNotYet: 'اقتربت', fxEarned: '+{n} نجوم', fxEarned1: '+نجمة',
+    fxPassed: ['أفضل من قبل!', 'صحّحتها!', 'أتقنتها!'], fxNotYet: 'اقتربت', fxEarned: '+{n} نجوم', fxEarned1: '+نجمة',
     fxNext: 'التعثّر التالي', fxFinish: 'شاهد نجومي', fxRetry: 'حاول مجددًا', fxFor3: 'حاول للحصول على 3 نجوم', fxHeard: 'سمعنا',
     fxSelf: 'لا نستطيع التحقق من هذه تلقائيًا الآن. كيف كانت؟', fxSelfYes: 'أتقنتها', fxSelfNo: 'حاول مجددًا',
     fxErr: 'لم نتمكن من التحقق. حاول مجددًا.', fxNoSpeech: 'لم نسمعك. اقترب من الميكروفون وحاول مجددًا.',
@@ -42,7 +42,14 @@
 
   function sorted(report) { return (report.moments || []).slice().sort(function (a, b) { return (a.at || 0) - (b.at || 0); }); }
   function key(report) { return 'speakupfearless.fixit.' + (report.id || 'x'); }
-  function saved(report) { try { return JSON.parse(S.store(key(report)) || '{}') || {}; } catch (_) { return {}; } }
+  // Best stars per slip: this device's, plus any the account saved ("fixes").
+  function saved(report) {
+    var best = {};
+    try { best = JSON.parse(S.store(key(report)) || '{}') || {}; } catch (_) {}
+    var f = report.fixes || {};
+    Object.keys(f).forEach(function (k) { best[k] = Math.max(best[k] || 0, +f[k] || 0); });
+    return best;
+  }
   function save(report, best) { S.store(key(report), JSON.stringify(best)); }
   function total(best) { return Object.keys(best).reduce(function (s, k) { return s + (best[k] || 0); }, 0); }
   function stars(n, max, cls) {
@@ -207,7 +214,8 @@
     }
 
     function result(r, blob) {
-      var n = award(r.passed ? r.stars : 0);
+      // 1 star means better but not fixed yet; it still counts.
+      var n = award(r.stars);
       var last = level === ms.length - 1;
       var heard = r.transcript && r.transcript.length ? window.Coach.transcriptHtml(r.transcript) : esc(r.heard || '');
       st.body.innerHTML = header() +
