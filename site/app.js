@@ -454,7 +454,7 @@
     }
     var u = user();
     var here = location.pathname.replace(/\/$/, '');
-    h.innerHTML = '<div class="bar"><a class="brand" href="/" aria-label="Speak Up Fearless">' + LOGO + '<span dir="ltr">Speak Up Fearless</span></a>' +
+    h.innerHTML = '<div class="bar"><a class="brand" href="/" aria-label="speakUnshaken">' + LOGO + '<span dir="ltr">speakUnshaken</span></a>' +
       (u ? '<a class="hbtn acct" href="/account" aria-label="' + esc(t('account')) + '"' + (here === '/account' ? ' aria-current="page"' : '') + '><span class="av"></span></a>'
          : '<a class="hbtn acct" href="/login?next=' + encodeURIComponent(location.pathname) + '">' + SVG.user + '<span class="label">' + esc(t('signIn')) + '</span></a>') +
       '<button class="hbtn lang" type="button" aria-label="' + esc(t('langName')) + '">' + SVG.lang + '<span>' + esc(t('langShort')) + '</span></button>' +

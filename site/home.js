@@ -1,4 +1,4 @@
-// Speak Up Fearless home page: language, theme, account link, menu, photo
+// speakUnshaken home page: language, theme, account link, menu, photo
 // viewer and the booking form. Plain JavaScript so the page stays light.
 (function () {
   'use strict';
@@ -10,7 +10,7 @@
   // Our own backend keeps a copy of each request; the email above stays the
   // way requests reach the inbox.
   var API_BASE = 'https://public-speaking-backend.vercel.app';
-  var CONTACT_EMAIL = 'speakupfearless@gmail.com';
+  var CONTACT_EMAIL = 'speakupunshaken@gmail.com';
   var root = document.documentElement;
   var $ = function (id) { return document.getElementById(id); };
   var all = function (sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); };
@@ -48,11 +48,11 @@
     sFree: 'Free', popular: 'MOST POPULAR', bestValue: 'BEST VALUE',
     weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    privacyBody: 'Speak Up Fearless respects your privacy.\n\n' +
+    privacyBody: 'speakUnshaken respects your privacy.\n\n' +
       'What we collect: this website does not store anything you type. When you request a time through the booking form, your name, email or phone, reason and preferred time are sent to us by email through FormSubmit (formsubmit.co), a form-forwarding service. If you email or call us, we receive your name, contact details, and whatever you choose to share.\n\n' +
       'How we use it: only to reply to you, arrange sessions, and keep in touch about sessions you have asked about. We never sell or rent your information.\n\n' +
       'Website statistics: we may use privacy-friendly, cookie-free analytics that count visits without identifying you.\n\n' +
-      'Your choices: you can ask us at any time to see, correct, or delete the information we hold about you by emailing speakupfearless@gmail.com.\n\n' +
+      'Your choices: you can ask us at any time to see, correct, or delete the information we hold about you by emailing speakupunshaken@gmail.com.\n\n' +
       "We follow Canada's Personal Information Protection and Electronic Documents Act (PIPEDA)."
   };
 
@@ -112,7 +112,7 @@
     heroHeadline: 'ابدأ بالكلام، ودع التوتر يرحل.',
     heroSupport: 'نساعد من يتوترون عند التحدث أمام الآخرين. مجموعات صغيرة وودودة وتمارين كلام ممتعة، خطوة صغيرة في كل مرة، حتى يخف القلق.',
     heroTrust: 'مكان ودود لا يحكم عليك فيه أحد، وتتقدّم فيه على راحتك.',
-    heroImageAlt: 'مضيف يقود ورشة Speak Up Fearless أمام مجموعة صغيرة',
+    heroImageAlt: 'مضيف يقود ورشة speakUnshaken أمام مجموعة صغيرة',
     badgeTitle: 'الكل يأخذ دوره', badgeBody: 'الأخطاء مرحّب بها هنا.',
     eyebrowWhy: 'لست وحدك', anxietyHeadline: 'يوترك التحدث؟ معظمنا يشعر بالشيء نفسه.',
     feel1: '«قلبي يبدأ بالخفقان بسرعة.»', feel2: '«أفكّر كثيرًا في كل ما أريد قوله.»',
@@ -175,7 +175,7 @@
     preferTalk: 'تفضّل أن نتحدث مباشرة؟', emailUs: 'راسلنا', callUs: 'اتصل بنا',
     footerBlurb: 'مجموعة ودودة في ميسيساغا يتدرّب فيها الناس على التحدث ويرتاحون له أكثر فأكثر.',
     explore: 'استكشف', mission: 'لماذا نفعل هذا', community: 'المجتمع', privacy: 'سياسة الخصوصية', contactLabel: 'تواصل',
-    copyright: '© 2026 Speak Up Fearless. جميع الحقوق محفوظة.', close: 'إغلاق',
+    copyright: '© 2026 speakUnshaken. جميع الحقوق محفوظة.', close: 'إغلاق',
     stickyCta: 'احجز الآن', almostThere: 'اقتربت!', mLead: 'بقي فقط:', mDay: 'اختيار يوم', mTime: 'اختيار وقت',
     mName: 'كتابة اسمك', mContact: 'إضافة بريدك', mPhone: 'إضافة رقم هاتف', mReason: 'إخبارنا بما تريد المساعدة فيه',
     dayMissing: 'اختر اليوم الأنسب لك.', timeMissing: 'صباحًا أم ظهرًا أم مساءً؟', tryGame: 'لست مستعدًا للكلام بعد؟ جرّب تحدي الدقيقة لليوم',
@@ -189,7 +189,7 @@
     bookFormTitle: 'اطلب جلسة', bookFormSub: 'لن يستغرق الأمر سوى دقيقة.',
     weekdays: ['الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'],
     months: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
-    privacyBody: 'تحترم Speak Up Fearless خصوصيتك.\n\nما نجمعه: لا يحفظ هذا الموقع أي شيء تكتبه. عندما تطلب موعدًا عبر نموذج الحجز، يُرسل إلينا اسمك وبريدك أو هاتفك وسبب الحجز والوقت المفضّل عبر البريد من خلال خدمة FormSubmit (formsubmit.co) لإعادة توجيه النماذج. وإذا راسلتنا أو اتصلت بنا، نتلقى اسمك وبيانات التواصل وما تختار مشاركته.\n\nكيف نستخدمها: فقط للرد عليك وترتيب الجلسات والتواصل بخصوص الجلسات التي سألت عنها. لا نبيع معلوماتك ولا نؤجّرها أبدًا.\n\nإحصاءات الموقع: قد نستخدم أدوات تحليل تحترم الخصوصية ولا تستخدم ملفات تعريف الارتباط، تحسب الزيارات دون التعرف عليك.\n\nخياراتك: يمكنك في أي وقت أن تطلب الاطلاع على معلوماتك لدينا أو تصحيحها أو حذفها بمراسلة speakupfearless@gmail.com.\n\nنلتزم بقانون حماية المعلومات الشخصية والوثائق الإلكترونية الكندي (PIPEDA).'
+    privacyBody: 'تحترم speakUnshaken خصوصيتك.\n\nما نجمعه: لا يحفظ هذا الموقع أي شيء تكتبه. عندما تطلب موعدًا عبر نموذج الحجز، يُرسل إلينا اسمك وبريدك أو هاتفك وسبب الحجز والوقت المفضّل عبر البريد من خلال خدمة FormSubmit (formsubmit.co) لإعادة توجيه النماذج. وإذا راسلتنا أو اتصلت بنا، نتلقى اسمك وبيانات التواصل وما تختار مشاركته.\n\nكيف نستخدمها: فقط للرد عليك وترتيب الجلسات والتواصل بخصوص الجلسات التي سألت عنها. لا نبيع معلوماتك ولا نؤجّرها أبدًا.\n\nإحصاءات الموقع: قد نستخدم أدوات تحليل تحترم الخصوصية ولا تستخدم ملفات تعريف الارتباط، تحسب الزيارات دون التعرف عليك.\n\nخياراتك: يمكنك في أي وقت أن تطلب الاطلاع على معلوماتك لدينا أو تصحيحها أو حذفها بمراسلة speakupunshaken@gmail.com.\n\nنلتزم بقانون حماية المعلومات الشخصية والوثائق الإلكترونية الكندي (PIPEDA).'
   };
 
   // English comes from the page itself, so the HTML stays the source of truth.
@@ -214,7 +214,7 @@
     $('lbPrev').setAttribute('aria-label', t('prev'));
     $('lbNext').setAttribute('aria-label', t('next'));
     $('lbClose').setAttribute('aria-label', t('close'));
-    document.title = lang === 'ar' ? 'دروس الخطابة في ميسيساغا | Speak Up Fearless' : 'Public Speaking Classes in Mississauga | Speak Up Fearless';
+    document.title = lang === 'ar' ? 'دروس الخطابة في ميسيساغا | speakUnshaken' : 'Public Speaking Classes in Mississauga | speakUnshaken';
     renderMenuLabel();
     renderTheme();
     renderAccount();
@@ -894,15 +894,15 @@
   function confirmationText(req) {
     var first = req.name.split(' ')[0];
     if (lang === 'ar') {
-      return 'مرحبًا ' + first + '،\n\nشكرًا لتواصلك مع Speak Up Fearless! وصلنا طلبك:\n\n' +
+      return 'مرحبًا ' + first + '،\n\nشكرًا لتواصلك مع speakUnshaken! وصلنا طلبك:\n\n' +
         t(sessionById(req.requestedCourse).title) + '\n' + localTime() + '\n\n' +
         'سنرد عليك قريبًا لتأكيد الموعد. إن احتجت إلى تغيير أي شيء، فقط رد على هذه الرسالة أو اتصل بنا على 5347-995 (416).\n\n' +
-        'نتطلع للقائك!\nفريق Speak Up Fearless';
+        'نتطلع للقائك!\nفريق speakUnshaken';
     }
-    return 'Hi ' + first + ',\n\nThanks for reaching out to Speak Up Fearless! We got your request:\n\n' +
+    return 'Hi ' + first + ',\n\nThanks for reaching out to speakUnshaken! We got your request:\n\n' +
       req.requestedLabel + '\n' + req.preferredTime + '\n\n' +
       "We'll get back to you soon to confirm your time. If anything changes, just reply to this email or call us at (416) 995-5347.\n\n" +
-      'Looking forward to meeting you!\nThe Speak Up Fearless team';
+      'Looking forward to meeting you!\nThe speakUnshaken team';
   }
 
   function saveToBackend(req) {

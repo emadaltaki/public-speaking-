@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#F1DDBC">
-  <title>Daily Challenge | Speak Up Fearless</title>
+  <title>Daily Challenge | speakUnshaken</title>
   <meta name="description" content="A new one-minute speaking topic every day. Keep your streak going and share it.">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Speak Up Fearless">
+  <meta property="og:site_name" content="speakUnshaken">
   <meta property="og:title" content="Take today's 1-minute speaking challenge">
   <meta property="og:description" content="A new speaking topic every day. Speak for one minute, build your streak, and get comfortable talking.">
   <meta property="og:url" content="https://speakup-ca500.web.app/games/daily">
@@ -165,7 +165,7 @@
         dWhy: 'Why one minute a day works', dWhy1: 'Short and easy, so it fits any day', dWhy2: 'Speaking often is what makes the nerves fade', dWhy3: 'Your streak shows how far you have come',
         dEndTitle: 'You did it!', dEndBody: 'One minute about "{topic}". See you tomorrow for a new one.',
         dEndStreak: 'day streak', dEndPractice: 'Nice practice! Your streak already counts today.',
-        dShared: 'Copied! Paste it anywhere to share.', dLinkCopied: 'Link copied! Paste it in any chat to share.', dShareText1: "I just did today's 1-minute speaking challenge on Speak Up Fearless. My topic: \"{topic}\". Your turn:", dSaved: 'Saved your streak card.', dShareText: "I've spoken every day for {n} days on Speak Up Fearless. Today's topic: \"{topic}\". Try today's challenge:",
+        dShared: 'Copied! Paste it anywhere to share.', dLinkCopied: 'Link copied! Paste it in any chat to share.', dShareText1: "I just did today's 1-minute speaking challenge on speakUnshaken. My topic: \"{topic}\". Your turn:", dSaved: 'Saved your streak card.', dShareText: "I've spoken every day for {n} days on speakUnshaken. Today's topic: \"{topic}\". Try today's challenge:",
         dBackGames: 'All games', dFinish: "I'm done", dYou: 'Spoke for {n}',
         dFrom: '{name} is on a {n}-day speaking streak', dFromAnon: 'A friend is on a {n}-day speaking streak', dFrom1: '{name} just started a speaking streak',
         dHow1: 'Every day you get your own new topic, right here at the top.',
@@ -195,7 +195,7 @@
         dWhy: 'لماذا تنجح دقيقة يوميًا', dWhy1: 'قصيرة وسهلة فتناسب أي يوم', dWhy2: 'التحدث كثيرًا هو ما يُذهب التوتر', dWhy3: 'سلسلتك تُظهر كم تقدّمت',
         dEndTitle: 'أحسنت!', dEndBody: 'دقيقة عن «{topic}». نراك غدًا مع موضوع جديد.',
         dEndStreak: 'أيام متتالية', dEndPractice: 'تدريب رائع! يومك محسوب بالفعل في سلسلتك.',
-        dShared: 'تم النسخ! الصقه في أي مكان للمشاركة.', dLinkCopied: 'تم نسخ الرابط! الصقه في أي محادثة للمشاركة.', dShareText1: 'أنهيت للتو تحدي الدقيقة لليوم على Speak Up Fearless. موضوعي: «{topic}». دورك:', dSaved: 'حفظنا بطاقة سلسلتك.', dShareText: 'تحدّثت كل يوم لمدة {n} أيام على Speak Up Fearless. موضوع اليوم: «{topic}». جرّب تحدي اليوم:',
+        dShared: 'تم النسخ! الصقه في أي مكان للمشاركة.', dLinkCopied: 'تم نسخ الرابط! الصقه في أي محادثة للمشاركة.', dShareText1: 'أنهيت للتو تحدي الدقيقة لليوم على speakUnshaken. موضوعي: «{topic}». دورك:', dSaved: 'حفظنا بطاقة سلسلتك.', dShareText: 'تحدّثت كل يوم لمدة {n} أيام على speakUnshaken. موضوع اليوم: «{topic}». جرّب تحدي اليوم:',
         dBackGames: 'كل الألعاب', dFinish: 'انتهيت', dYou: 'تحدّثت {n}',
         dFrom: '{name} يتحدث يوميًا منذ {n} أيام', dFromAnon: 'صديقك يتحدث يوميًا منذ {n} أيام', dFrom1: '{name} بدأ سلسلة تحدّث للتو',
         dHow1: 'كل يوم تحصل على موضوع جديد خاص بك، هنا في الأعلى.',
@@ -222,7 +222,7 @@
       var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>';
       var LANG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h9M8.5 3v2M6 5c.5 3.5 2.6 6.3 5.5 8M11 5c-.8 3.6-3 6.6-7 8.5"/><path d="m12 21 4.5-10 4.5 10M13.6 17.5h5.8"/></svg>';
       var BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>';
-      document.title = t('dTitle') + ' | Speak Up Fearless';
+      document.title = t('dTitle') + ' | speakUnshaken';
 
       // ------------------------------------------------------------ dates and streaks
       function dayKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -558,7 +558,7 @@
         var head = S.lang === 'ar' ? '800 {s}px Cairo, sans-serif' : '800 {s}px Montserrat, sans-serif';
         var body = S.lang === 'ar' ? '600 {s}px Cairo, sans-serif' : '600 {s}px Inter, sans-serif';
         var f = function (tpl, size) { return tpl.replace('{s}', size); };
-        x.font = f(body, 40); x.globalAlpha = .9; x.fillText('SPEAK UP FEARLESS', 540, 150); x.globalAlpha = 1;
+        x.font = f(body, 40); x.globalAlpha = .9; x.fillText('SPEAKUNSHAKEN', 540, 150); x.globalAlpha = 1;
         x.font = '220px serif'; x.fillText('🔥', 540, 470);
         x.font = f(head, 200); x.fillText(String(n), 540, 700);
         x.font = f(head, 60); x.fillText(t('dEndStreak'), 540, 790);
