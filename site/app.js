@@ -8,8 +8,7 @@
   // own Firebase project and backend, so test accounts never touch real ones.
   var IS_DEV = /^dev\.|^speakup-dev-fbb4b\./.test(location.hostname);
   var PROD_API = 'https://public-speaking-backend.vercel.app';
-  // Until the dev backend has its own address, dev uses PROD_API.
-  var DEV_API = PROD_API;
+  var DEV_API = 'https://public-speaking-backend-git-dev-emad-altakis-projects.vercel.app';
   var API = IS_DEV ? DEV_API : PROD_API;
 
   // Dev site: a small badge so nobody mistakes it for the real site.

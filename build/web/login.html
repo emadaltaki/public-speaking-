@@ -587,8 +587,7 @@
     // profile exists before they play. Never blocks sign-in for long: if the
     // API is slow or down, the site carries on and the account is created on
     // the next API call instead.
-    // Until the dev backend has its own address, dev uses the real one.
-    const API_BASE = IS_DEV ? 'https://public-speaking-backend.vercel.app' : 'https://public-speaking-backend.vercel.app';
+    const API_BASE = IS_DEV ? 'https://public-speaking-backend-git-dev-emad-altakis-projects.vercel.app' : 'https://public-speaking-backend.vercel.app';
     function syncAccount(user, name) {
       return Promise.race([syncAccountNow(user, name), new Promise((r) => setTimeout(r, 5000))]);
     }
