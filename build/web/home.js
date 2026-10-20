@@ -9,8 +9,7 @@
   // own Firebase project and backend, so test accounts never touch real ones.
   var IS_DEV = /^dev\.|^speakup-dev-fbb4b\./.test(location.hostname);
   var PROD_API = 'https://public-speaking-backend.vercel.app';
-  // Until the dev backend has its own address, dev uses PROD_API.
-  var DEV_API = PROD_API;
+  var DEV_API = 'https://public-speaking-backend-git-dev-emad-altakis-projects.vercel.app';
   var AUTH_KEY = 'firebase:authUser:' + (IS_DEV ? 'AIzaSyAb3AF_ECZ84HSQd0gdta9U93UF62K9Fdk' : 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow') + ':[DEFAULT]';
   var BOOKING_ENDPOINT = 'https://formsubmit.co/ajax/speakupunshaken@gmail.com';
   // Our own backend keeps a copy of each request; the email above stays the
