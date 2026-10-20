@@ -643,6 +643,71 @@
 
 
     @media (max-width: 1400px) { .nav a { padding: 8px 7px; font-size: 14.5px; } .hbtn { padding: 0 8px; } .site-header .cta { padding: 0 16px; margin-inline-start: 4px; } .brand span { font-size: 18px; } }
+    /* AI Speech Coach showcase */
+    .hero-coach { display: inline-flex; align-items: center; gap: 8px; margin-inline-start: 8px; padding: 6px 12px 6px 6px; border-radius: 999px; background: linear-gradient(135deg, #2F7A67, #5B3C86); color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 14px -8px rgba(47,122,103,.9); vertical-align: middle; }
+    .hero-coach b { display: grid; place-items: center; height: 20px; padding: 0 8px; border-radius: 999px; background: rgba(255,255,255,.22); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; }
+    .hero-coach:hover { filter: brightness(1.08); }
+    .coach-band { position: relative; padding: 84px 0; overflow: hidden; color: #EEF5F2; background: radial-gradient(900px 420px at 90% 0%, rgba(122,78,154,.55), transparent 60%), radial-gradient(800px 400px at 0% 100%, rgba(62,142,122,.55), transparent 60%), #15201D; }
+    .coach-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+    .coach-new { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); font-size: 13px; font-weight: 800; letter-spacing: .04em; color: #CFEDE4; }
+    .coach-new .spark { display: inline-block; color: #F2C66D; animation: sparkle 2.4s ease-in-out infinite; }
+    @keyframes sparkle { 50% { transform: scale(1.35) rotate(20deg); } }
+    .coach-band .s-title { color: #fff; margin-top: 18px; }
+    .coach-lead { margin: 14px 0 0; max-width: 560px; color: #C3D6D0; font-size: 18px; }
+    .coach-feats { list-style: none; padding: 0; margin: 26px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .coach-feats li { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+    .cf-ic { flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; background: rgba(255,255,255,.1); font-size: 19px; }
+    .coach-feats b { display: block; color: #fff; font-size: 15.5px; }
+    .coach-feats small { display: block; margin-top: 2px; color: #AFC6BF; font-size: 13.5px; line-height: 1.4; }
+    .coach-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 28px; }
+    .btn-coach { background: linear-gradient(135deg, #3E8E7A, #6B4A9A); color: #fff; min-height: 56px; font-size: 18px; box-shadow: 0 14px 28px -12px rgba(62,142,122,.9); }
+    .btn-coach svg { width: 22px; height: 22px; }
+    .btn-coach:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .coach-note { color: #AFC6BF; font-size: 13.5px; font-weight: 600; }
+    .coach-demo { display: block; position: relative; padding: 22px; border-radius: 26px; background: #FBF8F4; color: #2B2118; text-decoration: none; box-shadow: 0 40px 70px -30px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.08); transform: rotate(1.5deg); transition: transform .3s; }
+    :root[dir="rtl"] .coach-demo { transform: rotate(-1.5deg); }
+    .coach-demo:hover { transform: rotate(0) translateY(-4px); }
+    .cd-top { display: flex; align-items: center; gap: 16px; }
+    .cd-ring { position: relative; flex: none; width: 92px; height: 92px; display: grid; place-content: center; text-align: center; }
+    .cd-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+    .cd-ring circle { fill: none; stroke-width: 10; }
+    .cd-ring .bg { stroke: #E6EFEC; }
+    .cd-ring .fg { stroke: #3E8E7A; stroke-linecap: round; stroke-dasharray: 327; stroke-dashoffset: 327; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1) .2s; }
+    .coach-demo.in .cd-ring .fg { stroke-dashoffset: 59; }
+    .cd-ring b { font-family: var(--head); font-size: 26px; font-weight: 900; line-height: 1; }
+    .cd-ring small { font-size: 11px; color: #7A6A5C; font-weight: 700; }
+    .cd-head small { color: #2F7A67; font-weight: 800; font-size: 13px; }
+    .cd-head b { display: block; font-family: var(--head); font-size: 20px; line-height: 1.2; }
+    .cd-tag { display: inline-block; margin-top: 6px; padding: 2px 10px; border-radius: 999px; background: #F1ECE6; font-size: 12px; font-weight: 700; }
+    .cd-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+    .cd-stats span { padding: 10px 6px; border-radius: 14px; background: #F3EEE8; text-align: center; }
+    .cd-stats b { display: block; font-family: var(--head); font-size: 20px; }
+    .cd-stats small { font-size: 11.5px; color: #7A6A5C; font-weight: 600; }
+    .cd-pace { margin-top: 26px; display: flex; align-items: flex-end; gap: 14px; }
+    .cd-pace > small { font-size: 12px; font-weight: 800; color: #7A6A5C; text-transform: uppercase; letter-spacing: .08em; }
+    .cd-bars { flex: 1; height: 62px; display: flex; align-items: flex-end; gap: 10px; }
+    .cd-bars i { position: relative; flex: 1; height: 4%; border-radius: 8px 8px 3px 3px; background: #3F7D4E; transition: height 1s cubic-bezier(.2,.8,.2,1) .5s; }
+    .cd-bars i.hot { background: #B4583A; }
+    .coach-demo.in .cd-bars i { height: var(--h); }
+    .cd-bars em { position: absolute; top: -17px; left: 50%; transform: translateX(-50%); font-style: normal; font-size: 11px; font-weight: 800; }
+    .cd-words { margin: 18px 0 0; padding: 10px 12px; border-radius: 12px; background: #fff; border: 1px solid #ECE3D9; font-size: 14px; color: #5A4A3D; }
+    .cd-words mark { padding: 0 4px; border-radius: 5px; background: #FBE3D6; color: #B4583A; font-weight: 800; }
+    .cd-next { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding: 10px 12px; border-radius: 14px; background: linear-gradient(135deg, #E6F2EE, #EFE7F6); }
+    .cd-next small { display: block; font-size: 11.5px; font-weight: 800; color: #2F7A67; text-transform: uppercase; letter-spacing: .06em; }
+    .cd-next b { font-size: 14px; }
+    @media (prefers-reduced-motion: reduce) { .coach-new .spark { animation: none; } .cd-ring .fg, .cd-bars i { transition: none; } }
+    @media (max-width: 1023px) { .coach-grid { grid-template-columns: 1fr; gap: 40px; } .coach-demo { max-width: 460px; } }
+    @media (max-width: 640px) {
+      .coach-band { padding: 52px 0; }
+      .coach-lead { font-size: 16px; }
+      .coach-feats { grid-template-columns: 1fr; gap: 8px; }
+      .coach-feats li { padding: 10px 12px; }
+      .coach-ctas .btn-coach { width: 100%; }
+      .coach-note { width: 100%; text-align: center; }
+      .coach-demo { padding: 16px; transform: none; }
+      :root[dir="rtl"] .coach-demo { transform: none; }
+      .hero-coach { margin: 10px 0 0; }
+    }
     /* Games showcase */
     .nav-games { position: relative; }
     .nav-games em, .mobile-menu .nav-games em { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; background: var(--primary); color: var(--on-primary); margin-inline-start: 6px; vertical-align: 2px; }
@@ -948,7 +1013,8 @@
         <a href="#why" data-t="navWhy">Why we do this</a>
         <a href="#sessions" data-t="navSessions">Sessions</a>
         <a href="#community" data-t="navCommunity">Community</a>
-        <a href="/games" class="nav-games"><span data-t="navGames">Games</span><em data-t="newBadge">New</em></a>
+        <a href="/games/speech-coach" class="nav-games"><span data-t="navCoach">AI Coach</span><em data-t="newBadge">New</em></a>
+        <a href="/games" data-t="navGames">Games</a>
         <a href="#faq" data-t="navFaq">FAQ</a>
         <a href="#book" data-t="navContact">Contact</a>
       </nav>
@@ -964,7 +1030,8 @@
     <a href="#why" data-t="navWhy">Why we do this</a>
     <a href="#sessions" data-t="navSessions">Sessions</a>
     <a href="#community" data-t="navCommunity">Community</a>
-    <a href="/games" class="nav-games"><span data-t="navGames">Games</span><em data-t="newBadge">New</em></a>
+    <a href="/games/speech-coach" class="nav-games"><span data-t="navCoach">AI Coach</span><em data-t="newBadge">New</em></a>
+    <a href="/games" data-t="navGames">Games</a>
     <a href="#faq" data-t="navFaq">FAQ</a>
     <a href="#book" data-t="navContact">Contact</a>
     <button class="item" type="button" id="langBtn2"><svg class="i" aria-hidden="true"><use href="#i-lang"/></svg><span data-t="langLong">العربية</span></button>
@@ -978,6 +1045,7 @@
       <div class="wrap">
         <div>
           <span class="loc"><span class="dot"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Public speaking practice, online or around the GTA</span></span>
+          <a class="hero-coach" href="#coach"><b data-t="newBadge">New</b><span data-t="heroCoach">Free AI Speech Coach</span></a>
           <h1 data-t="heroHeadline">Get speaking. Let the nerves go.</h1>
           <p class="lead" data-t="heroSupport">We help people who get nervous speaking in front of others. Small friendly groups, fun speaking exercises, one small step at a time, until the anxiety fades.</p>
           <ul class="how3">
@@ -997,6 +1065,41 @@
           <button type="button" data-photo="0"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host leading a Speak Up Fearless workshop in front of a small group" data-t-alt="heroImageAlt" width="460" height="500" fetchpriority="high"></button>
           <div class="badge"><span class="ic warm"><svg aria-hidden="true"><use href="#i-group"/></svg></span><span><b data-t="badgeTitle">Everyone gets a turn</b><small data-t="badgeBody">Mistakes are welcome here.</small></span></div>
         </figure>
+      </div>
+    </section>
+
+    <!-- AI Speech Coach -->
+    <section class="coach-band" id="coach">
+      <div class="wrap coach-grid">
+        <div class="coach-copy">
+          <span class="coach-new"><span class="spark" aria-hidden="true">✦</span><span data-t="coachNew">New · Free AI Speech Coach</span></span>
+          <h2 class="s-title" data-t="coachTitle">Talk for one minute. Get a coach's report in seconds.</h2>
+          <p class="coach-lead" data-t="coachLead">Record yourself on any topic, right in your browser. Our AI coach listens and shows you exactly what to work on next.</p>
+          <ul class="coach-feats">
+            <li><span class="cf-ic">⏱️</span><span><b data-t="coachF1t">Your pace</b><small data-t="coachF1b">See where you sped up or slowed down.</small></span></li>
+            <li><span class="cf-ic">💬</span><span><b data-t="coachF2t">Every “um” and “uh”</b><small data-t="coachF2b">Filler words, counted and shown in your words.</small></span></li>
+            <li><span class="cf-ic">🧭</span><span><b data-t="coachF3t">Your story</b><small data-t="coachF3b">How well your opening, middle and ending connect.</small></span></li>
+            <li><span class="cf-ic">🎯</span><span><b data-t="coachF4t">What to practise</b><small data-t="coachF4b">A game picked for you, then try again and see your progress.</small></span></li>
+          </ul>
+          <div class="coach-ctas">
+            <a class="btn btn-coach" href="/games/speech-coach" data-track="coach_home"><svg aria-hidden="true"><use href="#i-mic"/></svg><span data-t="coachCta">Try the AI coach free</span></a>
+            <span class="coach-note" data-t="coachNote">Free account · Works on your phone · English or Arabic</span>
+          </div>
+        </div>
+        <a class="coach-demo" href="/games/speech-coach" aria-label="Speech Coach sample report" data-t-aria="coachDemoAria" tabindex="-1">
+          <div class="cd-top">
+            <div class="cd-ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg"/></svg><b>8.2</b><small>/10</small></div>
+            <div class="cd-head"><small data-t="coachDemoVerdict">Great talk!</small><b data-t="coachDemoTopic">My first job</b><span class="cd-tag" data-t="coachDemoStyle">📖 Story</span></div>
+          </div>
+          <div class="cd-stats">
+            <span><b>148</b><small data-t="coachDemoWpm">words / min</small></span>
+            <span><b>3</b><small data-t="coachDemoFill">fillers</small></span>
+            <span><b>1</b><small data-t="coachDemoPause">long pause</small></span>
+          </div>
+          <div class="cd-pace"><small data-t="coachDemoPace">Pace</small><div class="cd-bars"><i style="--h:62%"><em>138</em></i><i class="hot" style="--h:84%"><em>172</em></i></div></div>
+          <p class="cd-words" dir="ltr">So my first job was… <mark>um</mark> at a bakery, and <mark>like</mark> the owner…</p>
+          <div class="cd-next"><span>🎯</span><span><small data-t="coachDemoNextL">Practise next</small><b data-t="coachDemoNext">Triple Step, for smoother transitions</b></span></div>
+        </a>
       </div>
     </section>
 
