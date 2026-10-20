@@ -1,104 +1,51 @@
 {
-  "hosting": [
-    {
-      "target": "prod",
-      "public": "build/web",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**",
-        "vercel.json"
-      ],
-      "cleanUrls": true,
-      "trailingSlash": false,
-      "headers": [
-        {
-          "source": "**",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "public, max-age=0, must-revalidate"
-            }
-          ]
-        },
-        {
-          "source": "/login",
-          "headers": [
-            {
-              "key": "Cross-Origin-Opener-Policy",
-              "value": "same-origin-allow-popups"
-            }
-          ]
-        },
-        {
-          "source": "/login.html",
-          "headers": [
-            {
-              "key": "Cross-Origin-Opener-Policy",
-              "value": "same-origin-allow-popups"
-            }
-          ]
-        },
-        {
-          "source": "/assets/**",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "public, max-age=86400"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "target": "dev",
-      "public": "build/web",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**",
-        "vercel.json"
-      ],
-      "cleanUrls": true,
-      "trailingSlash": false,
-      "headers": [
-        {
-          "source": "**",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "public, max-age=0, must-revalidate"
-            }
-          ]
-        },
-        {
-          "source": "/login",
-          "headers": [
-            {
-              "key": "Cross-Origin-Opener-Policy",
-              "value": "same-origin-allow-popups"
-            }
-          ]
-        },
-        {
-          "source": "/login.html",
-          "headers": [
-            {
-              "key": "Cross-Origin-Opener-Policy",
-              "value": "same-origin-allow-popups"
-            }
-          ]
-        },
-        {
-          "source": "/assets/**",
-          "headers": [
-            {
-              "key": "Cache-Control",
-              "value": "public, max-age=86400"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "vercel.json"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/login",
+        "headers": [
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin-allow-popups"
+          }
+        ]
+      },
+      {
+        "source": "/login.html",
+        "headers": [
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin-allow-popups"
+          }
+        ]
+      },
+      {
+        "source": "/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      }
+    ]
+  }
 }
