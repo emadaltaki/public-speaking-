@@ -5,6 +5,16 @@
   'use strict';
 
   var API = 'https://public-speaking-backend.vercel.app';
+
+  // Dev site (dev.speakunshaken.com or speakunshaken-dev.web.app): a small badge
+  // so nobody mistakes it for the real site.
+  if (/^dev\.|-dev\.web\.app$|-dev\.firebaseapp\.com$/.test(location.hostname)) {
+    var devTag = document.createElement('div');
+    devTag.textContent = 'DEV';
+    devTag.setAttribute('aria-hidden', 'true');
+    devTag.style.cssText = 'position:fixed;z-index:9999;bottom:10px;left:10px;padding:3px 9px;border-radius:999px;background:#7A4E9A;color:#fff;font:800 11px/1.4 system-ui,sans-serif;letter-spacing:.08em;pointer-events:none;opacity:.9';
+    (document.body || document.documentElement).appendChild(devTag);
+  }
   var API_KEY = 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow';
   var AUTH_KEY = 'firebase:authUser:' + API_KEY + ':[DEFAULT]';
   var root = document.documentElement;
