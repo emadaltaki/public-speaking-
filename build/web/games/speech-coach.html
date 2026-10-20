@@ -352,7 +352,8 @@
             catch (_) { try { rec = new MediaRecorder(stream); } catch (e) { stopAll(); return readyScreen(t('cNoRecorder')); } }
             rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
             rec.onstop = function () { done(); };
-            rec.start(1000);
+            // One piece at the end: Safari's MP4 made of 1-second pieces plays badly.
+            rec.start();
             st.body.innerHTML = '<div class="rec-ring">' + G.pie(1) + '<div class="mic" id="mic">' + S.ICONS[ID] + '</div></div><div class="rec" style="margin-top:12px">' + esc(t('cRecording')) + '</div>' +
               '<div class="meter" aria-hidden="true">' + Array.apply(null, Array(16)).map(function () { return '<i></i>'; }).join('') + '</div>' +
               '<div class="tp"><div class="topic-label">' + esc(t('conductorTopic')) + '</div><div class="topic">' + esc(topic) + '</div></div>' +
