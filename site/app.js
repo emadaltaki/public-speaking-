@@ -4,18 +4,23 @@
 (function () {
   'use strict';
 
-  var API = 'https://public-speaking-backend.vercel.app';
+  // The dev site (dev.speakunshaken.com, speakup-dev-fbb4b.web.app) has its
+  // own Firebase project and backend, so test accounts never touch real ones.
+  var IS_DEV = /^dev\.|^speakup-dev-fbb4b\./.test(location.hostname);
+  var PROD_API = 'https://public-speaking-backend.vercel.app';
+  // Until the dev backend has its own address, dev uses PROD_API.
+  var DEV_API = PROD_API;
+  var API = IS_DEV ? DEV_API : PROD_API;
 
-  // Dev site (dev.speakunshaken.com or speakunshaken-dev.web.app): a small badge
-  // so nobody mistakes it for the real site.
-  if (/^dev\.|-dev\.web\.app$|-dev\.firebaseapp\.com$/.test(location.hostname)) {
+  // Dev site: a small badge so nobody mistakes it for the real site.
+  if (IS_DEV) {
     var devTag = document.createElement('div');
     devTag.textContent = 'DEV';
     devTag.setAttribute('aria-hidden', 'true');
     devTag.style.cssText = 'position:fixed;z-index:9999;bottom:10px;left:10px;padding:3px 9px;border-radius:999px;background:#7A4E9A;color:#fff;font:800 11px/1.4 system-ui,sans-serif;letter-spacing:.08em;pointer-events:none;opacity:.9';
     (document.body || document.documentElement).appendChild(devTag);
   }
-  var API_KEY = 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow';
+  var API_KEY = IS_DEV ? 'AIzaSyAb3AF_ECZ84HSQd0gdta9U93UF62K9Fdk' : 'AIzaSyD61GC3xaetEqOwPYhYltxMp-FAsFLX6Ow';
   var AUTH_KEY = 'firebase:authUser:' + API_KEY + ':[DEFAULT]';
   var root = document.documentElement;
 
