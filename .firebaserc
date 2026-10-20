@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "speakup-ca500"
+  },
+  "targets": {
+    "speakup-ca500": {
+      "hosting": {
+        "prod": [
+          "speakup-ca500"
+        ],
+        "dev": [
+          "speakunshaken-dev"
+        ]
+      }
+    }
   }
 }
