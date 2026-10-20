@@ -405,23 +405,27 @@
       });
     });
     var k = 0, tick = setInterval(function () { k++; if (num) num.textContent = String(Math.min(n, k)); if (k >= n) clearInterval(tick); }, 1100 / Math.max(n, 1));
-    if (n >= 8) {
-      var box = document.createElement('div');
-      box.className = 'sc-confetti';
-      var colors = ['#E0703E', '#D49A4E', '#3E8E7A', '#7A4E9A', '#3F6F8E'];
-      for (var c = 0; c < 36; c++) {
-        var p = document.createElement('i');
-        p.style.left = (Math.random() * 100) + '%';
-        p.style.background = colors[c % colors.length];
-        p.style.animationDelay = (Math.random() * 0.5) + 's';
-        p.style.animationDuration = (1.6 + Math.random() * 1.2) + 's';
-        p.style.transform = 'rotate(' + Math.round(Math.random() * 360) + 'deg)';
-        box.appendChild(p);
-      }
-      document.body.appendChild(box);
-      setTimeout(function () { box.remove(); }, 3500);
-    }
+    if (n >= 8) confetti();
   }
 
-  window.Coach = { render: render, progress: progress, mmss: mmss, clamp: clamp, band: band, CATS: CATS };
+  // A short burst of confetti over the page.
+  function confetti() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var box = document.createElement('div');
+    box.className = 'sc-confetti';
+    var colors = ['#E0703E', '#D49A4E', '#3E8E7A', '#7A4E9A', '#3F6F8E'];
+    for (var c = 0; c < 36; c++) {
+      var p = document.createElement('i');
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.background = colors[c % colors.length];
+      p.style.animationDelay = (Math.random() * 0.5) + 's';
+      p.style.animationDuration = (1.6 + Math.random() * 1.2) + 's';
+      p.style.transform = 'rotate(' + Math.round(Math.random() * 360) + 'deg)';
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(function () { box.remove(); }, 3500);
+  }
+
+  window.Coach = { render: render, progress: progress, confetti: confetti, transcriptHtml: transcript, mmss: mmss, clamp: clamp, band: band, CATS: CATS };
 })();
