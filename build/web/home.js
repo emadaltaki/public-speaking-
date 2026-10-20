@@ -85,7 +85,14 @@
     lbD5: 'ألعاب مثل Triple Step تجعلك تتحدث واقفًا والمجموعة تشجّعك.',
     lbD6: 'توقّع الكثير من الضحك. معظم الناس يغادرون أخفّ مما دخلوا.',
     skip: 'انتقل إلى المحتوى', navWhy: 'لماذا نفعل هذا', navSessions: 'الجلسات', navCommunity: 'مجتمعنا',
-    navGames: 'الألعاب', newBadge: 'جديد', playNow: 'العب',
+    navGames: 'الألعاب', newBadge: 'جديد', playNow: 'العب', navCoach: 'المدرب الذكي', heroCoach: 'مدرب إلقاء مجاني بالذكاء الاصطناعي',
+    coachNew: 'جديد · مدرب إلقاء مجاني بالذكاء الاصطناعي', coachTitle: 'تحدّث لدقيقة واحدة. واحصل على تقرير مدرب خلال ثوانٍ.',
+    coachLead: 'سجّل نفسك عن أي موضوع من متصفحك مباشرة. يستمع مدرب الذكاء الاصطناعي ويبيّن لك بالضبط ما تعمل عليه بعد ذلك.',
+    coachF1t: 'سرعتك', coachF1b: 'اعرف أين أسرعت وأين أبطأت.', coachF2t: 'كل «اممم» و«آآ»', coachF2b: 'كلمات الحشو، معدودة وظاهرة في كلامك.',
+    coachF3t: 'قصتك', coachF3b: 'مدى ترابط بدايتك ووسطك ونهايتك.', coachF4t: 'ماذا تتمرّن', coachF4b: 'لعبة مختارة لك، ثم جرّب مجددًا وشاهد تقدّمك.',
+    coachCta: 'جرّب المدرب الذكي مجانًا', coachNote: 'حساب مجاني · يعمل على هاتفك · بالعربية أو الإنجليزية', coachDemoAria: 'مثال على تقرير مدرب الإلقاء',
+    coachDemoVerdict: 'حديث رائع!', coachDemoTopic: 'وظيفتي الأولى', coachDemoStyle: '📖 قصة', coachDemoWpm: 'كلمة / دقيقة', coachDemoFill: 'كلمات حشو',
+    coachDemoPause: 'وقفة طويلة', coachDemoPace: 'السرعة', coachDemoNextL: 'تمرّن بعد ذلك', coachDemoNext: 'الخطوة الثلاثية، لانتقالات أسلس',
     gamesEyebrow: 'ألعاب تحدّث مجانية', gamesHeadline: 'جهّز صوتك للحديث في دقيقتين.',
     gamesIntro: 'ألعاب سريعة تلعبها وحدك أو مع أصدقائك. كل ما تحتاجه حساب مجاني.', gamesCta: 'العب الآن',
     gTriple: 'الخطوة الثلاثية', gTripleTag: 'تحدّث عن موضوع وأدخل الكلمات المفاجئة في كلامك.',
@@ -351,8 +358,9 @@
   paintEdges();
 
   // ---------------------------------------------------------------- feelings
-  // Cards slide in once, and flip to show how the sessions help.
-  var feelCards = all('.feelings li');
+  // Cards slide in once, and flip to show how the sessions help. The sample
+  // coach report fills its score ring and pace bars the same way.
+  var feelCards = all('.feelings li').concat(all('.coach-demo'));
   if ('IntersectionObserver' in window) {
     var feelIo = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); feelIo.unobserve(e.target); } });
