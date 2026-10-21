@@ -125,7 +125,7 @@
           content.innerHTML = dailyCard() + S.guestBar() + '<div class="grid">' + S.ORDER.map(function (id) {
             var g = games[id], lock = S.locked(id);
             return '<article class="game g-' + id + '"><span class="g-ic">' + S.ICONS[id] + '</span>' +
-              (lock ? '<span class="lockchip">' + S.LOCK + S.esc(S.t('lockBadge')) + '</span>' : '') +
+              (lock ? '<span class="lockchip">' + S.LOCK + S.esc(S.t('lockBadge')) + '</span>' : S.freeTry(id) ? '<span class="lockchip">✨ ' + S.esc(S.t('freeTry')) + '</span>' : '') +
               '<h2>' + S.esc(g.title) + '</h2><p>' + S.esc(g.tagline) + '</p>' +
               (lock ? '<p class="helps">' + S.esc(S.pitch(id)) + '</p>' : '') +
               '<ul class="skills">' + g.skills.map(function (k) { return '<li>' + S.esc(k) + '</li>'; }).join('') + '</ul>' +

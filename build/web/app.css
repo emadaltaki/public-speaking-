@@ -190,6 +190,9 @@ svg.i { width: 1em; height: 1em; flex: none; }
 .lock-txt small { display: block; margin-top: 2px; color: var(--muted); font-size: 13.5px; line-height: 1.4; }
 .lock-pad { width: 30px; height: 30px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--soft); color: var(--primary); }
 .lock-pad svg { width: 15px; height: 15px; }
+.try-pad { flex: none; padding: 5px 11px; border-radius: 999px; background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+.lock-used { margin: 0 0 12px; padding: 10px 14px; border-radius: 14px; background: var(--warm-soft); color: var(--ink); font-weight: 600; line-height: 1.45; }
+.locked > .free-now { margin: 16px 0 0; }
 .free-now { position: relative; display: flex; align-items: center; gap: 14px; margin: 0 0 16px; padding: 18px 20px; border-radius: 24px; color: #fff; text-decoration: none; overflow: hidden; }
 .free-now .g-ic { width: 52px; height: 52px; flex: none; border-radius: 16px; display: grid; place-items: center; background: rgba(255,255,255,.2); }
 .free-now .g-ic svg { width: 28px; height: 28px; }

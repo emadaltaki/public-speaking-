@@ -49,7 +49,8 @@
       joinCta: 'Create my free account', joinHave: 'Already have an account?', joinSignIn: 'Sign in', joinFine: 'Takes 30 seconds. No card, no spam.',
       verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
       minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s',
-      guestBar: "Today's challenge is free to play. Make a free account to unlock all {n} speaking games.", guestBarCta: 'Unlock all games',
+      guestBar: "Today's challenge is always free, and you can try each game once without an account. Make a free account to play them all as often as you like.", guestBarCta: 'Create free account',
+      freeTry: '1 free try', endTryDone: 'That was your free try. Make a free account to keep playing all the games, and keep this round.', lockUsed: "That was your free try of {game}. Make a free account to keep playing, and keep the rounds you've played.",
       lockBadge: 'Free with an account', unlock: 'Unlock free', freeNow: 'Free, no sign-up',
       lockTitle: 'Unlock {game} for free', lockAll: 'One free account unlocks all of these',
       lockB1: 'Every game, free forever', lockB2: 'Your streak and progress saved on every device', lockB3: 'Takes 30 seconds, no card needed',
@@ -72,7 +73,8 @@
       joinCta: 'أنشئ حسابي المجاني', joinHave: 'لديك حساب؟', joinSignIn: 'سجّل الدخول', joinFine: 'يستغرق 30 ثانية. بلا بطاقة وبلا رسائل مزعجة.',
       verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
       minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث',
-      guestBar: 'تحدي اليوم مجاني للعب. أنشئ حسابًا مجانيًا لتفتح ألعاب التحدث الـ{n} كلها.', guestBarCta: 'افتح كل الألعاب',
+      guestBar: 'تحدي اليوم مجاني دائمًا، ويمكنك تجربة كل لعبة مرة واحدة بلا حساب. أنشئ حسابًا مجانيًا لتلعبها كلها متى شئت.', guestBarCta: 'أنشئ حسابًا مجانيًا',
+      freeTry: 'تجربة مجانية واحدة', endTryDone: 'كانت هذه تجربتك المجانية. أنشئ حسابًا مجانيًا لتواصل لعب كل الألعاب وتحتفظ بهذه الجولة.', lockUsed: 'كانت هذه تجربتك المجانية لـ {game}. أنشئ حسابًا مجانيًا لتواصل اللعب وتحتفظ بجولاتك.',
       lockBadge: 'مجانًا مع حساب', unlock: 'افتحها مجانًا', freeNow: 'مجاني، بلا تسجيل',
       lockTitle: 'افتح {game} مجانًا', lockAll: 'حساب مجاني واحد يفتح كل هذه الألعاب',
       lockB1: 'كل الألعاب، مجانًا للأبد', lockB2: 'سلسلتك وتقدّمك محفوظان على كل أجهزتك', lockB3: 'يستغرق 30 ثانية، بلا بطاقة',
@@ -356,9 +358,18 @@
     }
   };
   function pitch(id) { return (PITCH[lang] || PITCH.en)[id] || ''; }
-  // Without an account only the daily challenge is open.
+  // Without an account the daily challenge is always open, and every other
+  // game can be played once on this device; after that it asks them to sign
+  // up. Speech Coach waits for the backend to score guests (GUEST_TRY).
   var FREE_GAME = 'daily';
-  function locked(id) { return !user() && !!id && id !== FREE_GAME; }
+  var GUEST_TRY = { 'speech-coach': false };
+  function triedAsGuest(id) { return readList(GUEST_HISTORY).some(function (r) { return r.gameId === id; }); }
+  function locked(id) {
+    if (user() || !id || id === FREE_GAME) return false;
+    return GUEST_TRY[id] === false || triedAsGuest(id);
+  }
+  // A guest who still has their one free try of this game.
+  function freeTry(id) { return !user() && !!id && id !== FREE_GAME && !locked(id); }
 
   function loadGames() {
     if (GAMES) return Promise.resolve(GAMES);
@@ -560,7 +571,7 @@
     return '<ul class="lock-list">' + ORDER.filter(function (id) { return id !== except; }).map(function (id) {
       return '<li><a href="/games/' + id + '"><span class="lock-ic g-' + id + '">' + ICONS[id] + '</span>' +
         '<span class="lock-txt"><b>' + esc(games[id].title) + '</b><small>' + esc(pitch(id)) + '</small></span>' +
-        '<span class="lock-pad" aria-label="' + esc(t('lockBadge')) + '">' + LOCK + '</span></a></li>';
+        (freeTry(id) ? '<span class="try-pad">' + esc(t('freeTry')) + '</span>' : '<span class="lock-pad" aria-label="' + esc(t('lockBadge')) + '">' + LOCK + '</span>') + '</a></li>';
     }).join('') + '</ul>';
   }
   // A guest on a members' game: what this game does for them, every other
@@ -573,21 +584,22 @@
     return loadGames().then(function (games) {
       var g = games[id];
       var tick = function (icon, key) { return '<li><span class="tick">' + icon + '</span><span>' + esc(t(key)) + '</span></li>'; };
-      // The free daily challenge goes first: it's the one thing they can do
-      // right now without an account.
+      // The game they came for comes first; the free daily challenge (no
+      // account needed) is offered at the end.
       el.innerHTML = '<div class="locked">' +
-        '<a class="free-now g-daily" href="/games/daily"><span class="g-ic">' + ICONS.daily + '</span><span class="txt"><small>' + esc(t('freeNow')) + '</small>' +
-        '<b>' + esc(t('freeNowTitle')) + '</b><span>' + esc(t('freeNowBody')) + '</span></span><span class="go">' + esc(t('freeNowGo')) + ' →</span></a>' +
         '<div class="join join-inline">' +
         '<div class="join-top g-' + id + '"><span class="join-badge">' + LOCK + esc(t('lockBadge')) + '</span>' +
         '<div class="join-game"><span class="join-ic">' + ICONS[id] + '</span><span><b>' + esc(g.title) + '</b><small>' + esc(g.tagline || '') + '</small></span></div>' +
         '<p class="join-pitch">' + esc(pitch(id)) + '</p>' +
         (g.skills ? '<ul class="join-skills">' + g.skills.map(function (k) { return '<li>' + esc(k) + '</li>'; }).join('') + '</ul>' : '') + '</div>' +
-        '<div class="join-body"><h3>' + esc(t('lockTitle', { game: g.title })) + '</h3>' +
+        '<div class="join-body">' + (triedAsGuest(id) ? '<p class="lock-used">' + esc(t('lockUsed', { game: g.title })) + '</p>' : '') +
+        '<h3>' + esc(t('lockTitle', { game: g.title })) + '</h3>' +
         '<ul class="join-list">' + tick(ICONS['triple-step'], 'lockB1') + tick(TROPHY, 'lockB2') + tick(HEART, 'lockB3') + '</ul>' +
         '<a class="btn btn-primary join-cta" href="' + signUpHref() + '">' + esc(t('joinCta')) + '</a>' + (o.extra || '') +
         '<p class="join-alt">' + esc(t('joinHave')) + ' <a href="/login?next=' + encodeURIComponent(here) + '">' + esc(t('joinSignIn')) + '</a></p></div></div>' +
         '<section class="card lock-more"><h3>' + esc(t('lockAll')) + '</h3>' + lockedList(games, id) + '</section>' +
+        '<a class="free-now g-daily" href="/games/daily"><span class="g-ic">' + ICONS.daily + '</span><span class="txt"><small>' + esc(t('freeNow')) + '</small>' +
+        '<b>' + esc(t('freeNowTitle')) + '</b><span>' + esc(t('freeNowBody')) + '</span></span><span class="go">' + esc(t('freeNowGo')) + ' →</span></a>' +
         '</div>';
       return games;
     });
@@ -625,7 +637,7 @@
   adoptGuest();
 
   window.SUF = {
-    gate: gate, guestId: guestId, guestBar: guestBar, signUpHref: signUpHref, locked: locked, lockedList: lockedList, pitch: pitch, LOCK: LOCK,
+    gate: gate, freeTry: freeTry, guestId: guestId, guestBar: guestBar, signUpHref: signUpHref, locked: locked, lockedList: lockedList, pitch: pitch, LOCK: LOCK,
     lang: lang, t: t, addStrings: addStrings, esc: esc, store: store,
     user: user, signIn: signIn, signOut: signOut, api: api, upload: upload, idToken: idToken,
     cachedAvatar: cachedAvatar, refreshAvatar: refreshAvatar, saveAvatar: saveAvatar, onAvatar: onAvatar, avatarStyle: avatarStyle, pickPhoto: pickPhoto,

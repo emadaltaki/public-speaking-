@@ -233,8 +233,17 @@
     bar.setAttribute('stroke-dashoffset', (c * (1 - Math.max(0, Math.min(1, fraction)))).toFixed(1));
   }
 
-  // Results card over the stage.
+  // Results card over the stage. A guest who just used their one free try
+  // of this game is asked to make a free account instead of playing again.
   function end(o) {
+    var id = (location.pathname.match(/^\/games\/([\w-]+)/) || [])[1];
+    if (!S.user() && S.locked(id)) {
+      o = Object.assign({}, o, {
+        primary: t('joinCta'), onRetry: null,
+        onPrimary: function () { location.href = S.signUpHref(); },
+        extra: (o.extra || '') + '<p class="end-try">' + esc(t('endTryDone')) + '</p>'
+      });
+    }
     var el = document.createElement('div');
     el.className = 'end';
     el.innerHTML = '<div class="card"><div class="party">🎉</div><h2>' + esc(o.title) + '</h2>' + (o.message ? '<p>' + esc(o.message) + '</p>' : '') + (o.extra || '') +
