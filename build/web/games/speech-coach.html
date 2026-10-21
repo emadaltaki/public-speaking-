@@ -61,6 +61,8 @@
     .result-head h1 { font-size: 24px; margin: 0; white-space: nowrap; }
     .result-head a { flex: none; color: var(--accent); font-weight: 700; font-size: 14px; text-decoration: none; white-space: nowrap; }
     .result-head a::before { content: "✓ "; }
+    .result-head a.unsaved::before { content: none; }
+    .result-head a.unsaved { white-space: normal; }
     .join-sample { display: flex; width: 100%; min-height: 50px; margin-top: 10px; }
     .sample { margin-top: 26px; scroll-margin-top: 96px; }
     .sample .result-head { margin-bottom: 4px; }
@@ -131,6 +133,8 @@
         cErrOther: 'Something went wrong while scoring. Your recording is still here, so try again.',
         cRetrySend: 'Try scoring again', cResult: 'Your feedback', cAgain: 'Try the same topic', cNext: 'New topic', cSettings: 'Settings', cAll: 'All games',
         cSavedNote: 'Saved to your account.',
+        cGuestSave: 'Not saved yet. Make a free account to keep it.', cGuestUsed: "You've had your free scored talk. Make a free account to keep practising with the AI coach.",
+        cGuestKick: 'Your free try', cGuestHead: 'Keep this report and fix your slips', cGuestText: 'Make a free account to save your scores, play Fix-it mode for stars, and record as many talks as you like.',
         cGuestTitle: 'Get your talk scored by AI', cGuestBody: 'Every recording is scored by AI, so Speech Coach needs a free account. Below is a sample of the report you get back.',
         cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.',
         cStyle: 'Style of talk', cOptional: 'Optional', cStyleHelp: 'The coach judges your talk against the style you pick.',
@@ -156,6 +160,8 @@
         cErrOther: 'حدث خطأ أثناء التقييم. تسجيلك ما زال هنا، فحاول مرة أخرى.',
         cRetrySend: 'أعد محاولة التقييم', cResult: 'ملاحظاتك', cAgain: 'الموضوع نفسه', cNext: 'موضوع جديد', cSettings: 'الإعدادات', cAll: 'كل الألعاب',
         cSavedNote: 'حُفظ في حسابك.',
+        cGuestSave: 'لم يُحفظ بعد. أنشئ حسابًا مجانيًا لتحتفظ به.', cGuestUsed: 'استخدمت حديثك المقيَّم المجاني. أنشئ حسابًا مجانيًا لتواصل التدرّب مع مدرب الذكاء الاصطناعي.',
+        cGuestKick: 'تجربتك المجانية', cGuestHead: 'احتفظ بهذا التقرير وصحّح تعثّراتك', cGuestText: 'أنشئ حسابًا مجانيًا لتحفظ درجاتك، وتلعب وضع التصحيح لتجمع النجوم، وتسجّل أحاديث بقدر ما تشاء.',
         cGuestTitle: 'احصل على تقييم لحديثك بالذكاء الاصطناعي', cGuestBody: 'كل تسجيل يقيّمه الذكاء الاصطناعي، لذا يحتاج مدرب الإلقاء إلى حساب مجاني. في الأسفل مثال على التقرير الذي ستحصل عليه.',
         cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.',
         cStyle: 'أسلوب الحديث', cOptional: 'اختياري', cStyleHelp: 'يقيّم المدرب حديثك حسب الأسلوب الذي تختاره.',
@@ -446,7 +452,7 @@
             form.append('lang', S.lang);
             if (settings.style !== 'default') form.append('style', settings.style);
             form.append('durationSeconds', seconds.toFixed(1));
-            S.upload('/v1/speech/analyze', form, 120000).then(function (r) {
+            S.upload('/v1/speech/analyze', form, 120000, !S.user()).then(function (r) {
               clearInterval(ticker);
               if (r && r.status === 200 && r.body && r.body.scores) {
                 S.recordRound({ gameId: ID, spokenSeconds: seconds, topic: own ? null : topic }, true);
@@ -456,8 +462,14 @@
               var msg = !r ? t('cErrNet')
                 : (r.status === 404 || r.status === 503 || code === 'not_configured') ? t('cErrSetup')
                 : code === 'no_speech' ? t('cErrSpeech')
+                : code === 'guest_limit' || r.status === 401 ? t('cGuestUsed')
                 : r.status === 429 ? t('cErrLimit') : t('cErrOther');
-              var canResend = !(code === 'no_speech' || r && r.status === 429);
+              var canResend = !(code === 'no_speech' || r && (r.status === 429 || r.status === 401));
+              if (r && (code === 'guest_limit' || r.status === 401)) {
+                st.body.innerHTML = '<div class="mic">' + S.ICONS[ID] + '</div><p class="note" style="font-size:16px">' + esc(msg) + '</p>' +
+                  '<div class="controls"><a class="btn btn-primary" href="' + S.signUpHref() + '">' + esc(t('joinCta')) + '</a></div>';
+                return;
+              }
               st.body.innerHTML = '<div class="mic">' + S.ICONS[ID] + '</div><p class="note err" style="font-size:16px">' + esc(msg) + '</p>' +
                 '<div class="controls">' + (canResend ? '<button class="btn btn-primary" type="button" id="resend">' + G.ICON.repeat + esc(t('cRetrySend')) + '</button>' : '') +
                 '<button class="btn btn-ghost" type="button" id="again">' + esc(t('cCancel')) + '</button></div>';
@@ -471,11 +483,17 @@
           function showResult(report, blob) {
             st.close();
             var url = URL.createObjectURL(blob);
-            main.innerHTML = '<div class="result-wrap"><div class="result-head"><h1>' + esc(t('cResult')) + '</h1><a href="/account#speech">' + esc(t('cSavedNote')) + '</a></div>' +
+            // A guest's free try isn't saved; the next step is a free account.
+            var guest = !S.user();
+            main.innerHTML = '<div class="result-wrap"><div class="result-head"><h1>' + esc(t('cResult')) + '</h1>' +
+              (guest ? '<a class="unsaved" href="' + S.signUpHref() + '">' + esc(t('cGuestSave')) + '</a>' : '<a href="/account#speech">' + esc(t('cSavedNote')) + '</a>') + '</div>' +
+              (guest ? '<section class="card fx-cta guest-join"><div class="fx-cta-top"><span class="fx-ic">★</span><div><small>' + esc(t('cGuestKick')) + '</small><h2>' + esc(t('cGuestHead')) + '</h2>' +
+                '<p>' + esc(t('cGuestText')) + '</p></div></div><a class="btn btn-primary btn-block" href="' + S.signUpHref() + '">' + esc(t('joinCta')) + '</a></section>' : '') +
               '<div id="report"></div>' +
+              (guest ? '<div class="result-bar"><a class="btn btn-primary" href="' + S.signUpHref() + '">' + esc(t('joinCta')) + '</a></div></div>' :
               '<div class="result-bar"><button class="btn btn-primary" type="button" id="same">' + G.ICON.repeat + esc(t('cAgain')) + '</button>' +
               (own ? '' : '<button class="btn btn-ghost" type="button" id="next">' + G.ICON.next + esc(t('cNext')) + '</button>') +
-              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div></div>';
+              '<button class="btn btn-ghost" type="button" id="set">' + esc(t('cSettings')) + '</button></div></div>');
             window.Coach.render(main.querySelector('#report'), report, { audio: url, celebrate: true });
             // Fix-it mode: a game made of this talk's slips.
             var fixCard = function () {
@@ -484,7 +502,7 @@
               var c = window.Fixit.cta(report, function () { window.Fixit.start({ report: report, audio: url, onClose: fixCard }); });
               if (c) main.querySelector('#report').insertAdjacentElement('beforebegin', c);
             };
-            fixCard();
+            if (!guest) fixCard();
             // Compare with their previous talk.
             S.api('/v1/speech/reports?limit=5').then(function (r) {
               var list = (r && r.status === 200 && r.body && (r.body.reports || r.body)) || [];
@@ -494,6 +512,7 @@
             });
             window.scrollTo(0, 0);
             var leave = function () { URL.revokeObjectURL(url); };
+            if (guest) return;
             main.querySelector('#same').addEventListener('click', function () { leave(); showSetup(); play(topic); });
             var nx = main.querySelector('#next');
             if (nx) nx.addEventListener('click', function () { leave(); showSetup(); play(); });
