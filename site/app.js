@@ -173,12 +173,15 @@
   }
 
   // Sends a FormData (a recording) to the backend; same result shape as api().
-  function upload(path, form, timeout) {
+  // asGuest: without a sign-in, send this device's guest id instead (the
+  // backend gives guests one free Speech Coach try).
+  function upload(path, form, timeout, asGuest) {
     return idToken().then(function (token) {
-      if (!token) return null;
+      if (!token && !asGuest) return null;
       var ctl = 'AbortController' in window ? new AbortController() : null;
       var timer = setTimeout(function () { if (ctl) ctl.abort(); }, timeout || 90000);
-      return fetch(API + path, { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form, signal: ctl ? ctl.signal : undefined })
+      var headers = token ? { Authorization: 'Bearer ' + token } : { 'X-Guest-Id': guestId() };
+      return fetch(API + path, { method: 'POST', headers: headers, body: form, signal: ctl ? ctl.signal : undefined })
         .then(function (r) {
           clearTimeout(timer);
           return r.json().catch(function () { return {}; }).then(function (b) { return { status: r.status, body: b }; });
@@ -362,7 +365,8 @@
   // game can be played once on this device; after that it asks them to sign
   // up. Speech Coach waits for the backend to score guests (GUEST_TRY).
   var FREE_GAME = 'daily';
-  var GUEST_TRY = { 'speech-coach': false };
+  // Guest scoring is on the dev backend first; main follows once it's live there.
+  var GUEST_TRY = { 'speech-coach': IS_DEV };
   function triedAsGuest(id) { return readList(GUEST_HISTORY).some(function (r) { return r.gameId === id; }); }
   function locked(id) {
     if (user() || !id || id === FREE_GAME) return false;
