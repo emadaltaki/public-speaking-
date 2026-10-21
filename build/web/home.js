@@ -117,6 +117,7 @@
     moreDetails: 'أضف ملاحظة', navFaq: 'الأسئلة الشائعة', navContact: 'تواصل معنا', navHome: 'الرئيسية',
     langLong: 'English', langShort: 'EN', signIn: 'تسجيل الدخول', signOut: 'تسجيل الخروج', signedOut: 'تم تسجيل خروجك. نراك قريبًا!', account: 'حسابك',
     themeDark: 'المظهر الداكن', themeLight: 'المظهر الفاتح', openMenu: 'افتح القائمة', closeMenu: 'أغلق القائمة',
+    ccKicker: 'مجاني · مدرب الإلقاء بالذكاء الاصطناعي', ccTitle: 'جرّبه الآن: تحدث لدقيقة واحدة', ccSub: 'احصل على تقييم لسرعتك ووقفاتك وكلمات الحشو، مع نصائح لتحسينها',
     joinUs: 'احجز مكالمة', getStarted: 'ابدأ معنا', getStartedFree: 'ابدأ مجانًا', ctaBookShort: 'احجز مكالمتي المجانية', ctaBook: 'احجز مكالمة تعريفية مجانية', ctaLearn: 'اطّلع على ما نتدرّب عليه',
     heroLocation: 'تدريب على التحدث أمام الناس، عبر الإنترنت أو حضوريًا في منطقة تورونتو',
     talkLocation: 'عبر الإنترنت، أو حضوريًا في منطقة تورونتو',
@@ -743,6 +744,11 @@
     { id: 'four', title: 'sFour', meta: 'sFourMeta', price: '$180', icon: '#i-bolt', tag: ['popular', 'warm'], hot: true },
     { id: 'eight', title: 'sEight', meta: 'sEightMeta', price: '$320', icon: '#i-trophy', tag: ['bestValue', 'soft'] }
   ];
+  // Prices are hidden for now (back next week): only the free intro call is
+  // offered. Set SHOW_PRICES to true and remove "hidden" from #pricing and
+  // the cost question in index.html to bring them back.
+  var SHOW_PRICES = false;
+  if (!SHOW_PRICES) SESSIONS = SESSIONS.filter(function (x) { return !x.price; });
   var pickedSession = 'intro';
   var dd = $('sessionDd');
   var ddList = $('ddList');
