@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#F1DDBC">
 
   <title>Public Speaking Classes in Mississauga | speakUnshaken</title>
-  <meta name="description" content="Overcome the fear of public speaking in Mississauga, Ontario. Small, supportive practice sessions for nervous speakers. Free online intro session, then $50 per session or packages from $180 CAD.">
+  <meta name="description" content="Overcome the fear of public speaking in Mississauga, Ontario. Small, supportive practice sessions for nervous speakers, a free AI Speech Coach, and a free online intro call.">
   <meta name="robots" content="index, follow">
   <meta name="geo.region" content="CA-ON">
   <meta name="geo.placename" content="Mississauga">
@@ -49,15 +49,11 @@
     "description": "A supportive public speaking community in Mississauga, Ontario, helping people with speaking anxiety practice, build confidence, and find their voice.",
     "email": "speakupunshaken@gmail.com",
     "telephone": "+1-416-995-5347",
-    "priceRange": "$0–$320 CAD",
     "currenciesAccepted": "CAD",
     "address": { "@type": "PostalAddress", "addressLocality": "Mississauga", "addressRegion": "ON", "addressCountry": "CA" },
     "areaServed": [{ "@type": "City", "name": "Mississauga" }, { "@type": "AdministrativeArea", "name": "Greater Toronto Area" }],
     "makesOffer": [
-      { "@type": "Offer", "name": "Free Online Explanation Session", "price": "0", "priceCurrency": "CAD" },
-      { "@type": "Offer", "name": "Single Session", "price": "50", "priceCurrency": "CAD" },
-      { "@type": "Offer", "name": "4-Session Package", "price": "180", "priceCurrency": "CAD" },
-      { "@type": "Offer", "name": "8-Session Package", "price": "320", "priceCurrency": "CAD" }
+      { "@type": "Offer", "name": "Free Online Explanation Session", "price": "0", "priceCurrency": "CAD" }
     ]
   }
   </script>
@@ -68,7 +64,6 @@
     "mainEntity": [
       { "@type": "Question", "name": "Do I need public speaking experience?", "acceptedAnswer": { "@type": "Answer", "text": "No. We welcome people who are just starting. You do not need to feel confident before you join. The community is how confidence grows." } },
       { "@type": "Question", "name": "What if I'm extremely nervous?", "acceptedAnswer": { "@type": "Answer", "text": "Then you're in the right place. Nervousness is common here. We take it slow and practice speaking through it together." } },
-      { "@type": "Question", "name": "How much does it cost?", "acceptedAnswer": { "@type": "Answer", "text": "Prices are in CAD: $50 for a single 1 hour session, $180 for four sessions, and $320 for eight sessions. A free 20 minute intro call is available if you want to talk first." } },
       { "@type": "Question", "name": "Can I talk to you before joining a session?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We offer a free 20 minute intro call so you can talk with a host, understand what we do, and ask questions. There is no speaking required and no pressure to join." } }
     ]
   }
@@ -189,6 +184,30 @@
     .hero .lead { font-size: 20px; color: var(--muted); margin: 0 0 30px; max-width: 580px; }
     .hero .ctas { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
     .hero .ctas .btn-primary { font-size: 18px; min-height: 52px; }
+    #pricing[hidden], .faq details[hidden] { display: none !important; }
+    /* The big "try the AI coach" button */
+    .coach-cta { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; gap: 14px; width: 100%; max-width: 480px; padding: 14px 16px 14px 14px;
+      border-radius: 22px; color: #fff; text-decoration: none; background: linear-gradient(120deg, #2F8A73 0%, #1F5A4C 45%, #B4583A 100%); background-size: 180% 100%;
+      box-shadow: 0 18px 34px -16px rgba(31,90,76,.85), inset 0 1px 0 rgba(255,255,255,.25); animation: ccBg 6s ease-in-out infinite; transition: transform .18s, box-shadow .25s; }
+    .coach-cta::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.32) 50%, transparent 70%); transform: translateX(-120%); animation: ccShine 3.2s ease-in-out infinite; }
+    .coach-cta:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 24px 40px -16px rgba(31,90,76,.95), inset 0 1px 0 rgba(255,255,255,.25); }
+    .coach-cta:active { transform: scale(.99); }
+    .cc-mic { position: relative; flex: none; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #1F5A4C; }
+    .cc-mic::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(255,255,255,.7); animation: ccRing 1.8s ease-out infinite; }
+    .cc-mic svg { width: 26px; height: 26px; }
+    .cc-txt { flex: 1; min-width: 0; display: grid; gap: 2px; text-align: start; }
+    .cc-txt small { font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #FFE29A; }
+    .cc-txt b { font-family: "Montserrat", sans-serif; font-size: 19px; font-weight: 800; line-height: 1.2; }
+    .cc-sub { font-size: 13.5px; opacity: .92; line-height: 1.35; }
+    .cc-go { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.18); transition: transform .2s; }
+    .cc-go svg { width: 20px; height: 20px; }
+    .coach-cta:hover .cc-go { transform: translateX(4px); }
+    :root[dir="rtl"] .cc-go svg { transform: scaleX(-1); }
+    :root[dir="rtl"] .coach-cta:hover .cc-go { transform: translateX(-4px); }
+    @keyframes ccBg { 50% { background-position: 100% 0; } }
+    @keyframes ccShine { 0%, 55% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
+    @keyframes ccRing { from { transform: scale(.9); opacity: .9; } to { transform: scale(1.35); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .coach-cta, .coach-cta::before, .cc-mic::after { animation: none; } }
     .trustline { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-size: 15.5px; color: var(--text); }
     .trustline svg { width: 20px; height: 20px; color: var(--primary); }
     .hero-photo { position: relative; justify-self: end; width: 100%; max-width: 460px; }
@@ -963,7 +982,8 @@
       .hero h1 { font-size: clamp(30px, 9.2vw, 38px); margin: 20px 0 16px; }
       .hero .lead { font-size: 17px; margin-bottom: 24px; }
       .hero .ctas { align-items: stretch; }
-      .hero .ctas .btn { width: 100%; }
+      .hero .ctas .btn, .hero .ctas .coach-cta { width: 100%; max-width: none; }
+      .cc-txt b { font-size: 17px; }
       .hero .ctas .btn-primary { font-size: 17px; }
       .trustline { font-size: 14.5px; align-items: flex-start; }
       .hero-photo { max-width: 360px; width: 92%; }
@@ -1069,7 +1089,7 @@
       <a class="hbtn acct" href="/login?next=%2F" id="acct"><svg aria-hidden="true"><use href="#i-user"/></svg><span class="acct-label acct-name" data-t="signIn">Sign in</span></a>
       <button class="hbtn lang" type="button" id="langBtn"><svg aria-hidden="true"><use href="#i-lang"/></svg><span class="long" data-t="langLong">العربية</span><span class="short" data-t="langShort">ع</span></button>
       <button class="hbtn icon theme" type="button" id="themeBtn"><svg aria-hidden="true"><use href="#i-moon"/></svg></button>
-      <a class="btn btn-primary cta" href="#pricing" data-t="getStarted" data-cta="header">Get started</a>
+      <a class="btn btn-primary cta" href="#book" data-t="getStarted" data-cta="header">Get started</a>
       <button class="hbtn icon menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
     </div>
   </header>
@@ -1084,7 +1104,7 @@
     <a href="#book" data-t="navContact">Contact</a>
     <button class="item" type="button" id="langBtn2"><svg class="i" aria-hidden="true"><use href="#i-lang"/></svg><span data-t="langLong">العربية</span></button>
     <button class="item" type="button" id="signOutBtn" hidden><svg class="i" aria-hidden="true"><use href="#i-logout"/></svg><span data-t="signOut">Sign out</span></button>
-    <a class="btn btn-primary" href="#pricing" data-t="getStartedFree" data-cta="menu">Get started for free</a>
+    <a class="btn btn-primary" href="#book" data-t="getStartedFree" data-cta="menu">Get started for free</a>
   </div>
 
   <main id="main">
@@ -1102,8 +1122,12 @@
             <li><b>3</b><span data-t="how3">Feel the fear fade</span></li>
           </ul>
           <div class="ctas">
-            <a class="btn btn-primary" href="#pricing" data-t="getStartedFree" data-cta="hero">Get started for free</a>
-            <a class="btn btn-ghost" href="#sessions" data-t="ctaLearn">See what we practice</a>
+            <a class="coach-cta" href="/games/speech-coach" data-cta="hero-coach">
+              <span class="cc-mic" aria-hidden="true"><svg><use href="#i-mic"/></svg></span>
+              <span class="cc-txt"><small data-t="ccKicker">Free · AI Speech Coach</small><b data-t="ccTitle">Try it now: talk for 1 minute</b><span class="cc-sub" data-t="ccSub">Get scored on pace, pauses and "um"s, with tips to fix them</span></span>
+              <span class="cc-go" aria-hidden="true"><svg><use href="#i-chev-r"/></svg></span>
+            </a>
+            <a class="btn btn-ghost" href="#book" data-t="ctaBook" data-cta="hero">Book a free intro call</a>
           </div>
           <p class="cta-note"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="ctaNote">Start with a free 20 minute video chat with a host about your goals. No speech needed.</span></p>
           <a class="try-game" href="/games/daily" data-track="try_game_hero"><svg aria-hidden="true"><use href="#i-play"/></svg><span data-t="tryGame">Not ready to talk yet? Try today's 1-minute challenge</span><span class="free-tag guest-only" data-t="freeTag">Free, no sign-up</span></a>
@@ -1280,7 +1304,7 @@
     </section>
 
     <!-- Pricing -->
-    <section class="bg-alt tight" id="pricing">
+    <section class="bg-alt tight" id="pricing" hidden>
       <div class="wrap">
         <span class="eyebrow" data-t="eyebrowPricing">Pricing</span>
         <h2 class="s-title" data-t="pricingHeadline">Simple, honest pricing</h2>
@@ -1325,7 +1349,7 @@
           <details><summary data-t="q2">What if I'm really nervous?</summary><p data-t="a2">Then you're in good company. Most people here felt the same way at first. We take it slow and practice together.</p></details>
           <details><summary data-t="q3">Do I have to speak in my first session?</summary><p data-t="a3">Not if you don't want to. We'll tell you how a session works before you come, and you can start small. Nobody will push you.</p></details>
           <details><summary data-t="qWhere">Are sessions online or in person?</summary><p data-t="aWhere">Both. Join online from anywhere, or come in person somewhere around the Greater Toronto Area. We'll sort out what suits you on your free call.</p></details>
-          <details><summary data-t="q8">How much does it cost?</summary><p data-t="a8">One session is $50. You can also get 4 sessions for $180 or 8 for $320. Your first call is free.</p></details>
+          <details hidden><summary data-t="q8">How much does it cost?</summary><p data-t="a8">One session is $50. You can also get 4 sessions for $180 or 8 for $320. Your first call is free.</p></details>
         </div>
       </div>
     </section>
@@ -1452,7 +1476,7 @@
   </div>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
-    <figure style="margin:0"><img id="lbImg" alt=""><figcaption class="lb-card"><span class="lb-k"><span data-t="lbKicker">What you'll get</span><span id="lbCount"></span></span><b id="lbCap"></b><p id="lbDesc"></p><a class="btn btn-primary" href="#pricing" id="lbCta" data-cta="photo" data-t="getStartedFree">Get started for free</a></figcaption></figure>
+    <figure style="margin:0"><img id="lbImg" alt=""><figcaption class="lb-card"><span class="lb-k"><span data-t="lbKicker">What you'll get</span><span id="lbCount"></span></span><b id="lbCap"></b><p id="lbDesc"></p><a class="btn btn-primary" href="#book" id="lbCta" data-cta="photo" data-t="getStartedFree">Get started for free</a></figcaption></figure>
     <button class="lb-btn lb-close" type="button" id="lbClose"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
     <button class="lb-btn lb-prev" type="button" id="lbPrev"><svg aria-hidden="true"><use href="#i-chev-l"/></svg></button>
     <button class="lb-btn lb-next" type="button" id="lbNext"><svg aria-hidden="true"><use href="#i-chev-r"/></svg></button>
