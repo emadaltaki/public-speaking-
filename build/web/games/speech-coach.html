@@ -134,7 +134,7 @@
         cRetrySend: 'Try scoring again', cResult: 'Your feedback', cAgain: 'Try the same topic', cNext: 'New topic', cSettings: 'Settings', cAll: 'All games',
         cSavedNote: 'Saved to your account.',
         cGuestSave: 'Not saved yet. Make a free account to keep it.', cGuestUsed: "You've had your free scored talk. Make a free account to keep practising with the AI coach.",
-        cGuestKick: 'Your free try', cGuestHead: 'Keep this report and fix your slips', cGuestText: 'Make a free account to save your scores, play Fix-it mode for stars, and record as many talks as you like.',
+        cGuestKick: 'Your free try', cGuestHead: 'Keep this report', cGuestText: 'Make a free account to save your scores and record as many talks as you like.',
         cGuestTitle: 'Get your talk scored by AI', cGuestBody: 'Every recording is scored by AI, so Speech Coach needs a free account. Below is a sample of the report you get back.',
         cSeeSample: 'See a sample report', cSample: 'What you get back', cSampleTag: 'Sample', cSampleNote: 'This is an example. Make a free account to get one from your own voice.',
         cStyle: 'Style of talk', cOptional: 'Optional', cStyleHelp: 'The coach judges your talk against the style you pick.',
@@ -161,7 +161,7 @@
         cRetrySend: 'أعد محاولة التقييم', cResult: 'ملاحظاتك', cAgain: 'الموضوع نفسه', cNext: 'موضوع جديد', cSettings: 'الإعدادات', cAll: 'كل الألعاب',
         cSavedNote: 'حُفظ في حسابك.',
         cGuestSave: 'لم يُحفظ بعد. أنشئ حسابًا مجانيًا لتحتفظ به.', cGuestUsed: 'استخدمت حديثك المقيَّم المجاني. أنشئ حسابًا مجانيًا لتواصل التدرّب مع مدرب الذكاء الاصطناعي.',
-        cGuestKick: 'تجربتك المجانية', cGuestHead: 'احتفظ بهذا التقرير وصحّح تعثّراتك', cGuestText: 'أنشئ حسابًا مجانيًا لتحفظ درجاتك، وتلعب وضع التصحيح لتجمع النجوم، وتسجّل أحاديث بقدر ما تشاء.',
+        cGuestKick: 'تجربتك المجانية', cGuestHead: 'احتفظ بهذا التقرير', cGuestText: 'أنشئ حسابًا مجانيًا لتحفظ درجاتك وتسجّل أحاديث بقدر ما تشاء.',
         cGuestTitle: 'احصل على تقييم لحديثك بالذكاء الاصطناعي', cGuestBody: 'كل تسجيل يقيّمه الذكاء الاصطناعي، لذا يحتاج مدرب الإلقاء إلى حساب مجاني. في الأسفل مثال على التقرير الذي ستحصل عليه.',
         cSeeSample: 'شاهد مثالًا على التقرير', cSample: 'ما ستحصل عليه', cSampleTag: 'مثال', cSampleNote: 'هذا مثال. أنشئ حسابًا مجانيًا لتحصل على تقريرك من صوتك أنت.',
         cStyle: 'أسلوب الحديث', cOptional: 'اختياري', cStyleHelp: 'يقيّم المدرب حديثك حسب الأسلوب الذي تختاره.',
@@ -502,7 +502,10 @@
               var c = window.Fixit.cta(report, function () { window.Fixit.start({ report: report, audio: url, onClose: fixCard }); });
               if (c) main.querySelector('#report').insertAdjacentElement('beforebegin', c);
             };
-            if (!guest) fixCard();
+            // Fix-it mode (the stars reward game) is hidden for now; set
+            // FIXIT_ON to true to bring it back.
+            var FIXIT_ON = false;
+            if (FIXIT_ON && !guest) fixCard();
             // Compare with their previous talk.
             S.api('/v1/speech/reports?limit=5').then(function (r) {
               var list = (r && r.status === 200 && r.body && (r.body.reports || r.body)) || [];
