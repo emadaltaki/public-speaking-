@@ -36,12 +36,13 @@
   root.dir = lang === 'ar' ? 'rtl' : 'ltr';
   var STRINGS = {
     en: {
+      tabHome: 'Home', tabGames: 'Games', tabCoach: 'AI Coach', tabToday: 'Today', tabMe: 'Me', mainNav: 'Main menu',
       home: 'Back to the site', signIn: 'Sign in', account: 'Your account', light: 'Light theme', dark: 'Dark theme', langName: 'العربية', langShort: 'ع',
       howTo: 'How to play', next: 'Next', back: 'Back', letsPlay: "Let's play!", close: 'Close', stepOf: 'Step {n} of {t}', play: 'Play',
       gateTitle: 'Sign up to play', gateBody: 'Create a free account to unlock all our speaking games and keep track of your practice.',
       gateSignUp: 'Create free account', gateSignIn: 'I already have an account',
       dailyName: 'Daily Challenge', dailyTag: 'A new one-minute topic every day. Keep your streak going.',
-      dailyCardTitle: "Today's 1-minute challenge", dailyCardDone: 'Done today. Come back tomorrow!', dailyCardGo: 'Take the challenge',
+      dailyCardTitle: "Today's 1-minute challenge", dailyCardDone: 'Done today. Come back tomorrow!', dailyCardGo: 'Take the challenge', dailyCardAgain: 'Practice again',
       joinKicker: 'Free to play', joinTitle: "You're one step away from playing", joinAll: 'Speaking games',
       joinBody: 'Make a free account to start {game}. It only takes a moment, and you can play right away.',
       joinBodyAll: 'Make a free account to play all our speaking games. It only takes a moment.',
@@ -49,7 +50,7 @@
       joinCta: 'Create my free account', joinHave: 'Already have an account?', joinSignIn: 'Sign in', joinFine: 'Takes 30 seconds. No card, no spam.',
       verifyTitle: 'Confirm your email to play', verifyBody: "We'll send a 6-digit code to {e}. It only takes a moment.", verifyCta: 'Send my code',
       minutes: '{n} min', round1: '1 round', rounds: '{n} rounds', seconds: '{n}s',
-      guestBar: "Today's challenge is always free, and you can try each game once without an account. Make a free account to play them all as often as you like.", guestBarCta: 'Create free account',
+      guestBar: "Try each game once for free. Make a free account to keep playing.", guestBarCta: 'Create free account',
       freeTry: '1 free try', endTryDone: 'That was your free try. Make a free account to keep playing all the games, and keep this round.', lockUsed: "That was your free try of {game}. Make a free account to keep playing, and keep the rounds you've played.",
       lockBadge: 'Free with an account', unlock: 'Unlock free', freeNow: 'Free, no sign-up',
       lockTitle: 'Unlock {game} for free', lockAll: 'One free account unlocks all of these',
@@ -60,12 +61,13 @@
       savedToast1: 'Welcome! Your guest round is now saved to your account.', savedToastN: 'Welcome! Your {n} guest rounds are now saved to your account.', savedToast2: 'Welcome! Your 2 guest rounds are now saved to your account.'
     },
     ar: {
+      tabHome: 'الرئيسية', tabGames: 'الألعاب', tabCoach: 'المدرب الذكي', tabToday: 'اليوم', tabMe: 'حسابي', mainNav: 'القائمة الرئيسية',
       home: 'العودة إلى الموقع', signIn: 'تسجيل الدخول', account: 'حسابك', light: 'المظهر الفاتح', dark: 'المظهر الداكن', langName: 'English', langShort: 'EN',
       howTo: 'طريقة اللعب', next: 'التالي', back: 'رجوع', letsPlay: 'هيا نلعب!', close: 'إغلاق', stepOf: 'الخطوة {n} من {t}', play: 'العب',
       gateTitle: 'سجّل لتلعب', gateBody: 'أنشئ حسابًا مجانيًا لتفتح جميع ألعاب التحدث وتتابع تدريبك.',
       gateSignUp: 'أنشئ حسابًا مجانيًا', gateSignIn: 'لدي حساب بالفعل',
       dailyName: 'التحدي اليومي', dailyTag: 'موضوع جديد لدقيقة واحدة كل يوم. حافظ على سلسلتك.',
-      dailyCardTitle: 'تحدي الدقيقة لليوم', dailyCardDone: 'أنجزته اليوم. عد غدًا!', dailyCardGo: 'خُض التحدي',
+      dailyCardTitle: 'تحدي الدقيقة لليوم', dailyCardDone: 'أنجزته اليوم. عد غدًا!', dailyCardGo: 'خُض التحدي', dailyCardAgain: 'تدرّب مجددًا',
       joinKicker: 'مجانية', joinTitle: 'خطوة واحدة وتبدأ اللعب', joinAll: 'ألعاب التحدث',
       joinBody: 'أنشئ حسابًا مجانيًا لتبدأ {game}. يستغرق الأمر لحظة، وتلعب فورًا.',
       joinBodyAll: 'أنشئ حسابًا مجانيًا لتلعب جميع ألعاب التحدث. يستغرق الأمر لحظة.',
@@ -73,7 +75,7 @@
       joinCta: 'أنشئ حسابي المجاني', joinHave: 'لديك حساب؟', joinSignIn: 'سجّل الدخول', joinFine: 'يستغرق 30 ثانية. بلا بطاقة وبلا رسائل مزعجة.',
       verifyTitle: 'أكّد بريدك لتلعب', verifyBody: 'سنرسل رمزًا من 6 أرقام إلى {e}. لن يستغرق الأمر سوى لحظة.', verifyCta: 'أرسل الرمز',
       minutes: '{n} د', round1: 'جولة واحدة', rounds: '{n} جولات', seconds: '{n} ث',
-      guestBar: 'تحدي اليوم مجاني دائمًا، ويمكنك تجربة كل لعبة مرة واحدة بلا حساب. أنشئ حسابًا مجانيًا لتلعبها كلها متى شئت.', guestBarCta: 'أنشئ حسابًا مجانيًا',
+      guestBar: 'جرّب كل لعبة مرة مجانًا. أنشئ حسابًا مجانيًا لتواصل اللعب.', guestBarCta: 'أنشئ حسابًا مجانيًا',
       freeTry: 'تجربة مجانية واحدة', endTryDone: 'كانت هذه تجربتك المجانية. أنشئ حسابًا مجانيًا لتواصل لعب كل الألعاب وتحتفظ بهذه الجولة.', lockUsed: 'كانت هذه تجربتك المجانية لـ {game}. أنشئ حسابًا مجانيًا لتواصل اللعب وتحتفظ بجولاتك.',
       lockBadge: 'مجانًا مع حساب', unlock: 'افتحها مجانًا', freeNow: 'مجاني، بلا تسجيل',
       lockTitle: 'افتح {game} مجانًا', lockAll: 'حساب مجاني واحد يفتح كل هذه الألعاب',
@@ -471,6 +473,7 @@
     user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3.2"/><path d="M6.2 18.4c1.4-1.9 3.4-2.9 5.8-2.9s4.4 1 5.8 2.9"/></svg>',
     moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
     sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    games: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2.2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2.2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2.2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2.2"/></svg>',
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>',
     lang: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>'
   };
@@ -483,14 +486,29 @@
     }
     var u = user();
     var here = location.pathname.replace(/\/$/, '');
+    // Where am I: one of games, coach, today, me (or nothing).
+    var at = here === '/account' ? 'me' : /^\/games\/speech-coach/.test(here) ? 'coach' : /^\/games\/daily/.test(here) ? 'today' : /^\/games/.test(here) ? 'games' : '';
+    var cur = function (k) { return at === k ? ' aria-current="page"' : ''; };
     h.innerHTML = '<div class="bar"><a class="brand" href="/" aria-label="speakUnshaken">' + LOGO + '<span dir="ltr">speakUnshaken</span></a>' +
+      '<nav class="hnav" aria-label="' + esc(t('mainNav')) + '"><a href="/games"' + cur('games') + '>' + esc(t('tabGames')) + '</a>' +
+      '<a href="/games/speech-coach"' + cur('coach') + '>' + esc(t('tabCoach')) + '</a>' +
+      '<a href="/games/daily"' + cur('today') + '>' + esc(t('dailyName')) + '</a></nav>' +
       (u ? '<a class="hbtn acct" href="/account" aria-label="' + esc(t('account')) + '"' + (here === '/account' ? ' aria-current="page"' : '') + '><span class="av"></span></a>'
          : '<a class="hbtn acct" href="/login?next=' + encodeURIComponent(location.pathname) + '">' + SVG.user + '<span class="label">' + esc(t('signIn')) + '</span></a>') +
       '<button class="hbtn lang" type="button" aria-label="' + esc(t('langName')) + '">' + SVG.lang + '<span>' + esc(t('langShort')) + '</span></button>' +
       '<button class="hbtn theme" type="button" aria-label="' + esc(isDark() ? t('light') : t('dark')) + '">' + (isDark() ? SVG.sun : SVG.moon) + '</button>' +
-      '<a class="hbtn" href="/" aria-label="' + esc(t('home')) + '" title="' + esc(t('home')) + '">' + SVG.home + '</a></div>';
-    var av = h.querySelector('.av');
-    if (av) avatarStyle(av, u, cachedAvatar());
+      '<a class="hbtn hhome" href="/" aria-label="' + esc(t('home')) + '" title="' + esc(t('home')) + '">' + SVG.home + '</a></div>';
+    // Phones: the main places sit in a tab bar under the thumb.
+    var tb = document.querySelector('.tabbar');
+    if (!tb) { tb = document.createElement('nav'); tb.className = 'tabbar'; document.body.appendChild(tb); }
+    tb.setAttribute('aria-label', t('mainNav'));
+    var tab = function (href, k, icon, label) { return '<a href="' + href + '"' + cur(k) + '><span class="ti">' + icon + '</span><span>' + esc(label) + '</span></a>'; };
+    tb.innerHTML = tab('/', 'home', SVG.home, t('tabHome')) + tab('/games', 'games', SVG.games, t('tabGames')) +
+      tab('/games/speech-coach', 'coach', ICONS['speech-coach'], t('tabCoach')) + tab('/games/daily', 'today', ICONS.daily, t('tabToday')) +
+      (u ? '<a href="/account"' + cur('me') + '><span class="ti"><span class="av"></span></span><span>' + esc(t('tabMe')) + '</span></a>'
+         : tab('/login?next=' + encodeURIComponent(location.pathname), 'me', SVG.user, t('signIn')));
+    document.body.classList.add('has-tabbar');
+    document.querySelectorAll('.app-header .av, .tabbar .av').forEach(function (av) { avatarStyle(av, u, cachedAvatar()); });
     h.querySelector('.theme').addEventListener('click', toggleTheme);
     h.querySelector('.lang').addEventListener('click', function () { setLang(lang === 'ar' ? 'en' : 'ar'); });
     // Tapping the page you're already on does nothing.
@@ -498,8 +516,7 @@
     if (here === '/account' && u) acct.addEventListener('click', function (e) { e.preventDefault(); });
   }
   onAvatar(function (v) {
-    var av = document.querySelector('.app-header .av');
-    if (av) avatarStyle(av, user(), v);
+    document.querySelectorAll('.app-header .av, .tabbar .av').forEach(function (av) { avatarStyle(av, user(), v); });
   });
 
   // ------------------------------------------------------------ toast

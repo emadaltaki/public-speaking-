@@ -13,6 +13,20 @@
   <style>
     .hub-head { padding: 12px 6px 22px; }
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    /* The AI coach is the star: a wide card on top. */
+    .grid .game.g-speech-coach { grid-column: 1 / -1; min-height: 0; }
+    @media (min-width: 721px) {
+      .grid .game.g-speech-coach { display: grid; grid-template-columns: auto 1fr auto; column-gap: 20px; align-items: center; padding: 26px; }
+      .grid .game.g-speech-coach .g-ic { grid-row: 1 / span 4; width: 72px; height: 72px; border-radius: 22px; }
+      .grid .game.g-speech-coach .g-ic svg { width: 36px; height: 36px; }
+      .grid .game.g-speech-coach h2 { margin: 0 0 4px; font-size: 26px; grid-column: 2; }
+      .grid .game.g-speech-coach p, .grid .game.g-speech-coach .skills { grid-column: 2; }
+      .grid .game.g-speech-coach .actions { grid-column: 3; grid-row: 1 / span 4; margin: 0; padding: 0; flex-direction: column; align-items: stretch; }
+      .grid .game.g-speech-coach .play { justify-content: center; padding: 13px 28px; font-size: 17px; }
+      .grid .game.g-speech-coach .lockchip { position: static; grid-column: 2; justify-self: start; margin-bottom: 8px; }
+    }
+    .game { transition: transform .18s, box-shadow .2s; cursor: pointer; }
+    @media (hover: hover) { .game:hover { transform: translateY(-3px); box-shadow: 0 22px 34px -18px rgba(0,0,0,.6); } }
     .game { position: relative; display: flex; flex-direction: column; min-height: 250px; padding: 22px; border-radius: 24px; color: #fff; overflow: hidden; isolation: isolate; box-shadow: 0 16px 28px -18px rgba(0,0,0,.55); }
     .game::after { content: ""; position: absolute; z-index: -1; right: -40px; top: -40px; width: 170px; height: 170px; border-radius: 50%; background: rgba(255,255,255,.12); }
     :root[dir="rtl"] .game::after { right: auto; left: -40px; }
@@ -116,7 +130,7 @@
         var free = S.user() ? '' : '<span class="free">' + S.esc(S.t('freeNow')) + '</span>';
         return '<a class="daily-card g-daily" href="/games/daily"><span class="g-ic">' + S.ICONS.daily + '</span><span class="txt"><small>' + S.esc(S.t('dailyName')) + free + '</small>' +
           '<b>' + S.esc(done ? S.t('dailyCardDone') : S.t('dailyCardTitle')) + '</b>' +
-          (n ? '<span class="st">🔥 ' + n + '</span>' : '') + '</span><span class="go">' + S.esc(S.t('dailyCardGo')) + '</span></a>';
+          (n ? '<span class="st">🔥 ' + n + '</span>' : '') + '</span><span class="go">' + S.esc(S.t(done ? 'dailyCardAgain' : 'dailyCardGo')) + '</span></a>';
       }
       S.gate(content, function () {
         return S.loadGames().then(function (games) {

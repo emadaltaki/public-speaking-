@@ -876,6 +876,8 @@
     @media (max-width: 640px) { .how3 { margin: -8px 0 22px; } .how3 { gap: 6px; } .how3 li { font-size: 13px; padding: 5px 11px 5px 5px; gap: 6px; } .how3 b { width: 21px; height: 21px; font-size: 12px; } }
     .free-tag { display: inline-block; padding: 3px 9px; border-radius: 999px; background: var(--soft); color: var(--primary); font-size: 12.5px; font-weight: 800; white-space: nowrap; }
     .try-game { flex-wrap: wrap; }
+    .try-game > span:first-of-type { flex: 1; min-width: 0; }
+    .try-game svg { flex: none; }
     .signed-in .guest-only, :root:not(.signed-in) .member-only { display: none !important; }
     .daily-feature { display: flex; align-items: center; gap: 16px; max-width: 1064px; margin: 28px auto 0; padding: 20px 22px; border-radius: 24px; color: #fff; text-decoration: none; background: linear-gradient(145deg, #E0703E, #A23B1E 70%, #7A2A16); box-shadow: 0 20px 36px -22px rgba(122,42,22,.8); position: relative; overflow: hidden; isolation: isolate; }
     .daily-feature::after { content: ""; position: absolute; z-index: -1; right: -50px; top: -70px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,.1); }
@@ -1113,7 +1115,6 @@
       <div class="wrap">
         <div>
           <span class="loc"><span class="dot"><svg aria-hidden="true"><use href="#i-pin"/></svg></span><span data-t="heroLocation">Public speaking practice, online or around the GTA</span></span>
-          <a class="hero-coach" href="#coach"><b data-t="newBadge">New</b><span data-t="heroCoach">Free AI Speech Coach</span></a>
           <h1 data-t="heroHeadline">Get speaking. Let the nerves go.</h1>
           <p class="lead" data-t="heroSupport">We help people who get nervous speaking in front of others. Small friendly groups, fun speaking exercises, one small step at a time, until the anxiety fades.</p>
           <ul class="how3">
@@ -1131,7 +1132,6 @@
           </div>
           <p class="cta-note"><svg aria-hidden="true"><use href="#i-check"/></svg><span data-t="ctaNote">Start with a free 20 minute video chat with a host about your goals. No speech needed.</span></p>
           <a class="try-game" href="/games/daily" data-track="try_game_hero"><svg aria-hidden="true"><use href="#i-play"/></svg><span data-t="tryGame">Not ready to talk yet? Try today's 1-minute challenge</span><span class="free-tag guest-only" data-t="freeTag">Free, no sign-up</span></a>
-          <p class="trustline"><svg aria-hidden="true"><use href="#i-badge"/></svg><span data-t="heroTrust">A friendly room where nobody judges you and you go at your own pace.</span></p>
         </div>
         <figure class="hero-photo" style="margin:0">
           <button type="button" data-photo="0"><img src="/assets/assets/images/explaining-pic.jpeg" alt="A host leading a speakUnshaken workshop in front of a small group" data-t-alt="heroImageAlt" width="460" height="500" fetchpriority="high"></button>
@@ -1244,31 +1244,31 @@
       <div class="game-row">
         <a class="game g1" href="/games/triple-step">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-mic"/></svg></span>
-          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">1 free try</span></span>
           <b data-t="gTriple">Triple Step</b>
           <small data-t="gTripleTag">Talk about a topic and work in the surprise words.</small>
-          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Try free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g2" href="/games/conductor">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-wave"/></svg></span>
-          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">1 free try</span></span>
           <b data-t="gConductor">The Conductor</b>
           <small data-t="gConductorTag">Change your pitch from 1 (low) to 10 (high) as you talk.</small>
-          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Try free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g3" href="/games/podcast">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-pod"/></svg></span>
-          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">1 free try</span></span>
           <b data-t="gPodcast">The Podcast Game</b>
           <small data-t="gPodcastTag">One topic, a few friends, and the mic keeps moving.</small>
-          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Try free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
         <a class="game g4" href="/games/autocomplete">
           <span class="g-ic"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>
-          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">Free account</span></span>
+          <span class="g-lock guest-only"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 7.8-1.3"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg><span data-t="lockChip">1 free try</span></span>
           <b data-t="gAuto">Autocomplete</b>
           <small data-t="gAutoTag">Finish each sentence out loud before time runs out.</small>
-          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Unlock free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
+          <span class="g-go"><span class="member-only" data-t="playNow">Play</span><span class="guest-only" data-t="unlockFree">Try free</span><svg aria-hidden="true"><use href="#i-chev-r"/></svg></span>
         </a>
       </div>
     </section>
